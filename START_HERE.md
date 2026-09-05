@@ -24,4 +24,4 @@
 
 ## 远端仓库
 
-建议工程名 `siyue`。仓库名、组织、可见性及许可确认后再执行远端建库或上传。当前连接未找到目标仓库，不把文档下载等同于 GitHub 已初始化。本次没有 GitHub Issue 编号；SY-xxx 是规划 ID。
+远端仓库为 `zhangqiu-ai/siyue`，当前为公开仓库。初始化代码进入 `main`，后续日常开发从 `feature/dev` 分支开始。本次没有 GitHub Issue 编号；SY-xxx 是规划 ID。

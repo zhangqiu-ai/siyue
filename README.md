@@ -31,9 +31,9 @@ AI-first 个人成长应用 / An AI-first personal growth app.
 
 ## 当前工程状态
 
-已创建移动、桌面、服务端最小代码骨架，以及 Domain / Contracts / AI 共享包。依赖锁文件、CI 运行、真机测试、数据库迁移、远端 GitHub 仓库及发布流水线仍未创建或验证。`planning/` 提供尚未创建为 GitHub Issue 的工作包与未执行测试定义。
+已创建移动、桌面、服务端最小代码骨架，以及 Domain / Contracts / AI 共享包。远端仓库为 `zhangqiu-ai/siyue`。依赖锁文件、CI 运行、真机测试、数据库迁移及发布流水线仍未创建或验证。`planning/` 提供尚未创建为 GitHub Issue 的工作包与未执行测试定义。
 
-本次查询未在当前 GitHub 连接可访问范围内找到 `zhangqiu-ai/siyue`；这不证明其他授权范围中不存在该仓库。没有修改现有仓库、注册域名、购买服务或发布代码。
+项目已在 GitHub 建立公开仓库 `zhangqiu-ai/siyue`。初始化阶段不注册域名、不购买外部服务，也不宣称尚未运行的构建或测试已经通过。
 
 ## 开源状态
 
