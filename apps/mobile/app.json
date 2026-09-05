@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Siyue",
+    "slug": "siyue",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "siyue",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.siyue.mobile"
+    },
+    "android": {
+      "package": "app.siyue.mobile"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

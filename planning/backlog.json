@@ -1,0 +1,368 @@
+{
+  "schema_version": "0.1",
+  "created_on": "2026-09-05",
+  "remote_issues_created": false,
+  "items": [
+    {
+      "id": "SY-001",
+      "title": "建立三端工程骨架与版本记录",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [],
+      "acceptance_criteria": [
+        "采用 pnpm workspace；移动为 Expo，桌面为 Electron + React，服务端为 Node。",
+        "记录 React/Expo/RN/Electron/Node 的版本与可执行命令。",
+        "完成当前可用环境的构建；iOS/Android 真机与 Windows 未运行项如实标注。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-002",
+      "title": "定义纯 TypeScript 领域与命令契约",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-001"
+      ],
+      "acceptance_criteria": [
+        "Goal/Project/Task/Draft/Receipt 具备 schema 与行为约束。",
+        "共享层不导入 UI、Node 文件系统、Electron 或具体数据库驱动。",
+        "同一命令可从手工 UI 与 AI 路径调用；有跨空间引用拒绝测试。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-003",
+      "title": "验证 SQLite 与同步候选并记录 ADR",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-001",
+        "SY-002"
+      ],
+      "acceptance_criteria": [
+        "在隔离原型验证 RN 与 Electron 的持久化、事务和原生构建。",
+        "比较 PowerSync 与受限备选的冲突、账号隔离、许可和退出路径。",
+        "写 ADR-004 的采用/不采用结果及版本证据；不以 demo 代替生产同步验收。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-004",
+      "title": "实现本地存储、事务与升级恢复",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-002",
+        "SY-003"
+      ],
+      "acceptance_criteria": [
+        "业务数据与活动/命令回执按选定适配器一致提交。",
+        "重启不丢失；升级失败不覆盖唯一原始数据。",
+        "测试重复命令、部分失败、删除标记与恢复入口。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-005",
+      "title": "建立秘密存储、数据授权与日志边界",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-001",
+        "SY-002"
+      ],
+      "acceptance_criteria": [
+        "区分本地保存、同步、AI 外发与后台用途。",
+        "模型平台 Key 不进入 App；个人 Key、日记、录音不进入日志或 Git。",
+        "受限 IPC/服务端鉴权接口有非法参数与越权测试。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-006",
+      "title": "接入 AI SDK 候选与 Mock Provider",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-001",
+        "SY-002",
+        "SY-005"
+      ],
+      "acceptance_criteria": [
+        "确定性 Mock 能覆盖文本、工具、审批、失败与取消。",
+        "实际模型凭据由部署者提供；使用前配置供应商和预算。",
+        "能力不足明确返回错误，不自动换未授权供应商。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-007",
+      "title": "实现 AgentRun 持久状态与事件协议",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-004",
+        "SY-006"
+      ],
+      "acceptance_criteria": [
+        "事件带 runId、seq 与 schemaVersion。",
+        "断流、取消、重启和未知结果分别处理，不伪造完成。",
+        "记录模型/策略版本与数据截止范围，不持久化隐藏思维链。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-008",
+      "title": "实现草稿、审批与幂等业务执行",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-004",
+        "SY-005",
+        "SY-007"
+      ],
+      "acceptance_criteria": [
+        "确认绑定参数 hash、对象版本、space 与有效期。",
+        "拒绝/过期/撤销不写正式表；参数变化需新审批。",
+        "相同 commandId 返回同一结果，丢回执后先对账再重试。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-009",
+      "title": "完成目标—项目—任务的最小闭环",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-004",
+        "SY-008"
+      ],
+      "acceptance_criteria": [
+        "AI 生成可编辑草稿；确认后出现真实对象。",
+        "手动创建、编辑、完成和归档在离线状态可用。",
+        "iOS 核心流程、Android 同一路径与 Electron 最小入口具备验收证据。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-010",
+      "title": "实现活动时间线和可管理记忆",
+      "milestone": "M2",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-004",
+        "SY-005",
+        "SY-009"
+      ],
+      "acceptance_criteria": [
+        "正式活动与审计分开；数字从正式数据计算。",
+        "候选记忆与确认事实分开；用户可编辑和删除。",
+        "撤销来源后相关摘要/检索投影失效。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-011",
+      "title": "验证语言学习录音与音频中断",
+      "milestone": "M2",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-001",
+        "SY-005",
+        "SY-006"
+      ],
+      "acceptance_criteria": [
+        "iOS/Android 真机录音、回放、权限拒绝、耳机/中断有实际记录。",
+        "无录音权限时文字路径可完成练习。",
+        "音频外发用途明确；ASR 不宣传成客观发音评分。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-012",
+      "title": "实现学习会话、纠错候选与复习队列",
+      "milestone": "M2",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-009",
+        "SY-010",
+        "SY-011"
+      ],
+      "acceptance_criteria": [
+        "练习关联目标或项目；原始会话与模型评估分开。",
+        "词汇与纠错以候选展示，确认后进入复习。",
+        "重复上传/提取不重复生成已确认项，时长由计时记录。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-013",
+      "title": "实现有来源的用户触发复盘",
+      "milestone": "M2",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-010",
+        "SY-012"
+      ],
+      "acceptance_criteria": [
+        "统计与模型文本分开，提供记录依据与覆盖范围。",
+        "未同步、缺失或不足的数据明确说明。",
+        "复盘可修改保存；不自动成为新个人事实或新任务。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-014",
+      "title": "实现可选身份绑定与生产同步",
+      "milestone": "M3",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-003",
+        "SY-004",
+        "SY-005",
+        "SY-008",
+        "SY-009"
+      ],
+      "acceptance_criteria": [
+        "账号绑定、切换、撤权与数据空间不串号。",
+        "本地乐观状态与服务端裁决有清楚 UI；拒绝保留可恢复输入。",
+        "重复投递、并发编辑、删除复活和旧客户端重建用例通过。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-015",
+      "title": "完成数据导出、恢复与级联删除",
+      "milestone": "M3",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-010",
+        "SY-012",
+        "SY-014"
+      ],
+      "acceptance_criteria": [
+        "导出带版本、范围、附件清单及缺失说明。",
+        "导入预览去重；账号删除覆盖正文、附件、记忆和索引。",
+        "备份过期与删除重放规则被文档化并验证。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-016",
+      "title": "完成核心回归、安全与费用边界测试",
+      "milestone": "M3",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-013",
+        "SY-014",
+        "SY-015"
+      ],
+      "acceptance_criteria": [
+        "执行 planning/test-cases.json；记录通过/失败/未运行和证据。",
+        "关闭授权、模型故障、预算耗尽不突破边界。",
+        "不将 mock 成功等同真实模型或真机成功。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-017",
+      "title": "完成开源许可、依赖与发布范围检查",
+      "milestone": "M4",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [],
+      "acceptance_criteria": [
+        "维护者确认 LICENSE、贡献和公开范围后才应用。",
+        "复用代码与所有直接/关键间接依赖有来源及许可记录。",
+        "没有真实用户数据、生产地址凭据或误导性商标/域名声明。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-018",
+      "title": "打包可复现 Alpha 并记录发布证据",
+      "milestone": "M4",
+      "priority": "P0",
+      "status": "planned",
+      "depends_on": [
+        "SY-016",
+        "SY-017"
+      ],
+      "acceptance_criteria": [
+        "全新环境可按文档启动相应平台；已验证与未验证平台分开列。",
+        "工件对应明确版本和 commit；功能表与实际一致。",
+        "公开、签名凭据及托管支出经维护者明确授权后执行。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-019",
+      "title": "增加手工资产账户与快照",
+      "milestone": "M5",
+      "priority": "P1",
+      "status": "planned",
+      "depends_on": [
+        "SY-018"
+      ],
+      "acceptance_criteria": [
+        "金额/数量精度与币种明确，估值有时间和来源。",
+        "内部转账、收入、估值变化不混为一谈。",
+        "金融域授权隔离；不自动交易、不宣称监管或收益保证。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    },
+    {
+      "id": "SY-020",
+      "title": "验证托管 AI、后台任务与权益服务",
+      "milestone": "M5",
+      "priority": "P1",
+      "status": "planned",
+      "depends_on": [
+        "SY-018"
+      ],
+      "acceptance_criteria": [
+        "先完成预算、认证、限流、平台购买与目标市场审查。",
+        "后台运行只使用已授权已同步数据，任务可取消并对账。",
+        "权益统一接口；不能因订阅失效阻断个人数据导出。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": []
+    }
+  ]
+}

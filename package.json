@@ -1,0 +1,23 @@
+{
+  "name": "siyue",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Siyue — AI-first personal growth app / 思玥 — AI First 个人成长应用",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev:mobile": "pnpm --filter @siyue/mobile start",
+    "dev:desktop:renderer": "pnpm --filter @siyue/desktop dev:renderer",
+    "dev:desktop:electron": "pnpm --filter @siyue/desktop dev:electron",
+    "dev:server": "pnpm --filter @siyue/server dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "2.9.17",
+    "typescript": "7.0.2"
+  }
+}

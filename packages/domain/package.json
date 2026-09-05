@@ -1,0 +1,16 @@
+{
+  "name": "@siyue/domain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "4.23.13",
+    "typescript": "7.0.2"
+  }
+}

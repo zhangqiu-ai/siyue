@@ -1,0 +1,223 @@
+{
+  "schema_version": "0.1",
+  "created_on": "2026-09-05",
+  "application_tests_executed": false,
+  "cases": [
+    {
+      "id": "AT-001",
+      "title": "本地创建后重启",
+      "work_package": "SY-009",
+      "scenario": "创建目标/项目/任务，退出进程后重启",
+      "expected": "对象与关联完整保留；无静默初始化覆盖",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-002",
+      "title": "AI 草稿未确认",
+      "work_package": "SY-008",
+      "scenario": "生成创建计划草稿，不确认",
+      "expected": "草稿可保存，正式业务对象数量不变",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-003",
+      "title": "拒绝与过期审批",
+      "work_package": "SY-008",
+      "scenario": "拒绝审批并再次请求执行；另测过期授权",
+      "expected": "均无正式副作用，状态明确",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-004",
+      "title": "审批后参数变更",
+      "work_package": "SY-008",
+      "scenario": "确认后改 payload 或目标版本",
+      "expected": "原批准无效；重新确认后才执行",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-005",
+      "title": "重复提交同一命令",
+      "work_package": "SY-008",
+      "scenario": "相同 commandId 与 payload 多次投递",
+      "expected": "只产生一次副作用，返回相同回执",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-006",
+      "title": "写入后丢回执",
+      "work_package": "SY-008",
+      "scenario": "提交成功后断开响应，再恢复",
+      "expected": "先对账已执行状态，不再次创建对象",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-007",
+      "title": "同 ID 不同参数",
+      "work_package": "SY-008",
+      "scenario": "同 commandId 发送不同 payload",
+      "expected": "明确冲突，不覆盖旧回执或执行新动作",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-008",
+      "title": "无权限读取敏感域",
+      "work_package": "SY-005",
+      "scenario": "关闭日记/资产授权，要求跨域检索",
+      "expected": "代码层拒绝；上下文与模型请求均无该数据",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-009",
+      "title": "外部内容诱导越权",
+      "work_package": "SY-016",
+      "scenario": "合成检索内容要求忽略规则、读私密数据或写库",
+      "expected": "内容不升级为权限；工具仍被限制",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-010",
+      "title": "模型/网络不可用",
+      "work_package": "SY-006",
+      "scenario": "模型调用失败、断网、返回无效结构",
+      "expected": "正式数据可手工使用；不虚构成功；错误可理解",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-011",
+      "title": "取消与后台中断",
+      "work_package": "SY-007",
+      "scenario": "前台取消、切后台或终止进程",
+      "expected": "状态可恢复；已执行动作可对账，无无限重试",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-012",
+      "title": "能力与供应商边界",
+      "work_package": "SY-006",
+      "scenario": "给无视觉/工具能力模型发送对应请求",
+      "expected": "明确 unsupported；未授权供应商不被自动调用",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-013",
+      "title": "费用与循环上限",
+      "work_package": "SY-016",
+      "scenario": "模拟预算耗尽与工具循环超过配置",
+      "expected": "停止新增调用；unknown 用量不写成 0",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-014",
+      "title": "录音权限与中断",
+      "work_package": "SY-011",
+      "scenario": "拒绝权限、插拔耳机、被来电或系统中断",
+      "expected": "iOS/Android 不丢状态；文字替代可用；不持续偷录",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-015",
+      "title": "学习提取与确认",
+      "work_package": "SY-012",
+      "scenario": "重复提取同一会话，编辑后确认词汇",
+      "expected": "不重复生成；建议与正式学习项区分",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-016",
+      "title": "删除来源与记忆",
+      "work_package": "SY-010",
+      "scenario": "删除日记/学习来源并重新发起检索",
+      "expected": "相关记忆与摘要失效，不再作为当前依据",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-017",
+      "title": "并发编辑冲突",
+      "work_package": "SY-014",
+      "scenario": "两台离线设备编辑同一对象同字段后同步",
+      "expected": "不静默覆盖；双方输入可恢复/选择",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-018",
+      "title": "删除后旧端重放",
+      "work_package": "SY-014",
+      "scenario": "一端删记录，旧端上传旧版本",
+      "expected": "记录不被自动复活；必要时触发全量重建",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-019",
+      "title": "账号切换与撤权",
+      "work_package": "SY-014",
+      "scenario": "A 账号离线排队，再切 B 并联网",
+      "expected": "A 数据不发给 B；旧授权停止；无跨空间检索",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-020",
+      "title": "客户端升级与恢复",
+      "work_package": "SY-004",
+      "scenario": "带已有数据升级并模拟中途故障",
+      "expected": "保留恢复路径；不清空或用空库覆盖",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-021",
+      "title": "时间区间与复盘范围",
+      "work_package": "SY-013",
+      "scenario": "改变时区且制造部分未同步记录",
+      "expected": "日期和时刻语义正确；复盘注明可见范围",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-022",
+      "title": "附件导出与删除",
+      "work_package": "SY-015",
+      "scenario": "中断上传，导出，删除并恢复备份",
+      "expected": "缺失范围可见；无孤儿敏感附件；删除可重放",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-023",
+      "title": "密钥与渲染安全",
+      "work_package": "SY-005",
+      "scenario": "扫描打包资源/日志/导出；尝试通用 IPC 与恶意内容",
+      "expected": "无平台密钥；未授权 IPC 被拒；内容不能执行系统命令",
+      "status": "not_run",
+      "evidence": []
+    },
+    {
+      "id": "AT-024",
+      "title": "闭环与跨端证据",
+      "work_package": "SY-018",
+      "scenario": "从新安装完成目标—练习—复盘并验证各端范围",
+      "expected": "iOS/Android 核心流程有证据；桌面范围明确；未测不算通过",
+      "status": "not_run",
+      "evidence": []
+    }
+  ]
+}

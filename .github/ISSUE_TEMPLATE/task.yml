@@ -1,0 +1,32 @@
+name: 工作包 / Work package
+description: 将 Siyue 的规划任务转成具有明确验收条件的工程工作包
+title: "[SY-xxx] "
+body:
+  - type: input
+    id: plan_id
+    attributes:
+      label: 规划 ID
+      description: 填写 planning/backlog.json 的 ID，或说明新增理由。
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 范围与非目标
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收条件
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 依赖与风险
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 执行证据
+      description: 未实现或未运行时明确写出，不预填通过结果。

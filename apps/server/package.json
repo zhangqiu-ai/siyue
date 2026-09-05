@@ -1,0 +1,25 @@
+{
+  "name": "@siyue/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@siyue/ai": "workspace:*",
+    "@siyue/contracts": "workspace:*",
+    "@siyue/domain": "workspace:*",
+    "ai": "7.0.92",
+    "fastify": "5.12.3",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "tsx": "4.23.13",
+    "typescript": "7.0.2"
+  }
+}

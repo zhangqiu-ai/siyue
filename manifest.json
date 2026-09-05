@@ -1,0 +1,97 @@
+{
+  "package": "Siyue project initiation",
+  "version": "0.1",
+  "date": "2026-09-05",
+  "deliverable_kind": "planning_documents",
+  "application_implemented": false,
+  "github_changes_made": false,
+  "checks": {
+    "work_packages": 20,
+    "acceptance_cases": 24,
+    "dependencies_acyclic": true,
+    "relative_links_checked": 18,
+    "application_tests": "not_run"
+  },
+  "files": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/task.yml",
+      "sha256": "c738eb941860a4473d1e62bbee83854c8e0facca4112592b45959325d4375665"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "sha256": "f066f20c6297494ec8f095ba69044a24893a749791a7841c440bd80ac729f020"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "3f93bc769cd76b101da5741bfdaddb93a1edf52b1dc968a3f5582dfe637add34"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "sha256": "f1a231cf5242f3c3f60adbe9c7620d508128a840df22c1cf6d9a7112e7f98e61"
+    },
+    {
+      "path": "PRODUCT.md",
+      "sha256": "c750e303fbff26ac8817c85c437b541891d3beff49e733f93b211b7fee5b8f7c"
+    },
+    {
+      "path": "PROJECT_CHARTER.md",
+      "sha256": "4f174e45ea6beecb9d430e853ccd27a64177295cb5a46eae127d6181c610ebc4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0372f3c0935c9be25621fde07790d8a084e6f7f4a17154992b4b3f3732c6500d"
+    },
+    {
+      "path": "START_HERE.md",
+      "sha256": "1ef540e02523c44efb9ef4394bdc50208c927ef3c71ee2f3f377df9fd917f395"
+    },
+    {
+      "path": "docs/acceptance.md",
+      "sha256": "ebf591a1d91eae1c010cab8288e8c8f1508d32abb9254a76b786c08829319e15"
+    },
+    {
+      "path": "docs/ai-foundation.md",
+      "sha256": "64b9a3a7ea93a25adb591134cecbc5f1cae7f45b41e702cac661d17210270ee7"
+    },
+    {
+      "path": "docs/backlog.md",
+      "sha256": "95f774675283b97cd8863f8674289d2fbb317de6ded713dfe3f46fb42242a64e"
+    },
+    {
+      "path": "docs/data-sync.md",
+      "sha256": "cacfd29d1eebf6819d8782cc6ac89a740da5f912621dee61f6b21359cf148038"
+    },
+    {
+      "path": "docs/decisions.md",
+      "sha256": "5a695bea26d498a6ef17f86c348435689b60c072642fa52894b3fa1604fd6b36"
+    },
+    {
+      "path": "docs/domain-model.md",
+      "sha256": "c280e47f4e69d928fbabba6211c96f3ed549abce00da869903fdad8fd0ed863f"
+    },
+    {
+      "path": "docs/open-source-commercial.md",
+      "sha256": "8a6db2d4253ed93c3577919f283a966d799c91d4fd1edb7a6c6d07f507c5abdb"
+    },
+    {
+      "path": "docs/privacy-security.md",
+      "sha256": "e2f38af7ea5454379badac91a8b59995117aca5296a129e191f82d24add73075"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "sha256": "bf982cd77d280918542f5a540a218e67f40725061d0ca63c9cb71b31f31cd62c"
+    },
+    {
+      "path": "docs/sources.md",
+      "sha256": "2fd47202a4c24644bd348d88c7da1280e2dc0d50941a21ed547372989f6b42e6"
+    },
+    {
+      "path": "planning/backlog.json",
+      "sha256": "db3b0ecf895e61f7ccbe4d38c378cd06de6589d282d9259d6565f43a47696f87"
+    },
+    {
+      "path": "planning/test-cases.json",
+      "sha256": "b8cf864071dd214442980aa9d8509b07098210f3f8c33db9ade6d6b86aab2505"
+    }
+  ]
+}
