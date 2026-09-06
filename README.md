@@ -30,6 +30,7 @@ iOS与Android独立QA应用均复用正常原生客户端工厂，真实SQLite�
 9. [docs/decisions.md](docs/decisions.md)、[docs/acceptance.md](docs/acceptance.md)：决策状态与验收。
 10. [START_HERE.md](START_HERE.md)、[AGENTS.md](AGENTS.md)：开发启动与 AI 编程协作规则。
 11. [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md)：本轮工程初始化、固定版本、运行命令和未验证项。
+12. [docs/product-philosophy.md](docs/product-philosophy.md)：2026-09-06 产品哲学、家庭自用方向、AI 原则、成长资产与记忆；区分已确认原则与待决方案，不自动扩大 M1。
 
 ## 当前工程状态
 
