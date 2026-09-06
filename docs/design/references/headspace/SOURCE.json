@@ -1,0 +1,13 @@
+{
+  "source": "https://github.com/Meliwat/awesome-ios-design-md",
+  "revision": "5d3aeca239caef3ea4080034eb22ab87cc77fa24",
+  "path": "design-md/fitness/headspace",
+  "retrievedAt": "2026-09-06",
+  "status": "Third-party design inspiration; not an official Headspace specification",
+  "sha256": {
+    "DESIGN.md": "eb2a1ff51e23b75584c1e21624e60467a738f4f7a0fd8ff19e9c73f3c27e2cdd",
+    "DESIGN-expo.md": "5be4531b87ee8b1a2715a53c3cc608066d31c89eeb81682194b10a3ca13ad5da",
+    "README.md": "b8b5d9b22aa612fe327b993ac813f73c3c107327ac4259cdfa42f69252cbc4ad",
+    "LICENSE": "ecdf03526d74525a46df5a4fc7cd9881036113267813a57eadaa1259c453ef53"
+  }
+}

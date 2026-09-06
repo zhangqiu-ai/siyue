@@ -165,3 +165,83 @@ Android UI 首次执行日志为 `artifacts/m1/android-ui-test.log`：1 项、�
 iOS与Android独立QA应用均复用正常原生客户端工厂，真实SQLite提交后丢响应/回执暂不可读、终止进程后对账分别通过（iOS 43.191秒、Android 12.053秒，各1项0失败）；恢复execute=0，同commandId/issuedAt/对象ID/完整快照hash不变，pending只在原回执验证后清除。每个平台两条正常用户UI用例与一条QA用例分别执行，不是同次3/3；不代表正常用户UI错误交互、真机、物理断电、生成取消/后台中断或升级通过，也不自动恢复表单。 正常默认数据库与命令语义保留，QA为显式独立入口及包名。构建、JSON、截图和准确复现命令见 [M1 验证记录](evidence/m1-validation.md)。工作包与跨阶段AT状态不提升。
 
 iOS QA日志为 `ios-native-recovery-compile-fix.log`（43.191秒、1项0失败），首轮Swift `isEmpty()` 编译错误修复史及六份JSON/PNG/辅助功能树TXT附件见上述验证记录；QA与正常target共享Pods生成文件，需串行构建。正常iOS Release重建及模拟器安装/启动也已通过；bundle标记检查与正常界面截图符合预期，仅属正常启动检查，非source map证据或完整UI重跑。本轮无新增真机签名。
+
+
+## iOS 日常热更新开发（2026-09-06）
+
+本机已构建并安装正常 `Siyue` target 的 Debug 包到 `Siyue M1 QA`（iOS 26.5），使用现有原生 Debug + Metro，无新增 expo-dev-client 依赖。Xcode 26.6、Node 22.22.3、Corepack pnpm 11.25.0。以下命令均在仓库根目录执行。
+
+首次构建或原生依赖变化时，本机已通过的命令（沿用已确认的 clang 探测绕行）：
+
+```sh
+corepack pnpm build:packages
+/usr/bin/xcodebuild build \
+  -workspace apps/mobile/ios/Siyue.xcworkspace -scheme Siyue -configuration Debug \
+  -destination 'platform=iOS Simulator,id=7328BC59-6853-445B-A888-E99496AB2048' \
+  -derivedDataPath /tmp/siyue-ios-debug-derived CODE_SIGNING_ALLOWED=NO \
+  CC="$PWD/scripts/xcode-probe/clang" CXX="$PWD/scripts/xcode-probe/clang++"
+xcrun simctl install 7328BC59-6853-445B-A888-E99496AB2048 \
+  /tmp/siyue-ios-debug-derived/Build/Products/Debug-iphonesimulator/Siyue.app
+```
+
+日常分别保持两个终端运行；重新开启开发会话时先运行 `corepack pnpm build:packages`：
+
+```sh
+# 终端一：Metro
+corepack pnpm --filter @siyue/mobile exec expo start --dev-client --localhost
+
+# 终端二：共享包自动编译
+corepack pnpm --filter './packages/*' --parallel exec tsc -p tsconfig.json --watch --preserveWatchOutput
+```
+
+然后打开 Simulator 并直接启动原生 App：
+
+```sh
+open -a Simulator
+xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
+```
+
+未安装 expo-dev-client 时，不依赖终端二维码或 `i` 键启动；这里由 AppDelegate 的 Debug 分支直接加载本机 Metro。当前 localhost 实际监听 IPv6 `::1:8081`，健康检查使用 `curl http://localhost:8081/status`，不要假定 `127.0.0.1` 可访问。本次为本机模拟器流程，不是手机扫码流程。模拟器需已启动；UUID 改变后先通过 `xcrun simctl list devices available` 核对。
+
+验证：共享包构建 4/4 通过；四包 watch 首次编译均零错误；Debug 原生构建 `BUILD SUCCEEDED`（日志 `/tmp/siyue-ios-debug-build.log`）；安装、启动成功；Metro 完成 iOS 1408 modules 打包，调试目标列出 `app.siyue.mobile (Siyue M1 QA)`。临时将首页 `SIYUE / 思玥` 改为 `SIYUE / 热更新验证`，未重启 App，截图确认自动更新；随后恢复原文。截图 `/tmp/siyue-debug-before.png`、`/tmp/siyue-debug-refresh.png`、`/tmp/siyue-debug-restored.png` 为本机临时证据。只验证开发连接与页面热更新；没有重跑业务 UI、真机或 Release 验收，也不提升工作包状态。
+
+### 2026-09-06：Expo UI 基础组件验证
+
+工作目录：仓库根目录。为移动包增加直接依赖 `@expo/ui@57.0.16`，未升级 Expo SDK；参考 SDK 57 官方文档 https://docs.expo.dev/versions/v57.0.0/sdk/ui/ 与安装包类型。
+
+- `corepack pnpm --filter @siyue/mobile exec expo install @expo/ui@57.0.16`：成功；安装器内部输出 pnpm 11.19.0，已保留锁文件更新。
+- `corepack pnpm --filter @siyue/mobile typecheck`：通过。
+- `corepack pnpm --filter @siyue/mobile test`：4 项错误信息单元测试通过；不等同于 UI 自动化测试。
+- `git diff --check`：通过。
+- iOS 26.5，Siyue M1 QA 模拟器，已有 Debug 应用通过 Metro 加载新页面：确认原生输入空值时按钮禁用；输入 `Read ten pages` 后启用，点击显示预览；关闭开关再点击，反馈从“慢慢来，今天先试试”变为“今天的行动”。验证返回业务首页和再次进入预览，已有记录仍可读。预览没有业务写入调用。
+- 本次没有重新执行原生构建；已有二进制含该版本 Expo UI 模块，实际渲染与事件已验证。未执行 Android、真机、发布构建、完整业务回归或真实 AI 调用。
+- 入口：Debug 首页“打开原生组件预览”。页面 `/ui-preview` 在非开发环境重定向首页；不作为正式产品导航分区。
+
+### 2026-09-06：完整移动 AI 应用框架
+
+工作目录：`/Users/feature/code/siyue`。维护者批准 assistant-ui 官方 Expo 示例 + 原生底部导航。新增框架位于 `apps/mobile/app/(shell)`，聊天层位于 `apps/mobile/src/chat`；原首页移动至 `src/screens/goal-screen.tsx`，独立 QA 的导入同步更新。iOS/Android 旧业务 UI 测试启动入口已改为先选“行动”，但本轮未重新执行整套原生业务自动化。
+
+依赖：`@assistant-ui/react-native@0.1.40`、`assistant-cloud@0.1.43`、`react-native-reanimated@4.5.1`、`react-native-gesture-handler@2.32.0`。Cloud 仅满足 Metro 静态解析，不创建云客户端、不外发。初次运行曾报 assistant-cloud 缺失与 gesture-handler 原生/JS 版本冲突；补齐依赖并统一 workspace override、重启 Metro 清缓存后消除。
+
+实际命令与结果：
+
+- `corepack pnpm --filter @siyue/mobile exec expo install @assistant-ui/react-native react-native-reanimated react-native-gesture-handler`：通过，Expo 安装器内部 pnpm 11.19.0。
+- `corepack pnpm --filter @siyue/mobile add assistant-cloud@0.1.43`、`corepack pnpm install`：通过，pnpm 11.25.0；保留锁文件。
+- 在 `apps/mobile/ios` 执行 `LANG=en_US.UTF-8 SSL_CERT_FILE=/opt/homebrew/etc/ca-certificates/cert.pem pod install`：通过，101 dependencies / 100 pods。日志 `/tmp/siyue-assistant-pod-install.log`。
+- 根目录 `/usr/bin/xcodebuild build -workspace apps/mobile/ios/Siyue.xcworkspace -scheme Siyue -configuration Debug -destination 'platform=iOS Simulator,id=7328BC59-6853-445B-A888-E99496AB2048' -derivedDataPath /tmp/siyue-ios-debug-derived CODE_SIGNING_ALLOWED=NO CC=/Users/feature/code/siyue/scripts/xcode-probe/clang CXX=/Users/feature/code/siyue/scripts/xcode-probe/clang++`：BUILD SUCCEEDED。日志 `/tmp/siyue-assistant-ios-debug-build.log`。沿用既有 clang probe 绕行，未 clean/prebuild 或删除设备数据。
+- `xcrun simctl install 7328BC59-6853-445B-A888-E99496AB2048 /tmp/siyue-ios-debug-derived/Build/Products/Debug-iphonesimulator/Siyue.app`：通过。
+- `corepack pnpm --filter @siyue/mobile typecheck`：通过。
+- `corepack pnpm --filter @siyue/mobile test`：6 项通过，含逐段文本增长、生成中取消与预先取消不输出；没有把现有错误测试算成 UI 自动化。
+- `corepack pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist`：两端 Hermes 导出通过，日志 `/tmp/siyue-ui-shell-export.log`。
+- `corepack pnpm --filter @siyue/mobile exec expo start --dev-client --localhost --clear`：Metro localhost:8081 可用，已有普通 Debug 应用加载。未安装 expo-dev-client。
+
+模拟器手动交互证据（iOS26.5，Siyue M1 QA，iPhone17Pro）：
+
+- 聊天首页、原生顶部操作、底部“对话/行动”、滑出侧栏可用。
+- 输入消息及建议入口可发送；可见逐段增长与停止按钮；重新生成后立即停止，出现“已停止，已生成的内容保留”，已生成部分仍在。
+- 新建第二个会话后可切回第一个，原消息与停止状态保留；首条输入 `Read` 成为侧栏标题。
+- 软件键盘展开时聊天输入区位于键盘上方；空态可滚动，收起后输入区位于底部导航上方。采用 screens 原生安全区与实际 Stack 高度，避免硬编码底栏高度。
+- 行动页可以读取原有 5 个目标 / 3 个项目 / 5 个任务，打开手动编辑未产生正式记录。嵌入导航时使用 ScrollView 系统键盘 inset 调整，独立 QA 保留原 KeyboardAvoidingView。未执行新的正式写入。
+- 本地截图：`artifacts/ui-shell/home.png`、`artifacts/ui-shell/sidebar.png`。截图与构建日志为本机证据，不自动加入 Git。
+
+限制：聊天是本地 Mock，会话仅内存，重启会清空；正式行动仍持久化。未测试真实模型、流式网络故障、Android 新框架原生运行、真机、完整业务回归及发行工件。未 commit、push 或部署。不改变 backlog 中尚未完成的真实 AI / 多平台验收状态。

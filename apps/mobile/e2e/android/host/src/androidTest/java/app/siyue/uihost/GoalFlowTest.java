@@ -192,6 +192,8 @@ public final class GoalFlowTest {
     private void launchSiyue() throws IOException {
         String result = device.executeShellCommand("am start -W -n app.siyue.mobile/.MainActivity");
         assertTrue("Siyue launch failed: " + result, result.contains("Status: ok"));
+        await("The app shell must expose the actions tab", () -> visible(text("行动")) != null);
+        visible(text("行动")).click();
         await("Siyue main content must be mounted", () -> visible(resource("siyue-main-scroll")) != null);
         // am start may resume the existing activity at a prior scroll offset; preserve data and return to its header.
         goToTop();

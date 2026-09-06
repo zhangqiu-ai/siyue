@@ -8,5 +8,6 @@ overrides:
   '@react-native/metro-config': 0.86.3
   react-native-worklets: 0.10.1
   react-native-reanimated: 4.5.1
+  react-native-gesture-handler: 2.32.0
 # Test/build commands must not silently mutate the dependency tree.
 verifyDepsBeforeRun: error

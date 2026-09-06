@@ -25,8 +25,15 @@ final class SiyueUITests: XCTestCase {
         // The product copy remains Chinese; use English system edit-menu labels deterministically.
         app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
+        openActions()
         XCTAssertTrue(app.staticTexts.matching(identifier: "本机空间 · 离线可用").firstMatch.waitForExistence(timeout: timeout),
                       "App must open its actual local space; a loading or unavailable screen is not success.")
+    }
+
+    private func openActions() {
+        let actions = app.tabBars.buttons["行动"]
+        XCTAssertTrue(actions.waitForExistence(timeout: timeout), "The app shell must expose the actions tab.")
+        actions.tap()
     }
 
     override func tearDownWithError() throws {
@@ -61,6 +68,7 @@ final class SiyueUITests: XCTestCase {
         // Restart before approval as well: a saved draft must require an explicit resume and confirmation.
         app.terminate()
         app.launch()
+        openActions()
         XCTAssertTrue(app.staticTexts.matching(identifier: "本机空间 · 离线可用").firstMatch.waitForExistence(timeout: timeout))
         XCTAssertEqual(goalCount(), initialGoals)
         try tapButton("继续：\(goal)")
@@ -76,6 +84,7 @@ final class SiyueUITests: XCTestCase {
 
         app.terminate()
         app.launch()
+        openActions()
         XCTAssertTrue(app.staticTexts.matching(identifier: "本机空间 · 离线可用").firstMatch.waitForExistence(timeout: timeout))
         try waitForRecord(goal)
         try waitForRecord(project)
@@ -146,6 +155,7 @@ final class SiyueUITests: XCTestCase {
 
         app.terminate()
         app.launch()
+        openActions()
         XCTAssertTrue(app.staticTexts.matching(identifier: "本机空间 · 离线可用").firstMatch.waitForExistence(timeout: timeout))
         try waitForRecord(renamedGoal)
         try waitForRecord(renamedTask)
