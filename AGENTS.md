@@ -93,9 +93,10 @@
 
 ## 6. 代码与交互实现
 
+- UI 信息密度遵循 [DESIGN.md](DESIGN.md)：熟悉操作优先图标，保留无障碍名称与足够触控区域；删除重复标题、口号和多余说明，低频入口不抢占主内容。简单文案或入口删减做必要静态检查，较复杂布局/交互变化再截图验收。
 - 设计技能选择（维护者于 2026-09-06 明确）：本项目禁止使用 `ui-ux-pro-max`，不作为设计、实现或审查依据；该限制不要求卸载本机技能。
 - 本项目采用已安装的 `huashu-design` 进行设计方向探索、高保真 HTML 原型与设计评审。使用时读取本机 `huashu-design/SKILL.md`（当前路径 `/Users/feature/.codex/skills/huashu-design/SKILL.md`）；不复制整套技能到仓库。HTML 原型用于设计确认，不替代 React Native + Expo 正式实现或原生验收，不改变桌面 Electron 技术约束。
-- 设计工作先读 [DESIGN.md](DESIGN.md)：维护者已选 Headspace 风格参考并要求安装，原文与 Expo 补充位于 `docs/design/references/headspace/`。具体页面、最终设计变量与 UI 组件库仍待原型确认；不将参考中的冥想功能、品牌资产或旧 API 自动引入思玥。Spectr skill 已安装供录屏提取参考使用，其 Claude/ffmpeg 流水线尚未验收；不默认运行。`design-md` 通用技能及 Google 格式工具未因本次安装自动选用。
+- 设计工作先读 [DESIGN.md](DESIGN.md)：维护者已将视觉方向改为黑白灰，仅明色/暗色主题，覆盖此前 Headspace 暖色方向；旧原文与 Expo 补充仅作为历史材料保留于 `docs/design/references/headspace/`。已采用 Expo UI 与 assistant-ui Expo 应用框架；后续具体页面仍经原型确认，不将历史参考中的功能、品牌资产或旧 API 自动引入思玥。Spectr skill 已安装供录屏提取参考使用，其 Claude/ffmpeg 流水线尚未验收；不默认运行。`design-md` 通用技能及 Google 格式工具未因本次安装自动选用。
 - 延续现有 TypeScript 严格配置、命名与格式。修改限于当前工作包和必要依赖，不做无关重构、全仓格式化或提前抽象。
 - 外部请求、IPC、模型输出和持久化输入在边界做运行时校验；TypeScript 类型断言不构成数据校验或权限校验。
 - 新领域行为明确空间、对象关联、状态转换、版本与错误语义；跨空间引用必须拒绝。

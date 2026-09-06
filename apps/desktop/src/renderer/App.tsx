@@ -151,17 +151,17 @@ export function App() {
   const latestRun = plan.snapshot?.runs.reduce<AgentRun | undefined>((latest, run) => !latest || run.updatedAt > latest.updatedAt ? run : latest, undefined);
   const pending = plan.snapshot?.drafts.filter((item) => ['draft', 'approved'].includes(item.status) && item.command.kind === 'plan.create') ?? [];
   return <main className="shell">
-    <header className="page-header"><div><p className="eyebrow">SIYUE / 思玥</p><h1>让想做的事，<br />有一个开始。</h1><p className="lead">写下一个目标，把它变成今天能做的小事。</p></div>
+    <header className="page-header"><h1>目标与行动</h1>
       <span className="local-badge">{plan.error ? plan.snapshot ? '本机空间状态待核对' : '本机空间暂不可用' : plan.snapshot ? '本机空间 · 离线可用' : '正在连接本机空间'}</span></header>
     <div className="feedback" aria-live="polite" aria-busy={!!plan.busy}>
       {plan.busy && <p>{plan.busy}…</p>}{plan.notice && <p className="success">{plan.notice}</p>}
       {plan.error && <div role="alert" className="error"><p>{plan.error}</p><button disabled={!!plan.busy} onClick={() => void plan.refresh()}>重新读取本地记录</button></div>}
     </div>
-    {latestRun && <aside className="run-status" aria-live="polite"><strong>最近一次示例计划</strong><p>{runMessages[latestRun.status]}</p></aside>}
+    {latestRun && <aside className="run-status" aria-live="polite"><p>{runMessages[latestRun.status]}</p></aside>}
     <div className="workspace">
-      <section className="panel compose" aria-labelledby="compose-title"><p className="eyebrow">01 / 从一个目标开始</p><h2 id="compose-title">今天，想往哪里成长？</h2>
+      <section className="panel compose" aria-labelledby="compose-title"><h2 id="compose-title">新目标</h2>
         <label htmlFor="goal-input">我的目标</label><textarea id="goal-input" rows={3} maxLength={160} value={plan.goal} onChange={(event) => plan.setGoal(event.target.value)} placeholder="例如：开始规律地阅读" />
-        <p className="hint">当前使用本机确定性 Mock 生成示例计划，不联网、不调用真实 AI。所有内容都可以修改。</p>
+        <p className="hint">本机示例生成，不调用 AI；内容可编辑。</p>
         <div className="actions"><button className="primary" disabled={disabled || !plan.goal.trim() || plan.editing} onClick={() => void plan.propose()}>生成示例计划</button>
           <button disabled={disabled || plan.editing} onClick={plan.startManual}>手动创建</button>
           {plan.busy === '生成示例计划' && <button onClick={plan.cancel}>取消生成</button>}</div>
@@ -179,19 +179,19 @@ export function App() {
             : <button className="primary" disabled={disabled || !plan.payload.title} onClick={() => void plan.manual()}>确认保存手动计划</button>}
           <button className="text-button" disabled={!!plan.busy} onClick={plan.close}>收起编辑（保留输入）</button>
         </div>}
-        {pending.length > 0 && <div className="draft-list"><h3>待确认草稿 <span className="count">{pending.length}</span></h3><p className="hint">已保存在本机，选择一份继续检查。草稿不会自动执行。</p>
+        {pending.length > 0 && <div className="draft-list"><h3>待确认草稿 <span className="count">{pending.length}</span></h3><p className="hint">草稿已存本机，确认后才执行。</p>
           {pending.map((item) => <button className="draft-item" key={item.id} disabled={disabled || plan.editing} onClick={() => plan.resume(item)}><span>{item.command.kind === 'plan.create' ? item.command.payload.title : '计划草稿'}</span><span>继续 →</span></button>)}
         </div>}
       </section>
-      <section className="panel saved" aria-labelledby="saved-title"><div className="section-heading"><div><p className="eyebrow">02 / 把成长留在每天</p><h2 id="saved-title">我的行动</h2></div><button disabled={!!plan.busy} onClick={() => void plan.refresh()}>刷新</button></div>
-        <p className="hint">正式记录保存于这台设备。关闭后重新打开，可继续查看和完成任务。</p>
-        {plan.snapshot && !plan.snapshot.goals.length && <div className="empty"><span className="empty-symbol" aria-hidden="true">↗</span><h3>第一步，可以很小。</h3><p>确认一个计划后，目标和行动会出现在这里。</p></div>}
+      <section className="panel saved" aria-labelledby="saved-title"><div className="section-heading"><h2 id="saved-title">我的行动</h2><button className="icon-button" aria-label="刷新" title="刷新" disabled={!!plan.busy} onClick={() => void plan.refresh()}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5" /><path d="M6 7a7 7 0 0 1 11-1l3 6M4 12l3 6a7 7 0 0 0 11-1" /></svg></button></div>
+        <p className="hint">记录保存在本机，重启后可继续。</p>
+        {plan.snapshot && !plan.snapshot.goals.length && <div className="empty"><p>暂无行动</p></div>}
         {(['goal', 'project', 'task'] as const).map((kind) => {
           const records = kind === 'goal' ? plan.snapshot?.goals : kind === 'project' ? plan.snapshot?.projects : plan.snapshot?.tasks;
           return records?.length ? <section className="record-group" key={kind}><h3>{kind === 'goal' ? '目标' : kind === 'project' ? '项目' : '任务'} <span className="count">{records.length}</span></h3>
             {records.map((record) => <RecordRow key={record.id} kind={kind} record={record} disabled={disabled} update={plan.update} />)}</section> : null;
         })}
       </section>
-    </div><footer>一步一步，成为想成为的自己。</footer>
+    </div>
   </main>;
 }

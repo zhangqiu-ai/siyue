@@ -58,7 +58,9 @@
 
 里程碑：M1 | 优先级：P0 | 状态：in_progress
 
-本轮证据：[M1 验证记录](evidence/m1-validation.md)。受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。
+早期 Mock 阶段证据：[M1 验证记录](evidence/m1-validation.md)。受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。
+
+2026-09-06 基础框架补充：移动端增加个人 OpenAI 兼容 BYOK、SecureStore 安全配置、明暗主题设置与流式聊天。属于 SY-021；真实供应商、Android 原生和真机仍待验收。目标草稿仍采用原有 Mock，生产鉴权未实现。见 docs/evidence/mobile-ai-settings.md。
 
 依赖：SY-001, SY-002
 
@@ -241,3 +243,25 @@
 - 权益统一接口；不能因订阅失效阻断个人数据导出。
 
 结构化版本：[planning/backlog.json](../planning/backlog.json)。任务创建或完成时分别填写 GitHub 编号和实际证据，不自动推定。
+
+## SY-021 · 补齐移动 AI 基础对话与个人密钥设置
+
+里程碑：M1 | 优先级：P0 | 状态：in_progress
+
+依赖：SY-001, SY-002
+
+维护者于 2026-09-06 要求优先补齐基础框架，选择通用 OpenAI 兼容接口；在 SY-009 剩余验收之前先完成本切片。同步推进 SY-005 的移动个人密钥部分，不因此宣称 SY-005 全部完成。
+
+验收：
+- 明暗主题、服务地址、模型与个人密钥可在设置页管理；密钥仅安全存储，改地址不能沿用旧密钥。
+- 当前会话文字经用户发送到指定 OpenAI 兼容服务，流式回复可停止、重试，配置切换不带入旧会话。
+- 连接测试仅发送合成提示，失败与取消可恢复；至少一项真实供应商调用与 iOS 真机验证单独记录。
+
+代码与单元验证已落地；真实供应商凭据未提供，不能将合成测试写为真实 AI 验收。详见 [移动 AI 与设置验证](evidence/mobile-ai-settings.md)。
+
+
+### 2026-09-06 设置改版进展
+
+SY-009 仍为 in_progress。2026-09-06：维护者要求移除初始化示例。移动正式导航现为对话/设置，目标与行动示例及原生组件预览入口已移除；旧目标 UI 仅保留为隔离 QA fixture，数据库与业务代码未删除。历史目标 UI 验收属于旧界面，不能证明当前正式移动入口可用。正式目标页面需后续重新设计。
+
+SY-021 仍为 in_progress：六家国内服务预设、自定义接口和分层设置已实现；iOS 模拟器明暗截图、供应商搜索/选择、地址展开及空密钥校验通过。移动 38 项测试、类型检查、双平台 JS 导出通过；真实供应商和真机尚待验证。见 [验收记录](evidence/settings-redesign.md)。

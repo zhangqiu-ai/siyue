@@ -245,3 +245,23 @@ xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
 - 本地截图：`artifacts/ui-shell/home.png`、`artifacts/ui-shell/sidebar.png`。截图与构建日志为本机证据，不自动加入 Git。
 
 限制：聊天是本地 Mock，会话仅内存，重启会清空；正式行动仍持久化。未测试真实模型、流式网络故障、Android 新框架原生运行、真机、完整业务回归及发行工件。未 commit、push 或部署。不改变 backlog 中尚未完成的真实 AI / 多平台验收状态。
+
+### 2026-09-06：黑白灰双主题验证
+
+工作目录 `/Users/feature/code/siyue`。无新增依赖，无原生模块变化。
+
+- `corepack pnpm --filter @siyue/mobile typecheck`：通过。
+- `corepack pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist`：两端导出通过；日志 `/tmp/siyue-monochrome-export.log`。
+- iOS26.5 Siyue M1 QA 模拟器：检查明色首页；侧栏选择暗色后侧栏、原生顶栏/底栏、聊天首页与行动表单同步更新；执行 `xcrun simctl terminate booted app.siyue.mobile` 和 `xcrun simctl launch booted app.siyue.mobile` 后暗色选择仍保留。
+- 色号扫描：移动路由、聊天、行动、UI 目录内仅 `src/ui/theme.ts` 保留黑白灰十六进制色值，无旧暖色硬编码。
+- `git diff --check`：通过。未重复业务测试、原生构建、Android运行或真机验收；本轮只修改展示与本机外观偏好。未提交、推送或部署。
+# 2026-09-06 · 移动 AI 对话与基础设置补充
+
+移动端现支持个人 OpenAI 兼容服务地址、模型与密钥配置，以及明暗主题设置、显式连接测试、流式普通对话。`expo-secure-store@57.0.3` 已安装；原目标草稿仍为 Mock，聊天不调用业务写入工具。真实供应商与本轮真机尚未验收。准确命令、失败修复与结果见 [移动 AI 与设置验证](evidence/mobile-ai-settings.md)。
+
+注意：此前 `CODE_SIGNING_ALLOWED=NO` 的模拟器构建不满足 Keychain 权限；本轮使用 `scripts/ios-simulator.entitlements` 通过 Xcode 生成模拟器专用权限后，安全配置保存/重启/移除已检查。仅用于指定模拟器 target，不替代真机团队签名。不要把编译通过等同于安全存储可用。
+
+
+## 2026-09-06 · 设置改版验证
+
+无新增原生依赖。沿用已安装的 Debug 模拟器构建，通过 Metro 更新并冷启动验证新路由。`corepack pnpm --filter @siyue/mobile typecheck`、`corepack pnpm --filter @siyue/mobile test`（38/38）及 `corepack pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist` 通过。iOS 26.5（Siyue M1 QA）完成截图与交互检查；本轮未重新原生构建、未做真机或真实供应商调用。详见 [验收记录](evidence/settings-redesign.md)。

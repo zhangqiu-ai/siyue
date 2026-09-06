@@ -139,9 +139,10 @@
       ],
       "github_issue_number": null,
       "execution_evidence": [
-        "docs/evidence/m1-validation.md"
+        "docs/evidence/m1-validation.md",
+        "docs/evidence/mobile-ai-settings.md"
       ],
-      "implementation_note": "受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。"
+      "implementation_note": "早期 Mock 阶段：受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。 2026-09-06 基础框架补充：移动端增加个人 OpenAI 兼容 BYOK、SecureStore 安全配置、明暗主题设置与流式聊天。属于 SY-021；真实供应商、Android 原生和真机仍待验收。目标草稿仍采用原有 Mock，生产鉴权未实现。见 docs/evidence/mobile-ai-settings.md。"
     },
     {
       "id": "SY-006",
@@ -249,7 +250,7 @@
         "artifacts/m1/android-offline-probe.log",
         "artifacts/m1/android-offline-connectivity-restored.log"
       ],
-      "implementation_note": "目标草稿编辑确认、手动保存、改名/任务完成/归档已接入两端；实际macOS桌面闭环通过。iOS模拟器两条独立UI用例分别执行通过：草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成与重启保留、拒绝不增记录、手动创建；另一用例验证手动目标/任务改名ID不变、任务完成后归档、重启同ID/状态/数量保留。上述iOS用例未主动切换模拟器网络或注入断网；iPhone开发签名与两条核心真机UI路径分别通过，故障/后台场景未验收；Android环境与独立UI宿主已就绪，主应用构建、APK签名校验及安装通过；Android模拟器UI闭环通过（1项、0失败，336.319秒），覆盖草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成后重启同ID/状态/数量保留、拒绝不增记录和手动创建。Android第二条独立用例在关闭Wi-Fi/移动数据且无默认网络时通过（1项0失败，325.679秒），验证手动目标/任务改名同ID、旧名全页不存在、完成归档、重启同ID/名称/状态/数量及归档只读；网络已恢复。两条Android用例分别运行，不是同次2/2；Android真机、iPhone故障/后台及正常用户UI其余错误交互/升级故障仍待验收。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。"
+      "implementation_note": "目标草稿编辑确认、手动保存、改名/任务完成/归档已接入两端；实际macOS桌面闭环通过。iOS模拟器两条独立UI用例分别执行通过：草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成与重启保留、拒绝不增记录、手动创建；另一用例验证手动目标/任务改名ID不变、任务完成后归档、重启同ID/状态/数量保留。上述iOS用例未主动切换模拟器网络或注入断网；iPhone开发签名与两条核心真机UI路径分别通过，故障/后台场景未验收；Android环境与独立UI宿主已就绪，主应用构建、APK签名校验及安装通过；Android模拟器UI闭环通过（1项、0失败，336.319秒），覆盖草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成后重启同ID/状态/数量保留、拒绝不增记录和手动创建。Android第二条独立用例在关闭Wi-Fi/移动数据且无默认网络时通过（1项0失败，325.679秒），验证手动目标/任务改名同ID、旧名全页不存在、完成归档、重启同ID/名称/状态/数量及归档只读；网络已恢复。两条Android用例分别运行，不是同次2/2；Android真机、iPhone故障/后台及正常用户UI其余错误交互/升级故障仍待验收。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 2026-09-06：维护者要求移除初始化示例。移动正式导航现为对话/设置，目标与行动示例及原生组件预览入口已移除；旧目标 UI 仅保留为隔离 QA fixture，数据库与业务代码未删除。历史目标 UI 验收属于旧界面，不能证明当前正式移动入口可用。正式目标页面需后续重新设计。"
     },
     {
       "id": "SY-010",
@@ -451,6 +452,28 @@
       ],
       "github_issue_number": null,
       "execution_evidence": []
+    },
+    {
+      "id": "SY-021",
+      "title": "补齐移动 AI 基础对话与个人密钥设置",
+      "milestone": "M1",
+      "priority": "P0",
+      "status": "in_progress",
+      "depends_on": [
+        "SY-001",
+        "SY-002"
+      ],
+      "acceptance_criteria": [
+        "明暗主题、服务地址、模型与个人密钥可在设置页管理；密钥仅安全存储，改地址不能沿用旧密钥。",
+        "当前会话文字经用户发送到指定 OpenAI 兼容服务，流式回复可停止、重试，配置切换不带入旧会话。",
+        "连接测试仅发送合成提示，失败与取消可恢复；至少一项真实供应商调用与 iOS 真机验证单独记录。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": [
+        "docs/evidence/mobile-ai-settings.md",
+        "docs/evidence/settings-redesign.md"
+      ],
+      "implementation_note": "维护者明确要求优先补齐基础框架，并选择通用 OpenAI 兼容接口。代码与单元验证已落地；真实供应商凭据未提供，不能将合成测试写为真实 AI 验收。 六家国内服务预设、自定义接口和分层设置已实现；iOS 模拟器明暗截图、搜索/选择、地址展开和空密钥校验通过；移动38项测试、类型检查及双平台JS导出通过，真实供应商和真机仍待验收。"
     }
   ],
   "updated_on": "2026-09-06"

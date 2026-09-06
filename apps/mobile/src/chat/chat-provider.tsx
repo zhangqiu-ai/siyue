@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import {
   AssistantRuntimeProvider,
   InMemoryThreadListAdapter,
@@ -6,10 +6,14 @@ import {
   useRemoteThreadListRuntime,
   type RemoteThreadListAdapter,
 } from '@assistant-ui/react-native';
-import { mockChatAdapter } from './mock-adapter';
+import { useAISettings } from '../settings/ai-settings';
+import { useCompatibleChatAdapter } from './compatible-adapter';
 
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const [adapter] = useState<RemoteThreadListAdapter>(() => {
+  const { revision } = useAISettings();
+  // Replacing the list adapter clears its threads using the library's generation
+  // handling, while preserving the navigation tree and unsaved goal forms.
+  const adapter = useMemo<RemoteThreadListAdapter>(() => {
     const local: RemoteThreadListAdapter = new InMemoryThreadListAdapter();
     local.generateTitle = async (_threadId, messages) => {
       const first = messages.find((message) => message.role === 'user');
@@ -25,11 +29,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       });
     };
     return local;
-  });
+  }, [revision]);
   const runtime = useRemoteThreadListRuntime({
     adapter,
     runtimeHook: function useChatRuntime() {
-      return useLocalRuntime(mockChatAdapter);
+      return useLocalRuntime(useCompatibleChatAdapter());
     },
   });
   return <AssistantRuntimeProvider runtime={runtime}>{children}</AssistantRuntimeProvider>;

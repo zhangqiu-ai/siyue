@@ -12,4 +12,6 @@ MIT 许可全文保留在 [UPSTREAM-LICENSE](UPSTREAM-LICENSE)，不为整个思
 
 实际调用 API 以安装的 `@assistant-ui/react-native@0.1.40` 类型及源码为准。使用官方 runtime/primitives 管理发送、流式消息、取消、重新生成和多会话；以本项目色板与中文文案改编展示。
 
-`ChatProvider` 明确使用 InMemoryThreadListAdapter，`mock-adapter.ts` 在本机异步逐段产出累计文本。不使用上游云服务、API 密钥、上传或工具执行。会话仅当前运行内存保留；不变更行动页的 SQLite/审批/正式写入逻辑。普通文字输入及逐段输出已接入；附件、语音、Markdown 富渲染、真实 Provider 和持久化会话不在本次范围。
+`ChatProvider` 使用 InMemoryThreadListAdapter；当前 `compatible-adapter.ts` 连接用户在设置中明确保存的 OpenAI 兼容服务，`mock-adapter.ts` 仅保留作确定性测试。未配置密钥时提示设置，不自动启用 Mock 或其他服务。SecureStore 保存绑定地址的个人密钥；只发送当前会话可见文字，不读取正式业务对象、不上传其他会话、不执行工具。
+
+会话仅当前运行内存保留，配置保存/移除后替换会话列表适配器；不使用上游 assistant-cloud 服务。旧行动示例页已移至 e2e/native-recovery/legacy-goal-screen.tsx，正式应用不导入；SQLite/审批/正式写入逻辑和数据保留。附件、语音、Markdown 富渲染、持久化聊天及真实供应商验收不在已完成的基础实现内。验证见 [mobile-ai-settings.md](../../../../docs/evidence/mobile-ai-settings.md)。

@@ -5,7 +5,7 @@ import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spaceStateSchema } from '@siyue/contracts';
 import type { LocalClient } from '@siyue/adapters';
-import HomeScreen from '../../src/screens/goal-screen';
+import HomeScreen from './legacy-goal-screen';
 import { createNativeClient } from '../../src/native-client';
 
 // This module is imported only by the independently bundled native QA entry.

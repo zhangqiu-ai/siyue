@@ -1,6 +1,6 @@
-import { Link } from 'expo-router';
-import { theme } from '../ui/theme';
-import { describeError } from '../errors';
+// Historical M1 QA fixture; not routed or imported by the product app.
+import { useTheme, type Theme } from '../../src/ui/theme';
+import { describeError } from '../../src/errors';
 import { useEffect, useRef, useState } from 'react';
 import type { LocalClient, PlanSnapshot } from '@siyue/adapters';
 import type { ActionDraft, AgentRun, GoalDraft } from '@siyue/contracts';
@@ -110,12 +110,13 @@ function usePlan(loadClient: () => Promise<LocalClient>) {
   };
 }
 
-import { getClient } from '../client';
-import { StatusBar } from 'expo-status-bar';
+import { getClient } from '../../src/client';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 function Button({ title, onPress, disabled = false, primary = false, testID }: { title: string; onPress: () => void; disabled?: boolean; primary?: boolean; testID?: string }) {
+  const theme = useTheme();
+  const styles = makeStyles(theme);
   return <Pressable testID={testID} accessibilityRole="button" accessibilityLabel={title} accessibilityState={{ disabled }} disabled={disabled} onPress={onPress}
     style={({ pressed }) => [styles.button, primary && styles.primary, disabled && styles.disabled, pressed && styles.pressed]}>
     <Text style={[styles.buttonText, primary && styles.primaryText]}>{title}</Text>
@@ -124,13 +125,17 @@ function Button({ title, onPress, disabled = false, primary = false, testID }: {
 function Field({ label, value, onChangeText, multiline = false, maxLength, disabled = false, testID }: {
   label: string; value: string; onChangeText: (value: string) => void; multiline?: boolean; maxLength?: number; disabled?: boolean; testID?: string;
 }) {
+  const theme = useTheme();
+  const styles = makeStyles(theme);
   return <View style={styles.field}><Text style={styles.label}>{label}</Text><TextInput testID={testID} accessibilityLabel={label} value={value} onChangeText={onChangeText}
-    multiline={multiline} maxLength={maxLength} editable={!disabled} style={[styles.input, multiline && styles.multiline]} textAlignVertical="top" /></View>;
+    selectionColor={theme.color.accent} multiline={multiline} maxLength={maxLength} editable={!disabled} style={[styles.input, multiline && styles.multiline]} textAlignVertical="top" /></View>;
 }
 function RecordRow({ kind, record, disabled, update }: {
   kind: 'goal' | 'project' | 'task'; record: { id: string; version: number; title: string; status: string };
   disabled: boolean; update: ReturnType<typeof usePlan>['update'];
 }) {
+  const theme = useTheme();
+  const styles = makeStyles(theme);
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(record.title);
   return <View testID={`siyue-record-${kind}-${record.id}`} collapsable={false} style={styles.record}>
@@ -147,18 +152,19 @@ function RecordRow({ kind, record, disabled, update }: {
   </View>;
 }
 export default function HomeScreen({ loadClient = getClient, embedded = false }: { loadClient?: () => Promise<LocalClient>; embedded?: boolean } = {}) {
+  const theme = useTheme();
+  const styles = makeStyles(theme);
   const plan = usePlan(loadClient);
   const disabled = !!plan.busy || !plan.snapshot;
   const latestRun = plan.snapshot?.runs.reduce<AgentRun | undefined>((latest, run) => !latest || run.updatedAt > latest.updatedAt ? run : latest, undefined);
   const pending = plan.snapshot?.drafts.filter((item) => ['draft', 'approved'].includes(item.status) && item.command.kind === 'plan.create') ?? [];
-  return <SafeAreaView style={styles.safe} edges={embedded ? [] : ['top', 'bottom']}><StatusBar style="dark" />
+  return <SafeAreaView style={styles.safe} edges={embedded ? [] : ['top', 'bottom']}>
     <KeyboardAvoidingView style={styles.safe} enabled={!embedded || Platform.OS !== 'ios'} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView automaticallyAdjustKeyboardInsets={embedded} testID="siyue-main-scroll" contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
-        {embedded && __DEV__ && <Link href="/ui-preview" style={{ color: '#A8421F', paddingVertical: 12 }}>打开原生组件预览 →</Link>}
         <Text testID="siyue-page-start" style={styles.eyebrow}>SIYUE / 思玥</Text><Text style={styles.title} accessibilityRole="header">让想做的事，{ '\n' }有一个开始。</Text>
         <Text style={styles.lead}>写下一个目标，把它变成今天能做的小事。</Text>
         <Text testID="siyue-local-state" style={styles.badge}>{plan.error ? plan.snapshot ? '本机空间状态待核对' : '本机空间暂不可用' : plan.snapshot ? '本机空间 · 离线可用' : '正在连接本机空间'}</Text>
-        {!!plan.busy && <View style={styles.actions}><ActivityIndicator color="#365d48" /><Text accessibilityLiveRegion="polite" style={styles.hint}>{plan.busy}…</Text></View>}
+        {!!plan.busy && <View style={styles.actions}><ActivityIndicator color={theme.color.accent} /><Text accessibilityLiveRegion="polite" style={styles.hint}>{plan.busy}…</Text></View>}
         {!!plan.notice && <Text accessibilityLiveRegion="polite" style={styles.notice}>{plan.notice}</Text>}
         {!!plan.error && <View style={styles.error}><Text testID="siyue-error-message" accessibilityRole="alert" style={styles.errorText}>{plan.error}</Text><Button title="重新读取本地记录" disabled={!!plan.busy} onPress={() => void plan.refresh()} /></View>}
         {latestRun && <View style={styles.runStatus}><Text style={styles.label}>最近一次示例计划</Text><Text testID="siyue-run-status" accessibilityLiveRegion="polite" style={styles.hint}>{runMessages[latestRun.status]}</Text></View>}
@@ -201,28 +207,28 @@ export default function HomeScreen({ loadClient = getClient, embedded = false }:
     </KeyboardAvoidingView>
   </SafeAreaView>;
 }
-const styles = StyleSheet.create({
+const makeStyles = (theme: Theme) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: theme.color.background },
   container: { padding: 20, gap: 14, paddingBottom: 32 },
-  eyebrow: { fontSize: 11, letterSpacing: 1.8, color: '#6c7b6d', fontWeight: '600' },
+  eyebrow: { fontSize: 11, letterSpacing: 1.8, color: theme.color.muted, fontWeight: '600' },
   title: { fontSize: 36, lineHeight: 47, letterSpacing: -1, color: theme.color.ink, fontWeight: '600' },
   lead: { fontSize: 14, lineHeight: 24, color: theme.color.muted },
-  badge: { alignSelf: 'flex-start', fontSize: 11, color: '#526544', backgroundColor: '#e8eddf', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16 },
-  runStatus: { backgroundColor: '#edf0e7', borderRadius: 10, padding: 14, gap: 4 },
+  badge: { alignSelf: 'flex-start', fontSize: 11, color: theme.color.ink, backgroundColor: theme.color.subtle, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16 },
+  runStatus: { backgroundColor: theme.color.subtle, borderRadius: 10, padding: 14, gap: 4 },
   panel: { backgroundColor: theme.color.surface, borderColor: theme.color.border, borderWidth: 1, borderRadius: 16, padding: 18, gap: 10 },
   heading: { fontSize: 22, lineHeight: 30, color: theme.color.ink, fontWeight: '600' },
   subheading: { fontSize: 16, lineHeight: 25, color: theme.color.accent, fontWeight: '600' },
-  field: { gap: 7, marginTop: 7 }, label: { fontSize: 12, lineHeight: 21, fontWeight: '600', color: '#52604f' },
-  input: { backgroundColor: '#fffefb', borderColor: '#cbd1c7', borderWidth: 1, borderRadius: 8, padding: 12, color: theme.color.ink, fontSize: 16, lineHeight: 24, minHeight: 46 },
+  field: { gap: 7, marginTop: 7 }, label: { fontSize: 12, lineHeight: 21, fontWeight: '600', color: theme.color.muted },
+  input: { backgroundColor: theme.color.surface, borderColor: theme.color.border, borderWidth: 1, borderRadius: 8, padding: 12, color: theme.color.ink, fontSize: 16, lineHeight: 24, minHeight: 46 },
   multiline: { minHeight: 95 }, hint: { fontSize: 12, lineHeight: 21, color: theme.color.muted },
   actions: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' },
-  button: { borderColor: '#c9d2c8', borderWidth: 1, backgroundColor: '#fffefa', borderRadius: 8, paddingVertical: 12, paddingHorizontal: 13, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
+  button: { borderColor: theme.color.border, borderWidth: 1, backgroundColor: theme.color.surface, borderRadius: 8, paddingVertical: 12, paddingHorizontal: 13, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   buttonText: { color: theme.color.accent, fontSize: 13, lineHeight: 20 },
-  primary: { backgroundColor: theme.color.accent, borderColor: theme.color.accent }, primaryText: { color: '#fff' }, disabled: { opacity: .4 }, pressed: { opacity: .7 },
-  editor: { marginTop: 14, paddingTop: 18, borderTopColor: '#e2e4d9', borderTopWidth: 1, gap: 10 },
-  record: { paddingVertical: 14, gap: 8, borderBottomWidth: 1, borderBottomColor: '#e5e5da' }, recordTitle: { color: theme.color.ink, fontSize: 16, lineHeight: 25 },
-  done: { textDecorationLine: 'line-through', color: '#71816c' },
-  notice: { backgroundColor: '#e8eddf', color: '#3b6249', padding: 14, borderRadius: 9, fontSize: 13, lineHeight: 23 },
-  error: { borderColor: '#e1c5ad', borderWidth: 1, padding: 14, backgroundColor: '#fff4e8', borderRadius: 9, gap: 12 }, errorText: { color: '#804e28', fontSize: 13, lineHeight: 23 },
-  empty: { paddingVertical: 36, alignItems: 'center', gap: 12 }, emptySymbol: { fontSize: 38, color: '#9aab85' }, footer: { textAlign: 'center', fontSize: 11, color: '#929a86', paddingTop: 12 },
+  primary: { backgroundColor: theme.color.accent, borderColor: theme.color.accent }, primaryText: { color: theme.color.onAccent }, disabled: { opacity: .4 }, pressed: { opacity: .7 },
+  editor: { marginTop: 14, paddingTop: 18, borderTopColor: theme.color.border, borderTopWidth: 1, gap: 10 },
+  record: { paddingVertical: 14, gap: 8, borderBottomWidth: 1, borderBottomColor: theme.color.border }, recordTitle: { color: theme.color.ink, fontSize: 16, lineHeight: 25 },
+  done: { textDecorationLine: 'line-through', color: theme.color.muted },
+  notice: { backgroundColor: theme.color.subtle, color: theme.color.ink, padding: 14, borderRadius: 9, fontSize: 13, lineHeight: 23 },
+  error: { borderColor: theme.color.border, borderWidth: 1, padding: 14, backgroundColor: theme.color.subtle, borderRadius: 9, gap: 12 }, errorText: { color: theme.color.ink, fontSize: 13, lineHeight: 23 },
+  empty: { paddingVertical: 36, alignItems: 'center', gap: 12 }, emptySymbol: { fontSize: 38, color: theme.color.muted }, footer: { textAlign: 'center', fontSize: 11, color: theme.color.muted, paddingTop: 12 },
 });
