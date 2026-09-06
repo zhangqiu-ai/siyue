@@ -93,5 +93,7 @@
       "path": "planning/test-cases.json",
       "sha256": "b8cf864071dd214442980aa9d8509b07098210f3f8c33db9ade6d6b86aab2505"
     }
-  ]
+  ],
+  "record_scope": "Historical initiation document snapshot only; not a current code or acceptance manifest",
+  "current_status_source": "docs/evidence/m1-validation.md"
 }

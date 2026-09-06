@@ -8,7 +8,7 @@
       "title": "建立三端工程骨架与版本记录",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "done",
       "depends_on": [],
       "acceptance_criteria": [
         "采用 pnpm workspace；移动为 Expo，桌面为 Electron + React，服务端为 Node。",
@@ -16,14 +16,31 @@
         "完成当前可用环境的构建；iOS/Android 真机与 Windows 未运行项如实标注。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-app-build-retry.log",
+        "artifacts/m1/android-app-install.log",
+        "artifacts/m1/android-ui-test.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log"
+      ],
+      "implementation_note": "锁文件、官方版本对齐、类型检查、共享/服务端/桌面构建、移动双平台JS打包已验证；iOS模拟器原生构建通过，两条独立UI用例分别执行通过，覆盖草稿闭环及手动改名/完成/归档重启；iPhone开发签名与两条核心真机UI路径分别通过，故障/后台场景未验收；Android SDK/专用模拟器与独立UI宿主已就绪，主应用重试构建、APK签名校验及安装通过，Android模拟器两条独立UI用例分别通过（各1项0失败，336.319/325.679秒），第二条验证真实断网下手动改名/完成/归档与重启；Windows未运行。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。"
     },
     {
       "id": "SY-002",
       "title": "定义纯 TypeScript 领域与命令契约",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "done",
       "depends_on": [
         "SY-001"
       ],
@@ -33,14 +50,17 @@
         "同一命令可从手工 UI 与 AI 路径调用；有跨空间引用拒绝测试。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "implementation_note": "纯TS领域/运行时契约与命令服务已实现，共享审批/版本/幂等/空间隔离行为测试通过。"
     },
     {
       "id": "SY-003",
       "title": "验证 SQLite 与同步候选并记录 ADR",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "SY-001",
         "SY-002"
@@ -51,14 +71,31 @@
         "写 ADR-004 的采用/不采用结果及版本证据；不以 demo 代替生产同步验收。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-app-build-retry.log",
+        "artifacts/m1/android-app-install.log",
+        "artifacts/m1/android-ui-test.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log"
+      ],
+      "implementation_note": "Node隔离PoC、实际Electron SQLite重启及expo-sqlite在iOS模拟器上的目标闭环与重启持久化通过；另一次独立UI运行验证目标/任务改名ID不变、完成后归档与重启同ID/状态/数量保留。Android环境与独立UI宿主已就绪，主应用重试构建并安装成功，Android模拟器UI已验证草稿保存、确认创建、任务完成与force-stop重启同ID/状态/数量保留；Android另一次独立UI用例在关闭Wi-Fi/移动数据且无默认网络时验证手动改名同ID、完成归档和force-stop重启保留，网络已恢复；Android真机及iPhone故障场景、PowerSync和退出演练仍未验证。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。 本轮iOS/Android独立原生存储QA分别通过（61.387/2.891秒，各1项0失败）：真实SQL写入后抛错回滚、关闭重开保持原快照、同命令重试与重复投递幂等；损坏JSON和未来版本经createNativeClient拒绝，原schema/rows/version保留。该close/reopen测试不等于跨进程、物理断电、生产迁移或正常用户UI验收；iOS首轮输入漏字未进入SQL，修复输入等待后通过，旧日志保留。"
     },
     {
       "id": "SY-004",
       "title": "实现本地存储、事务与升级恢复",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "SY-002",
         "SY-003"
@@ -69,14 +106,28 @@
         "测试重复命令、部分失败、删除标记与恢复入口。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log"
+      ],
+      "implementation_note": "单设备快照事务、损坏/未知版本拒绝、重启恢复已实现；iOS模拟器两条独立UI用例分别验证草稿/正式记录/完成状态重启保留，以及目标/任务改名ID不变、任务完成后归档、重启同ID/归档状态/数量保留。Android模拟器草稿恢复及正式记录/任务完成状态跨force-stop重启保留通过；Android第二条独立UI用例在真实断网下验证改名同ID、完成后归档、重启ID/名称/状态/数量保留及归档只读，网络已恢复；正式迁移、删除标记、正常用户UI错误交互、取消/升级故障与Android真机/iPhone故障场景仍待验收。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。 本轮iOS/Android独立原生存储QA分别通过（61.387/2.891秒，各1项0失败）：真实SQL写入后抛错回滚、关闭重开保持原快照、同命令重试与重复投递幂等；损坏JSON和未来版本经createNativeClient拒绝，原schema/rows/version保留。该close/reopen测试不等于跨进程、物理断电、生产迁移或正常用户UI验收；iOS首轮输入漏字未进入SQL，修复输入等待后通过，旧日志保留。"
     },
     {
       "id": "SY-005",
       "title": "建立秘密存储、数据授权与日志边界",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "SY-001",
         "SY-002"
@@ -87,14 +138,17 @@
         "受限 IPC/服务端鉴权接口有非法参数与越权测试。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "implementation_note": "受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。"
     },
     {
       "id": "SY-006",
       "title": "接入 AI SDK 候选与 Mock Provider",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "done",
       "depends_on": [
         "SY-001",
         "SY-002",
@@ -106,14 +160,17 @@
         "能力不足明确返回错误，不自动换未授权供应商。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "implementation_note": "维护者明确选择先完成本地Mock；确定性文本草稿、取消/失败、SDK结构化输出与工具审批离线契约通过。未配置或调用真实模型。"
     },
     {
       "id": "SY-007",
       "title": "实现 AgentRun 持久状态与事件协议",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "SY-004",
         "SY-006"
@@ -124,14 +181,21 @@
         "记录模型/策略版本与数据截止范围，不持久化隐藏思维链。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log"
+      ],
+      "implementation_note": "已持久记录Mock运行状态/seq/策略/数据截止；事件含schemaVersion/runId/seq，授权按游标补读、旧格式兼容和只读重放测试通过；iOS模拟器保存草稿后重启、显式继续与确认通过，Android模拟器保存草稿后force-stop、重启显式继续与确认通过；Android独立QA复用正常HomeScreen已通过生成取消/进程强杀恢复（47.61秒，1项0失败）：取消后超过20秒Mock期限仍无迟到写，第二run经两次force-stop重启保留同runId/interrupted/seq2且无新增事件。iOS同QA也独立通过（269.349秒、1项0失败），语义与Android一致；两平台分别运行，同进程系统后台中断未测。"
     },
     {
       "id": "SY-008",
       "title": "实现草稿、审批与幂等业务执行",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "SY-004",
         "SY-005",
@@ -143,14 +207,21 @@
         "相同 commandId 返回同一结果，丢回执后先对账再重试。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log"
+      ],
+      "implementation_note": "审批绑定身份/hash/对象版本/有效期，拒绝/过期/撤权/重复/丢回执已测；桌面真实全进程重启稳定命令已验证，移动独立SQLite待提交日志和重开对账已实现并经Node测试。iOS模拟器草稿编辑保存、重启后显式确认和拒绝不增记录通过；Android模拟器草稿编辑保存、重启显式确认及拒绝不增记录通过；正常用户UI错误交互与Android真机/iPhone故障场景仍待验收。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。"
     },
     {
       "id": "SY-009",
       "title": "完成目标—项目—任务的最小闭环",
       "milestone": "M1",
       "priority": "P0",
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "SY-004",
         "SY-008"
@@ -161,7 +232,24 @@
         "iOS 核心流程、Android 同一路径与 Electron 最小入口具备验收证据。"
       ],
       "github_issue_number": null,
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-app-build-retry.log",
+        "artifacts/m1/android-app-install.log",
+        "artifacts/m1/android-ui-test.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log"
+      ],
+      "implementation_note": "目标草稿编辑确认、手动保存、改名/任务完成/归档已接入两端；实际macOS桌面闭环通过。iOS模拟器两条独立UI用例分别执行通过：草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成与重启保留、拒绝不增记录、手动创建；另一用例验证手动目标/任务改名ID不变、任务完成后归档、重启同ID/状态/数量保留。上述iOS用例未主动切换模拟器网络或注入断网；iPhone开发签名与两条核心真机UI路径分别通过，故障/后台场景未验收；Android环境与独立UI宿主已就绪，主应用构建、APK签名校验及安装通过；Android模拟器UI闭环通过（1项、0失败，336.319秒），覆盖草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成后重启同ID/状态/数量保留、拒绝不增记录和手动创建。Android第二条独立用例在关闭Wi-Fi/移动数据且无默认网络时通过（1项0失败，325.679秒），验证手动目标/任务改名同ID、旧名全页不存在、完成归档、重启同ID/名称/状态/数量及归档只读；网络已恢复。两条Android用例分别运行，不是同次2/2；Android真机、iPhone故障/后台及正常用户UI其余错误交互/升级故障仍待验收。 iOS/Android独立QA真实丢回执与跨进程原回执对账分别通过（43.191/12.053秒，各1项0失败），恢复execute=0且pending验证后清除；各与本平台两条正常UI用例分别统计，不覆盖正常用户UI错误交互、断电、生成取消/后台中断、升级或真机。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。"
     },
     {
       "id": "SY-010",
@@ -364,5 +452,6 @@
       "github_issue_number": null,
       "execution_evidence": []
     }
-  ]
+  ],
+  "updated_on": "2026-09-06"
 }

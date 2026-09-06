@@ -1,0 +1,4 @@
+plugins {
+    // Independent test host only. This does not select or change Siyue's app AGP version.
+    id 'com.android.application' version '9.1.1' apply false
+}

@@ -3,14 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "react-native": "./dist/index.js",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test src/**/*.test.ts"
+    "test": "tsx --test src/*.test.ts"
   },
   "devDependencies": {
     "tsx": "4.23.13",
-    "typescript": "7.0.2"
+    "typescript": "6.0.3"
+  },
+  "dependencies": {
+    "@siyue/contracts": "workspace:*"
   }
 }

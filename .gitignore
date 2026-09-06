@@ -29,3 +29,6 @@ Thumbs.db
 *.log
 npm-debug.log*
 pnpm-debug.log*
+
+# Local execution evidence (synthetic QA data/screenshots)
+artifacts/

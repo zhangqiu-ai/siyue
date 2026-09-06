@@ -8,16 +8,22 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev:mobile": "pnpm --filter @siyue/mobile start",
-    "dev:desktop:renderer": "pnpm --filter @siyue/desktop dev:renderer",
-    "dev:desktop:electron": "pnpm --filter @siyue/desktop dev:electron",
-    "dev:server": "pnpm --filter @siyue/server dev",
+    "dev:mobile": "pnpm build:packages && pnpm --filter @siyue/mobile start",
+    "dev:desktop:renderer": "pnpm build:packages && pnpm --filter @siyue/desktop dev:renderer",
+    "dev:desktop:electron": "pnpm build:packages && pnpm --filter @siyue/desktop dev:electron",
+    "dev:server": "pnpm build:packages && pnpm --filter @siyue/server dev",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "build:packages": "turbo run build --filter=./packages/*",
+    "bundle:mobile": "pnpm build:packages && pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist",
+    "test:storage-poc": "node --test experiments/storage/sqlite-poc.test.mjs",
+    "test:desktop-smoke": "node scripts/desktop-smoke.mjs"
   },
   "devDependencies": {
     "turbo": "2.9.17",
-    "typescript": "7.0.2"
+    "typescript": "6.0.3",
+    "@types/node": "22.20.1",
+    "playwright": "1.62.1"
   }
 }

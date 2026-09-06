@@ -1,0 +1,18 @@
+// Explicit opt-in build only. Normal Gradle/Expo builds do not load this script.
+gradle.beforeProject { p ->
+    if (p.path == ':app') {
+        p.pluginManager.withPlugin('com.android.application') {
+            p.extensions.getByName('androidComponents').finalizeDsl { androidDsl ->
+                def entry = new File(p.rootProject.projectDir.parentFile, 'e2e/native-recovery/entry.tsx').canonicalFile
+                if (!entry.isFile()) throw new GradleException('Siyue native QA entry is missing')
+                if (System.getenv('ENTRY_FILE') != null) throw new GradleException('Unset ENTRY_FILE before building Siyue native QA')
+                if (androidDsl.namespace != 'app.siyue.mobile' || androidDsl.defaultConfig.applicationId != 'app.siyue.mobile') {
+                    throw new GradleException('Unexpected application: refusing to override QA build identity')
+                }
+                androidDsl.defaultConfig.applicationId = 'app.siyue.mobile.qa'
+                p.extensions.getByName('react').entryFile.set(entry)
+                p.logger.lifecycle('Siyue native QA: app.siyue.mobile.qa; isolated recovery entry')
+            }
+        }
+    }
+}

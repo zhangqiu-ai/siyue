@@ -7,19 +7,30 @@
     "start": "expo start",
     "ios": "expo run:ios",
     "android": "expo run:android",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs"
   },
   "dependencies": {
     "@siyue/contracts": "workspace:*",
     "@siyue/domain": "workspace:*",
     "expo": "57.0.20",
+    "expo-constants": "~57.0.17",
+    "expo-crypto": "~57.0.2",
+    "expo-linking": "~57.0.9",
     "expo-router": "57.0.19",
+    "expo-sqlite": "~57.0.2",
     "expo-status-bar": "57.0.1",
     "react": "19.2.3",
-    "react-native": "0.86.3"
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.2",
+    "react-native-worklets": "0.10.1",
+    "@siyue/adapters": "workspace:*",
+    "@siyue/ai": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "latest",
-    "typescript": "7.0.2"
+    "@react-native/metro-config": "0.86.3",
+    "@types/react": "19.2.18",
+    "typescript": "6.0.3"
   }
 }

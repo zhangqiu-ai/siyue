@@ -1,0 +1,26 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'app.siyue.uihost'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'app.siyue.uihost'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '1.0'
+        // Instrument this host, not app.siyue.mobile; its process survives Siyue force-stop.
+        testApplicationId 'app.siyue.uihost.test'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+}

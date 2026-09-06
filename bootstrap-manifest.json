@@ -1,7 +1,7 @@
 {
   "project": "Siyue",
   "generated_at": "2026-09-05",
-  "status": "repository-ready scaffold; dependencies not installed",
+  "status": "M1 local Mock implementation; desktop runtime and mobile bundles verified; native devices not verified",
   "apps": [
     "mobile",
     "desktop",
@@ -10,11 +10,12 @@
   "packages": [
     "domain",
     "contracts",
-    "ai"
+    "ai",
+    "adapters"
   ],
   "versions": {
     "pnpm": "11.25.0",
-    "typescript": "7.0.2",
+    "typescript": "6.0.3",
     "expo": "57.0.20",
     "expo-router": "57.0.19",
     "react": "19.2.3",
@@ -24,5 +25,6 @@
     "ai": "7.0.92",
     "fastify": "5.12.3",
     "zod": "4.5.4"
-  }
+  },
+  "evidence": "docs/evidence/m1-validation.md"
 }

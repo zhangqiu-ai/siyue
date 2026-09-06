@@ -1,0 +1,30 @@
+{
+  "name": "@siyue/adapters",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "react-native": "./dist/index.js",
+      "import": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@siyue/domain": "workspace:*",
+    "@siyue/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.23.13",
+    "typescript": "6.0.3"
+  }
+}

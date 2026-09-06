@@ -1,6 +1,8 @@
 # 验收与完成定义
 
-当前 24 项测试均未运行；本包只提供测试定义，不提供应用通过率。
+24 项为跨阶段验收场景，不能与实现测试数量混用。2026-09-06 已有 118 项 JavaScript 测试及 macOS Electron 闭环通过；iOS 模拟器两条独立 UI 用例分别执行通过，每次 1 项、0 失败，耗时分别为 167.126 秒与 151.684 秒（iPhone 17 Pro / iOS 26.5 / 23F77）。Android 模拟器两条独立 UI 用例分别通过，每次 1 项、0 失败，耗时 336.319 秒与 325.679 秒；第二条在关闭 Wi-Fi/移动数据并确认无默认网络时验证手动改名/完成/归档与重启保留。两次不能合写为同次 2/2，与实现测试和 iOS 用例分别统计。相关场景仍标记 partial，并在结构化文件注明覆盖范围。详见 [M1 验证记录](evidence/m1-validation.md)。
+
+模拟器实测覆盖：生成草稿不写正式记录、编辑并保存草稿、重启后显式继续与确认、创建目标/项目/任务、完成任务及重启保留、拒绝草稿不增加正式目标、手动创建。证据为 [XCTest 汇总](../artifacts/m1/ios-simulator-summary.json) 与 [执行日志](../artifacts/m1/ios-simulator-anchor-fix.log)。另一条独立运行覆盖手动目标/任务改名 ID 不变、任务完成后归档、重启同 ID/状态/数量保留及归档后只读，证据为 [改名归档汇总](../artifacts/m1/ios-rename-archive-summary.json) 与 [执行日志](../artifacts/m1/ios-simulator-rename-archive.log)。两条 iOS 测试没有主动切换模拟器网络；这不覆盖原生断网或丢回执故障注入、系统后台中断或升级故障；iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 应用与Runner签名验证通过，iPhone故障/后台及Android真机仍待验收；Android SDK 与专用模拟器已就绪，独立 UI 宿主已构建、安装并核验插桩目标；主应用重试构建、APK 签名校验与安装已通过；Android 模拟器 UI 闭环通过（1 项、0 失败，336.319 秒），覆盖草稿编辑/恢复、确认创建、任务完成与跨重启保留、拒绝和手动创建。通过日志为 [Android UI 记录](../artifacts/m1/android-ui-cold-start.log)，关键阶段截图/XML 位于 [Android 证据目录](../artifacts/m1/android-ui-passed/)。Android 第二条独立离线用例通过，见 [离线改名归档日志](../artifacts/m1/android-ui-offline-rename.log) 与 [三阶段截图/XML](../artifacts/m1/android-offline-rename-passed/)；真实断网下该手动路径已验证，Wi-Fi/移动数据恢复原值并重新取得默认网络。正常用户UI其余错误交互、同进程后台中断、升级故障、iPhone故障/Android真机、同步、语言学习及复盘仍未验收。
 
 ## 完成定义
 
@@ -44,3 +46,19 @@ Mock、真实供应商、编译、模拟器、真机与发布工件各自独立�
 模型效果尚未理想可通过范围缩小与人工确认改善，但不能以模型不确定性解释越权或数据破坏。
 
 来源：验收目标为本项目的工程要求，不是已取得的测试结果。结构化定义见 [planning/test-cases.json](../planning/test-cases.json)。
+
+### 2026-09-06 iOS / Android 独立 QA 丢回执恢复
+
+iOS与Android独立QA应用均复用正常原生客户端工厂，真实SQLite提交后丢响应/回执暂不可读、终止进程后对账分别通过（iOS 43.191秒、Android 12.053秒，各1项0失败）；恢复execute=0，同commandId/issuedAt/对象ID/完整快照hash不变，pending只在原回执验证后清除。每个平台两条正常用户UI用例与一条QA用例分别执行，不是同次3/3；不代表正常用户UI错误交互、真机、物理断电、生成取消/后台中断或升级通过，也不自动恢复表单。 正常默认数据库与命令语义保留，QA为显式独立入口及包名。构建、JSON、截图和准确复现命令见 [M1 验证记录](evidence/m1-validation.md)。工作包与跨阶段AT状态不提升。
+
+iOS QA日志为 `ios-native-recovery-compile-fix.log`（43.191秒、1项0失败），首轮Swift `isEmpty()` 编译错误修复史及六份JSON/PNG/辅助功能树TXT附件见上述验证记录；QA与正常target共享Pods生成文件，需串行构建。正常iOS Release重建及模拟器安装/启动也已通过；bundle标记检查与正常界面截图符合预期，仅属正常启动检查，非source map证据或完整UI重跑。本轮无新增真机签名。
+
+### 2026-09-06 独立原生存储故障 QA
+
+本轮iOS/Android独立原生存储QA分别通过（61.387/2.891秒，各1项0失败）：真实SQL写入后抛错回滚、关闭重开保持原快照、同命令重试与重复投递幂等；损坏JSON和未来版本经createNativeClient拒绝，原schema/rows/version保留。该close/reopen测试不等于跨进程、物理断电、生产迁移或正常用户UI验收；iOS首轮输入漏字未进入SQL，修复输入等待后通过，旧日志保留。 两个平台各自独立运行，不与此前正常UI或丢回执QA合并为同次suite。Android证据为 `android-native-storage.log` 与 `android-native-storage-passed/storage.json`、PNG/XML；iOS证据为 `ios-native-storage-input-fix.log`、`.xcresult`、`ios-native-storage-summary.json` 及 `ios-native-storage-passed/` 中JSON/PNG/真实辅助功能树TXT（非XML）。详细步骤见 [M1验证记录](evidence/m1-validation.md)。SY-003/004与AT-020仅补覆盖注记，整体状态不提升。
+
+### 当前真机与生成生命周期补充
+
+iPhone 16 Pro Max（iOS26.6.1/23G83）两条核心UI路径分别有通过证据：首轮core142.692秒，最后改名/完成/归档重启125.001秒。首轮整个suite仍为1通过1失败；SelectAll未出现47.995秒及任务输入定位93.860秒两次失败保留，最后仅修测试helper后通过，不改业务或清库。应用/Runner签名验证通过。真机故障/后台与Android真机仍待验收。
+
+Android独立QA复用正常HomeScreen的生成/取消交互通过（47.61秒、1项0失败）：SQL验证running→cancelled且21秒后无迟到写；生成中force-stop恢复同runId为interrupted seq2，二次重启不增事件，正式记录/草稿/审批/pending均0。QA20秒Mock/30秒超时，默认工厂仍250毫秒/10秒；这不证明同进程后台或全部正常UI错误通过。iOS同QA也独立通过（269.349秒、1项0失败），六阶段JSON/PNG/真实辅助功能树TXT各6份；两平台分别运行，不是同次2/2。证据、准确命令与失败史见 [M1验证记录](evidence/m1-validation.md)，跨阶段AT与工作包状态不提升。

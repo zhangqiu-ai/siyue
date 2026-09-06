@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "created_on": "2026-09-05",
-  "application_tests_executed": false,
+  "application_tests_executed": true,
   "cases": [
     {
       "id": "AT-001",
@@ -9,8 +9,23 @@
       "work_package": "SY-009",
       "scenario": "创建目标/项目/任务，退出进程后重启",
       "expected": "对象与关联完整保留；无静默初始化覆盖",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-ui-test.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log"
+      ],
+      "coverage_note": "Node持久存储与实际Electron两次重开通过；iOS模拟器草稿重启后显式继续、正式目标/项目/任务及完成状态重启保留通过。另一次独立UI运行验证手动目标/任务改名ID不变、任务完成后归档、重启同ID/归档状态/数量保留。两条用例分别执行通过；iPhone核心真机路径已通过，Android真机待验收；Android环境与独立UI宿主已就绪，主应用构建、APK签名校验及安装通过；Android模拟器UI闭环1项通过、0失败（336.319秒），验证草稿编辑保存、重启显式继续与确认、目标/项目/任务、任务完成后force-stop重启同ID/状态/数量保留、拒绝不增记录及手动创建；Android真机、iPhone故障/后台与正常用户UI其余错误交互/升级故障仍未验收。Android第二条独立UI运行在关闭Wi-Fi/移动数据且无默认网络、探测Network unreachable时通过（1项0失败，325.679秒）：手动目标/任务改名同ID、旧名全页不存在、完成归档、force-stop重启同ID/名称/状态/数量保留且归档无编辑/切换按钮。网络设置已恢复；两条Android用例分别运行，不是同次2/2，该离线UI用例不代表生成取消或升级故障通过；iOS/Android独立QA丢回执恢复分别通过（43.191/12.053秒，各1项0失败），正常用户UI错误交互仍待验收。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 对应真机故障/后台、Android真机和跨阶段其余场景未验收。"
     },
     {
       "id": "AT-002",
@@ -18,8 +33,15 @@
       "work_package": "SY-008",
       "scenario": "生成创建计划草稿，不确认",
       "expected": "草稿可保存，正式业务对象数量不变",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log"
+      ],
+      "coverage_note": "domain/adapters测试、Electron界面与iOS模拟器UI均验证未确认草稿不增加正式目标；模拟器保存草稿后重启仍须显式继续与确认。Android模拟器同样验证未确认草稿不增目标，保存草稿后force-stop仍须显式继续与确认。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 对应真机故障/后台、Android真机和跨阶段其余场景未验收。"
     },
     {
       "id": "AT-003",
@@ -27,8 +49,15 @@
       "work_package": "SY-008",
       "scenario": "拒绝审批并再次请求执行；另测过期授权",
       "expected": "均无正式副作用，状态明确",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log"
+      ],
+      "coverage_note": "domain拒绝/取消/过期与Electron拒绝路径通过；iOS模拟器拒绝草稿不增正式记录通过。原生过期授权路径与移动真机未运行。Android模拟器拒绝草稿不增正式目标通过；原生过期授权测试仍未完成。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 对应真机故障/后台、Android真机和跨阶段其余场景未验收。"
     },
     {
       "id": "AT-004",
@@ -36,8 +65,15 @@
       "work_package": "SY-008",
       "scenario": "确认后改 payload 或目标版本",
       "expected": "原批准无效；重新确认后才执行",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log"
+      ],
+      "coverage_note": "domain参数hash/版本/关联对象变化失效通过；Electron与iOS模拟器编辑草稿后需先保存修改再确认。模拟器未执行审批后篡改参数故障注入。Android模拟器验证未保存修改时禁止确认、保存后才可确认；未执行审批后篡改参数故障注入。"
     },
     {
       "id": "AT-005",
@@ -45,8 +81,11 @@
       "work_package": "SY-008",
       "scenario": "相同 commandId 与 payload 多次投递",
       "expected": "只产生一次副作用，返回相同回执",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "domain并发重投与SQLite/IPC稳定命令通过；移动待提交日志重开测试在Node执行，原生重复投递故障场景尚未验证。普通iOS模拟器重启不增加记录不替代重复命令测试。"
     },
     {
       "id": "AT-006",
@@ -54,8 +93,11 @@
       "work_package": "SY-008",
       "scenario": "提交成功后断开响应，再恢复",
       "expected": "先对账已执行状态，不再次创建对象",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "SQLite提交后丢响应、桌面Renderer重载和全进程重启对账通过；移动待提交日志的Node重开对账已测；Android独立QA复用正常native factory，真实SQLite提交后丢响应并使回执暂不可读，force-stop后恢复只查询原回执、execute=0，命令ID/issuedAt/对象ID/完整快照hash不变，pending在原回执验证后由1清为0（12.053秒，1项0失败）。iOS独立QA同样通过真实SQLite丢回执与terminate后恢复（43.191秒、1项0失败），metadata由SQL回读，processSession改变，同身份/时间/快照/数量且恢复execute=0、pending验证后清除；与Android及正常UI用例分别执行。测试重新输入同一case，不代表自动恢复表单；正常用户UI错误交互、断电、生成取消/后台中断、升级和真机未验收。"
     },
     {
       "id": "AT-007",
@@ -63,8 +105,11 @@
       "work_package": "SY-008",
       "scenario": "同 commandId 发送不同 payload",
       "expected": "明确冲突，不覆盖旧回执或执行新动作",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "同ID不同参数或执行身份明确冲突的测试通过。"
     },
     {
       "id": "AT-008",
@@ -72,8 +117,11 @@
       "work_package": "SY-005",
       "scenario": "关闭日记/资产授权，要求跨域检索",
       "expected": "代码层拒绝；上下文与模型请求均无该数据",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "已验证目标域跨空间和撤权读取拒绝；敏感业务域及真实模型上下文尚未实现。"
     },
     {
       "id": "AT-009",
@@ -81,8 +129,11 @@
       "work_package": "SY-016",
       "scenario": "合成检索内容要求忽略规则、读私密数据或写库",
       "expected": "内容不升级为权限；工具仍被限制",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "schema拒绝权限注入、非白名单IPC被拒；完整外部检索内容场景未实现。"
     },
     {
       "id": "AT-010",
@@ -90,8 +141,22 @@
       "work_package": "SY-006",
       "scenario": "模型调用失败、断网、返回无效结构",
       "expected": "正式数据可手工使用；不虚构成功；错误可理解",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log"
+      ],
+      "coverage_note": "Mock失败/超时和无服务手工保存通过；iOS模拟器本地手动创建目标与任务通过，另一条独立UI用例验证手动改名、完成、归档及重启保留。两条iOS用例分别执行通过；未主动切换模拟器网络或注入断网，真实模型与请求进行中的移动网络中断未验证。Android首条用例验证本地手动创建目标/任务，未主动断网。Android第二条独立UI运行在关闭Wi-Fi/移动数据且无默认网络、探测Network unreachable时通过（1项0失败，325.679秒）：手动目标/任务改名同ID、旧名全页不存在、完成归档、force-stop重启同ID/名称/状态/数量保留且归档无编辑/切换按钮。网络设置已恢复；两条Android用例分别运行，不是同次2/2，该离线UI用例不代表生成取消或升级故障通过；iOS/Android独立QA丢回执恢复分别通过（43.191/12.053秒，各1项0失败），正常用户UI错误交互仍待验收。"
     },
     {
       "id": "AT-011",
@@ -99,8 +164,15 @@
       "work_package": "SY-007",
       "scenario": "前台取消、切后台或终止进程",
       "expected": "状态可恢复；已执行动作可对账，无无限重试",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log"
+      ],
+      "coverage_note": "Mock取消、HTTP真实断连及运行状态重启对账通过；iOS模拟器保存草稿后终止进程、重启显式继续与确认通过。同进程移动系统后台中断仍未实测；iOS/Android独立QA未知提交结果恢复已分别通过（43.191/12.053秒，各1项0失败）。Android模拟器保存草稿与正式写入后分别force-stop并核对进程消失，重启显式继续/同ID及任务状态保留通过；生成中进程强杀恢复的Android证据见本条补充；同进程后台中断以及其余正常用户UI未知提交结果仍待验证。"
     },
     {
       "id": "AT-012",
@@ -108,8 +180,15 @@
       "work_package": "SY-006",
       "scenario": "给无视觉/工具能力模型发送对应请求",
       "expected": "明确 unsupported；未授权供应商不被自动调用",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/android-native-run-ui.log",
+        "artifacts/m1/android-native-run-ui-json-check.json",
+        "artifacts/m1/ios-native-run-ui-summary.json",
+        "artifacts/m1/ios-native-run-ui-json-check.json"
+      ],
+      "coverage_note": "Mock unsupported与SDK非法输出拒绝通过，无外部供应商切换；真实供应商未配置。 Android独立QA复用正常HomeScreen的cancel和生成交互通过（47.61秒、1项0失败）：真实SQL确认running，取消后等待21秒无迟到草稿或正式写；第二run两次force-stop/新process恢复同runId为interrupted seq2，二次不增事件；全部正式对象/草稿/审批/pending为0。默认工厂仍250ms/10s，QA显式20s/30s；iOS同QA也独立通过（269.349秒、1项0失败），六阶段SQL JSON复核通过；两平台分别运行，同进程后台未测。"
     },
     {
       "id": "AT-013",
@@ -153,8 +232,11 @@
       "work_package": "SY-014",
       "scenario": "两台离线设备编辑同一对象同字段后同步",
       "expected": "不静默覆盖；双方输入可恢复/选择",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "基于版本的并发/过期修改拒绝有测试；多端同步冲突未实现。"
     },
     {
       "id": "AT-018",
@@ -171,8 +253,11 @@
       "work_package": "SY-014",
       "scenario": "A 账号离线排队，再切 B 并联网",
       "expected": "A 数据不发给 B；旧授权停止；无跨空间检索",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md"
+      ],
+      "coverage_note": "本地空间与完整执行身份、撤权测试通过；生产账号切换/同步未实现。"
     },
     {
       "id": "AT-020",
@@ -180,8 +265,29 @@
       "work_package": "SY-004",
       "scenario": "带已有数据升级并模拟中途故障",
       "expected": "保留恢复路径；不清空或用空库覆盖",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log",
+        "artifacts/m1/android-native-storage.log",
+        "artifacts/m1/android-native-storage-passed/storage.json",
+        "artifacts/m1/android-native-storage-json-check.json",
+        "artifacts/m1/ios-native-storage-input-fix.log",
+        "artifacts/m1/ios-native-storage-summary.json",
+        "artifacts/m1/ios-native-storage-json-check.json",
+        "artifacts/m1/ios-native-storage-passed/CAA95C46-D535-498C-8BA2-A9BC86E19729.json"
+      ],
+      "coverage_note": "初始schema建表失败回滚与未来/损坏版本拒绝保留通过；iOS模拟器两条独立UI用例分别验证常规进程重启后的草稿/正式记录/任务状态保留，以及目标/任务改名ID不变、完成后归档与重启同ID/状态/数量保留。正式版本升级、移动原生升级故障及坏库恢复未验收。Android模拟器常规force-stop重启后的草稿/正式记录/任务状态保留通过，不替代版本升级与坏库故障恢复测试。Android第二条独立UI运行在关闭Wi-Fi/移动数据且无默认网络、探测Network unreachable时通过（1项0失败，325.679秒）：手动目标/任务改名同ID、旧名全页不存在、完成归档、force-stop重启同ID/名称/状态/数量保留且归档无编辑/切换按钮。网络设置已恢复；两条Android用例分别运行，不是同次2/2，该离线UI用例不代表生成取消或升级故障通过；iOS/Android独立QA丢回执恢复分别通过（43.191/12.053秒，各1项0失败），正常用户UI错误交互仍待验收。 本轮iOS/Android独立原生存储QA分别通过（61.387/2.891秒，各1项0失败）：真实SQL写入后抛错回滚、关闭重开保持原快照、同命令重试与重复投递幂等；损坏JSON和未来版本经createNativeClient拒绝，原schema/rows/version保留。该close/reopen测试不等于跨进程、物理断电、生产迁移或正常用户UI验收；iOS首轮输入漏字未进入SQL，修复输入等待后通过，旧日志保留。"
     },
     {
       "id": "AT-021",
@@ -207,8 +313,15 @@
       "work_package": "SY-005",
       "scenario": "扫描打包资源/日志/导出；尝试通用 IPC 与恶意内容",
       "expected": "无平台密钥；未授权 IPC 被拒；内容不能执行系统命令",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "docs/evidence/m1-security-review.md",
+        "artifacts/m1/mobile-error-redaction-red.log",
+        "artifacts/m1/mobile-error-redaction-green.log",
+        "artifacts/m1/mobile-error-redaction-typecheck.log"
+      ],
+      "coverage_note": "Node/真实Electron受限IPC与sandbox/隔离通过；平台密钥安全存储、导出和移动包体验收尚未完成。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。"
     },
     {
       "id": "AT-024",
@@ -216,8 +329,27 @@
       "work_package": "SY-018",
       "scenario": "从新安装完成目标—练习—复盘并验证各端范围",
       "expected": "iOS/Android 核心流程有证据；桌面范围明确；未测不算通过",
-      "status": "not_run",
-      "evidence": []
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/m1-validation.md",
+        "artifacts/m1/ios-simulator-summary.json",
+        "artifacts/m1/ios-simulator-anchor-fix.log",
+        "artifacts/m1/ios-rename-archive-summary.json",
+        "artifacts/m1/ios-simulator-rename-archive.log",
+        "artifacts/m1/android-ui-test.log",
+        "artifacts/m1/android-ui-cold-start.log",
+        "artifacts/m1/android-tested-host-sha256.log",
+        "artifacts/m1/android-ui-offline-rename.log",
+        "artifacts/m1/android-offline-rename-host-sha256.log",
+        "artifacts/m1/android-offline-connectivity-during.log",
+        "artifacts/m1/android-offline-probe.log",
+        "artifacts/m1/android-offline-connectivity-restored.log",
+        "artifacts/m1/ios-device-live-core-summary.json",
+        "artifacts/m1/ios-device-rename-focus-fix-summary.json",
+        "artifacts/m1/ios-device-current-signature.log"
+      ],
+      "coverage_note": "macOS Electron与iOS模拟器目标闭环通过；模拟器两条独立UI用例分别执行通过，覆盖草稿编辑保存、重启显式继续与确认、目标/项目/任务、任务完成与重启保留、拒绝及手动创建，以及目标/任务改名ID不变、任务完成后归档、重启同ID/状态/数量保留。完整目标—练习—复盘未完成；iPhone开发签名与两条核心真机UI路径分别通过，故障/后台未验收；Android环境与独立UI宿主已就绪，主应用构建、APK签名校验及安装通过；Android模拟器UI闭环1项通过、0失败（336.319秒），验证草稿编辑保存、重启显式继续与确认、目标/项目/任务、任务完成后force-stop重启同ID/状态/数量保留、拒绝不增记录及手动创建；Android真机、iPhone故障/后台与正常用户UI其余错误交互/升级故障仍未验收。Android第二条独立UI运行在关闭Wi-Fi/移动数据且无默认网络、探测Network unreachable时通过（1项0失败，325.679秒）：手动目标/任务改名同ID、旧名全页不存在、完成归档、force-stop重启同ID/名称/状态/数量保留且归档无编辑/切换按钮。网络设置已恢复；两条Android用例分别运行，不是同次2/2，该离线UI用例不代表生成取消或升级故障通过；iOS/Android独立QA丢回执恢复分别通过（43.191/12.053秒，各1项0失败），正常用户UI错误交互仍待验收。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 对应真机故障/后台、Android真机和跨阶段其余场景未验收。"
     }
-  ]
+  ],
+  "updated_on": "2026-09-06"
 }

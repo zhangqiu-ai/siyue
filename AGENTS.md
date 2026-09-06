@@ -42,7 +42,7 @@
 
 ## 4. 工程地图与依赖边界
 
-仓库已包含三端最小骨架与三个共享包。存在代码不代表依赖已安装、平台已构建或完整流程已通过；每轮以现场检查为准。
+仓库已包含三端工程与四个共享包。存在代码不代表依赖已安装、平台已构建或完整流程已通过；每轮以现场检查为准。
 
 | 目录 | 职责与约束 |
 |---|---|
@@ -54,13 +54,14 @@
 | `packages/domain` | 纯 TypeScript 领域对象、业务规则、命令/查询与仓储接口 |
 | `packages/contracts` | Zod 运行时校验、版本化命令和跨边界协议 |
 | `packages/ai` | AI 执行器、能力接口与确定性 Mock；供应商 SDK 不泄漏到领域层 |
+| `packages/adapters` | 本地 SQLite 与应用命令入口；Node 驱动仅从 `/node` 入口提供 |
 | `docs`、`planning` | 决策、工作包、验收定义与执行证据 |
 
 - 表中列出目录职责，不代表相关能力已全部实现；领域接口不能证明审批、幂等和正式写入已完成。
 - 依赖由应用与适配器指向共享契约和领域；领域不能反向导入应用或基础设施。`domain` 不依赖 React、React Native、Electron、Node 文件系统、数据库驱动或供应商 SDK。
 - `contracts` 保持平台中立，不导入应用层。跨包通过公共导出访问，避免深层路径耦合与循环依赖。
 - UI 与 AI 复用同一业务命令处理器；不在页面、IPC 或模型工具内各写一套正式写入逻辑。
-- `packages/adapters`、`packages/design-tokens` 属于架构规划，按当前切片需要再创建；不为填满目录树增加空包。
+- `packages/design-tokens` 属于架构规划，按当前切片需要再创建；不为填满目录树增加空包。
 - SQLite 驱动、ORM 与生产同步选择受 SY-003 / ADR-004 验证约束；PowerSync、Supabase、Hermes 等候选不等于已采用。
 
 ## 5. 依赖、运行与构建
@@ -82,6 +83,9 @@
 | 全仓类型检查 | `pnpm typecheck` |
 | 现有构建任务 | `pnpm build` |
 | 现有测试任务 | `pnpm test` |
+| 移动 JavaScript / Hermes 字节码导出 | `pnpm bundle:mobile` |
+| 真实 Electron 闭环验证 | `pnpm test:desktop-smoke` |
+| 隔离 SQLite 原型验证 | `pnpm test:storage-poc` |
 | 定向包验证，以 AI 包为例 | `pnpm --filter @siyue/ai test` |
 | iOS / Android 原生运行 | `pnpm --filter @siyue/mobile ios` / `pnpm --filter @siyue/mobile android` |
 
