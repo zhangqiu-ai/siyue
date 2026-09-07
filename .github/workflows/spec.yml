@@ -22,3 +22,5 @@ jobs:
       - run: corepack pnpm test:spec-workflow
       - run: corepack pnpm spec:check
       - run: corepack pnpm spec:pr
+      - run: corepack pnpm test:release-workflow
+      - run: corepack pnpm release:check

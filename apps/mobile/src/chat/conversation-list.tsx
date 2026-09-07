@@ -1,13 +1,15 @@
+import { useLocale } from '../i18n';
 import { AppIcon } from '../ui/icon';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ThreadListPrimitive, useAui, useAuiState } from '@assistant-ui/react-native';
 import { useTheme, type Theme } from '../ui/theme';
 
 export function NewChatButton({ onSelect }: { onSelect?: () => void }) {
+  const { t } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   const aui = useAui();
-  return <Pressable accessibilityRole="button" accessibilityLabel="新建对话" testID="chat-new" style={({ pressed }) => [styles.newButton, pressed && styles.pressed]} onPress={() => {
+  return <Pressable accessibilityRole="button" accessibilityLabel={t('chat.new')} testID="chat-new" style={({ pressed }) => [styles.newButton, pressed && styles.pressed]} onPress={() => {
     aui.thread.cancelRun();
     aui.threads.switchToNewThread();
     onSelect?.();
@@ -15,6 +17,7 @@ export function NewChatButton({ onSelect }: { onSelect?: () => void }) {
 }
 
 function ConversationItem({ index, onSelect }: { index: number; onSelect: () => void }) {
+  const { t, locale } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   const aui = useAui();
@@ -26,14 +29,15 @@ function ConversationItem({ index, onSelect }: { index: number; onSelect: () => 
       aui.threads.switchToThread(item.id);
     }
     onSelect();
-  }}><Text numberOfLines={2} style={styles.itemText}>{item.title || `对话 ${index + 1}`}</Text></Pressable>;
+  }}><Text numberOfLines={2} style={styles.itemText}>{item.title || t('chat.number', { count: new Intl.NumberFormat(locale).format(index + 1) })}</Text></Pressable>;
 }
 
 export function ConversationList({ onSelect }: { onSelect: () => void }) {
+  const { t } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   return <View style={styles.container}>
-    <ThreadListPrimitive.Items contentContainerStyle={styles.list} renderItem={({ index }) => <ConversationItem index={index} onSelect={onSelect} />} ListEmptyComponent={<Text style={styles.note}>暂无对话</Text>} />
+    <ThreadListPrimitive.Items contentContainerStyle={styles.list} renderItem={({ index }) => <ConversationItem index={index} onSelect={onSelect} />} ListEmptyComponent={<Text style={styles.note}>{t('chat.empty')}</Text>} />
   </View>;
 }
 const makeStyles = (theme: Theme) => StyleSheet.create({

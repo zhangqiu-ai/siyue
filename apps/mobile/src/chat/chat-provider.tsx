@@ -18,7 +18,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     local.generateTitle = async (_threadId, messages) => {
       const first = messages.find((message) => message.role === 'user');
       const input = first?.content.filter((part) => part.type === 'text').map((part) => part.text).join('') ?? '';
-      const title = Array.from(input.replace(/\s+/g, ' ').trim()).slice(0, 24).join('') || '新的成长对话';
+      const title = Array.from(input.replace(/\s+/g, ' ').trim()).slice(0, 24).join('');
       return new ReadableStream({
         start(controller) {
           controller.enqueue({ type: 'part-start', path: [0], part: { type: 'text' } });

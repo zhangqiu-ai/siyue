@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import Fastify from 'fastify';
 import {
   AgentExecutionError,
@@ -6,6 +7,8 @@ import {
   mockCapabilities,
   type AgentExecutor,
 } from '@siyue/ai';
+
+const { version } = createRequire(import.meta.url)('../package.json') as { version: string };
 
 export interface AppOptions {
   executor?: AgentExecutor;
@@ -39,7 +42,7 @@ export function createApp(options: AppOptions = {}) {
     return reply.code(status).send({ error: status === 413 ? 'body_too_large' : status < 500 ? 'invalid_request' : 'internal_error' });
   });
 
-  app.get('/health', async () => ({ ok: true, service: 'siyue-server', version: '0.1.0' }));
+  app.get('/health', async () => ({ ok: true, service: 'siyue-server', version }));
   app.get('/v1/ai/capabilities', async () => ({
     execution: ['mock'],
     tools: ['draft.goal-plan'],

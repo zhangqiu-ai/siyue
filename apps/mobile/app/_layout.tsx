@@ -6,6 +6,7 @@ import { ChatProvider } from '../src/chat/chat-provider';
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-navigation';
 import { AppThemeProvider, useTheme } from '../src/ui/theme';
 import { AISettingsProvider } from '../src/settings/ai-settings';
+import { LocaleProvider } from '../src/i18n';
 
 function ThemedLayout() {
   const theme = useTheme();
@@ -23,5 +24,5 @@ function ThemedLayout() {
 }
 
 export default function RootLayout() {
-  return <AppThemeProvider><AISettingsProvider><ThemedLayout /></AISettingsProvider></AppThemeProvider>;
+  return <LocaleProvider><AppThemeProvider><AISettingsProvider><ThemedLayout /></AISettingsProvider></AppThemeProvider></LocaleProvider>;
 }

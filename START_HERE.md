@@ -1,5 +1,7 @@
 # 从这里开始：首个开发切片
 
+当前开发版本：**0.0.1（未发布）**。功能归属见 [版本计划](planning/releases/0.0.1.md)，流程见 [版本规则](planning/releases/README.md)，实际发布变化见 [CHANGELOG](CHANGELOG.md)。
+
 **2026-09-07 设备约束：iPhone 与 iPad 必须同时适配。当前重视手机，iPad 是未来主力；新页面和布局修改同时纳入两类设备，不将平板适配后置。具体矩阵见 [UI 设计与验收](docs/design/ui-acceptance.md)。本条是要求，不代表已有 iPad 验收。**
 
 开发流程入口：[OpenSpec 规格与变更规则](openspec/README.md)。新功能先写规格，简单修改可说明豁免；验收后同步现行规格。

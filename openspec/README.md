@@ -75,3 +75,8 @@ CI 文件随下一次获授权的推送生效。本次没有设置 GitHub 分支
 ## 官方依据
 
 查阅并核对发布版本 1.12.0（2026-09-07）：[项目配置](https://github.com/Fission-AI/OpenSpec/blob/v1.12.0/docs/customization.md)、[CLI](https://github.com/Fission-AI/OpenSpec/blob/v1.12.0/docs/cli.md)。本流程的变更分级、授权与证据要求是思玥项目约定，不是 OpenSpec 自动强制的能力。
+
+
+## 版本归属
+
+开发前在 proposal 写唯一 `Target release: x.y.z`，并登记到 [版本计划](../planning/releases/README.md)。当前开发版本为 0.0.1，尚未发布。验收/延期时同步版本条目；归档后将计划中的提案链接改为真实归档路径，历史版本归属保留。`corepack pnpm release:check` 检查版本与活动变更登记，不能代替业务验收。

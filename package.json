@@ -1,6 +1,6 @@
 {
   "name": "siyue",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Siyue — AI-first personal growth app / 思玥 — AI First 个人成长应用",
   "packageManager": "pnpm@11.25.0",
@@ -22,7 +22,9 @@
     "openspec": "node scripts/openspec.mjs",
     "spec:check": "node scripts/openspec.mjs validate --all --strict --no-interactive",
     "spec:pr": "node scripts/check-spec-pr.mjs",
-    "test:spec-workflow": "node --test scripts/check-spec-pr.test.mjs"
+    "test:spec-workflow": "node --test scripts/check-spec-pr.test.mjs",
+    "release:check": "node scripts/check-release.mjs",
+    "test:release-workflow": "node --test scripts/check-release.test.mjs"
   },
   "devDependencies": {
     "@fission-ai/openspec": "1.12.0",

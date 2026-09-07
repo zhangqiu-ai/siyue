@@ -1,3 +1,4 @@
+import { useLocale } from '../i18n';
 import { AppIcon } from '../ui/icon';
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { SafeAreaView } from 'react-native-screens/experimental';
@@ -18,48 +19,52 @@ const MessageText: TextMessagePartComponent = ({ text }) => {
   return <Text selectable style={styles.messageText}>{text}</Text>;
 };
 function MessageBubble() {
+  const { t, errorText: translateError } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   const isUser = useAuiState((s) => s.message.role === 'user');
   const status = useAuiState((s) => s.message.status);
   const error = status?.type === 'incomplete' && status.reason === 'error' ? status.error : undefined;
-  const errorText = error && typeof error === 'object' && 'message' in error && typeof error.message === 'string' ? error.message : '回复中断，请重试。';
+  const errorText = translateError(error, t('chat.interrupted'));
   return <MessagePrimitive.Root style={[styles.message, isUser && styles.userMessage]}>
     <View style={[styles.bubble, isUser && styles.userBubble]}>
-      <MessagePrimitive.Parts components={{ Text: MessageText, Empty: () => <Text style={styles.note}>{status?.type === 'running' ? '正在回应…' : '未收到回复'}</Text> }} />
+      <MessagePrimitive.Parts components={{ Text: MessageText, Empty: () => <Text style={styles.note}>{status?.type === 'running' ? t('chat.responding') : t('chat.noReply')}</Text> }} />
       <ErrorPrimitive.Root><Text style={styles.error}>{errorText}</Text></ErrorPrimitive.Root>
     </View>
-    {!isUser && status?.type === 'running' && <Text accessibilityLiveRegion="polite" style={styles.note}>正在生成…</Text>}
-    {!isUser && status?.type === 'incomplete' && status.reason === 'cancelled' && <Text style={styles.note}>已停止，已生成的内容保留。</Text>}
-    {!isUser && status?.type !== 'running' && <ActionBarPrimitive.Reload testID="chat-retry" accessibilityLabel="重新生成回复" style={({ pressed }) => [styles.retry, pressed && styles.pressed]}><AppIcon name="retry" color={theme.color.muted} /></ActionBarPrimitive.Reload>}
+    {!isUser && status?.type === 'running' && <Text accessibilityLiveRegion="polite" style={styles.note}>{t('chat.generating')}</Text>}
+    {!isUser && status?.type === 'incomplete' && status.reason === 'cancelled' && <Text style={styles.note}>{t('chat.stopped')}</Text>}
+    {!isUser && status?.type !== 'running' && <ActionBarPrimitive.Reload testID="chat-retry" accessibilityLabel={t('chat.retry')} style={({ pressed }) => [styles.retry, pressed && styles.pressed]}><AppIcon name="retry" color={theme.color.muted} /></ActionBarPrimitive.Reload>}
   </MessagePrimitive.Root>;
 }
 
 function EmptyState() {
+  const { t } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   return <ScrollView style={styles.flex} contentContainerStyle={styles.empty} keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
-    <Text style={styles.welcome}>有什么想聊的？</Text>
-    <View style={styles.suggestions}>{[{ label: '理清想法', prompt: '帮我理清一个想法' }, { label: '练习英语', prompt: '陪我练习英语对话' }, { label: '回顾今天', prompt: '一起回顾今天' }].map(({ label, prompt }) => <ThreadPrimitive.Suggestion key={prompt} prompt={prompt} send style={({ pressed }) => [styles.suggestion, pressed && styles.pressed]}><Text style={styles.suggestionText}>{label}</Text></ThreadPrimitive.Suggestion>)}</View>
+    <Text style={styles.welcome}>{t('chat.welcome')}</Text>
+    <View style={styles.suggestions}>{[{ label: t('chat.clarify'), prompt: t('chat.clarifyPrompt') }, { label: t('chat.english'), prompt: t('chat.englishPrompt') }, { label: t('chat.review'), prompt: t('chat.reviewPrompt') }].map(({ label, prompt }) => <ThreadPrimitive.Suggestion key={prompt} prompt={prompt} send style={({ pressed }) => [styles.suggestion, pressed && styles.pressed]}><Text style={styles.suggestionText}>{label}</Text></ThreadPrimitive.Suggestion>)}</View>
   </ScrollView>;
 }
 
 function Composer() {
   const { config, storageError } = useAISettings();
+  const { t } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   const isRunning = useAuiState((s) => s.thread.isRunning);
   const isEmpty = useAuiState((s) => !s.composer.text.trim());
   return <View style={styles.composerArea}>
     <ComposerPrimitive.Root style={styles.composer}>
-      <ComposerPrimitive.Input testID="chat-input" accessibilityLabel="对话输入" multiline placeholder="说说你的想法…" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} style={styles.input} />
-      {isRunning ? <ComposerPrimitive.Cancel testID="chat-stop" accessibilityLabel="停止生成" style={({ pressed }) => [styles.send, pressed && styles.primaryPressed]}><AppIcon name="stop" color={theme.color.onAccent} /></ComposerPrimitive.Cancel> : <ComposerPrimitive.Send testID="chat-send" accessibilityLabel="发送消息" style={({ pressed }) => [styles.send, isEmpty && styles.disabled, pressed && styles.primaryPressed]}><AppIcon name="send" color={theme.color.onAccent} /></ComposerPrimitive.Send>}
+      <ComposerPrimitive.Input testID="chat-input" accessibilityLabel={t('chat.input')} multiline placeholder={t('chat.placeholder')} placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} style={styles.input} />
+      {isRunning ? <ComposerPrimitive.Cancel testID="chat-stop" accessibilityLabel={t('chat.stop')} style={({ pressed }) => [styles.send, pressed && styles.primaryPressed]}><AppIcon name="stop" color={theme.color.onAccent} /></ComposerPrimitive.Cancel> : <ComposerPrimitive.Send testID="chat-send" accessibilityLabel={t('chat.send')} style={({ pressed }) => [styles.send, isEmpty && styles.disabled, pressed && styles.primaryPressed]}><AppIcon name="send" color={theme.color.onAccent} /></ComposerPrimitive.Send>}
     </ComposerPrimitive.Root>
-    {config && !storageError && <Text style={styles.disclaimer}>{config.model} · {new URL(config.baseUrl).hostname}{'\n'}仅发送当前会话文字</Text>}
+    {config && !storageError && <Text style={styles.disclaimer}>{config.model} · {new URL(config.baseUrl).hostname}{'\n'}{t('chat.disclaimer')}</Text>}
   </View>;
 }
 
 function Messages() {
+  const { t } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   const list = useRef<ComponentRef<typeof ThreadPrimitive.MessagesFlatList>>(null);
@@ -70,7 +75,7 @@ function Messages() {
     <ThreadPrimitive.MessagesFlatList ref={list} testID="chat-messages" style={styles.flex} contentContainerStyle={styles.messages} keyboardDismissMode="interactive" keyboardShouldPersistTaps="handled" onScroll={({ nativeEvent }) => {
       setAwayFromBottom(nativeEvent.contentSize.height - nativeEvent.layoutMeasurement.height - nativeEvent.contentOffset.y > 4);
     }}>{() => <MessageBubble />}</ThreadPrimitive.MessagesFlatList>
-    {awayFromBottom && <Pressable accessibilityRole="button" accessibilityLabel="回到最新消息" testID="chat-scroll-bottom" onPress={() => list.current?.scrollToEnd({ animated: false })} style={({ pressed }) => [styles.scrollBottom, pressed && styles.pressed]}>
+    {awayFromBottom && <Pressable accessibilityRole="button" accessibilityLabel={t('chat.latest')} testID="chat-scroll-bottom" onPress={() => list.current?.scrollToEnd({ animated: false })} style={({ pressed }) => [styles.scrollBottom, pressed && styles.pressed]}>
       <AppIcon name="down" />
     </Pressable>}
   </View>;

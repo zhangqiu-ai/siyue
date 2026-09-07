@@ -9,6 +9,9 @@ const route = '/v1/ai/mock-plan';
 test('local service reports mock limits and returns preview data only', async (t) => {
   const app = createApp();
   t.after(() => app.close());
+  const health = await app.inject('/health');
+  assert.equal(health.statusCode, 200);
+  assert.equal(health.json().version, '0.0.1');
   const capabilities = (await app.inject('/v1/ai/capabilities')).json();
   assert.equal(capabilities.productionReady, false);
   assert.equal(capabilities.providerConfigured, false);

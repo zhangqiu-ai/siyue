@@ -1,5 +1,7 @@
 # 思玥 · Siyue
 
+当前开发版本：**0.0.1（未发布）**。功能归属见 [版本计划](planning/releases/0.0.1.md)，流程见 [版本规则](planning/releases/README.md)，实际发布变化见 [CHANGELOG](CHANGELOG.md)。
+
 开发流程入口：[OpenSpec 规格与变更规则](openspec/README.md)。新功能先写规格，简单修改可说明豁免；验收后同步现行规格。
 
 AI-first 个人成长应用 / An AI-first personal growth app.

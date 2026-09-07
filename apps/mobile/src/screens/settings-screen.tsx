@@ -1,3 +1,5 @@
+import { zh } from '../i18n/messages';
+import { useLocale } from '../i18n';
 import { AppIcon } from '../ui/icon';
 import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
@@ -8,34 +10,45 @@ import { findProvider } from '../settings/providers';
 import { useTheme, useThemePreference, type Theme, type ThemeMode } from '../ui/theme';
 
 export default function SettingsScreen() {
+  const { t, locale, setLocale, preferenceError } = useLocale();
   const theme = useTheme();
   const { fontScale } = useWindowDimensions();
   const styles = makeStyles(theme, fontScale);
   const { mode, setMode } = useThemePreference();
   const settings = useAISettings();
   const router = useRouter();
-  const providerName = settings.config ? findProvider(settings.config.baseUrl)?.name ?? '自定义接口' : '未配置';
+  const provider = settings.config ? findProvider(settings.config.baseUrl) : undefined;
+  const providerName = settings.config ? (provider ? t(`provider.${provider.id}.name` as keyof typeof zh) : t('settings.custom')) : t('settings.unconfigured');
   return <SafeAreaView style={styles.page} edges={['bottom']}>
-    <Stack.Screen options={{ headerShown: true, title: '设置', headerBackTitle: '返回', headerBackButtonDisplayMode: 'minimal', headerShadowVisible: false, headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
+    <Stack.Screen options={{ headerShown: true, title: t('settings.title'), headerBackTitle: t('common.back'), headerBackButtonDisplayMode: 'minimal', headerShadowVisible: false, headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
     <ScrollView contentContainerStyle={styles.content}>
-      <Pressable accessibilityRole="button" accessibilityLabel={`AI 服务，${providerName}`} testID="settings-ai-service" onPress={() => router.push('/ai-provider')} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
-        <Text style={styles.label}>AI 服务</Text>
-        <View style={styles.trailing}><Text numberOfLines={1} style={styles.value}>{!settings.ready ? '正在读取' : settings.storageError ? '需要检查' : providerName}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} /></View>
+      <Pressable accessibilityRole="button" accessibilityLabel={t('settings.aiLabel', { name: providerName })} testID="settings-ai-service" onPress={() => router.push('/ai-provider')} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
+        <Text style={styles.label}>{t('settings.aiService')}</Text>
+        <View style={styles.trailing}><Text numberOfLines={1} style={styles.value}>{!settings.ready ? t('settings.reading') : settings.storageError ? t('settings.check') : providerName}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} /></View>
       </Pressable>
       <View style={[styles.row, styles.appearanceRow]}>
-        <Text style={styles.label}>外观</Text>
+        <Text style={styles.label}>{t('settings.appearance')}</Text>
         <View style={styles.segment}>
-          {(['light', 'dark'] as ThemeMode[]).map(value => <Pressable key={value} accessibilityRole="radio" accessibilityState={{ checked: mode === value }} accessibilityLabel={value === 'light' ? '明色主题' : '暗色主题'} onPress={() => setMode(value)} style={({ pressed }) => [styles.segmentButton, mode === value && styles.segmentSelected, pressed && (mode === value ? styles.primaryPressed : styles.pressed)]}>
-            <Text style={[styles.segmentText, mode === value && styles.segmentSelectedText]}>{value === 'light' ? '明色' : '暗色'}</Text>
+          {(['light', 'dark'] as ThemeMode[]).map(value => <Pressable key={value} accessibilityRole="radio" accessibilityState={{ checked: mode === value }} accessibilityLabel={value === 'light' ? t('theme.lightLabel') : t('theme.darkLabel')} onPress={() => setMode(value)} style={({ pressed }) => [styles.segmentButton, mode === value && styles.segmentSelected, pressed && (mode === value ? styles.primaryPressed : styles.pressed)]}>
+            <Text style={[styles.segmentText, mode === value && styles.segmentSelectedText]}>{value === 'light' ? t('theme.light') : t('theme.dark')}</Text>
           </Pressable>)}
         </View>
       </View>
+      <View style={[styles.row, styles.appearanceRow]}>
+        <Text style={styles.label}>{t('locale.title')}</Text>
+        <View style={styles.segment}>
+          {(['zh-CN', 'en'] as const).map(value => <Pressable key={value} testID={`settings-language-${value}`} accessibilityRole="radio" accessibilityState={{ checked: locale === value }} accessibilityLabel={t(value === 'zh-CN' ? 'locale.zh' : 'locale.en')} onPress={() => setLocale(value)} style={({ pressed }) => [styles.segmentButton, locale === value && styles.segmentSelected, pressed && (locale === value ? styles.primaryPressed : styles.pressed)]}>
+            <Text style={[styles.segmentText, locale === value && styles.segmentSelectedText]}>{t(value === 'zh-CN' ? 'locale.zh' : 'locale.en')}</Text>
+          </Pressable>)}
+        </View>
+      </View>
+      {preferenceError ? <Text accessibilityRole="alert" style={styles.value}>{preferenceError}</Text> : null}
       <View style={styles.group}>
-        <View style={styles.row}><Text style={styles.label}>聊天记录</Text><Text style={styles.value}>重启后清空</Text></View>
+        <View style={styles.row}><Text style={styles.label}>{t('settings.history')}</Text><Text style={styles.value}>{t('settings.historyNote')}</Text></View>
         <View style={styles.divider} />
-        <View style={styles.row}><Text style={styles.label}>密钥存储</Text><Text style={styles.value}>本机安全存储</Text></View>
+        <View style={styles.row}><Text style={styles.label}>{t('settings.keyStorage')}</Text><Text style={styles.value}>{t('settings.localStorage')}</Text></View>
         <View style={styles.divider} />
-        <View style={styles.row}><Text style={styles.label}>应用版本</Text><Text style={styles.value}>{Constants.expoConfig?.version ?? '开发版本'}</Text></View>
+        <View style={styles.row}><Text style={styles.label}>{t('settings.version')}</Text><Text style={styles.value}>{Constants.expoConfig?.version ?? t('settings.development')}</Text></View>
       </View>
     </ScrollView>
   </SafeAreaView>;
@@ -53,7 +66,7 @@ const makeStyles = (theme: Theme, fontScale: number) => StyleSheet.create({
   pressed: { backgroundColor: theme.color.subtle },
   primaryPressed: { backgroundColor: theme.color.accentPressed },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: theme.color.border, marginLeft: 16 },
-  segment: { flexDirection: 'row', padding: 4, flexShrink: 1, backgroundColor: theme.color.subtle, borderRadius: theme.radius.field },
+  segment: { flexDirection: fontScale > 1.4 ? 'column' : 'row', padding: 4, flexShrink: 1, backgroundColor: theme.color.subtle, borderRadius: theme.radius.field },
   segmentButton: { minWidth: 64, flexShrink: 1, minHeight: 48, padding: 8, alignItems: 'center', justifyContent: 'center', borderRadius: theme.radius.field },
   segmentSelected: { backgroundColor: theme.color.accent },
   segmentText: { color: theme.color.muted, fontSize: 16, lineHeight: 24 },

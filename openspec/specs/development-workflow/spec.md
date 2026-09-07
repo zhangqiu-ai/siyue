@@ -55,3 +55,15 @@
 #### Scenario: User-facing copy changes
 - **WHEN** 开发者新增或修改产品界面文案
 - **THEN** 同时覆盖中文与英文，并按变更风险验证资源完整性、可理解性和布局；缺少证据不宣称双语支持完成
+
+### Requirement: Record release ownership during development
+
+开发者 MUST 在开发前登记功能、改进或修复的目标版本；标准变更声明唯一 Target release，版本计划链接变更、状态与证据。版本登记 MUST 与实施授权及验收状态区分。
+
+#### Scenario: Assign an active change
+- **WHEN** 开发者开始一个已授权变更
+- **THEN** 提案写明目标版本且该版本计划登记对应条目，未验收项不作为 CHANGELOG 已交付变化
+
+#### Scenario: Delay or publish
+- **WHEN** 变更延期或版本准备发布
+- **THEN** 延期保留原因与去向，未定时按版本流程保留原登记并移出交付；实际发布成功前不得填写已发布状态或日期

@@ -1,3 +1,5 @@
+import { zh } from '../i18n/messages';
+import { useLocale } from '../i18n';
 import { AppIcon } from '../ui/icon';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Stack, useFocusEffect, useNavigation } from 'expo-router';
@@ -12,6 +14,7 @@ import { PROVIDERS, findProvider, type ProviderPreset } from '../settings/provid
 import { useTheme, type Theme } from '../ui/theme';
 
 export default function AIProviderScreen() {
+  const { t, errorText: translateError } = useLocale();
   const theme = useTheme();
   const styles = makeStyles(theme);
   const settings = useAISettings();
@@ -47,7 +50,7 @@ export default function AIProviderScreen() {
     testController.current = null;
     if (mounted.current) {
       setBusy(null);
-      setNotice('已取消测试。');
+      setNotice('ai.cancelledTest');
     }
   }, []);
   const cancelModels = useCallback(() => {
@@ -68,9 +71,9 @@ export default function AIProviderScreen() {
       const endpoint = normalizeBaseUrl(baseUrl);
       let secret = apiKey.trim();
       if (!secret) {
-        if (!settings.hasKey) throw new Error('请先填写 API 密钥。');
+        if (!settings.hasKey) throw new Error('ai.needKey');
         const saved = await settings.getCredentials();
-        if (saved.baseUrl !== endpoint) throw new Error('修改服务地址后，请重新填写密钥再获取模型。');
+        if (saved.baseUrl !== endpoint) throw new Error('ai.changedEndpoint');
         secret = saved.apiKey;
       }
       if (sessionSignal.aborted) controller.abort();
@@ -78,7 +81,7 @@ export default function AIProviderScreen() {
       if (!mounted.current || modelsController.current !== controller || controller.signal.aborted) return;
       setModels(result); setModel(value => result.includes(value) ? value : ''); setModelQuery(''); setModelPickerOpen(true);
     } catch (error) {
-      if (mounted.current && modelsController.current === controller) setNotice(controller.signal.aborted ? '已取消获取。' : error instanceof Error ? error.message : '获取模型失败，请重试。');
+      if (mounted.current && modelsController.current === controller) setNotice(controller.signal.aborted ? 'ai.cancelledModels' : error instanceof Error ? error.message : 'ai.modelsFailed');
     } finally {
       sessionSignal.removeEventListener('abort', abort);
       if (mounted.current && modelsController.current === controller) { modelsController.current = null; setBusy(null); }
@@ -92,10 +95,10 @@ export default function AIProviderScreen() {
       await settings.save({ baseUrl, model, apiKey });
       if (mounted.current) {
         setApiKey('');
-        setNotice('已保存。');
+        setNotice('ai.saved');
       }
     } catch (error) {
-      if (mounted.current) setNotice(error instanceof Error ? error.message : '保存失败，请重试。');
+      if (mounted.current) setNotice(error instanceof Error ? error.message : 'ai.saveFailed');
     } finally {
       if (mounted.current) setBusy(null);
     }
@@ -107,10 +110,10 @@ export default function AIProviderScreen() {
       await settings.remove();
       if (mounted.current) {
         setApiKey('');
-        setNotice('已移除本机 AI 配置。');
+        setNotice('ai.removed');
       }
     } catch (error) {
-      if (mounted.current) setNotice(error instanceof Error ? error.message : '移除失败，请重试。');
+      if (mounted.current) setNotice(error instanceof Error ? error.message : 'ai.removeFailed');
     } finally {
       if (mounted.current) setBusy(null);
     }
@@ -119,12 +122,12 @@ export default function AIProviderScreen() {
     const controller = new AbortController();
     testController.current = controller;
     setBusy('test');
-    setNotice('正在测试已保存的服务…');
+    setNotice('ai.testing');
     try {
       await settings.testConnection(controller.signal);
-      if (mounted.current && testController.current === controller) setNotice('连接成功。');
+      if (mounted.current && testController.current === controller) setNotice('ai.connected');
     } catch (error) {
-      if (mounted.current && testController.current === controller) setNotice(error instanceof Error ? error.message : '连接失败，请检查配置后重试。');
+      if (mounted.current && testController.current === controller) setNotice(error instanceof Error ? error.message : 'ai.connectionFailed');
     } finally {
       if (mounted.current && testController.current === controller) {
         testController.current = null;
@@ -139,15 +142,15 @@ export default function AIProviderScreen() {
   const writing = busy === 'save' || busy === 'remove';
   const confirmDiscard = (proceed: () => void) => {
     if (writing) {
-      Alert.alert('请等待操作完成', busy === 'save' ? '配置正在保存，完成后可继续操作。' : '配置正在移除，完成后可继续操作。');
+      Alert.alert(t('ai.waitTitle'), busy === 'save' ? t('ai.waitSave') : t('ai.waitRemove'));
       return;
     }
     if (!hasUnsavedChanges) { proceed(); return; }
     if (discardPromptOpen.current) return;
     discardPromptOpen.current = true;
-    Alert.alert('舍弃未保存的修改？', '已填内容将丢失，已保存的配置不受影响。', [
-      { text: '继续编辑', style: 'cancel', onPress: () => { discardPromptOpen.current = false; } },
-      { text: '舍弃修改', style: 'default', onPress: () => { discardPromptOpen.current = false; proceed(); } },
+    Alert.alert(t('ai.discardTitle'), t('ai.discardBody'), [
+      { text: t('ai.keepEditing'), style: 'cancel', onPress: () => { discardPromptOpen.current = false; } },
+      { text: t('ai.discard'), style: 'default', onPress: () => { discardPromptOpen.current = false; proceed(); } },
     ], { cancelable: true, onDismiss: () => { discardPromptOpen.current = false; } });
   };
   usePreventRemove(hasUnsavedChanges || writing, ({ data }) => {
@@ -168,65 +171,66 @@ export default function AIProviderScreen() {
       setApiKey(''); setNotice(''); setAddressOpen(preset.id === 'custom'); setPickerOpen(false);
     });
   };
-  const filtered = PROVIDERS.filter(item => `${item.name} ${item.subtitle}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const providerText = (item: ProviderPreset, field: 'name' | 'subtitle') => t(`provider.${item.id}.${field}` as keyof typeof zh);
+  const filtered = PROVIDERS.filter(item => `${providerText(item, 'name')} ${providerText(item, 'subtitle')} ${item.name} ${item.id}`.toLowerCase().includes(query.trim().toLowerCase()));
   return <SafeAreaView style={styles.page} edges={['bottom']}>
-    <Stack.Screen options={{ headerShown: true, title: 'AI 服务', headerBackTitle: '设置', headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
+    <Stack.Screen options={{ headerShown: true, title: t('settings.aiService'), headerBackTitle: t('settings.title'), headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
     <ScrollView contentContainerStyle={styles.content} automaticallyAdjustKeyboardInsets keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
-      <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 供应商" testID="ai-provider-picker" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { setQuery(''); setPickerOpen(true); }} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
-        <Text style={[styles.rowTitle, styles.flex]}>{provider?.name ?? '选择供应商'}</Text>
+      <Pressable accessibilityRole="button" accessibilityLabel={t('ai.selectProviderLabel')} testID="ai-provider-picker" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { setQuery(''); setPickerOpen(true); }} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
+        <Text style={[styles.rowTitle, styles.flex]}>{provider ? providerText(provider, 'name') : t('ai.selectProvider')}</Text>
         <AppIcon name="chevronRight" size={20} color={theme.color.muted} />
       </Pressable>
       {provider ? <>
         <View style={styles.group}>
           <View style={styles.field}>
-            <View style={styles.inline}><Text style={styles.label}>API 密钥</Text><Text style={styles.note}>{settings.hasKey && sameEndpoint ? '已安全保存' : '未配置'}</Text></View>
-            <TextInput accessibilityLabel="AI API 密钥" testID="ai-api-key" style={styles.input} value={apiKey} onChangeText={value => { setApiKey(value); setModels([]); setModel(''); }} placeholder={settings.hasKey && sameEndpoint ? '留空保留现有密钥' : '粘贴密钥'} placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="off" textContentType="none" editable={!disabled} maxLength={512} />
+            <View style={styles.inline}><Text style={styles.label}>{t('ai.key')}</Text><Text style={styles.note}>{settings.hasKey && sameEndpoint ? t('ai.keySaved') : t('settings.unconfigured')}</Text></View>
+            <TextInput accessibilityLabel={t('ai.keyLabel')} testID="ai-api-key" style={styles.input} value={apiKey} onChangeText={value => { setApiKey(value); setModels([]); setModel(''); }} placeholder={settings.hasKey && sameEndpoint ? t('ai.keepKey') : t('ai.pasteKey')} placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="off" textContentType="none" editable={!disabled} maxLength={512} />
           </View>
           <View style={styles.divider} />
           <View style={styles.field}>
             <View style={styles.inline}>
-              <Text style={styles.label}>模型</Text>
-              <Pressable accessibilityRole="button" accessibilityLabel="刷新模型列表" accessibilityState={{ disabled: disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint)), busy: busy === 'models' }} testID="ai-model-refresh" disabled={disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint))} onPress={() => { void refreshModels(); }} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}>
+              <Text style={styles.label}>{t('ai.model')}</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('ai.refreshModels')} accessibilityState={{ disabled: disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint)), busy: busy === 'models' }} testID="ai-model-refresh" disabled={disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint))} onPress={() => { void refreshModels(); }} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}>
                 {busy === 'models' ? <ActivityIndicator color={theme.color.ink} /> : <AppIcon name="retry" />}
               </Pressable>
             </View>
-            <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 模型" testID="ai-model" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { if (models.length) { setModelQuery(''); setModelPickerOpen(true); } else { void refreshModels(); } }} style={({ pressed }) => [styles.inline, pressed && styles.pressed]}>
-              <Text style={[styles.input, styles.flex]}>{model || '获取模型'}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} />
+            <Pressable accessibilityRole="button" accessibilityLabel={t('ai.selectModel')} testID="ai-model" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { if (models.length) { setModelQuery(''); setModelPickerOpen(true); } else { void refreshModels(); } }} style={({ pressed }) => [styles.inline, pressed && styles.pressed]}>
+              <Text style={[styles.input, styles.flex]}>{model || t('ai.fetchModels')}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} />
             </Pressable>
           </View>
           <View style={styles.divider} />
           <Pressable accessibilityRole="button" accessibilityState={{ expanded: addressOpen }} onPress={() => setAddressOpen(value => !value)} style={({ pressed }) => [styles.addressRow, pressed && styles.pressed]}>
-            <Text style={styles.label}>接口地址</Text><AppIcon name={addressOpen ? 'chevronDown' : 'chevronRight'} size={20} color={theme.color.muted} />
+            <Text style={styles.label}>{t('ai.endpoint')}</Text><AppIcon name={addressOpen ? 'chevronDown' : 'chevronRight'} size={20} color={theme.color.muted} />
           </Pressable>
           {addressOpen ? <View style={styles.addressField}>
-            <TextInput accessibilityLabel="AI 服务地址" testID="ai-base-url" style={styles.input} value={baseUrl} onChangeText={value => { setBaseUrl(value); setApiKey(''); setModels([]); setModel(''); }} placeholder="https://…/v1" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} autoCapitalize="none" autoCorrect={false} keyboardType="url" editable={!disabled} maxLength={1000} />
-            <Text style={styles.note}>仅 HTTPS，不含 /chat/completions。换地址需重填密钥。</Text>
+            <TextInput accessibilityLabel={t('ai.endpointLabel')} testID="ai-base-url" style={styles.input} value={baseUrl} onChangeText={value => { setBaseUrl(value); setApiKey(''); setModels([]); setModel(''); }} placeholder="https://…/v1" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} autoCapitalize="none" autoCorrect={false} keyboardType="url" editable={!disabled} maxLength={1000} />
+            <Text style={styles.note}>{t('ai.endpointNote')}</Text>
           </View> : null}
         </View>
-        <Text style={styles.footnote}>密钥存于本机安全存储。仅当前会话文字发往 {baseUrl ? (() => { try { return new URL(baseUrl).hostname; } catch { return '所填地址'; } })() : '所填地址'}。</Text>
-      </> : <Text style={styles.footnote}>支持 OpenAI 兼容接口。</Text>}
-      {settings.storageError ? <Text accessibilityRole="alert" style={styles.status}>{settings.storageError}</Text> : null}
-      {!settings.ready ? <Text style={styles.note}>正在读取本机配置…</Text> : null}
+        <Text style={styles.footnote}>{t('ai.privacy', { host: baseUrl ? (() => { try { return new URL(baseUrl).hostname; } catch { return t('ai.enteredAddress'); } })() : t('ai.enteredAddress') })}</Text>
+      </> : <Text style={styles.footnote}>{t('ai.compatible')}</Text>}
+      {settings.storageError ? <Text accessibilityRole="alert" style={styles.status}>{translateError(settings.storageError)}</Text> : null}
+      {!settings.ready ? <Text style={styles.note}>{t('ai.loading')}</Text> : null}
       {provider ? <View style={styles.actions}>
-        {button(busy === 'save' ? '正在保存…' : '保存', () => { void save(); }, { primary: true, disabled: disabled || !changed || !baseUrl.trim() || !model.trim(), testID: 'ai-save' })}
-        <Text style={styles.footnote}>保存或移除会停止回复、清空聊天记录。</Text>
-        {busy === 'test' ? button('取消测试', cancelTest, { testID: 'ai-test-cancel' }) : button('测试连接', () => { void test(); }, { disabled: disabled || !settings.config || !settings.hasKey || changed, testID: 'ai-test' })}
-        <Text style={styles.footnote}>{changed && settings.config ? '修改后请先保存。' : '测试发送“请只回复 OK”，可能产生费用。'}</Text>
+        {button(busy === 'save' ? t('ai.saving') : t('common.save'), () => { void save(); }, { primary: true, disabled: disabled || !changed || !baseUrl.trim() || !model.trim(), testID: 'ai-save' })}
+        <Text style={styles.footnote}>{t('ai.saveWarning')}</Text>
+        {busy === 'test' ? button(t('ai.cancelTest'), cancelTest, { testID: 'ai-test-cancel' }) : button(t('ai.test'), () => { void test(); }, { disabled: disabled || !settings.config || !settings.hasKey || changed, testID: 'ai-test' })}
+        <Text style={styles.footnote}>{changed && settings.config ? t('ai.saveFirst') : t('ai.testWarning')}</Text>
       </View> : null}
-      {busy === 'models' ? button('取消获取', () => { cancelModels(); setNotice('已取消获取。'); }, { testID: 'ai-model-cancel' }) : null}
-      {notice ? <Text accessibilityLiveRegion="polite" style={styles.status}>{notice}</Text> : null}
-      {(settings.config || settings.hasKey || settings.storageError) ? button(busy === 'remove' ? '正在移除…' : '移除配置', () => Alert.alert('移除本机 AI 配置？', '将移除本机配置与密钥，停止回复并清空聊天记录。供应商平台的密钥不会被撤销。', [{ text: '取消', style: 'cancel' }, { text: '移除', style: 'destructive', onPress: () => { void remove(); } }]), { disabled, testID: 'ai-remove' }) : null}
+      {busy === 'models' ? button(t('ai.cancelFetch'), () => { cancelModels(); setNotice('ai.cancelledModels'); }, { testID: 'ai-model-cancel' }) : null}
+      {notice ? <Text accessibilityLiveRegion="polite" style={styles.status}>{Object.hasOwn(zh, notice) ? t(notice as keyof typeof zh) : translateError(notice)}</Text> : null}
+      {(settings.config || settings.hasKey || settings.storageError) ? button(busy === 'remove' ? t('ai.removing') : t('ai.removeConfig'), () => Alert.alert(t('ai.removeTitle'), t('ai.removeBody'), [{ text: t('common.cancel'), style: 'cancel' }, { text: t('common.remove'), style: 'destructive', onPress: () => { void remove(); } }]), { disabled, testID: 'ai-remove' }) : null}
     </ScrollView>
     <Modal visible={modelPickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setModelPickerOpen(false)}>
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
         <View style={styles.modalContent}>
-        <View style={styles.modalHeader}><Text style={styles.heading}>模型</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭模型选择" onPress={() => setModelPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
-        <TextInput accessibilityLabel="搜索模型" style={styles.search} value={modelQuery} onChangeText={setModelQuery} placeholder="搜索模型" placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
+        <View style={styles.modalHeader}><Text style={styles.heading}>{t('ai.model')}</Text><Pressable accessibilityRole="button" accessibilityLabel={t('ai.closeModels')} onPress={() => setModelPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
+        <TextInput accessibilityLabel={t('ai.searchModels')} style={styles.search} value={modelQuery} onChangeText={setModelQuery} placeholder={t('ai.searchModels')} placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
           {models.filter(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())).map(item => <Pressable key={item} accessibilityRole="button" accessibilityState={{ selected: item === model }} onPress={() => { setModel(item); setModelPickerOpen(false); setNotice(''); }} style={({ pressed }) => [styles.providerRow, pressed && styles.pressed]}>
             <Text style={[styles.rowTitle, styles.flex]}>{item}</Text>{item === model ? <AppIcon name="check" /> : null}
           </Pressable>)}
-          {!models.some(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())) ? <Text style={styles.footnote}>无匹配模型</Text> : null}
+          {!models.some(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())) ? <Text style={styles.footnote}>{t('ai.noModels')}</Text> : null}
         </ScrollView>
         </View>
       </SafeAreaView>
@@ -234,13 +238,13 @@ export default function AIProviderScreen() {
     <Modal visible={pickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setPickerOpen(false)}>
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
         <View style={styles.modalContent}>
-        <View style={styles.modalHeader}><Text style={styles.heading}>供应商</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭供应商选择" onPress={() => setPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
-        <TextInput accessibilityLabel="搜索供应商" testID="ai-provider-search" style={styles.search} value={query} onChangeText={setQuery} placeholder="搜索供应商" placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
+        <View style={styles.modalHeader}><Text style={styles.heading}>{t('ai.providers')}</Text><Pressable accessibilityRole="button" accessibilityLabel={t('ai.closeProviders')} onPress={() => setPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
+        <TextInput accessibilityLabel={t('ai.searchProviders')} testID="ai-provider-search" style={styles.search} value={query} onChangeText={setQuery} placeholder={t('ai.searchProviders')} placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
           {filtered.map(item => <Pressable key={item.id} accessibilityRole="button" accessibilityState={{ selected: item.id === providerId }} onPress={() => selectProvider(item)} style={({ pressed }) => [styles.providerRow, pressed && styles.pressed]}>
-            <View style={styles.flex}><Text style={styles.rowTitle}>{item.name}</Text><Text style={styles.note}>{item.subtitle}</Text></View><AppIcon name={item.id === providerId ? 'check' : 'chevronRight'} size={20} color={theme.color.muted} />
+            <View style={styles.flex}><Text style={styles.rowTitle}>{providerText(item, 'name')}</Text><Text style={styles.note}>{providerText(item, 'subtitle')}</Text></View><AppIcon name={item.id === providerId ? 'check' : 'chevronRight'} size={20} color={theme.color.muted} />
           </Pressable>)}
-          {!filtered.length ? <Text style={styles.footnote}>无匹配结果，可清空搜索后自定义。</Text> : null}
+          {!filtered.length ? <Text style={styles.footnote}>{t('ai.noProviders')}</Text> : null}
         </ScrollView>
         </View>
       </SafeAreaView>

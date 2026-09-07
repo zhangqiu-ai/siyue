@@ -65,3 +65,10 @@ input::placeholder, textarea::placeholder { color: #737373; opacity: 1; }
 .draft-item .draft-continue { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .section-heading { flex-wrap: wrap; }
 @media (max-width: 480px) { .shell { padding: 24px 16px; } .panel { padding: 16px; } }
+.settings-trigger { flex-shrink: 0; margin-left: auto; }
+.settings-dialog { width: min(440px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow: auto; border: 1px solid #888888; border-radius: 24px; padding: 24px; color: #171717; background: #ffffff; }
+.settings-dialog::backdrop { background: rgb(0 0 0 / 40%); }
+.settings-dialog fieldset { margin: 24px 0 0; padding: 0; border: 0; min-width: 0; }
+.settings-dialog legend { margin-bottom: 12px; font-weight: 600; }
+.language-options { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 850px) { .page-header { flex-direction: row; flex-wrap: wrap; } .local-badge { order: 3; } }
