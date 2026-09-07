@@ -24,7 +24,6 @@ function MessageBubble() {
   const error = status?.type === 'incomplete' && status.reason === 'error' ? status.error : undefined;
   const errorText = error && typeof error === 'object' && 'message' in error && typeof error.message === 'string' ? error.message : '回复中断，请重试。';
   return <MessagePrimitive.Root style={[styles.message, isUser && styles.userMessage]}>
-    <Text style={styles.speaker}>{isUser ? '你' : 'AI'}</Text>
     <View style={[styles.bubble, isUser && styles.userBubble]}>
       <MessagePrimitive.Parts components={{ Text: MessageText, Empty: () => <Text style={styles.note}>{status?.type === 'running' ? '正在回应…' : '未收到回复'}</Text> }} />
       <ErrorPrimitive.Root><Text style={styles.error}>{errorText}</Text></ErrorPrimitive.Root>
@@ -86,7 +85,6 @@ const makeStyles = (theme: Theme) => StyleSheet.create({
   suggestionText: { color: theme.color.ink, fontSize: 15 },
   messages: { padding: 20, gap: 24 },
   message: { alignItems: 'flex-start', gap: 8 }, userMessage: { alignItems: 'flex-end' },
-  speaker: { color: theme.color.muted, fontSize: 12, paddingHorizontal: 4 },
   bubble: { maxWidth: '100%', padding: 16, borderRadius: 20, backgroundColor: theme.color.surface },
   userBubble: { maxWidth: '88%', backgroundColor: theme.color.subtle },
   messageText: { color: theme.color.ink, fontSize: 16, lineHeight: 26 },

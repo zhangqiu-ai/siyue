@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Stack, useFocusEffect } from 'expo-router';
-import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { fetch as expoFetch } from 'expo/fetch';
+import { normalizeBaseUrl } from '../chat/compatible-transport';
+import { fetchCompatibleModels } from '../settings/model-catalog';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAISettings } from '../settings/ai-settings';
 import { PROVIDERS, findProvider, type ProviderPreset } from '../settings/providers';
@@ -12,18 +15,23 @@ export default function AIProviderScreen() {
   const settings = useAISettings();
   const [baseUrl, setBaseUrl] = useState('');
   const [model, setModel] = useState('');
+  const [models, setModels] = useState<string[]>([]);
+  const [modelPickerOpen, setModelPickerOpen] = useState(false);
+  const [modelQuery, setModelQuery] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [pickerOpen, setPickerOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [addressOpen, setAddressOpen] = useState(false);
   const [providerId, setProviderId] = useState('');
-  const [busy, setBusy] = useState<'save' | 'remove' | 'test' | null>(null);
+  const [busy, setBusy] = useState<'save' | 'remove' | 'test' | 'models' | null>(null);
   const [notice, setNotice] = useState('');
   const testController = useRef<AbortController | null>(null);
+  const modelsController = useRef<AbortController | null>(null);
   const mounted = useRef(true);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   useEffect(() => {
     if (!settings.ready) return;
+    setModels([]);
     setBaseUrl(settings.config?.baseUrl ?? '');
     setModel(settings.config?.model ?? '');
     setProviderId(settings.config ? findProvider(settings.config.baseUrl)?.id ?? 'custom' : '');
@@ -38,7 +46,40 @@ export default function AIProviderScreen() {
       setNotice('已取消测试。');
     }
   }, []);
-  useFocusEffect(useCallback(() => () => { cancelTest(); }, [cancelTest]));
+  const cancelModels = useCallback(() => {
+    modelsController.current?.abort();
+    modelsController.current = null;
+    if (mounted.current) setBusy(value => value === 'models' ? null : value);
+  }, []);
+  useFocusEffect(useCallback(() => () => { cancelTest(); cancelModels(); }, [cancelTest, cancelModels]));
+
+  const refreshModels = async () => {
+    const controller = new AbortController();
+    modelsController.current = controller;
+    const sessionSignal = settings.getSessionSignal();
+    const abort = () => controller.abort();
+    sessionSignal.addEventListener('abort', abort, { once: true });
+    setBusy('models'); setNotice('');
+    try {
+      const endpoint = normalizeBaseUrl(baseUrl);
+      let secret = apiKey.trim();
+      if (!secret) {
+        if (!settings.hasKey) throw new Error('请先填写 API 密钥。');
+        const saved = await settings.getCredentials();
+        if (saved.baseUrl !== endpoint) throw new Error('修改服务地址后，请重新填写密钥再获取模型。');
+        secret = saved.apiKey;
+      }
+      if (sessionSignal.aborted) controller.abort();
+      const result = await fetchCompatibleModels({ baseUrl: endpoint, apiKey: secret }, controller.signal, expoFetch);
+      if (!mounted.current || modelsController.current !== controller || controller.signal.aborted) return;
+      setModels(result); setModel(value => result.includes(value) ? value : ''); setModelQuery(''); setModelPickerOpen(true);
+    } catch (error) {
+      if (mounted.current && modelsController.current === controller) setNotice(controller.signal.aborted ? '已取消获取。' : error instanceof Error ? error.message : '获取模型失败，请重试。');
+    } finally {
+      sessionSignal.removeEventListener('abort', abort);
+      if (mounted.current && modelsController.current === controller) { modelsController.current = null; setBusy(null); }
+    }
+  };
 
   const save = async () => {
     setBusy('save');
@@ -98,7 +139,7 @@ export default function AIProviderScreen() {
   const provider = PROVIDERS.find(item => item.id === providerId);
   const sameEndpoint = baseUrl.trim().replace(/\/+$/, '') === settings.config?.baseUrl;
   const selectProvider = (preset: ProviderPreset) => {
-    setProviderId(preset.id); setBaseUrl(preset.baseUrl); setModel(preset.model);
+    setProviderId(preset.id); setBaseUrl(preset.baseUrl); setModel(''); setModels([]);
     setApiKey(''); setNotice(''); setAddressOpen(preset.id === 'custom'); setPickerOpen(false);
   };
   const filtered = PROVIDERS.filter(item => `${item.name} ${item.subtitle}`.toLowerCase().includes(query.trim().toLowerCase()));
@@ -113,24 +154,30 @@ export default function AIProviderScreen() {
         <View style={styles.group}>
           <View style={styles.field}>
             <View style={styles.inline}><Text style={styles.label}>API 密钥</Text><Text style={styles.note}>{settings.hasKey && sameEndpoint ? '已安全保存' : '未配置'}</Text></View>
-            <TextInput accessibilityLabel="AI API 密钥" testID="ai-api-key" style={styles.input} value={apiKey} onChangeText={setApiKey} placeholder={settings.hasKey && sameEndpoint ? '留空保留现有密钥' : '粘贴密钥'} placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="off" textContentType="none" editable={!disabled} maxLength={512} />
+            <TextInput accessibilityLabel="AI API 密钥" testID="ai-api-key" style={styles.input} value={apiKey} onChangeText={value => { setApiKey(value); setModels([]); setModel(''); }} placeholder={settings.hasKey && sameEndpoint ? '留空保留现有密钥' : '粘贴密钥'} placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="off" textContentType="none" editable={!disabled} maxLength={512} />
           </View>
           <View style={styles.divider} />
           <View style={styles.field}>
-            <Text style={styles.label}>模型</Text>
-            <TextInput accessibilityLabel="AI 模型" testID="ai-model" style={styles.input} value={model} onChangeText={setModel} placeholder="输入模型名称" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} autoCapitalize="none" autoCorrect={false} editable={!disabled} maxLength={200} />
+            <View style={styles.inline}>
+              <Text style={styles.label}>模型</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel="刷新模型列表" testID="ai-model-refresh" disabled={disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint))} onPress={() => { void refreshModels(); }} style={styles.closeButton}>
+                <Text style={styles.rowTitle}>{busy === 'models' ? '…' : '↻'}</Text>
+              </Pressable>
+            </View>
+            <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 模型" testID="ai-model" disabled={disabled} onPress={() => { if (models.length) { setModelQuery(''); setModelPickerOpen(true); } else { void refreshModels(); } }} style={styles.inline}>
+              <Text style={[styles.input, styles.flex]}>{model || '获取模型'}</Text><Text style={styles.chevron}>›</Text>
+            </Pressable>
           </View>
           <View style={styles.divider} />
           <Pressable accessibilityRole="button" accessibilityState={{ expanded: addressOpen }} onPress={() => setAddressOpen(value => !value)} style={styles.addressRow}>
             <Text style={styles.label}>接口地址</Text><Text style={styles.chevron}>{addressOpen ? '⌄' : '›'}</Text>
           </Pressable>
           {addressOpen ? <View style={styles.addressField}>
-            <TextInput accessibilityLabel="AI 服务地址" testID="ai-base-url" style={styles.input} value={baseUrl} onChangeText={setBaseUrl} placeholder="https://…/v1" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} autoCapitalize="none" autoCorrect={false} keyboardType="url" editable={!disabled} maxLength={1000} />
+            <TextInput accessibilityLabel="AI 服务地址" testID="ai-base-url" style={styles.input} value={baseUrl} onChangeText={value => { setBaseUrl(value); setApiKey(''); setModels([]); setModel(''); }} placeholder="https://…/v1" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} autoCapitalize="none" autoCorrect={false} keyboardType="url" editable={!disabled} maxLength={1000} />
             <Text style={styles.note}>仅 HTTPS，不含 /chat/completions。换地址需重填密钥。</Text>
           </View> : null}
         </View>
         <Text style={styles.footnote}>密钥存于本机安全存储。仅当前会话文字发往 {baseUrl ? (() => { try { return new URL(baseUrl).hostname; } catch { return '所填地址'; } })() : '所填地址'}。</Text>
-        {provider.helpUrl ? <Pressable accessibilityRole="link" onPress={() => { void Linking.openURL(provider.helpUrl).catch(() => setNotice('暂时无法打开帮助页面。')); }} style={styles.help}><Text style={styles.helpText}>官方文档 ↗</Text></Pressable> : null}
       </> : <Text style={styles.footnote}>支持 OpenAI 兼容接口。</Text>}
       {settings.storageError ? <Text accessibilityRole="alert" style={styles.status}>{settings.storageError}</Text> : null}
       {!settings.ready ? <Text style={styles.note}>正在读取本机配置…</Text> : null}
@@ -140,9 +187,22 @@ export default function AIProviderScreen() {
         {busy === 'test' ? button('取消测试', cancelTest, { testID: 'ai-test-cancel' }) : button('测试连接', () => { void test(); }, { disabled: disabled || !settings.config || !settings.hasKey || changed, testID: 'ai-test' })}
         <Text style={styles.footnote}>{changed && settings.config ? '修改后请先保存。' : '测试发送“请只回复 OK”，可能产生费用。'}</Text>
       </View> : null}
+      {busy === 'models' ? button('取消获取', () => { cancelModels(); setNotice('已取消获取。'); }, { testID: 'ai-model-cancel' }) : null}
       {notice ? <Text accessibilityLiveRegion="polite" style={styles.status}>{notice}</Text> : null}
       {(settings.config || settings.hasKey || settings.storageError) ? button(busy === 'remove' ? '正在移除…' : '移除配置', () => Alert.alert('移除本机 AI 配置？', '将移除本机配置与密钥，停止回复并清空聊天记录。供应商平台的密钥不会被撤销。', [{ text: '取消', style: 'cancel' }, { text: '移除', style: 'destructive', onPress: () => { void remove(); } }]), { disabled, testID: 'ai-remove' }) : null}
     </ScrollView>
+    <Modal visible={modelPickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setModelPickerOpen(false)}>
+      <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
+        <View style={styles.modalHeader}><Text style={styles.heading}>模型</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭模型选择" onPress={() => setModelPickerOpen(false)} style={styles.closeButton}><Text accessible={false} style={styles.closeIcon}>×</Text></Pressable></View>
+        <TextInput accessibilityLabel="搜索模型" style={styles.search} value={modelQuery} onChangeText={setModelQuery} placeholder="搜索模型" placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
+        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
+          {models.filter(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())).map(item => <Pressable key={item} accessibilityRole="button" accessibilityState={{ selected: item === model }} onPress={() => { setModel(item); setModelPickerOpen(false); setNotice(''); }} style={styles.providerRow}>
+            <Text style={[styles.rowTitle, styles.flex]}>{item}</Text><Text style={styles.chevron}>{item === model ? '✓' : ''}</Text>
+          </Pressable>)}
+          {!models.some(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())) ? <Text style={styles.footnote}>无匹配模型</Text> : null}
+        </ScrollView>
+      </SafeAreaView>
+    </Modal>
     <Modal visible={pickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setPickerOpen(false)}>
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
         <View style={styles.modalHeader}><Text style={styles.heading}>供应商</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭供应商选择" onPress={() => setPickerOpen(false)} style={styles.closeButton}><Text accessible={false} style={styles.closeIcon}>×</Text></Pressable></View>
@@ -175,8 +235,6 @@ const makeStyles = (theme: Theme) => StyleSheet.create({
   addressRow: { minHeight: 54, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   addressField: { paddingHorizontal: 16, paddingBottom: 16, gap: 6 },
   footnote: { color: theme.color.muted, fontSize: 12, lineHeight: 18, paddingHorizontal: 4, marginTop: 8 },
-  help: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 4 },
-  helpText: { color: theme.color.ink, fontSize: 14, fontWeight: '500' },
   actions: { gap: 4, marginTop: 20, marginBottom: 16 },
   button: { minHeight: 48, padding: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 12, backgroundColor: theme.color.surface },
   primaryButton: { backgroundColor: theme.color.accent },

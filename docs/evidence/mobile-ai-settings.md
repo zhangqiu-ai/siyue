@@ -64,3 +64,19 @@ xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
 - [Expo fetch](https://docs.expo.dev/versions/latest/sdk/expo/)：原生流式 fetch；本地 Expo57 iOS NativeResponse.swift 与 Android NativeRequest.kt 已核实实现 redirect:error。
 - [DeepSeek API](https://api-docs.deepseek.com/)：OpenAI 兼容端点、deepseek-v4-flash 预设。
 - [通义 OpenAI 兼容接口](https://www.alibabacloud.com/help/en/model-studio/compatibility-of-openai-with-dashscope)：地域/业务空间与密钥绑定。预设提供北京旧通用地址，可按控制台改为业务空间专用地址；模型与接口可用性必须实际验证。
+
+
+## 2026-09-07 · 模型获取与真实 DeepSeek 验证
+
+本节补充并覆盖前文“模型可编辑”和“未调用真实供应商”的相应历史状态，不提升工作包完成状态。
+
+- 模型输入改为供应商 `GET /models` 列表选择，支持搜索和刷新；不自动使用预设模型名。新密钥可在保存前获取列表；密钥留空时仅对相同标准化地址复用安全存储记录。地址变化清空输入密钥与模型，密钥变化清空列表与选择。成功刷新后失效模型需重选，失败保留原选择。
+- 获取可取消，离页/后台取消，15 秒超时，无自动重试或重定向；返回列表运行时校验，错误使用固定中文文案。不支持此接口的服务会明确失败，不回退手填。列表不保证全部模型支持聊天，需连接测试。
+- 移除设置页“官方文档”入口和聊天气泡上方“你 / AI”名称；保留消息内容、对齐及操作无障碍标签。
+- 工作目录 `/Users/feature/code/siyue`，Node 22.22.3。`corepack pnpm --filter @siyue/mobile test`：61 项通过、0 失败（新增 23 项模型列表测试），日志 `/tmp/siyue-model-tests.log`。`corepack pnpm --filter @siyue/mobile typecheck`、`git diff --check` 通过。
+- 正常 Debug 应用通过 `corepack pnpm --filter @siyue/mobile start --localhost` 加载最新 JavaScript；在 Siyue M1 QA / iOS 26.5 模拟器 `7328BC59-6853-445B-A888-E99496AB2048` 检查了页面截图、模型按钮和缺密钥提示。未重新构建原生二进制。
+- 维护者明确授权保存测试密钥并实际调用 DeepSeek。通过应用安全输入框填写，真实获取返回 `deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp`；选择 flash 后保存，界面显示“已安全保存”，输入框不回填。再用留空密钥刷新成功，保留所选模型。
+- 应用连接测试显示“连接成功”；正常聊天发送“请只回复：连接正常”，实际收到“连接正常”，生成结束、发送按钮恢复。AX 树及截图确认没有“你 / AI”名称，配置保留供维护者继续测试。本文不记录密钥；未测试其余模型、Android、真机、重启配置恢复或本次完整业务回归，未核算实际费用。
+- 官方协议依据（2026-09-07）：[DeepSeek List Models](https://api-docs.deepseek.com/api/list-models/)、[OpenAI List Models](https://developers.openai.com/api/reference/resources/models/methods/list)。真实成功证据仅覆盖上述 DeepSeek 地址与所选模型，不代表其他预设兼容。
+
+本轮未提交、推送或部署。

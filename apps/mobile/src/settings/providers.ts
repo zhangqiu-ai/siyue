@@ -53,7 +53,7 @@ export const PROVIDERS: ProviderPreset[] = [
   {
     id: 'volcengine',
     name: '火山方舟',
-    subtitle: '北京地域 · 填写已开通模型或接入点',
+    subtitle: '火山引擎 · 北京地域',
     baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
     model: '',
     helpUrl: 'https://www.volcengine.com/docs/82379/1494384',
