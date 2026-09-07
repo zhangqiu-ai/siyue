@@ -37,3 +37,21 @@
 #### Scenario: Completed change
 - **WHEN** 已授权范围的实现、审查及验收完成
 - **THEN** 同步现行规格、归档变更并更新相关规划与证据，提交及发布仍遵循当次授权
+
+
+### Requirement: Plan and verify both Apple device classes
+
+涉及移动页面或布局的变更 MUST 同时规划 iPhone 与 iPad 的设计及验收，按 docs/design/ui-acceptance.md 的设备矩阵分别保留证据。iPad 是未来主力，不能以此省略手机体验；本规则不表示应用已经适配。
+
+#### Scenario: New mobile layout
+- **WHEN** 开发者为移动端增加页面或改变布局
+- **THEN** 规格和任务包含 iPhone 与 iPad 的适用窗口、方向和输入场景，缺少任一设备证据时不得宣称双设备适配完成
+
+
+### Requirement: Include Chinese and English in delivery planning
+
+涉及产品文案的变更 MUST 同时规划中文和英文资源及适用验证，包含状态、错误和无障碍名称。界面语言 MUST 与用户内容、学习语种及 AI 回复语言区分；未确认的语言选择策略不得自行当作已批准。
+
+#### Scenario: User-facing copy changes
+- **WHEN** 开发者新增或修改产品界面文案
+- **THEN** 同时覆盖中文与英文，并按变更风险验证资源完整性、可理解性和布局；缺少证据不宣称双语支持完成

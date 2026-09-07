@@ -1,6 +1,8 @@
+import { AppIcon } from '../ui/icon';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Stack, useFocusEffect } from 'expo-router';
-import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Stack, useFocusEffect, useNavigation } from 'expo-router';
+import { usePreventRemove } from 'expo-router/react-navigation';
+import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { fetch as expoFetch } from 'expo/fetch';
 import { normalizeBaseUrl } from '../chat/compatible-transport';
 import { fetchCompatibleModels } from '../settings/model-catalog';
@@ -13,6 +15,8 @@ export default function AIProviderScreen() {
   const theme = useTheme();
   const styles = makeStyles(theme);
   const settings = useAISettings();
+  const navigation = useNavigation();
+  const discardPromptOpen = useRef(false);
   const [baseUrl, setBaseUrl] = useState('');
   const [model, setModel] = useState('');
   const [models, setModels] = useState<string[]>([]);
@@ -129,9 +133,28 @@ export default function AIProviderScreen() {
     }
   };
   const disabled = !settings.ready || busy !== null;
-  const changed = baseUrl.trim().replace(/\/+$/, '') !== settings.config?.baseUrl || model.trim() !== settings.config?.model || apiKey.trim() !== '';
+  const changed = baseUrl.trim().replace(/\/+$/, '') !== (settings.config?.baseUrl ?? '') || model.trim() !== (settings.config?.model ?? '') || apiKey !== '';
+  const savedProviderId = settings.config ? findProvider(settings.config.baseUrl)?.id ?? 'custom' : '';
+  const hasUnsavedChanges = settings.ready && (baseUrl !== (settings.config?.baseUrl ?? '') || model !== (settings.config?.model ?? '') || apiKey !== '' || providerId !== savedProviderId);
+  const writing = busy === 'save' || busy === 'remove';
+  const confirmDiscard = (proceed: () => void) => {
+    if (writing) {
+      Alert.alert('请等待操作完成', busy === 'save' ? '配置正在保存，完成后可继续操作。' : '配置正在移除，完成后可继续操作。');
+      return;
+    }
+    if (!hasUnsavedChanges) { proceed(); return; }
+    if (discardPromptOpen.current) return;
+    discardPromptOpen.current = true;
+    Alert.alert('舍弃未保存的修改？', '已填内容将丢失，已保存的配置不受影响。', [
+      { text: '继续编辑', style: 'cancel', onPress: () => { discardPromptOpen.current = false; } },
+      { text: '舍弃修改', style: 'default', onPress: () => { discardPromptOpen.current = false; proceed(); } },
+    ], { cancelable: true, onDismiss: () => { discardPromptOpen.current = false; } });
+  };
+  usePreventRemove(hasUnsavedChanges || writing, ({ data }) => {
+    confirmDiscard(() => navigation.dispatch(data.action));
+  });
   const button = (label: string, onPress: () => void, options: { primary?: boolean; disabled?: boolean; testID?: string } = {}) => (
-    <Pressable accessibilityRole="button" accessibilityState={{ disabled: options.disabled ?? false }} disabled={options.disabled} testID={options.testID} onPress={onPress} style={({ pressed }) => [styles.button, options.primary && styles.primaryButton, (options.disabled || pressed) && styles.dimmed]}>
+    <Pressable accessibilityRole="button" accessibilityState={{ disabled: options.disabled ?? false }} disabled={options.disabled} testID={options.testID} onPress={onPress} style={({ pressed }) => [styles.button, options.primary && styles.primaryButton, options.disabled && styles.dimmed, pressed && (options.primary ? styles.primaryPressed : styles.pressed)]}>
       <Text style={[styles.buttonText, options.primary && styles.primaryButtonText]}>{label}</Text>
     </Pressable>
   );
@@ -139,16 +162,19 @@ export default function AIProviderScreen() {
   const provider = PROVIDERS.find(item => item.id === providerId);
   const sameEndpoint = baseUrl.trim().replace(/\/+$/, '') === settings.config?.baseUrl;
   const selectProvider = (preset: ProviderPreset) => {
-    setProviderId(preset.id); setBaseUrl(preset.baseUrl); setModel(''); setModels([]);
-    setApiKey(''); setNotice(''); setAddressOpen(preset.id === 'custom'); setPickerOpen(false);
+    if (preset.id === providerId) { setPickerOpen(false); return; }
+    confirmDiscard(() => {
+      setProviderId(preset.id); setBaseUrl(preset.baseUrl); setModel(''); setModels([]);
+      setApiKey(''); setNotice(''); setAddressOpen(preset.id === 'custom'); setPickerOpen(false);
+    });
   };
   const filtered = PROVIDERS.filter(item => `${item.name} ${item.subtitle}`.toLowerCase().includes(query.trim().toLowerCase()));
   return <SafeAreaView style={styles.page} edges={['bottom']}>
     <Stack.Screen options={{ headerShown: true, title: 'AI 服务', headerBackTitle: '设置', headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
     <ScrollView contentContainerStyle={styles.content} automaticallyAdjustKeyboardInsets keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
-      <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 供应商" testID="ai-provider-picker" disabled={disabled} onPress={() => { setQuery(''); setPickerOpen(true); }} style={styles.row}>
+      <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 供应商" testID="ai-provider-picker" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { setQuery(''); setPickerOpen(true); }} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
         <Text style={[styles.rowTitle, styles.flex]}>{provider?.name ?? '选择供应商'}</Text>
-        <Text style={styles.chevron}>›</Text>
+        <AppIcon name="chevronRight" size={20} color={theme.color.muted} />
       </Pressable>
       {provider ? <>
         <View style={styles.group}>
@@ -160,17 +186,17 @@ export default function AIProviderScreen() {
           <View style={styles.field}>
             <View style={styles.inline}>
               <Text style={styles.label}>模型</Text>
-              <Pressable accessibilityRole="button" accessibilityLabel="刷新模型列表" testID="ai-model-refresh" disabled={disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint))} onPress={() => { void refreshModels(); }} style={styles.closeButton}>
-                <Text style={styles.rowTitle}>{busy === 'models' ? '…' : '↻'}</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel="刷新模型列表" accessibilityState={{ disabled: disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint)), busy: busy === 'models' }} testID="ai-model-refresh" disabled={disabled || !baseUrl.trim() || (!apiKey.trim() && !(settings.hasKey && sameEndpoint))} onPress={() => { void refreshModels(); }} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}>
+                {busy === 'models' ? <ActivityIndicator color={theme.color.ink} /> : <AppIcon name="retry" />}
               </Pressable>
             </View>
-            <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 模型" testID="ai-model" disabled={disabled} onPress={() => { if (models.length) { setModelQuery(''); setModelPickerOpen(true); } else { void refreshModels(); } }} style={styles.inline}>
-              <Text style={[styles.input, styles.flex]}>{model || '获取模型'}</Text><Text style={styles.chevron}>›</Text>
+            <Pressable accessibilityRole="button" accessibilityLabel="选择 AI 模型" testID="ai-model" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { if (models.length) { setModelQuery(''); setModelPickerOpen(true); } else { void refreshModels(); } }} style={({ pressed }) => [styles.inline, pressed && styles.pressed]}>
+              <Text style={[styles.input, styles.flex]}>{model || '获取模型'}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} />
             </Pressable>
           </View>
           <View style={styles.divider} />
-          <Pressable accessibilityRole="button" accessibilityState={{ expanded: addressOpen }} onPress={() => setAddressOpen(value => !value)} style={styles.addressRow}>
-            <Text style={styles.label}>接口地址</Text><Text style={styles.chevron}>{addressOpen ? '⌄' : '›'}</Text>
+          <Pressable accessibilityRole="button" accessibilityState={{ expanded: addressOpen }} onPress={() => setAddressOpen(value => !value)} style={({ pressed }) => [styles.addressRow, pressed && styles.pressed]}>
+            <Text style={styles.label}>接口地址</Text><AppIcon name={addressOpen ? 'chevronDown' : 'chevronRight'} size={20} color={theme.color.muted} />
           </Pressable>
           {addressOpen ? <View style={styles.addressField}>
             <TextInput accessibilityLabel="AI 服务地址" testID="ai-base-url" style={styles.input} value={baseUrl} onChangeText={value => { setBaseUrl(value); setApiKey(''); setModels([]); setModel(''); }} placeholder="https://…/v1" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} autoCapitalize="none" autoCorrect={false} keyboardType="url" editable={!disabled} maxLength={1000} />
@@ -193,26 +219,30 @@ export default function AIProviderScreen() {
     </ScrollView>
     <Modal visible={modelPickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setModelPickerOpen(false)}>
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
-        <View style={styles.modalHeader}><Text style={styles.heading}>模型</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭模型选择" onPress={() => setModelPickerOpen(false)} style={styles.closeButton}><Text accessible={false} style={styles.closeIcon}>×</Text></Pressable></View>
+        <View style={styles.modalContent}>
+        <View style={styles.modalHeader}><Text style={styles.heading}>模型</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭模型选择" onPress={() => setModelPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
         <TextInput accessibilityLabel="搜索模型" style={styles.search} value={modelQuery} onChangeText={setModelQuery} placeholder="搜索模型" placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
-          {models.filter(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())).map(item => <Pressable key={item} accessibilityRole="button" accessibilityState={{ selected: item === model }} onPress={() => { setModel(item); setModelPickerOpen(false); setNotice(''); }} style={styles.providerRow}>
-            <Text style={[styles.rowTitle, styles.flex]}>{item}</Text><Text style={styles.chevron}>{item === model ? '✓' : ''}</Text>
+          {models.filter(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())).map(item => <Pressable key={item} accessibilityRole="button" accessibilityState={{ selected: item === model }} onPress={() => { setModel(item); setModelPickerOpen(false); setNotice(''); }} style={({ pressed }) => [styles.providerRow, pressed && styles.pressed]}>
+            <Text style={[styles.rowTitle, styles.flex]}>{item}</Text>{item === model ? <AppIcon name="check" /> : null}
           </Pressable>)}
           {!models.some(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())) ? <Text style={styles.footnote}>无匹配模型</Text> : null}
         </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
     <Modal visible={pickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setPickerOpen(false)}>
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
-        <View style={styles.modalHeader}><Text style={styles.heading}>供应商</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭供应商选择" onPress={() => setPickerOpen(false)} style={styles.closeButton}><Text accessible={false} style={styles.closeIcon}>×</Text></Pressable></View>
+        <View style={styles.modalContent}>
+        <View style={styles.modalHeader}><Text style={styles.heading}>供应商</Text><Pressable accessibilityRole="button" accessibilityLabel="关闭供应商选择" onPress={() => setPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
         <TextInput accessibilityLabel="搜索供应商" testID="ai-provider-search" style={styles.search} value={query} onChangeText={setQuery} placeholder="搜索供应商" placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
-          {filtered.map(item => <Pressable key={item.id} accessibilityRole="button" accessibilityState={{ selected: item.id === providerId }} onPress={() => selectProvider(item)} style={styles.providerRow}>
-            <View style={styles.flex}><Text style={styles.rowTitle}>{item.name}</Text><Text style={styles.note}>{item.subtitle}</Text></View><Text style={styles.chevron}>{item.id === providerId ? '✓' : '›'}</Text>
+          {filtered.map(item => <Pressable key={item.id} accessibilityRole="button" accessibilityState={{ selected: item.id === providerId }} onPress={() => selectProvider(item)} style={({ pressed }) => [styles.providerRow, pressed && styles.pressed]}>
+            <View style={styles.flex}><Text style={styles.rowTitle}>{item.name}</Text><Text style={styles.note}>{item.subtitle}</Text></View><AppIcon name={item.id === providerId ? 'check' : 'chevronRight'} size={20} color={theme.color.muted} />
           </Pressable>)}
           {!filtered.length ? <Text style={styles.footnote}>无匹配结果，可清空搜索后自定义。</Text> : null}
         </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
   </SafeAreaView>;
@@ -220,33 +250,34 @@ export default function AIProviderScreen() {
 
 const makeStyles = (theme: Theme) => StyleSheet.create({
   page: { flex: 1, backgroundColor: theme.color.background },
-  content: { padding: 20, paddingTop: 10, paddingBottom: 32 },
-  row: { minHeight: 58, padding: 16, backgroundColor: theme.color.surface, borderRadius: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  content: { width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center', padding: 20, paddingTop: 16, paddingBottom: 32 },
+  row: { minHeight: 56, padding: 16, backgroundColor: theme.color.surface, borderRadius: theme.radius.card, flexDirection: 'row', alignItems: 'center', gap: 12 },
   flex: { flex: 1, gap: 4 },
-  rowTitle: { color: theme.color.ink, fontSize: 17, fontWeight: '500' },
-  chevron: { color: theme.color.muted, fontSize: 23 },
-  group: { marginTop: 20, backgroundColor: theme.color.surface, borderRadius: 14, overflow: 'hidden' },
+  rowTitle: { color: theme.color.ink, fontSize: 16, lineHeight: 24, fontWeight: '500' },
+  group: { marginTop: 24, backgroundColor: theme.color.surface, borderRadius: theme.radius.card, overflow: 'hidden' },
   field: { padding: 16, gap: 8 },
   inline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  note: { color: theme.color.muted, fontSize: 13, lineHeight: 19 },
-  label: { color: theme.color.ink, fontSize: 15, fontWeight: '500' },
-  input: { minHeight: 44, paddingVertical: 8, paddingHorizontal: 0, color: theme.color.ink, fontSize: 16 },
+  note: { color: theme.color.muted, fontSize: 13, lineHeight: 20, flexShrink: 1 },
+  label: { color: theme.color.ink, fontSize: 16, lineHeight: 24, flexShrink: 1, fontWeight: '500' },
+  input: { minHeight: 48, paddingVertical: 8, paddingHorizontal: 12, borderWidth: 1, borderColor: theme.color.controlBorder, borderRadius: theme.radius.field, color: theme.color.ink, fontSize: 16, lineHeight: 24 },
   divider: { marginLeft: 16, height: StyleSheet.hairlineWidth, backgroundColor: theme.color.border },
-  addressRow: { minHeight: 54, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  addressField: { paddingHorizontal: 16, paddingBottom: 16, gap: 6 },
-  footnote: { color: theme.color.muted, fontSize: 12, lineHeight: 18, paddingHorizontal: 4, marginTop: 8 },
-  actions: { gap: 4, marginTop: 20, marginBottom: 16 },
+  addressRow: { minHeight: 56, paddingVertical: 12, gap: 12, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  addressField: { paddingHorizontal: 16, paddingBottom: 16, gap: 8 },
+  footnote: { color: theme.color.muted, fontSize: 14, lineHeight: 22, paddingHorizontal: 4, marginTop: 8 },
+  actions: { gap: 4, marginTop: 24, marginBottom: 16 },
   button: { minHeight: 48, padding: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 12, backgroundColor: theme.color.surface },
   primaryButton: { backgroundColor: theme.color.accent },
-  buttonText: { color: theme.color.ink, fontSize: 16, fontWeight: '500', textAlign: 'center' },
+  buttonText: { color: theme.color.ink, fontSize: 16, lineHeight: 24, fontWeight: '500', textAlign: 'center' },
   primaryButtonText: { color: theme.color.onAccent },
+  pressed: { backgroundColor: theme.color.subtle },
+  primaryPressed: { backgroundColor: theme.color.accentPressed },
   dimmed: { opacity: 0.4 },
   status: { color: theme.color.ink, fontSize: 14, lineHeight: 22, padding: 12, marginBottom: 12, borderRadius: 12, backgroundColor: theme.color.subtle },
+  modalContent: { flex: 1, width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center' },
   modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 },
-  heading: { color: theme.color.ink, fontSize: 23, fontWeight: '600' },
-  closeButton: { minHeight: 44, minWidth: 44, alignItems: 'center', justifyContent: 'center' },
-  closeIcon: { color: theme.color.ink, fontSize: 28 },
-  search: { minHeight: 44, margin: 20, padding: 12, borderRadius: 12, color: theme.color.ink, backgroundColor: theme.color.subtle, fontSize: 16 },
+  heading: { color: theme.color.ink, fontSize: 24, lineHeight: 36, flexShrink: 1, fontWeight: '600' },
+  closeButton: { minHeight: 48, minWidth: 48, alignItems: 'center', justifyContent: 'center' },
+  search: { minHeight: 48, margin: 20, padding: 12, borderRadius: theme.radius.field, borderWidth: 1, borderColor: theme.color.controlBorder, color: theme.color.ink, backgroundColor: theme.color.subtle, fontSize: 16, lineHeight: 24 },
   providerList: { paddingHorizontal: 20, paddingBottom: 32 },
-  providerRow: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: theme.color.border, paddingVertical: 14 },
+  providerRow: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: theme.color.border, paddingVertical: 16 },
 });

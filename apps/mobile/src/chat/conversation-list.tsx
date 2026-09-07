@@ -1,3 +1,4 @@
+import { AppIcon } from '../ui/icon';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ThreadListPrimitive, useAui, useAuiState } from '@assistant-ui/react-native';
 import { useTheme, type Theme } from '../ui/theme';
@@ -6,11 +7,11 @@ export function NewChatButton({ onSelect }: { onSelect?: () => void }) {
   const theme = useTheme();
   const styles = makeStyles(theme);
   const aui = useAui();
-  return <Pressable accessibilityRole="button" accessibilityLabel="新建对话" testID="chat-new" style={styles.newButton} onPress={() => {
+  return <Pressable accessibilityRole="button" accessibilityLabel="新建对话" testID="chat-new" style={({ pressed }) => [styles.newButton, pressed && styles.pressed]} onPress={() => {
     aui.thread.cancelRun();
     aui.threads.switchToNewThread();
     onSelect?.();
-  }}><Text accessible={false} style={styles.newLabel}>✎</Text></Pressable>;
+  }}><AppIcon name="compose" /></Pressable>;
 }
 
 function ConversationItem({ index, onSelect }: { index: number; onSelect: () => void }) {
@@ -19,7 +20,7 @@ function ConversationItem({ index, onSelect }: { index: number; onSelect: () => 
   const aui = useAui();
   const item = useAuiState((s) => s.threadListItem);
   const selected = useAuiState((s) => s.threads.mainThreadId === s.threadListItem.id);
-  return <Pressable accessibilityRole="button" accessibilityState={{ selected }} style={[styles.item, selected && styles.selected]} onPress={() => {
+  return <Pressable accessibilityRole="button" accessibilityState={{ selected }} style={({ pressed }) => [styles.item, selected && styles.selected, pressed && styles.pressed]} onPress={() => {
     if (!selected) {
       aui.thread.cancelRun();
       aui.threads.switchToThread(item.id);
@@ -37,11 +38,11 @@ export function ConversationList({ onSelect }: { onSelect: () => void }) {
 }
 const makeStyles = (theme: Theme) => StyleSheet.create({
   container: { flex: 1, gap: 16 },
-  newButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: 22 },
-  newLabel: { color: theme.color.ink, fontSize: 28 },
+  newButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderRadius: 24 },
+  pressed: { backgroundColor: theme.color.subtle },
   list: { gap: 8 },
-  item: { padding: 14, borderRadius: 16, borderWidth: 1, borderColor: 'transparent', gap: 6 },
-  selected: { backgroundColor: theme.color.surface, borderColor: theme.color.border },
-  itemText: { color: theme.color.ink, fontSize: 16, fontWeight: '600' },
-  note: { color: theme.color.muted, fontSize: 12, lineHeight: 19 },
+  item: { minHeight: 56, justifyContent: 'center', padding: 16, borderRadius: theme.radius.field, borderWidth: 1, borderColor: 'transparent', gap: 6 },
+  selected: { backgroundColor: theme.color.surface, borderColor: theme.color.controlBorder },
+  itemText: { color: theme.color.ink, fontSize: 16, lineHeight: 24 },
+  note: { color: theme.color.muted, fontSize: 13, lineHeight: 20 },
 });

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { AppIcon } from '../ui/icon';
+import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { SafeAreaView } from 'react-native-screens/experimental';
 // Adapted from assistant-ui/examples/with-expo (MIT); see UPSTREAM.md.
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
   ActionBarPrimitive, AuiIf, ComposerPrimitive, ErrorPrimitive,
   MessagePrimitive, ThreadPrimitive, useAuiState,
@@ -30,7 +31,7 @@ function MessageBubble() {
     </View>
     {!isUser && status?.type === 'running' && <Text accessibilityLiveRegion="polite" style={styles.note}>正在生成…</Text>}
     {!isUser && status?.type === 'incomplete' && status.reason === 'cancelled' && <Text style={styles.note}>已停止，已生成的内容保留。</Text>}
-    {!isUser && status?.type !== 'running' && <ActionBarPrimitive.Reload testID="chat-retry" accessibilityLabel="重新生成回复" style={styles.retry}><Text accessible={false} style={styles.retryText}>↻</Text></ActionBarPrimitive.Reload>}
+    {!isUser && status?.type !== 'running' && <ActionBarPrimitive.Reload testID="chat-retry" accessibilityLabel="重新生成回复" style={({ pressed }) => [styles.retry, pressed && styles.pressed]}><AppIcon name="retry" color={theme.color.muted} /></ActionBarPrimitive.Reload>}
   </MessagePrimitive.Root>;
 }
 
@@ -39,7 +40,7 @@ function EmptyState() {
   const styles = makeStyles(theme);
   return <ScrollView style={styles.flex} contentContainerStyle={styles.empty} keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
     <Text style={styles.welcome}>有什么想聊的？</Text>
-    <View style={styles.suggestions}>{[{ label: '理清想法', prompt: '帮我理清一个想法' }, { label: '练习英语', prompt: '陪我练习英语对话' }, { label: '回顾今天', prompt: '一起回顾今天' }].map(({ label, prompt }) => <ThreadPrimitive.Suggestion key={prompt} prompt={prompt} send style={styles.suggestion}><Text style={styles.suggestionText}>{label}</Text></ThreadPrimitive.Suggestion>)}</View>
+    <View style={styles.suggestions}>{[{ label: '理清想法', prompt: '帮我理清一个想法' }, { label: '练习英语', prompt: '陪我练习英语对话' }, { label: '回顾今天', prompt: '一起回顾今天' }].map(({ label, prompt }) => <ThreadPrimitive.Suggestion key={prompt} prompt={prompt} send style={({ pressed }) => [styles.suggestion, pressed && styles.pressed]}><Text style={styles.suggestionText}>{label}</Text></ThreadPrimitive.Suggestion>)}</View>
   </ScrollView>;
 }
 
@@ -52,9 +53,26 @@ function Composer() {
   return <View style={styles.composerArea}>
     <ComposerPrimitive.Root style={styles.composer}>
       <ComposerPrimitive.Input testID="chat-input" accessibilityLabel="对话输入" multiline placeholder="说说你的想法…" placeholderTextColor={theme.color.muted} selectionColor={theme.color.accent} style={styles.input} />
-      {isRunning ? <ComposerPrimitive.Cancel testID="chat-stop" accessibilityLabel="停止生成" style={styles.send}><Text style={styles.sendText}>■</Text></ComposerPrimitive.Cancel> : <ComposerPrimitive.Send testID="chat-send" accessibilityLabel="发送消息" style={[styles.send, isEmpty && styles.disabled]}><Text style={styles.sendText}>↑</Text></ComposerPrimitive.Send>}
+      {isRunning ? <ComposerPrimitive.Cancel testID="chat-stop" accessibilityLabel="停止生成" style={({ pressed }) => [styles.send, pressed && styles.primaryPressed]}><AppIcon name="stop" color={theme.color.onAccent} /></ComposerPrimitive.Cancel> : <ComposerPrimitive.Send testID="chat-send" accessibilityLabel="发送消息" style={({ pressed }) => [styles.send, isEmpty && styles.disabled, pressed && styles.primaryPressed]}><AppIcon name="send" color={theme.color.onAccent} /></ComposerPrimitive.Send>}
     </ComposerPrimitive.Root>
     {config && !storageError && <Text style={styles.disclaimer}>{config.model} · {new URL(config.baseUrl).hostname}{'\n'}仅发送当前会话文字</Text>}
+  </View>;
+}
+
+function Messages() {
+  const theme = useTheme();
+  const styles = makeStyles(theme);
+  const list = useRef<ComponentRef<typeof ThreadPrimitive.MessagesFlatList>>(null);
+  const threadId = useAuiState(s => s.threads.mainThreadId);
+  const [awayFromBottom, setAwayFromBottom] = useState(false);
+  useEffect(() => setAwayFromBottom(false), [threadId]);
+  return <View style={styles.messageArea}>
+    <ThreadPrimitive.MessagesFlatList ref={list} testID="chat-messages" style={styles.flex} contentContainerStyle={styles.messages} keyboardDismissMode="interactive" keyboardShouldPersistTaps="handled" onScroll={({ nativeEvent }) => {
+      setAwayFromBottom(nativeEvent.contentSize.height - nativeEvent.layoutMeasurement.height - nativeEvent.contentOffset.y > 4);
+    }}>{() => <MessageBubble />}</ThreadPrimitive.MessagesFlatList>
+    {awayFromBottom && <Pressable accessibilityRole="button" accessibilityLabel="回到最新消息" testID="chat-scroll-bottom" onPress={() => list.current?.scrollToEnd({ animated: false })} style={({ pressed }) => [styles.scrollBottom, pressed && styles.pressed]}>
+      <AppIcon name="down" />
+    </Pressable>}
   </View>;
 }
 
@@ -71,30 +89,34 @@ export function ChatScreen() {
   return <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}>
     <SafeAreaView edges={{ bottom: !keyboardVisible }} style={styles.flex}>
     <AuiIf condition={(s) => s.thread.isEmpty}><EmptyState /></AuiIf>
-    <AuiIf condition={(s) => !s.thread.isEmpty}><ThreadPrimitive.MessagesFlatList testID="chat-messages" style={styles.flex} contentContainerStyle={styles.messages} keyboardDismissMode="interactive" keyboardShouldPersistTaps="handled">{() => <MessageBubble />}</ThreadPrimitive.MessagesFlatList></AuiIf>
+    <AuiIf condition={(s) => !s.thread.isEmpty}><Messages /></AuiIf>
     <Composer />
     </SafeAreaView>
   </KeyboardAvoidingView>;
 }
 const makeStyles = (theme: Theme) => StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.color.background }, flex: { flex: 1 },
-  empty: { flexGrow: 1, justifyContent: 'center', padding: 24 },
-  welcome: { color: theme.color.ink, fontWeight: '700', fontSize: 28, lineHeight: 38 },
-  suggestions: { gap: 10, marginTop: 26 },
-  suggestion: { borderRadius: 18, borderWidth: 1, borderColor: theme.color.border, backgroundColor: theme.color.surface, paddingVertical: 14, paddingHorizontal: 16 },
-  suggestionText: { color: theme.color.ink, fontSize: 15 },
-  messages: { padding: 20, gap: 24 },
+  empty: { width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center', flexGrow: 1, justifyContent: 'center', padding: 20 },
+  welcome: { color: theme.color.ink, fontWeight: '600', fontSize: 28, lineHeight: 38 },
+  suggestions: { gap: 12, marginTop: 24 },
+  suggestion: { borderRadius: theme.radius.field, borderWidth: 1, borderColor: theme.color.controlBorder, backgroundColor: theme.color.surface, paddingVertical: 14, paddingHorizontal: 16 },
+  suggestionText: { color: theme.color.ink, fontSize: 16, lineHeight: 24 },
+  pressed: { backgroundColor: theme.color.subtle },
+  primaryPressed: { backgroundColor: theme.color.accentPressed },
+  messageArea: { flex: 1, width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center' },
+  scrollBottom: { position: 'absolute', bottom: 8, right: 20, width: 48, height: 48, borderRadius: 24, borderWidth: 1, borderColor: theme.color.controlBorder, backgroundColor: theme.color.surface, alignItems: 'center', justifyContent: 'center' },
+  messages: { width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center', padding: 20, gap: 24 },
   message: { alignItems: 'flex-start', gap: 8 }, userMessage: { alignItems: 'flex-end' },
-  bubble: { maxWidth: '100%', padding: 16, borderRadius: 20, backgroundColor: theme.color.surface },
+  bubble: { maxWidth: '100%', padding: 16, borderRadius: theme.radius.card, backgroundColor: theme.color.surface },
   userBubble: { maxWidth: '88%', backgroundColor: theme.color.subtle },
   messageText: { color: theme.color.ink, fontSize: 16, lineHeight: 26 },
-  note: { color: theme.color.muted, fontSize: 12, lineHeight: 18 },
+  note: { color: theme.color.muted, fontSize: 13, lineHeight: 20 },
   error: { color: theme.color.accent, fontSize: 14, marginTop: 8 },
-  retry: { width: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' }, retryText: { color: theme.color.muted, fontSize: 24 },
-  composerArea: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 10 },
-  composer: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: theme.color.surface, borderWidth: 1, borderColor: theme.color.border, borderRadius: 26, padding: 8 },
-  input: { flex: 1, minHeight: 44, maxHeight: 130, paddingVertical: 12, paddingHorizontal: 10, fontSize: 16, lineHeight: 22, color: theme.color.ink },
-  send: { width: 44, height: 44, borderRadius: 22, backgroundColor: theme.color.accent, alignItems: 'center', justifyContent: 'center' },
-  sendText: { color: theme.color.onAccent, fontSize: 25, fontWeight: '600' }, disabled: { opacity: 0.4 },
-  disclaimer: { color: theme.color.muted, fontSize: 11, textAlign: 'center', marginTop: 8 },
+  retry: { width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' },
+  composerArea: { width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center', paddingHorizontal: 20, paddingTop: 8, paddingBottom: 12 },
+  composer: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: theme.color.surface, borderWidth: 1, borderColor: theme.color.controlBorder, borderRadius: theme.radius.card, padding: 8 },
+  input: { flex: 1, minHeight: 48, maxHeight: 160, paddingVertical: 12, paddingHorizontal: 8, fontSize: 16, lineHeight: 24, color: theme.color.ink },
+  send: { width: 48, height: 48, borderRadius: 24, backgroundColor: theme.color.accent, alignItems: 'center', justifyContent: 'center' },
+  disabled: { opacity: 0.4 },
+  disclaimer: { color: theme.color.muted, fontSize: 13, lineHeight: 20, textAlign: 'center', marginTop: 8 },
 });

@@ -4,7 +4,7 @@
 
 ## 1. 总体选择
 
-采用双客户端、共享纯 TypeScript 业务核心、模块化单体服务和可替换 AI 执行器。移动使用 React Native + Expo + Expo Router，桌面使用 Electron + React。Expo 官方提供 workspace monorepo 支持，但具体 React、Expo、Electron 与原生依赖组合仍须通过构建验证。[S01][S02]
+采用双客户端、共享纯 TypeScript 业务核心、模块化单体服务和可替换 AI 执行器。移动使用 React Native + Expo + Expo Router，覆盖 iPhone 与 iPad 两类必需尺寸；布局依据可用窗口空间适配，共享业务规则，不以手机界面简单放大代替平板适配。桌面使用 Electron + React。Expo 官方提供 workspace monorepo 支持，但具体 React、Expo、Electron 与原生依赖组合仍须通过构建验证。[S01][S02]
 
 ```text
 移动交互 (React Native)      桌面交互 (React)

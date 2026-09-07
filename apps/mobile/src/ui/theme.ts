@@ -4,17 +4,18 @@ import Storage from 'expo-sqlite/kv-store';
 
 export type ThemeMode = 'light' | 'dark';
 const common = {
+  layout: { contentWidth: 760 },
   space: { small: 8, medium: 16, large: 24, section: 32 },
   radius: { card: 24, field: 12 },
 };
 export const themes = {
   light: { ...common, mode: 'light' as const, color: {
     background: '#FAFAFA', surface: '#FFFFFF', ink: '#171717', muted: '#666666',
-    accent: '#171717', onAccent: '#FFFFFF', subtle: '#EEEEEE', border: '#D9D9D9',
+    accent: '#171717', accentPressed: '#333333', onAccent: '#FFFFFF', subtle: '#EEEEEE', border: '#D9D9D9', controlBorder: '#858585',
   } },
   dark: { ...common, mode: 'dark' as const, color: {
     background: '#101010', surface: '#1C1C1C', ink: '#F5F5F5', muted: '#A6A6A6',
-    accent: '#F5F5F5', onAccent: '#171717', subtle: '#292929', border: '#404040',
+    accent: '#F5F5F5', accentPressed: '#D4D4D4', onAccent: '#171717', subtle: '#292929', border: '#404040', controlBorder: '#777777',
   } },
 };
 export type Theme = typeof themes[ThemeMode];

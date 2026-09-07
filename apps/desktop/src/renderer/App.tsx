@@ -180,7 +180,7 @@ export function App() {
           <button className="text-button" disabled={!!plan.busy} onClick={plan.close}>收起编辑（保留输入）</button>
         </div>}
         {pending.length > 0 && <div className="draft-list"><h3>待确认草稿 <span className="count">{pending.length}</span></h3><p className="hint">草稿已存本机，确认后才执行。</p>
-          {pending.map((item) => <button className="draft-item" key={item.id} disabled={disabled || plan.editing} onClick={() => plan.resume(item)}><span>{item.command.kind === 'plan.create' ? item.command.payload.title : '计划草稿'}</span><span>继续 →</span></button>)}
+          {pending.map((item) => <button className="draft-item" key={item.id} disabled={disabled || plan.editing} onClick={() => plan.resume(item)}><span>{item.command.kind === 'plan.create' ? item.command.payload.title : '计划草稿'}</span><span className="draft-continue">继续<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></span></button>)}
         </div>}
       </section>
       <section className="panel saved" aria-labelledby="saved-title"><div className="section-heading"><h2 id="saved-title">我的行动</h2><button className="icon-button" aria-label="刷新" title="刷新" disabled={!!plan.busy} onClick={() => void plan.refresh()}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5" /><path d="M6 7a7 7 0 0 1 11-1l3 6M4 12l3 6a7 7 0 0 0 11-1" /></svg></button></div>

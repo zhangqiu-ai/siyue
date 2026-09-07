@@ -57,7 +57,7 @@ try {
   // Close before approval: recovery must come from SQLite rather than React state.
   await application.close(); application = undefined;
   page = await start();
-  await page.getByRole('button', { name: '每天阅读十五分钟 继续 →' }).click();
+  await page.getByRole('button', { name: /每天阅读十五分钟.*继续/ }).click();
   await page.getByRole('button', { name: '确认并正式保存', exact: true }).click();
   await page.getByText('已保存到本机 · 4 条正式记录。', { exact: true }).waitFor();
   let state = await read(page);

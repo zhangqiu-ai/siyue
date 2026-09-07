@@ -19,7 +19,7 @@
 
 ## 平台推进
 
-iOS 是主产品节奏。Android 每条核心功能均有最低验收。Electron 早建运行与边界验证入口，成熟界面可稍后丰富；不改用 Tauri。桌面正式发布至少覆盖维护者决定的 macOS/Windows 目标，Linux 后置。
+iOS / iPadOS 是主产品节奏，iPhone 与 iPad 必须同时适配与分别验收；iPad 为未来主力，手机持续保障。设备矩阵见 [UI 验收](design/ui-acceptance.md)，不得将平板适配视为可选后置。Android 每条核心功能均有最低验收。Electron 早建运行与边界验证入口，成熟界面可稍后丰富；不改用 Tauri。桌面正式发布至少覆盖维护者决定的 macOS/Windows 目标，Linux 后置。
 
 模拟器、编译成功与真机通过分开记录。不因当前环境无法进行 iOS 构建而把该项写成通过。
 

@@ -269,3 +269,8 @@ xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
 ## 2026-09-07 · OpenSpec 开发工具
 
 根开发依赖固定 `@fission-ai/openspec@1.12.0`，使用 Node 22.22.3 / Corepack pnpm 11.25.0 安装并通过 frozen-lockfile 复现检查。`corepack pnpm openspec` 调用包装器关闭遥测；`spec:check` 严格校验通过（1 项），`test:spec-workflow` 通过（5 项），配置注入经隔离临时变更验证。采用内置 spec-driven，不安装全局 CLI 或代理 skill；未改应用依赖。详见 [流程说明](../openspec/README.md) 与 [实际验证](evidence/openspec-workflow.md)。CI 仅已写入本地，尚未远端运行或设置必需检查；不代表应用测试或业务工作包完成。
+
+
+## 2026-09-07 · 当前 UI 规则审查
+
+显式声明已有传递依赖`expo-symbols@~57.0.2`，按SDK57安装并保持锁文件，iOS已有Pod版本无需更换。移动类型/61项现有测试/双端Hermes导出、桌面类型/构建/真实Electron闭环通过；本轮原生设备矩阵尚未齐，运行时直接更改字号存在待定位裁切。详细命令、原生构建结果和准确限制见[UI审查证据](evidence/ui-audit-2026-09-07.md)。不据此升级业务工作包或发布状态。
