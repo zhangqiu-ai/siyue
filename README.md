@@ -1,5 +1,7 @@
 # 思玥 · Siyue
 
+开发流程入口：[OpenSpec 规格与变更规则](openspec/README.md)。新功能先写规格，简单修改可说明豁免；验收后同步现行规格。
+
 AI-first 个人成长应用 / An AI-first personal growth app.
 
 > 立项基线 v0.1 · 2026-09-05；验证更新于 2026-09-06。当前已实现 M1 本地 Mock 目标闭环：macOS Electron 与 iOS 模拟器闭环、重启持久化及 iOS/Android JavaScript 打包通过；iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 应用与Runner签名验证通过，iPhone故障/后台及Android真机仍待验收；Android SDK 与专用模拟器已就绪，独立 UI 宿主已构建、安装并核验插桩目标；主应用重试构建、APK 签名校验与安装已通过；Android 模拟器两条独立 UI 用例分别通过（各 1 项、0 失败，336.319 秒与 325.679 秒），覆盖草稿闭环及真实断网下手动改名、完成、归档与重启保留。

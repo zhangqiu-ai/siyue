@@ -1,3 +1,9 @@
+## OpenSpec 关联
+
+<!-- 以下二选一保留并填实值。变更 ID 对应活动或已归档提案；豁免必须解释为何不改变语义。 -->
+OpenSpec-Change: <change-id>
+OpenSpec-Exempt: <具体豁免理由>
+
 ## 对应工作包
 
 SY-___

@@ -2,6 +2,13 @@ name: 工作包 / Work package
 description: 将 Siyue 的规划任务转成具有明确验收条件的工程工作包
 title: "[SY-xxx] "
 body:
+  - type: textarea
+    id: specification
+    attributes:
+      label: OpenSpec 变更或简化路径
+      description: 填写 change-id；尚在提议时说明待建规格，简单修改说明豁免理由。不能把待决项写成已批准。
+    validations:
+      required: true
   - type: input
     id: plan_id
     attributes:

@@ -265,3 +265,7 @@ xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
 ## 2026-09-06 · 设置改版验证
 
 无新增原生依赖。沿用已安装的 Debug 模拟器构建，通过 Metro 更新并冷启动验证新路由。`corepack pnpm --filter @siyue/mobile typecheck`、`corepack pnpm --filter @siyue/mobile test`（38/38）及 `corepack pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist` 通过。iOS 26.5（Siyue M1 QA）完成截图与交互检查；本轮未重新原生构建、未做真机或真实供应商调用。详见 [验收记录](evidence/settings-redesign.md)。
+
+## 2026-09-07 · OpenSpec 开发工具
+
+根开发依赖固定 `@fission-ai/openspec@1.12.0`，使用 Node 22.22.3 / Corepack pnpm 11.25.0 安装并通过 frozen-lockfile 复现检查。`corepack pnpm openspec` 调用包装器关闭遥测；`spec:check` 严格校验通过（1 项），`test:spec-workflow` 通过（5 项），配置注入经隔离临时变更验证。采用内置 spec-driven，不安装全局 CLI 或代理 skill；未改应用依赖。详见 [流程说明](../openspec/README.md) 与 [实际验证](evidence/openspec-workflow.md)。CI 仅已写入本地，尚未远端运行或设置必需检查；不代表应用测试或业务工作包完成。

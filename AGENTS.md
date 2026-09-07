@@ -25,7 +25,7 @@
 1. 检查 `pwd`、`git status --short`、`git branch --show-current`，用 `rg --files` 查看实际目录；识别用户已有改动，禁止默认覆盖。
 2. 首次进入任务，阅读 [README.md](README.md)、[PROJECT_CHARTER.md](PROJECT_CHARTER.md)、[PRODUCT.md](PRODUCT.md)、[ARCHITECTURE.md](ARCHITECTURE.md)、[docs/decisions.md](docs/decisions.md) 和对应 backlog；继续同一任务时只补读变化与相关内容。
 3. 对照 [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md)、根目录及相关包的 `package.json`，确认脚本、依赖、锁文件和可用工具，不照抄过时命令。
-4. 明确本轮目标、工作包、必需依赖、验收方式和修改范围。纯文档任务只做相应检查，不因此安装应用依赖或启动整个路线图。
+4. 先按 [OpenSpec 开发流程](openspec/README.md) 判断标准或简化路径，读取相关现行规格与活动变更，再明确本轮目标、工作包、必需依赖、验收方式和修改范围。纯文档任务只做相应检查，不因此安装应用依赖或启动整个路线图。
 5. 实施最小改动，执行适合本次变化的验证，检查最终 diff，更新相关状态与证据后交付。
 
 | 工作内容 | 按需补读 |
@@ -93,6 +93,7 @@
 
 ## 6. 代码与交互实现
 
+- UI 实施与审查先按 [UI 验收标准](docs/design/ui-acceptance.md) 确定 S/M/L、适用 UI-V/UI-I 检查及证据范围；不把数值基线或截图生成当成验收通过。
 - UI 信息密度遵循 [DESIGN.md](DESIGN.md)：熟悉操作优先图标，保留无障碍名称与足够触控区域；删除重复标题、口号和多余说明，低频入口不抢占主内容。简单文案或入口删减做必要静态检查，较复杂布局/交互变化再截图验收。
 - 设计技能选择（维护者于 2026-09-06 明确）：本项目禁止使用 `ui-ux-pro-max`，不作为设计、实现或审查依据；该限制不要求卸载本机技能。
 - 本项目采用已安装的 `huashu-design` 进行设计方向探索、高保真 HTML 原型与设计评审。使用时读取本机 `huashu-design/SKILL.md`（当前路径 `/Users/feature/.codex/skills/huashu-design/SKILL.md`）；不复制整套技能到仓库。HTML 原型用于设计确认，不替代 React Native + Expo 正式实现或原生验收，不改变桌面 Electron 技术约束。
@@ -163,3 +164,14 @@
 - 发现历史状态不一致时，指出具体文件并按证据处理，不批量标记完成；文档不能互相引用来证明测试已通过。
 - 沟通简洁、直接，区分已核实事实、推断、假设与未知；只在有助于理解复杂关系时使用最小图示。进度更新说明发现、决策和阻塞，不堆叠操作流水账。
 - 最终报告包含：改动文件与行为、关键决策、实际验证命令及结果、未运行项与原因、影响和剩余风险。未执行 commit、push、部署或真机测试时，不暗示已执行。
+
+
+## 12. OpenSpec 开发规则（2026-09-07 起）
+
+- 所有开发者和代理遵循 [openspec/README.md](openspec/README.md)，项目上下文与产物要求见 [openspec/config.yaml](openspec/config.yaml)。使用内置 spec-driven 模板。
+- 新功能、行为、数据、权限、AI 外发、契约和跨端交互变化先建 `openspec/changes/<change-id>/`；纯文案、细微样式与非敏感局部修复可以说明豁免，不强制生成全套文件。
+- 实施前完成提案、规格差量、设计和任务，记录已有授权及待决项。关键范围或数据取舍由维护者确认；既有明确授权不重复询问。CLI ready、模板生成及模型建议不构成批准。
+- `openspec/specs/` 维护已验收现行行为；未覆盖的历史能力按代码和证据判断，不追溯编造规格。修改时按需补基线；未实现提案不写入现行规格。
+- PR 引用一个 change-id 或填写具体豁免理由，使用现有 PR 模板。范围改变先更新提案；重大变化重新确认。不得用修改规格掩盖实现缺陷。
+- 运行 `corepack pnpm spec:check` 与受影响路径验证；逐条关联场景和证据，关键验收未完成不归档。完成后同步现行规格、归档变更并更新相关规划。
+- OpenSpec 管功能行为和变更；PRODUCT 管范围、decisions 管决策、backlog 管排期、evidence 管真实验证，互相链接而非复制维护。工具检查不能证明授权或业务正确。

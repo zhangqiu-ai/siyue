@@ -4,6 +4,10 @@
 
 模拟器实测覆盖：生成草稿不写正式记录、编辑并保存草稿、重启后显式继续与确认、创建目标/项目/任务、完成任务及重启保留、拒绝草稿不增加正式目标、手动创建。证据为 [XCTest 汇总](../artifacts/m1/ios-simulator-summary.json) 与 [执行日志](../artifacts/m1/ios-simulator-anchor-fix.log)。另一条独立运行覆盖手动目标/任务改名 ID 不变、任务完成后归档、重启同 ID/状态/数量保留及归档后只读，证据为 [改名归档汇总](../artifacts/m1/ios-rename-archive-summary.json) 与 [执行日志](../artifacts/m1/ios-simulator-rename-archive.log)。两条 iOS 测试没有主动切换模拟器网络；这不覆盖原生断网或丢回执故障注入、系统后台中断或升级故障；iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 应用与Runner签名验证通过，iPhone故障/后台及Android真机仍待验收；Android SDK 与专用模拟器已就绪，独立 UI 宿主已构建、安装并核验插桩目标；主应用重试构建、APK 签名校验与安装已通过；Android 模拟器 UI 闭环通过（1 项、0 失败，336.319 秒），覆盖草稿编辑/恢复、确认创建、任务完成与跨重启保留、拒绝和手动创建。通过日志为 [Android UI 记录](../artifacts/m1/android-ui-cold-start.log)，关键阶段截图/XML 位于 [Android 证据目录](../artifacts/m1/android-ui-passed/)。Android 第二条独立离线用例通过，见 [离线改名归档日志](../artifacts/m1/android-ui-offline-rename.log) 与 [三阶段截图/XML](../artifacts/m1/android-offline-rename-passed/)；真实断网下该手动路径已验证，Wi-Fi/移动数据恢复原值并重新取得默认网络。正常用户UI其余错误交互、同进程后台中断、升级故障、iPhone故障/Android真机、同步、语言学习及复盘仍未验收。
 
+## UI 验收入口
+
+界面质量按 [UI 设计与验收标准](design/ui-acceptance.md) 的视觉、交互检查与 S/M/L 分级记录证据。本文业务验收仍独立执行；截图不能代替业务验证，业务测试也不能证明视觉达标。UI 规则本轮仅建立，未将历史场景或 planning/test-cases.json 状态升级为通过。
+
 ## 完成定义
 
 业务：可见界面和 AI 工具行为一致，正式数据可核实，失败状态完整。代码：层级边界通过检查，无凭据或真实个人样例。验证：准确记录命令、环境、结果和证据。文档：架构、产品和变更同步更新。

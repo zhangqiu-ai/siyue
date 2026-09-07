@@ -1,0 +1,24 @@
+name: Specification workflow
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+  push:
+    branches: [main, feature/dev]
+permissions:
+  contents: read
+jobs:
+  openspec:
+    name: OpenSpec checks
+    runs-on: ubuntu-latest
+    env:
+      OPENSPEC_TELEMETRY: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.3'
+      - run: corepack enable
+      - run: corepack pnpm install --frozen-lockfile --ignore-scripts
+      - run: corepack pnpm test:spec-workflow
+      - run: corepack pnpm spec:check
+      - run: corepack pnpm spec:pr
