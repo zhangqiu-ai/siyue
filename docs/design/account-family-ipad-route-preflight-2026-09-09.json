@@ -1,0 +1,1502 @@
+[
+  {
+    "offset": 0,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-counterpart",
+        "frame": "456:13020",
+        "node": "468:14615",
+        "name": "消息输入"
+      },
+      {
+        "kind": "missing-counterpart",
+        "frame": "456:13109",
+        "node": "468:14615",
+        "name": "消息输入"
+      }
+    ],
+    "plannedMutationCount": 136
+  },
+  {
+    "offset": 32,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-counterpart",
+        "frame": "458:11820",
+        "node": "468:14622",
+        "name": "消息输入"
+      },
+      {
+        "kind": "missing-counterpart",
+        "frame": "458:11909",
+        "node": "468:14622",
+        "name": "消息输入"
+      },
+      {
+        "kind": "missing-counterpart",
+        "frame": "460:12328",
+        "node": "468:14629",
+        "name": "消息输入"
+      },
+      {
+        "kind": "missing-counterpart",
+        "frame": "460:12524",
+        "node": "468:14629",
+        "name": "消息输入"
+      }
+    ],
+    "plannedMutationCount": 138
+  },
+  {
+    "offset": 64,
+    "applied": false,
+    "frames": 32,
+    "mutatedNodeIds": [],
+    "plannedMutationCount": 72,
+    "stats": [
+      {
+        "id": "466:14992",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15059",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15190",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15257",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15324",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15391",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15458",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15525",
+        "key": "login",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15592",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15657",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15722",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15787",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15852",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15917",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:15982",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:16047",
+        "key": "otp",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:16112",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16230",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16348",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16466",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16584",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16702",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16820",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:16938",
+        "key": "adopt",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "466:17056",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "466:17160",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:14609",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:14713",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:14817",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:14921",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15025",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15129",
+        "key": "home",
+        "sourceReactions": 5,
+        "skippedHidden": 0
+      }
+    ],
+    "issues": []
+  },
+  {
+    "offset": 96,
+    "applied": false,
+    "frames": 32,
+    "mutatedNodeIds": [],
+    "plannedMutationCount": 152,
+    "stats": [
+      {
+        "id": "470:15233",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15330",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15427",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15524",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15621",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15718",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15815",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:15912",
+        "key": "family",
+        "sourceReactions": 4,
+        "skippedHidden": 0
+      },
+      {
+        "id": "470:16009",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16124",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16239",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16354",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16469",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16584",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16699",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16814",
+        "key": "chat-input",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:16929",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17006",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17145",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17222",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17299",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17376",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17453",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17530",
+        "key": "edit-task",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17607",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17706",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17805",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:17904",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:18003",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:18102",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:18201",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      },
+      {
+        "id": "470:18300",
+        "key": "saved",
+        "sourceReactions": 2,
+        "skippedHidden": 1
+      }
+    ],
+    "issues": []
+  },
+  {
+    "offset": 128,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "470:20375",
+        "node": "470:20441",
+        "phoneTarget": "258:3340",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "470:20461",
+        "node": "470:20527",
+        "phoneTarget": "258:3340",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "470:20547",
+        "node": "470:20613",
+        "phoneTarget": "443:8495",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "470:20633",
+        "node": "470:20699",
+        "phoneTarget": "443:8495",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 160
+  },
+  {
+    "offset": 160,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23055",
+        "node": "473:23120",
+        "phoneTarget": "403:4805",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23173",
+        "node": "473:23238",
+        "phoneTarget": "403:4805",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23291",
+        "node": "473:23354",
+        "phoneTarget": "314:3908",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23291",
+        "node": "473:23356",
+        "phoneTarget": "463:12736",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23291",
+        "node": "473:23357",
+        "phoneTarget": "314:4552",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23409",
+        "node": "473:23472",
+        "phoneTarget": "314:3908",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23409",
+        "node": "473:23474",
+        "phoneTarget": "463:12736",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23409",
+        "node": "473:23475",
+        "phoneTarget": "314:4552",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23527",
+        "node": "473:23592",
+        "phoneTarget": "463:12668",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23527",
+        "node": "473:23593",
+        "phoneTarget": "258:3374",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23645",
+        "node": "473:23710",
+        "phoneTarget": "463:12668",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23645",
+        "node": "473:23711",
+        "phoneTarget": "258:3374",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23763",
+        "node": "473:23826",
+        "phoneTarget": "443:7968",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23763",
+        "node": "473:23828",
+        "phoneTarget": "463:12804",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23763",
+        "node": "473:23829",
+        "phoneTarget": "443:8511",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23881",
+        "node": "473:23944",
+        "phoneTarget": "443:7968",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23881",
+        "node": "473:23946",
+        "phoneTarget": "463:12804",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:23881",
+        "node": "473:23947",
+        "phoneTarget": "443:8511",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 136
+  },
+  {
+    "offset": 192,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:24229",
+        "node": "473:24292",
+        "phoneTarget": "314:4298",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:24344",
+        "node": "473:24407",
+        "phoneTarget": "314:4298",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:24459",
+        "node": "473:24522",
+        "phoneTarget": "258:3120",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:24574",
+        "node": "473:24637",
+        "phoneTarget": "258:3120",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:24689",
+        "node": "473:24752",
+        "phoneTarget": "443:8410",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:24804",
+        "node": "473:24867",
+        "phoneTarget": "443:8410",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 136
+  },
+  {
+    "offset": 224,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28271",
+        "node": "473:28347",
+        "phoneTarget": "442:6303",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28376",
+        "node": "473:28452",
+        "phoneTarget": "442:6303",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28481",
+        "node": "473:28557",
+        "phoneTarget": "463:14231",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28586",
+        "node": "473:28662",
+        "phoneTarget": "463:14231",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28691",
+        "node": "473:28767",
+        "phoneTarget": "463:14204",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28796",
+        "node": "473:28872",
+        "phoneTarget": "463:14204",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:28901",
+        "node": "473:28977",
+        "phoneTarget": "463:14258",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "473:29006",
+        "node": "473:29082",
+        "phoneTarget": "463:14258",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 112
+  },
+  {
+    "offset": 256,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:19946",
+        "node": "479:20022",
+        "phoneTarget": "442:6303",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20051",
+        "node": "479:20127",
+        "phoneTarget": "442:6303",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20156",
+        "node": "479:20232",
+        "phoneTarget": "463:14231",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20261",
+        "node": "479:20337",
+        "phoneTarget": "463:14231",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20984",
+        "node": "479:21060",
+        "phoneTarget": "463:14204",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:21089",
+        "node": "479:21165",
+        "phoneTarget": "463:14204",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:21194",
+        "node": "479:21270",
+        "phoneTarget": "463:14258",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:21299",
+        "node": "479:21375",
+        "phoneTarget": "463:14258",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 144
+  },
+  {
+    "offset": 288,
+    "applied": false,
+    "frames": 32,
+    "mutatedNodeIds": [],
+    "plannedMutationCount": 192,
+    "stats": [
+      {
+        "id": "479:21728",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:21845",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:21962",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:22079",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:22550",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:22667",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:22784",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:22901",
+        "key": "readonly",
+        "sourceReactions": 1,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:23372",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:23477",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:23582",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:23687",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:24120",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:24225",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:24330",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:24435",
+        "key": "chat-shared",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:24855",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:24975",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:25095",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:25215",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:25650",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:25770",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:25890",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:26010",
+        "key": "chat-sent",
+        "sourceReactions": 3,
+        "skippedHidden": 1
+      },
+      {
+        "id": "479:26451",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:26518",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:26585",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:26652",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:27992",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:28059",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:28126",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      },
+      {
+        "id": "479:28193",
+        "key": "confirm-remove",
+        "sourceReactions": 2,
+        "skippedHidden": 0
+      }
+    ],
+    "issues": []
+  },
+  {
+    "offset": 320,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29044",
+        "node": "I479:29095;5446:7598",
+        "phoneTarget": "463:12271",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29111",
+        "node": "I479:29162;5446:7598",
+        "phoneTarget": "463:12271",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29178",
+        "node": "I479:29229;5446:7598",
+        "phoneTarget": "463:12373",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29245",
+        "node": "I479:29296;5446:7598",
+        "phoneTarget": "463:12373",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20366",
+        "node": "479:20432",
+        "phoneTarget": "246:1734",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20469",
+        "node": "479:20535",
+        "phoneTarget": "246:1734",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20572",
+        "node": "479:20638",
+        "phoneTarget": "463:14484",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20675",
+        "node": "479:20741",
+        "phoneTarget": "463:14484",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20778",
+        "node": "479:20844",
+        "phoneTarget": "463:14467",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:20881",
+        "node": "479:20947",
+        "phoneTarget": "463:14467",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:21404",
+        "node": "479:21470",
+        "phoneTarget": "463:14501",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:21507",
+        "node": "479:21573",
+        "phoneTarget": "463:14501",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 100
+  },
+  {
+    "offset": 352,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:26130",
+        "node": "479:26185",
+        "phoneTarget": "442:6383",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:26237",
+        "node": "479:26292",
+        "phoneTarget": "442:6383",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:26344",
+        "node": "479:26399",
+        "phoneTarget": "463:14096",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:26719",
+        "node": "479:26774",
+        "phoneTarget": "463:14096",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:26826",
+        "node": "479:26881",
+        "phoneTarget": "463:14042",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:26933",
+        "node": "479:26988",
+        "phoneTarget": "463:14042",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30448",
+        "node": "479:30503",
+        "phoneTarget": "463:14150",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30555",
+        "node": "479:30610",
+        "phoneTarget": "463:14150",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30662",
+        "node": "479:30728",
+        "phoneTarget": "452:11746",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30765",
+        "node": "479:30831",
+        "phoneTarget": "452:11746",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30868",
+        "node": "479:30934",
+        "phoneTarget": "463:15582",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30971",
+        "node": "479:31037",
+        "phoneTarget": "463:15582",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:32010",
+        "node": "479:32076",
+        "phoneTarget": "463:15565",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:32113",
+        "node": "479:32179",
+        "phoneTarget": "463:15565",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:32216",
+        "node": "479:32282",
+        "phoneTarget": "463:15599",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:32519",
+        "node": "479:32585",
+        "phoneTarget": "463:15599",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:32622",
+        "node": "479:32690",
+        "phoneTarget": "452:9611",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:32733",
+        "node": "479:32801",
+        "phoneTarget": "452:9611",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33868",
+        "node": "479:33936",
+        "phoneTarget": "463:15920",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33979",
+        "node": "479:34047",
+        "phoneTarget": "463:15920",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:34090",
+        "node": "479:34158",
+        "phoneTarget": "463:15847",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:34201",
+        "node": "479:34269",
+        "phoneTarget": "463:15847",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:34312",
+        "node": "479:34380",
+        "phoneTarget": "463:15993",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:34423",
+        "node": "479:34491",
+        "phoneTarget": "463:15993",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 168
+  },
+  {
+    "offset": 384,
+    "applied": false,
+    "frames": 32,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27040",
+        "node": "479:27106",
+        "phoneTarget": "452:10778",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27159",
+        "node": "479:27225",
+        "phoneTarget": "452:10778",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27278",
+        "node": "479:27344",
+        "phoneTarget": "463:14518",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27278",
+        "node": "479:27345",
+        "phoneTarget": "258:3374",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27397",
+        "node": "479:27463",
+        "phoneTarget": "463:14518",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27397",
+        "node": "479:27464",
+        "phoneTarget": "258:3374",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27516",
+        "node": "479:27582",
+        "phoneTarget": "463:14565",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27516",
+        "node": "479:27583",
+        "phoneTarget": "314:4552",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27635",
+        "node": "479:27701",
+        "phoneTarget": "463:14565",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27635",
+        "node": "479:27702",
+        "phoneTarget": "314:4552",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27754",
+        "node": "479:27820",
+        "phoneTarget": "463:14612",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27754",
+        "node": "479:27821",
+        "phoneTarget": "443:8511",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27873",
+        "node": "479:27939",
+        "phoneTarget": "463:14612",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:27873",
+        "node": "479:27940",
+        "phoneTarget": "443:8511",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33050",
+        "node": "479:33116",
+        "phoneTarget": "258:3374",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33153",
+        "node": "479:33219",
+        "phoneTarget": "258:3374",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 208
+  },
+  {
+    "offset": 416,
+    "applied": false,
+    "frames": 20,
+    "issues": [
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33256",
+        "node": "479:33322",
+        "phoneTarget": "314:4552",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33359",
+        "node": "479:33425",
+        "phoneTarget": "314:4552",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33462",
+        "node": "479:33528",
+        "phoneTarget": "443:8511",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33565",
+        "node": "479:33631",
+        "phoneTarget": "443:8511",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29512",
+        "node": "479:29575",
+        "phoneTarget": "419:6308",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29612",
+        "node": "479:29675",
+        "phoneTarget": "419:6308",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30048",
+        "node": "479:30111",
+        "phoneTarget": "443:6595",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30148",
+        "node": "479:30211",
+        "phoneTarget": "443:6595",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30248",
+        "node": "479:30311",
+        "phoneTarget": "443:9691",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:30348",
+        "node": "479:30411",
+        "phoneTarget": "443:9691",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33668",
+        "node": "479:33731",
+        "phoneTarget": "419:6308",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:33768",
+        "node": "479:33831",
+        "phoneTarget": "419:6308",
+        "mode": "portrait"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29880",
+        "node": "479:29945",
+        "phoneTarget": "314:4552",
+        "mode": "landscape"
+      },
+      {
+        "kind": "missing-tablet-target",
+        "frame": "479:29964",
+        "node": "479:30029",
+        "phoneTarget": "314:4552",
+        "mode": "portrait"
+      }
+    ],
+    "plannedMutationCount": 122
+  }
+]

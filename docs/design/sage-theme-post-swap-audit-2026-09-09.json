@@ -1,0 +1,133 @@
+{
+  "primary": 915,
+  "instances": 9182,
+  "links": 5627,
+  "badLinks": [],
+  "blue": 0,
+  "cards": [
+    {
+      "id": "221:1517",
+      "name": "继续目标 · 英语工作交流",
+      "w": 350,
+      "h": 190,
+      "reactions": [
+        {
+          "action": {
+            "type": "NODE",
+            "destinationId": "221:1554",
+            "navigation": "NAVIGATE",
+            "transition": null,
+            "resetVideoPosition": false,
+            "resetScrollPosition": true
+          },
+          "actions": [
+            {
+              "type": "NODE",
+              "destinationId": "221:1554",
+              "navigation": "NAVIGATE",
+              "transition": null,
+              "resetVideoPosition": false,
+              "resetScrollPosition": true
+            }
+          ],
+          "trigger": {
+            "type": "ON_CLICK"
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": "221:1518",
+          "name": "继续你的目标",
+          "type": "TEXT",
+          "reactions": []
+        },
+        {
+          "id": "221:1519",
+          "name": "提高工作交流能力",
+          "type": "TEXT",
+          "reactions": []
+        },
+        {
+          "id": "221:1520",
+          "name": "进度 2/5",
+          "type": "FRAME",
+          "reactions": []
+        },
+        {
+          "id": "221:1522",
+          "name": "2 / 5 已完成 · 下一项约 5 分钟",
+          "type": "TEXT",
+          "reactions": []
+        },
+        {
+          "id": "221:1523",
+          "name": "开始三分钟自我介绍",
+          "type": "FRAME",
+          "reactions": []
+        }
+      ]
+    },
+    {
+      "id": "221:1550",
+      "name": "新建对话",
+      "w": 48,
+      "h": 48,
+      "reactions": [],
+      "children": [
+        {
+          "id": "221:1551",
+          "name": "新建",
+          "type": "FRAME",
+          "reactions": []
+        }
+      ]
+    },
+    {
+      "id": "314:2925",
+      "name": "语义图标",
+      "w": 40,
+      "h": 40,
+      "reactions": [],
+      "children": [
+        {
+          "id": "314:2926",
+          "name": "Frame",
+          "type": "FRAME",
+          "reactions": []
+        }
+      ]
+    },
+    {
+      "id": "314:2993",
+      "name": "语义图标",
+      "w": 40,
+      "h": 40,
+      "reactions": [],
+      "children": [
+        {
+          "id": "314:2994",
+          "name": "Frame",
+          "type": "FRAME",
+          "reactions": []
+        }
+      ]
+    },
+    {
+      "id": "314:3017",
+      "name": "语义图标",
+      "w": 40,
+      "h": 40,
+      "reactions": [],
+      "children": [
+        {
+          "id": "314:3018",
+          "name": "Frame",
+          "type": "FRAME",
+          "reactions": []
+        }
+      ]
+    }
+  ],
+  "cardsCount": 1026
+}

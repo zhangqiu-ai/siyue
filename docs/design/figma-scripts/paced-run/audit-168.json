@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "515:36713",
+      "key": "reading-child",
+      "nodes": 66,
+      "hydratedNodes": 66,
+      "hydrationFailures": 0,
+      "visibleNodes": 35,
+      "textNodes": 17,
+      "visibleTextNodes": 10,
+      "fontsChecked": 10,
+      "instances": 8,
+      "componentReferencesChecked": 8,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 34,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "515:36838",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "515:36839",
+          "text": "周末家庭 · 仅可查看"
+        },
+        {
+          "id": "I515:36841;550:50523",
+          "text": "阅读一篇短文"
+        },
+        {
+          "id": "I515:36841;550:50524",
+          "text": "今天 · 已完成"
+        },
+        {
+          "id": "I515:36842;550:50523",
+          "text": "记录一句收获"
+        },
+        {
+          "id": "I515:36842;550:50524",
+          "text": "等待完成"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "515:36875",
+      "key": "reading-child",
+      "nodes": 66,
+      "hydratedNodes": 66,
+      "hydrationFailures": 0,
+      "visibleNodes": 35,
+      "textNodes": 17,
+      "visibleTextNodes": 10,
+      "fontsChecked": 10,
+      "instances": 8,
+      "componentReferencesChecked": 8,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 34,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "515:37000",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "515:37001",
+          "text": "周末家庭 · 仅可查看"
+        },
+        {
+          "id": "I515:37003;550:50523",
+          "text": "阅读一篇短文"
+        },
+        {
+          "id": "I515:37003;550:50524",
+          "text": "今天 · 已完成"
+        },
+        {
+          "id": "I515:37004;550:50523",
+          "text": "记录一句收获"
+        },
+        {
+          "id": "I515:37004;550:50524",
+          "text": "等待完成"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "515:37037",
+      "key": "reading-child",
+      "nodes": 66,
+      "hydratedNodes": 66,
+      "hydrationFailures": 0,
+      "visibleNodes": 35,
+      "textNodes": 17,
+      "visibleTextNodes": 10,
+      "fontsChecked": 10,
+      "instances": 8,
+      "componentReferencesChecked": 8,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 34,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "515:37162",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "515:37163",
+          "text": "周末家庭 · 仅可查看"
+        },
+        {
+          "id": "I515:37165;550:50523",
+          "text": "阅读一篇短文"
+        },
+        {
+          "id": "I515:37165;550:50524",
+          "text": "今天 · 已完成"
+        },
+        {
+          "id": "I515:37166;550:50523",
+          "text": "记录一句收获"
+        },
+        {
+          "id": "I515:37166;550:50524",
+          "text": "等待完成"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "510:29838",
+      "key": "child-home",
+      "nodes": 69,
+      "hydratedNodes": 69,
+      "hydrationFailures": 0,
+      "visibleNodes": 38,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 37,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "510:29964",
+          "text": "小禾的空间"
+        },
+        {
+          "id": "510:29965",
+          "text": "独立儿童身份 · 周末家庭"
+        },
+        {
+          "id": "I510:29967;550:50523",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "I510:29967;550:50524",
+          "text": "今天读一篇短文"
+        },
+        {
+          "id": "I510:29967;550:50526;212:117599",
+          "text": "查看"
+        },
+        {
+          "id": "I510:29967;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "510:30006",
+      "key": "child-home",
+      "nodes": 69,
+      "hydratedNodes": 69,
+      "hydrationFailures": 0,
+      "visibleNodes": 38,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 37,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "510:30132",
+          "text": "小禾的空间"
+        },
+        {
+          "id": "510:30133",
+          "text": "独立儿童身份 · 周末家庭"
+        },
+        {
+          "id": "I510:30135;550:50523",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "I510:30135;550:50524",
+          "text": "今天读一篇短文"
+        },
+        {
+          "id": "I510:30135;550:50526;212:117599",
+          "text": "查看"
+        },
+        {
+          "id": "I510:30135;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "510:30174",
+      "key": "create-family",
+      "nodes": 53,
+      "hydratedNodes": 53,
+      "hydrationFailures": 0,
+      "visibleNodes": 52,
+      "textNodes": 14,
+      "visibleTextNodes": 14,
+      "fontsChecked": 14,
+      "instances": 5,
+      "componentReferencesChecked": 5,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 51,
+      "childCollectionsRead": 23,
+      "fonts": {
+        "Noto Sans SC": 14
+      },
+      "textSamples": [
+        {
+          "id": "510:30176",
+          "text": "Siyue"
+        },
+        {
+          "id": "510:30177",
+          "text": "Spaces"
+        },
+        {
+          "id": "510:30182",
+          "text": "My space"
+        },
+        {
+          "id": "510:30189",
+          "text": "周末家庭"
+        },
+        {
+          "id": "510:30193",
+          "text": "Conversations"
+        },
+        {
+          "id": "510:30199",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

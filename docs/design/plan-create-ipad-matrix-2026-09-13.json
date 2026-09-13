@@ -1,0 +1,961 @@
+{
+  "date": "2026-09-13",
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "status": "iPad 16 base entry variants; mode routes configured; workflow incomplete",
+  "results": {
+    "ipadChineseManual": [
+      {
+        "rootId": "592:34582",
+        "createdNodeIds": [
+          "592:34582",
+          "592:34583",
+          "592:34584",
+          "592:34585",
+          "I592:34585;5:108797",
+          "592:34586",
+          "592:34587",
+          "592:34588",
+          "592:34589",
+          "592:34590",
+          "592:34591",
+          "592:34592",
+          "592:34593",
+          "592:34594",
+          "I592:34594;5:108797",
+          "592:34595",
+          "I592:34595;5:108797",
+          "592:34596",
+          "592:34597",
+          "592:34598",
+          "I592:34598;5433:15632",
+          "I592:34598;5433:15633",
+          "592:34599",
+          "592:34600",
+          "I592:34600;5433:15632",
+          "I592:34600;5433:15633",
+          "592:34601",
+          "592:34602",
+          "I592:34602;5:108581"
+        ]
+      }
+    ],
+    "ipadChineseManualVariants": [
+      {
+        "variants": [
+          {
+            "id": "592:34613",
+            "name": "plan-create · iPad landscape · 中文明色 · manual",
+            "createdNodeIds": [
+              "592:34613",
+              "592:34614",
+              "592:34615",
+              "592:34616",
+              "I592:34616;5:108797",
+              "592:34617",
+              "592:34618",
+              "592:34619",
+              "592:34620",
+              "592:34621",
+              "592:34622",
+              "592:34623",
+              "592:34624",
+              "592:34625",
+              "I592:34625;5:108797",
+              "592:34626",
+              "I592:34626;5:108797",
+              "592:34627",
+              "592:34628",
+              "592:34629",
+              "I592:34629;5433:15632",
+              "I592:34629;5433:15633",
+              "592:34630",
+              "592:34631",
+              "I592:34631;5433:15632",
+              "I592:34631;5433:15633",
+              "592:34632",
+              "592:34633",
+              "I592:34633;5:108581"
+            ]
+          },
+          {
+            "id": "592:34644",
+            "name": "plan-create · iPad portrait · 中文暗色 · manual",
+            "createdNodeIds": [
+              "592:34644",
+              "592:34645",
+              "592:34646",
+              "592:34647",
+              "I592:34647;5:108797",
+              "592:34648",
+              "592:34649",
+              "592:34650",
+              "592:34651",
+              "592:34652",
+              "592:34653",
+              "592:34654",
+              "592:34655",
+              "592:34656",
+              "I592:34656;5:108797",
+              "592:34657",
+              "I592:34657;5:108797",
+              "592:34658",
+              "592:34659",
+              "592:34660",
+              "I592:34660;5433:15632",
+              "I592:34660;5433:15633",
+              "592:34661",
+              "592:34662",
+              "I592:34662;5433:15632",
+              "I592:34662;5433:15633",
+              "592:34663",
+              "592:34664",
+              "I592:34664;5:108581"
+            ]
+          },
+          {
+            "id": "592:34675",
+            "name": "plan-create · iPad landscape · 中文暗色 · manual",
+            "createdNodeIds": [
+              "592:34675",
+              "592:34676",
+              "592:34677",
+              "592:34678",
+              "I592:34678;5:108797",
+              "592:34679",
+              "592:34680",
+              "592:34681",
+              "592:34682",
+              "592:34683",
+              "592:34684",
+              "592:34685",
+              "592:34686",
+              "592:34687",
+              "I592:34687;5:108797",
+              "592:34688",
+              "I592:34688;5:108797",
+              "592:34689",
+              "592:34690",
+              "592:34691",
+              "I592:34691;5433:15632",
+              "I592:34691;5433:15633",
+              "592:34692",
+              "592:34693",
+              "I592:34693;5433:15632",
+              "I592:34693;5433:15633",
+              "592:34694",
+              "592:34695",
+              "I592:34695;5:108581"
+            ]
+          }
+        ]
+      }
+    ],
+    "ipadAIEnglish": [
+      {
+        "rootId": "592:34706",
+        "createdNodeIds": [
+          "592:34706",
+          "592:34707",
+          "592:34708",
+          "592:34709",
+          "I592:34709;5:108797",
+          "592:34710",
+          "592:34711",
+          "592:34712",
+          "592:34713",
+          "592:34714",
+          "592:34715",
+          "592:34716",
+          "592:34717",
+          "592:34718",
+          "I592:34718;5:108797",
+          "592:34719",
+          "I592:34719;5:108797",
+          "592:34720",
+          "592:34721",
+          "592:34722",
+          "I592:34722;5433:15632",
+          "I592:34722;5433:15633",
+          "592:34725",
+          "592:34726",
+          "I592:34726;5:108581",
+          "592:34736",
+          "I592:34736;5:108797"
+        ],
+        "lastBottom": 630
+      }
+    ],
+    "ipadAIEnglishVariants": [
+      {
+        "variants": [
+          {
+            "id": "592:34739",
+            "name": "plan-create · iPad landscape · English light · AI",
+            "createdNodeIds": [
+              "592:34739",
+              "592:34740",
+              "592:34741",
+              "592:34742",
+              "I592:34742;5:108797",
+              "592:34743",
+              "592:34744",
+              "592:34745",
+              "592:34746",
+              "592:34747",
+              "592:34748",
+              "592:34749",
+              "592:34750",
+              "592:34751",
+              "I592:34751;5:108797",
+              "592:34752",
+              "I592:34752;5:108797",
+              "592:34753",
+              "592:34754",
+              "592:34755",
+              "I592:34755;5433:15632",
+              "I592:34755;5433:15633",
+              "592:34756",
+              "592:34757",
+              "I592:34757;5:108581",
+              "592:34758",
+              "I592:34758;5:108797"
+            ]
+          },
+          {
+            "id": "592:34767",
+            "name": "plan-create · iPad portrait · English dark · AI",
+            "createdNodeIds": [
+              "592:34767",
+              "592:34768",
+              "592:34769",
+              "592:34770",
+              "I592:34770;5:108797",
+              "592:34771",
+              "592:34772",
+              "592:34773",
+              "592:34774",
+              "592:34775",
+              "592:34776",
+              "592:34777",
+              "592:34778",
+              "592:34779",
+              "I592:34779;5:108797",
+              "592:34780",
+              "I592:34780;5:108797",
+              "592:34781",
+              "592:34782",
+              "592:34783",
+              "I592:34783;5433:15632",
+              "I592:34783;5433:15633",
+              "592:34784",
+              "592:34785",
+              "I592:34785;5:108581",
+              "592:34786",
+              "I592:34786;5:108797"
+            ]
+          },
+          {
+            "id": "592:34795",
+            "name": "plan-create · iPad landscape · English dark · AI",
+            "createdNodeIds": [
+              "592:34795",
+              "592:34796",
+              "592:34797",
+              "592:34798",
+              "I592:34798;5:108797",
+              "592:34799",
+              "592:34800",
+              "592:34801",
+              "592:34802",
+              "592:34803",
+              "592:34804",
+              "592:34805",
+              "592:34806",
+              "592:34807",
+              "I592:34807;5:108797",
+              "592:34808",
+              "I592:34808;5:108797",
+              "592:34809",
+              "592:34810",
+              "592:34811",
+              "I592:34811;5433:15632",
+              "I592:34811;5433:15633",
+              "592:34812",
+              "592:34813",
+              "I592:34813;5:108581",
+              "592:34814",
+              "I592:34814;5:108797"
+            ]
+          }
+        ]
+      }
+    ],
+    "ipadAIChinese": [
+      {
+        "rootId": "592:34823",
+        "createdNodeIds": [
+          "592:34823",
+          "592:34824",
+          "592:34825",
+          "592:34826",
+          "I592:34826;5:108797",
+          "592:34827",
+          "592:34828",
+          "592:34829",
+          "592:34830",
+          "592:34831",
+          "592:34832",
+          "592:34833",
+          "592:34834",
+          "592:34835",
+          "I592:34835;5:108797",
+          "592:34836",
+          "I592:34836;5:108797",
+          "592:34837",
+          "592:34838",
+          "592:34839",
+          "I592:34839;5433:15632",
+          "I592:34839;5433:15633",
+          "592:34840",
+          "592:34841",
+          "I592:34841;5:108581",
+          "592:34842",
+          "I592:34842;5:108797"
+        ]
+      }
+    ],
+    "ipadAIChineseVariants": [
+      {
+        "variants": [
+          {
+            "id": "592:34851",
+            "name": "plan-create · iPad landscape · 中文明色 · AI",
+            "createdNodeIds": [
+              "592:34851",
+              "592:34852",
+              "592:34853",
+              "592:34854",
+              "I592:34854;5:108797",
+              "592:34855",
+              "592:34856",
+              "592:34857",
+              "592:34858",
+              "592:34859",
+              "592:34860",
+              "592:34861",
+              "592:34862",
+              "592:34863",
+              "I592:34863;5:108797",
+              "592:34864",
+              "I592:34864;5:108797",
+              "592:34865",
+              "592:34866",
+              "592:34867",
+              "I592:34867;5433:15632",
+              "I592:34867;5433:15633",
+              "592:34868",
+              "592:34869",
+              "I592:34869;5:108581",
+              "592:34870",
+              "I592:34870;5:108797"
+            ]
+          },
+          {
+            "id": "592:34879",
+            "name": "plan-create · iPad portrait · 中文暗色 · AI",
+            "createdNodeIds": [
+              "592:34879",
+              "592:34880",
+              "592:34881",
+              "592:34882",
+              "I592:34882;5:108797",
+              "592:34883",
+              "592:34884",
+              "592:34885",
+              "592:34886",
+              "592:34887",
+              "592:34888",
+              "592:34889",
+              "592:34890",
+              "592:34891",
+              "I592:34891;5:108797",
+              "592:34892",
+              "I592:34892;5:108797",
+              "592:34893",
+              "592:34894",
+              "592:34895",
+              "I592:34895;5433:15632",
+              "I592:34895;5433:15633",
+              "592:34896",
+              "592:34897",
+              "I592:34897;5:108581",
+              "592:34898",
+              "I592:34898;5:108797"
+            ]
+          },
+          {
+            "id": "592:34907",
+            "name": "plan-create · iPad landscape · 中文暗色 · AI",
+            "createdNodeIds": [
+              "592:34907",
+              "592:34908",
+              "592:34909",
+              "592:34910",
+              "I592:34910;5:108797",
+              "592:34911",
+              "592:34912",
+              "592:34913",
+              "592:34914",
+              "592:34915",
+              "592:34916",
+              "592:34917",
+              "592:34918",
+              "592:34919",
+              "I592:34919;5:108797",
+              "592:34920",
+              "I592:34920;5:108797",
+              "592:34921",
+              "592:34922",
+              "592:34923",
+              "I592:34923;5433:15632",
+              "I592:34923;5433:15633",
+              "592:34924",
+              "592:34925",
+              "I592:34925;5:108581",
+              "592:34926",
+              "I592:34926;5:108797"
+            ]
+          }
+        ]
+      }
+    ],
+    "ipadEnglishModeRoutes": [
+      {
+        "pairs": [
+          {
+            "manualId": "591:34542",
+            "aiId": "592:34706",
+            "buttons": [
+              {
+                "id": "591:34553",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34706",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34706",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34719",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "591:34542",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "591:34542",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "manualId": "591:34573",
+            "aiId": "592:34739",
+            "buttons": [
+              {
+                "id": "591:34585",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34739",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34739",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34752",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "591:34573",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "591:34573",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "manualId": "591:34604",
+            "aiId": "592:34767",
+            "buttons": [
+              {
+                "id": "591:34616",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34767",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34767",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34780",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "591:34604",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "591:34604",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "manualId": "591:34635",
+            "aiId": "592:34795",
+            "buttons": [
+              {
+                "id": "591:34647",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34795",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34795",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34808",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "591:34635",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "591:34635",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "mutatedNodeIds": [
+          "591:34553",
+          "592:34719",
+          "591:34585",
+          "592:34752",
+          "591:34616",
+          "592:34780",
+          "591:34647",
+          "592:34808"
+        ]
+      }
+    ],
+    "ipadChineseModeRoutes": [
+      {
+        "pairs": [
+          {
+            "manualId": "592:34582",
+            "aiId": "592:34823",
+            "buttons": [
+              {
+                "id": "592:34594",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34823",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34823",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34836",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34582",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34582",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "manualId": "592:34613",
+            "aiId": "592:34851",
+            "buttons": [
+              {
+                "id": "592:34625",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34851",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34851",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34864",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34613",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34613",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "manualId": "592:34644",
+            "aiId": "592:34879",
+            "buttons": [
+              {
+                "id": "592:34656",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34879",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34879",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34892",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34644",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34644",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "manualId": "592:34675",
+            "aiId": "592:34907",
+            "buttons": [
+              {
+                "id": "592:34687",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34907",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34907",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "592:34920",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "592:34675",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "592:34675",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "mutatedNodeIds": [
+          "592:34594",
+          "592:34836",
+          "592:34625",
+          "592:34864",
+          "592:34656",
+          "592:34892",
+          "592:34687",
+          "592:34920"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "scope": "Current controlled observations only, not account daily usage",
+  "diagnosis": "rate-limit-type-unconfirmed",
+  "calls": [
+    {
+      "before": {
+        "current_time": "2026-09-08 23:21:10 UTC"
+      },
+      "after": {
+        "current_time": "2026-09-08 23:21:18 UTC"
+      },
+      "tool": "mcp__codex_apps__figma_use_figma",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "[{\"id\":\"500:28182\",\"alerts\":[{\"id\":\"500:28299\",\"visible\":true,\"children\":[{\"id\":\"I500:28299;5742:38608\",\"name\":\"BG\",\"type\":\"INSTANCE\",\"visible\":true},{\"id\":\"I500:28299;61:67654\",\"name\":\"Title and Description\",\"type\":\"FRAME\",\"visible\":true},{\"id\":\"I500:28299;537:39280\",\"name\":\"Buttons\",\"type\":\"FRAME\",\"visible\":true}]}]},{\"id\":\"500:28315\",\"alerts\":[{\"id\":\"500:28432\",\"visible\":true,\"children\":[{\"id\":\"I500:28432;5742:38608\",\"name\":\"BG\",\"type\":\"INSTANCE\",\"visible\":true},{\"id\":\"I500:28432;61:67654\",\"name\":\"Title and Description\",\"type\":\"FRAME\",\"visible\":true},{\"id\":\"I500:28432;537:39280\",\"name\":\"Buttons\",\"type\":\"FRAME\",\"visible\":true}]}]}]"
+          }
+        ],
+        "isError": false
+      }
+    }
+  ]
+}

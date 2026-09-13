@@ -24,7 +24,8 @@
     "spec:pr": "node scripts/check-spec-pr.mjs",
     "test:spec-workflow": "node --test scripts/check-spec-pr.test.mjs",
     "release:check": "node scripts/check-release.mjs",
-    "test:release-workflow": "node --test scripts/check-release.test.mjs"
+    "test:release-workflow": "node --test scripts/check-release.test.mjs",
+    "test:e2e": "pnpm build:packages && pnpm --filter @siyue/desktop build && playwright test"
   },
   "devDependencies": {
     "@fission-ai/openspec": "1.12.0",

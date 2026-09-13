@@ -1,0 +1,140 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:42741",
+      "key": "confirm-share",
+      "nodes": 45,
+      "hydratedNodes": 45,
+      "hydrationFailures": 0,
+      "visibleNodes": 15,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 14,
+      "childCollectionsRead": 20,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I513:42858;61:67599",
+          "text": "撤销家庭共享？"
+        },
+        {
+          "id": "I513:42858;61:67600",
+          "text": "家人将失去这份内容的访问权限。原件仍保留在你的个人空间。"
+        },
+        {
+          "id": "I513:42858;5446:7598;5446:6673",
+          "text": "撤销共享"
+        },
+        {
+          "id": "I513:42858;5446:7604;5446:6675",
+          "text": "取消"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:42874",
+      "key": "confirm-share",
+      "nodes": 45,
+      "hydratedNodes": 45,
+      "hydrationFailures": 0,
+      "visibleNodes": 15,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 14,
+      "childCollectionsRead": 20,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I513:42991;61:67599",
+          "text": "撤销家庭共享？"
+        },
+        {
+          "id": "I513:42991;61:67600",
+          "text": "家人将失去这份内容的访问权限。原件仍保留在你的个人空间。"
+        },
+        {
+          "id": "I513:42991;5446:7598;5446:6673",
+          "text": "撤销共享"
+        },
+        {
+          "id": "I513:42991;5446:7604;5446:6675",
+          "text": "取消"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:43007",
+      "key": "confirm-share",
+      "nodes": 45,
+      "hydratedNodes": 45,
+      "hydrationFailures": 0,
+      "visibleNodes": 15,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 14,
+      "childCollectionsRead": 20,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I513:43124;61:67599",
+          "text": "Revoke family sharing?"
+        },
+        {
+          "id": "I513:43124;61:67600",
+          "text": "Family members lose access to this content. The original stays in your space."
+        },
+        {
+          "id": "I513:43124;5446:7598;5446:6673",
+          "text": "Revoke sharing"
+        },
+        {
+          "id": "I513:43124;5446:7604;5446:6675",
+          "text": "Cancel"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

@@ -8,6 +8,19 @@ import { canonicalize, createCommandService } from '@siyue/domain';
 import { createLocalClient } from '@siyue/adapters';
 import { openNodeStore } from '@siyue/adapters/node';
 import { createDesktopClient } from '../renderer/client.ts';
+
+test('renderer refuses a request-scoped provider without invoking IPC or the callback', async () => {
+  let invoked = false;
+  const client = createDesktopClient({
+    storage: {getItem: () => null, setItem() {}, removeItem() {}},
+    bridge: {invoke: async () => { invoked = true; throw new Error('unexpected IPC'); }, cancel() {}},
+  });
+  await assert.rejects(client.propose('Goal', undefined, async () => {
+    invoked = true;
+    throw new Error('unexpected callback');
+  }), {code: 'unsupported'});
+  assert.equal(invoked, false);
+});
 import { createIpcDispatcher } from './ipc.mjs';
 
 async function fixture(t) {
@@ -73,6 +86,37 @@ test('lost update response returns the original receipt without incrementing the
   assert.equal(updated.status, 'done');
   assert.equal(updated.version, task.version + 1);
   assert.equal(updates, 1);
+});
+
+test('lost manual-draft response retries the explicit identity and recovers one UI draft without formal records', async (t) => {
+  const { client, dispatcher, event, storage, data } = await fixture(t);
+  const payload = { title: 'draft-only goal', projectTitles: ['editable project'], taskTitles: ['task'] };
+  const request = { commandId: randomUUID(), issuedAt: new Date().toISOString() };
+  const requests = [];
+  let drop = true;
+  const bridge = { cancel() {}, async invoke(message) {
+    assert.equal(message.method, 'createManualDraft');
+    requests.push(structuredClone(message.args));
+    const reply = await dispatcher.handle(event, message);
+    if (drop) throw new Error('draft response lost after commit');
+    return reply;
+  } };
+  await assert.rejects(createDesktopClient({ bridge, storage }).createManualDraft(payload, request), /draft response lost/);
+  const initial = await client.snapshot();
+  assert.equal(initial.drafts.length, 1);
+  assert.equal(initial.drafts[0].source, 'ui');
+  assert.equal(initial.drafts[0].status, 'draft');
+  assert.equal(initial.drafts[0].command.commandId, request.commandId);
+  assert.deepEqual([initial.goals.length, initial.projects.length, initial.tasks.length], [0, 0, 0]);
+  drop = false;
+  const recovered = await createDesktopClient({ bridge, storage }).createManualDraft(payload, request);
+  assert.deepEqual(recovered, initial.drafts[0]);
+  assert.deepEqual(requests, [[payload, request], [payload, request]]);
+  const final = await client.snapshot();
+  assert.deepEqual(final.drafts, initial.drafts);
+  assert.deepEqual([final.goals.length, final.projects.length, final.tasks.length], [0, 0, 0]);
+  assert.equal(await client.receipt(request.commandId), null);
+  assert.equal(data.size, 0, 'explicit draft identity does not enter the legacy formal-command recovery store');
 });
 
 test('strict IPC operation envelope rejects identity injection and invalid timestamps', async (t) => {

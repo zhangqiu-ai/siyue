@@ -12,6 +12,8 @@ test('both languages cover every key and preserve interpolation parameters', () 
   }
   assert.equal(translate('en', 'chat.number', { count: 1200 }), 'Conversation 1,200');
   assert.equal(translate('zh-CN', 'settings.aiLabel', { name: 'my-model' }), 'AI 服务，my-model');
+  assert.match(translate('zh-CN', 'ai.privacy', { host: 'api.example.com' }), /当前会话文字.*本次目标.*api\.example\.com/);
+  assert.match(translate('en', 'ai.privacy', { host: 'api.example.com' }), /current conversation.*this goal.*api\.example\.com/);
 });
 test('preference survives a new read and invalid values use Chinese', () => {
   let value = null;

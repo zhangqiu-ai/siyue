@@ -1,0 +1,1 @@
+await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));let changed=[];for(const id of ['452:9913','452:9888']){const n=await figma.getNodeByIdAsync(id);if(n.type==='INSTANCE'&&n.componentProperties['Show Trailing#5534:8']){n.setProperties({'Show Trailing#5534:8':false});changed.push(id);}}return{mutatedNodeIds:changed};

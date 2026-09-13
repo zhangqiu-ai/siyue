@@ -50,6 +50,32 @@ test('only validated method arguments are dispatched; errors expose a known code
   assert.deepEqual(await dispatcher.handle({ ...event, senderFrame: { url: rendererUrl } }, message('snapshot')), { ok: false, error: { code: 'forbidden' } });
 });
 
+test('manual drafts require one project and an explicit strict operation identity', async () => {
+  const payload = { title: 'Goal', projectTitles: ['Project'], taskTitles: ['Task'] };
+  const request = { commandId: 'manual-command-1', issuedAt: '2026-09-13T08:00:00.000Z' };
+  const calls = [];
+  const draft = { id: 'draft-1', status: 'draft' };
+  const { event, dispatcher } = setup({ createManualDraft: async (...args) => { calls.push(args); return draft; } });
+  for (const args of [
+    [payload], [payload, undefined], [payload, null], [payload, {}],
+    [payload, { commandId: request.commandId }], [payload, { issuedAt: request.issuedAt }],
+    [payload, { ...request, commandId: 'bad' }], [payload, { ...request, issuedAt: 'yesterday' }],
+    [payload, { ...request, actorId: 'other' }], [payload, { ...request, spaceId: 'other' }],
+    [{ ...payload, projectTitles: [] }, request], [{ ...payload, projectTitles: ['One', 'Two'] }, request],
+    [{ ...payload, projectTitles: [' '] }, request], [{ title: 'Goal' }, request],
+    [{ ...payload, actorId: 'other' }, request], [payload, request, 'extra'],
+  ]) {
+    assert.throws(() => validateCall(message('createManualDraft', args)), { code: 'invalid_input' });
+    assert.deepEqual(await dispatcher.handle(event, message('createManualDraft', args)), { ok: false, error: { code: 'invalid_input' } });
+  }
+  assert.equal(calls.length, 0);
+  assert.deepEqual(await dispatcher.handle(event, message('createManualDraft', [payload, request])), { ok: true, value: draft });
+  assert.deepEqual(calls, [[payload, request]]);
+  // IPC retries preserve the caller's identity; reconciliation belongs to LocalClient.
+  await dispatcher.handle(event, message('createManualDraft', [payload, request], 'transport-retry'));
+  assert.deepEqual(calls[1], [payload, request]);
+});
+
 test('proposal cancellation is scoped to its request and window; duplicate requests are rejected', async () => {
   let signal;
   const { event, dispatcher } = setup({ propose: async (_goal, controllerSignal) => {

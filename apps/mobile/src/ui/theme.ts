@@ -10,12 +10,16 @@ const common = {
 };
 export const themes = {
   light: { ...common, mode: 'light' as const, color: {
-    background: '#FAFAFA', surface: '#FFFFFF', ink: '#171717', muted: '#666666',
-    accent: '#171717', accentPressed: '#333333', onAccent: '#FFFFFF', subtle: '#EEEEEE', border: '#D9D9D9', controlBorder: '#858585',
+    focus: '#E7EDE5', focusPressed: '#DDE6D9', onFocus: '#25352B', focusMuted: '#506254', focusTrack: '#BBCABB', focusProgress: '#53755D',
+    background: '#F7F8F2', surface: '#FFFEFA', ink: '#25352B', muted: '#5D695F',
+    accent: '#476B53', accentPressed: '#395A44', onAccent: '#FFFFFF', subtle: '#EDF0E8', border: '#D4DCD0', controlBorder: '#7A8C7C',
+    progress: '#53755D', progressTrack: '#BBCABB', selectedBorder: '#53755D', error: '#A33E32',
   } },
   dark: { ...common, mode: 'dark' as const, color: {
-    background: '#101010', surface: '#1C1C1C', ink: '#F5F5F5', muted: '#A6A6A6',
-    accent: '#F5F5F5', accentPressed: '#D4D4D4', onAccent: '#171717', subtle: '#292929', border: '#404040', controlBorder: '#777777',
+    focus: '#28372D', focusPressed: '#334738', onFocus: '#F0F3E9', focusMuted: '#BCCBBB', focusTrack: '#4B5E4E', focusProgress: '#B7CDB8',
+    background: '#151C17', surface: '#202A23', ink: '#F0F3E9', muted: '#B3C0B2',
+    accent: '#B7CDB8', accentPressed: '#A3BDA6', onAccent: '#203326', subtle: '#2D3930', border: '#435346', controlBorder: '#839887',
+    progress: '#B7CDB8', progressTrack: '#4B5E4E', selectedBorder: '#B7CDB8', error: '#F1A99D',
   } },
 };
 export type Theme = typeof themes[ThemeMode];

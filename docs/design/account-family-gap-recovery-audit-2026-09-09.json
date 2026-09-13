@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"checked\":172,\"instances\":1372,\"issues\":[{\"id\":\"479:21610\",\"key\":\"pair-refresh\",\"overflow\":[{\"id\":\"479:21668\",\"name\":\"title\",\"parent\":\"479:21663\",\"x\":52,\"y\":1,\"w\":608,\"h\":42,\"pw\":520,\"ph\":44}],\"badfonts\":[],\"broken\":[],\"instances\":12},{\"id\":\"479:22314\",\"key\":\"pair-refresh\",\"overflow\":[{\"id\":\"479:22372\",\"name\":\"title\",\"parent\":\"479:22367\",\"x\":52,\"y\":1,\"w\":608,\"h\":42,\"pw\":520,\"ph\":44}],\"badfonts\":[],\"broken\":[],\"instances\":12},{\"id\":\"479:23018\",\"key\":\"pair-refresh\",\"overflow\":[{\"id\":\"479:23076\",\"name\":\"title\",\"parent\":\"479:23071\",\"x\":52,\"y\":16,\"w\":608,\"h\":32,\"pw\":520,\"ph\":64}],\"badfonts\":[],\"broken\":[],\"instances\":12},{\"id\":\"479:23254\",\"key\":\"pair-refresh\",\"overflow\":[{\"id\":\"479:23312\",\"name\":\"title\",\"parent\":\"479:23307\",\"x\":52,\"y\":16,\"w\":608,\"h\":32,\"pw\":520,\"ph\":64}],\"badfonts\":[],\"broken\":[],\"instances\":12}]}"
+    }
+  ],
+  "isError": false
+}

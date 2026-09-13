@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module';
 import Fastify from 'fastify';
+import { registerSessionRoute, type SessionOptions } from './session.js';
 import {
   AgentExecutionError,
   executeGoalPlan,
@@ -10,7 +11,7 @@ import {
 
 const { version } = createRequire(import.meta.url)('../package.json') as { version: string };
 
-export interface AppOptions {
+export interface AppOptions extends SessionOptions {
   executor?: AgentExecutor;
   timeoutMs?: number;
   maxConcurrentRuns?: number;
@@ -41,6 +42,8 @@ export function createApp(options: AppOptions = {}) {
     const status = typeof statusCode === 'number' && statusCode >= 400 && statusCode < 500 ? statusCode : 500;
     return reply.code(status).send({ error: status === 413 ? 'body_too_large' : status < 500 ? 'invalid_request' : 'internal_error' });
   });
+
+  registerSessionRoute(app, options);
 
   app.get('/health', async () => ({ ok: true, service: 'siyue-server', version }));
   app.get('/v1/ai/capabilities', async () => ({

@@ -1,0 +1,98 @@
+{
+  "createdNodeIds": [],
+  "mutatedNodeIds": [
+    "210:33",
+    "I210:33;5:108581"
+  ],
+  "before": {
+    "label": "获取验证码",
+    "w": 342,
+    "h": 52,
+    "fills": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.27843138575553894,
+          "g": 0.41960784792900085,
+          "b": 0.32549020648002625
+        },
+        "boundVariables": {
+          "color": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:547:75"
+          }
+        }
+      }
+    ],
+    "strokes": [],
+    "opacity": 1,
+    "cornerRadius": 1000,
+    "reactions": [
+      {
+        "action": {
+          "type": "NODE",
+          "destinationId": "210:10",
+          "navigation": "NAVIGATE",
+          "transition": null,
+          "resetVideoPosition": false,
+          "resetScrollPosition": true
+        },
+        "actions": [
+          {
+            "type": "NODE",
+            "destinationId": "210:10",
+            "navigation": "NAVIGATE",
+            "transition": null,
+            "resetVideoPosition": false,
+            "resetScrollPosition": true
+          }
+        ],
+        "trigger": {
+          "type": "ON_CLICK"
+        }
+      }
+    ]
+  },
+  "after": {
+    "main": "548:33775",
+    "w": 342,
+    "h": 52,
+    "properties": {
+      "Label#548:0": {
+        "type": "TEXT",
+        "value": "获取验证码"
+      }
+    },
+    "reactions": [
+      {
+        "action": {
+          "type": "NODE",
+          "destinationId": "210:10",
+          "navigation": "NAVIGATE",
+          "transition": null,
+          "resetVideoPosition": false,
+          "resetScrollPosition": true
+        },
+        "actions": [
+          {
+            "type": "NODE",
+            "destinationId": "210:10",
+            "navigation": "NAVIGATE",
+            "transition": null,
+            "resetVideoPosition": false,
+            "resetScrollPosition": true
+          }
+        ],
+        "trigger": {
+          "type": "ON_CLICK"
+        }
+      }
+    ],
+    "text": [
+      "获取验证码"
+    ]
+  }
+}

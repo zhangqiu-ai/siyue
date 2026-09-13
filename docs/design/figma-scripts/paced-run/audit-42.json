@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:30803",
+      "key": "otp-sending",
+      "nodes": 65,
+      "hydratedNodes": 65,
+      "hydrationFailures": 0,
+      "visibleNodes": 34,
+      "textNodes": 18,
+      "visibleTextNodes": 11,
+      "fontsChecked": 9,
+      "instances": 8,
+      "componentReferencesChecked": 8,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 33,
+      "childCollectionsRead": 33,
+      "fonts": {
+        "Noto Sans SC": 9
+      },
+      "textSamples": [
+        {
+          "id": "513:30927",
+          "text": "Requesting a code"
+        },
+        {
+          "id": "513:30928",
+          "text": "Waiting for the sending result."
+        },
+        {
+          "id": "I513:30930;550:50523",
+          "text": "Email"
+        },
+        {
+          "id": "I513:30930;550:50524",
+          "text": "alex@example.com"
+        },
+        {
+          "id": "I513:30930;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:30930;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:30967",
+      "key": "otp-sending",
+      "nodes": 65,
+      "hydratedNodes": 65,
+      "hydrationFailures": 0,
+      "visibleNodes": 34,
+      "textNodes": 18,
+      "visibleTextNodes": 11,
+      "fontsChecked": 9,
+      "instances": 8,
+      "componentReferencesChecked": 8,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 33,
+      "childCollectionsRead": 33,
+      "fonts": {
+        "Noto Sans SC": 9
+      },
+      "textSamples": [
+        {
+          "id": "513:31091",
+          "text": "Requesting a code"
+        },
+        {
+          "id": "513:31092",
+          "text": "Waiting for the sending result."
+        },
+        {
+          "id": "I513:31094;550:50523",
+          "text": "Email"
+        },
+        {
+          "id": "I513:31094;550:50524",
+          "text": "alex@example.com"
+        },
+        {
+          "id": "I513:31094;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:31094;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:31131",
+      "key": "adopt-failed",
+      "nodes": 67,
+      "hydratedNodes": 67,
+      "hydrationFailures": 0,
+      "visibleNodes": 66,
+      "textNodes": 19,
+      "visibleTextNodes": 19,
+      "fontsChecked": 17,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 65,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 17
+      },
+      "textSamples": [
+        {
+          "id": "513:31133",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:31134",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:31139",
+          "text": "My space"
+        },
+        {
+          "id": "513:31146",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:31150",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:31156",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

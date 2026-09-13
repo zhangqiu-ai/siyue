@@ -1,0 +1,50 @@
+{
+  "status": "all-768-static-and-route-checks-passed-awaiting-owner-review",
+  "frames": 768,
+  "phoneFrames": 384,
+  "iPadVisibleLinks": 4376,
+  "visibleTextNodes": 13216,
+  "fontsChecked": 12450,
+  "componentReferencesChecked": 6084,
+  "latestIssueCount": 0,
+  "rawAttemptsRetained": 76,
+  "latestBatches": 72,
+  "scope": "Figma design static checks and prototype links; not production accounts, native devices or cloud sync",
+  "screenshotsReviewed": [
+    "final-pair-success.png",
+    "final-edit-task.png",
+    "final-family-member-portrait.png"
+  ],
+  "browserClicks": [
+    {
+      "from": "513:43599",
+      "to": "513:46355",
+      "action": "普通成员侧栏对话",
+      "result": "Sam只读共享对话，中文明色横屏"
+    },
+    {
+      "from": "513:46355",
+      "to": "515:35417",
+      "action": "普通成员侧栏目标",
+      "result": "同身份共享目标节点"
+    },
+    {
+      "from": "473:28376",
+      "to": "473:30050",
+      "action": "勾选任务",
+      "result": "0/3到1/3，中文明色竖屏"
+    },
+    {
+      "from": "473:30050",
+      "to": "473:30903",
+      "action": "侧栏我的空间",
+      "result": "修复后首页保持1/3，已查看渲染"
+    }
+  ],
+  "supplementalProgressFrames": 32,
+  "supplementalEvidence": [
+    "account-family-ipad-progress-route-2026-09-09.json",
+    "account-family-ipad-progress-deep-2026-09-09.json",
+    "account-family-ipad-progress-audit-2026-09-09.json"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Error: Reaction at index 0 was invalid (destination 452:11871 was rejected — the destination node may not exist, the source may not be a valid prototype source, or the destination may not be reachable from this source; for NAVIGATE actions, destinations must be a different top-level frame on the same page)\n    at <anonymous> (<input>:1:22)\n"
+      },
+      {
+        "type": "text",
+        "text": "Figma Debug UUID: f0502aa3-68ff-4d8c-861c-c789a5aeaa22"
+      }
+    ],
+    "structuredContent": {
+      "safeToRetryWithoutCanvasRead": true,
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "isError": true
+  },
+  "pending": [
+    {
+      "frame": "452:10616",
+      "from": "452:10664",
+      "to": null,
+      "sourceFrom": "221:1548",
+      "sourceTarget": "221:1813",
+      "name": "开始新对话"
+    },
+    {
+      "frame": "452:10670",
+      "from": "452:10718",
+      "to": null,
+      "sourceFrom": "221:1548",
+      "sourceTarget": "221:1813",
+      "name": "开始新对话"
+    },
+    {
+      "frame": "452:10724",
+      "from": "452:10772",
+      "to": null,
+      "sourceFrom": "221:1548",
+      "sourceTarget": "221:1813",
+      "name": "开始新对话"
+    },
+    {
+      "frame": "452:11088",
+      "from": "452:11114",
+      "to": null,
+      "sourceFrom": "221:1580",
+      "sourceTarget": "442:6303",
+      "name": "练习三分钟自我介绍"
+    },
+    {
+      "frame": "452:11143",
+      "from": "452:11169",
+      "to": null,
+      "sourceFrom": "221:1580",
+      "sourceTarget": "442:6303",
+      "name": "练习三分钟自我介绍"
+    },
+    {
+      "frame": "452:11198",
+      "from": "452:11224",
+      "to": null,
+      "sourceFrom": "221:1580",
+      "sourceTarget": "442:6303",
+      "name": "练习三分钟自我介绍"
+    },
+    {
+      "frame": "452:11973",
+      "from": "452:11978",
+      "to": null,
+      "sourceFrom": "442:6251",
+      "sourceTarget": "442:6383",
+      "name": "返回我的空间"
+    },
+    {
+      "frame": "452:12030",
+      "from": "452:12035",
+      "to": null,
+      "sourceFrom": "442:6251",
+      "sourceTarget": "442:6383",
+      "name": "返回我的空间"
+    },
+    {
+      "frame": "452:12087",
+      "from": "452:12092",
+      "to": null,
+      "sourceFrom": "442:6251",
+      "sourceTarget": "442:6383",
+      "name": "返回我的空间"
+    }
+  ]
+}

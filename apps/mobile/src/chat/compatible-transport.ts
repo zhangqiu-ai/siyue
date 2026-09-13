@@ -64,12 +64,23 @@ export async function* streamCompatibleReply(
   signal.addEventListener('abort', abort, { once: true });
   const timer = setTimeout(() => { timedOut = true; abort(); }, 90_000);
   try {
-    const response = await fetcher(`${baseUrl}/chat/completions`, {
-      method: 'POST',
-      redirect: 'error',
-      headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream', Authorization: `Bearer ${config.apiKey.trim()}` },
-      body: JSON.stringify({ model: config.model.trim(), messages, stream: true, max_tokens: 2048 }),
-      signal: controller.signal,
+    const response = await new Promise<Response>((resolve, reject) => {
+      const cancelled = () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' }));
+      controller.signal.addEventListener('abort', cancelled, { once: true });
+      Promise.resolve().then(() => fetcher(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        redirect: 'error',
+        headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream', Authorization: `Bearer ${config.apiKey.trim()}` },
+        body: JSON.stringify({ model: config.model.trim(), messages, stream: true, max_tokens: 2048 }),
+        signal: controller.signal,
+      })).then((value) => {
+        if (controller.signal.aborted) {
+          void value.body?.cancel().catch(() => {});
+          return;
+        }
+        resolve(value);
+      }, reject).finally(() => controller.signal.removeEventListener('abort', cancelled));
+      if (controller.signal.aborted) cancelled();
     });
     if (!response.ok) {
       void response.body?.cancel().catch(() => {});

@@ -1,0 +1,582 @@
+{
+  "date": "2026-09-13",
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "result": [
+    {
+      "variants": [
+        {
+          "id": "585:34470",
+          "name": "plan-create · AI 协助 · 中文明色",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 630,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "586:34478",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.47843137383461,
+                    "g": 0.5490196347236633,
+                    "b": 0.48627451062202454
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:1"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.27843138575553894,
+                "g": 0.41960784792900085,
+                "b": 0.32549020648002625
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "586:34488",
+          "name": "plan-create · 手工创建 · 中文明色",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 652,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "586:34503",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.47843137383461,
+                    "g": 0.5490196347236633,
+                    "b": 0.48627451062202454
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            },
+            {
+              "id": "586:34513",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.47843137383461,
+                    "g": 0.5490196347236633,
+                    "b": 0.48627451062202454
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:1"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.27843138575553894,
+                "g": 0.41960784792900085,
+                "b": 0.32549020648002625
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "587:34488",
+          "name": "plan-create · AI assistance · English light",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 654,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "587:34503",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.47843137383461,
+                    "g": 0.5490196347236633,
+                    "b": 0.48627451062202454
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:1"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.27843138575553894,
+                "g": 0.41960784792900085,
+                "b": 0.32549020648002625
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "587:34515",
+          "name": "plan-create · Create manually · English light",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 676,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "587:34530",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.47843137383461,
+                    "g": 0.5490196347236633,
+                    "b": 0.48627451062202454
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            },
+            {
+              "id": "587:34532",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.47843137383461,
+                    "g": 0.5490196347236633,
+                    "b": 0.48627451062202454
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:1"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.27843138575553894,
+                "g": 0.41960784792900085,
+                "b": 0.32549020648002625
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "587:34547",
+          "name": "plan-create · AI 协助 · 中文暗色",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 630,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "587:34562",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.5137255191802979,
+                    "g": 0.5960784554481506,
+                    "b": 0.529411792755127
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:2"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.7176470756530762,
+                "g": 0.8039215803146362,
+                "b": 0.7215686440467834
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "587:34574",
+          "name": "plan-create · 手工创建 · 中文暗色",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 652,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "587:34589",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.5137255191802979,
+                    "g": 0.5960784554481506,
+                    "b": 0.529411792755127
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            },
+            {
+              "id": "587:34591",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.5137255191802979,
+                    "g": 0.5960784554481506,
+                    "b": 0.529411792755127
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:2"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.7176470756530762,
+                "g": 0.8039215803146362,
+                "b": 0.7215686440467834
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "587:34604",
+          "name": "plan-create · AI assistance · English dark",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 654,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "587:34619",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.5137255191802979,
+                    "g": 0.5960784554481506,
+                    "b": 0.529411792755127
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:2"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.7176470756530762,
+                "g": 0.8039215803146362,
+                "b": 0.7215686440467834
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "587:34631",
+          "name": "plan-create · Create manually · English dark",
+          "width": 390,
+          "height": 844,
+          "lastBottom": 676,
+          "fontFamilies": [
+            "Noto Sans SC"
+          ],
+          "inputs": [
+            {
+              "id": "587:34646",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.5137255191802979,
+                    "g": 0.5960784554481506,
+                    "b": 0.529411792755127
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            },
+            {
+              "id": "587:34648",
+              "width": 302,
+              "height": 70,
+              "border": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.5137255191802979,
+                    "g": 0.5960784554481506,
+                    "b": 0.529411792755127
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:547:90"
+                    }
+                  }
+                }
+              ],
+              "separatorHidden": true
+            }
+          ],
+          "primaryMode": {
+            "VariableCollectionId:547:44": "547:2"
+          },
+          "primaryFill": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.7176470756530762,
+                "g": 0.8039215803146362,
+                "b": 0.7215686440467834
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:75"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

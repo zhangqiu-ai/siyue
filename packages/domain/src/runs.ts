@@ -1,4 +1,4 @@
-import {agentRunSchema, runErrorCodeSchema, spaceStateSchema, runTransitions, runEventReplaySchema, type AgentRun, type RunStatus, type SpaceState, type RunEventReplay} from '@siyue/contracts';
+import {runExecutionMetadataSchema, type RunExecutionMetadata, agentRunSchema, runErrorCodeSchema, spaceStateSchema, runTransitions, runEventReplaySchema, type AgentRun, type RunStatus, type SpaceState, type RunEventReplay} from '@siyue/contracts';
 import {CommandError, type Actor, type SpaceStore} from './commands.js';
 
 export interface RunDependencies {store: SpaceStore; now: () => string; newId: () => string}
@@ -31,15 +31,17 @@ export function createRunService({store, now, newId}: RunDependencies) {
     else if (draft.status === 'rejected' || draft.status === 'cancelled') move(run, 'cancelled');
   }
   return {
-    async start(spaceId: string, actor: Actor): Promise<AgentRun> {
+    async start(spaceId: string, actor: Actor, execution: RunExecutionMetadata = {executor: 'mock', modelVersion: 'deterministic-mock-v1', promptVersion: 'mock-plan-v1'}): Promise<AgentRun> {
+      const metadata = runExecutionMetadataSchema.safeParse(execution);
+      if (!metadata.success) throw new CommandError('invalid_input', 'Run execution metadata is invalid');
       return store.transaction(spaceId, async (state) => {
         authorize(state, spaceId, actor);
         const id = newId();
         if (!id || [...state.goals, ...state.projects, ...state.tasks, ...state.drafts, ...state.approvals, ...state.runs].some((item) => item.id === id) || state.events.some((item) => item.eventId === id))
           throw new CommandError('id_collision', 'Generated identifier is already in use');
         const timestamp = now();
-        const run: AgentRun = {id, spaceId, actorId: actor.id, actorKind: actor.kind, executor: 'mock', policyVersion: '1', schemaVersion: 1,
-          modelVersion: 'deterministic-mock-v1', promptVersion: 'mock-plan-v1', dataCutoff: timestamp,
+        const run: AgentRun = {id, spaceId, actorId: actor.id, actorKind: actor.kind, ...metadata.data, policyVersion: '1', schemaVersion: 1,
+          usage: null, dataCutoff: timestamp,
           status: 'running', createdAt: timestamp, updatedAt: timestamp, seq: 1, events: [{schemaVersion: 1, runId: id, seq: 1, state: 'running', time: timestamp}]};
         state.runs.push(run); return copy(run);
       });

@@ -1,0 +1,140 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "515:38084",
+      "key": "revoke-chat-dialog",
+      "nodes": 46,
+      "hydratedNodes": 46,
+      "hydrationFailures": 0,
+      "visibleNodes": 16,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 15,
+      "childCollectionsRead": 21,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I515:38201;61:67599",
+          "text": "撤销家庭共享？"
+        },
+        {
+          "id": "I515:38201;61:67600",
+          "text": "家人将失去这份内容的访问权限。原件仍保留在你的个人空间。"
+        },
+        {
+          "id": "I515:38201;5446:7598;5446:6665",
+          "text": "撤销共享"
+        },
+        {
+          "id": "I515:38201;5446:7604;5446:6662",
+          "text": "取消"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "515:38217",
+      "key": "revoke-chat-dialog",
+      "nodes": 45,
+      "hydratedNodes": 45,
+      "hydrationFailures": 0,
+      "visibleNodes": 15,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 14,
+      "childCollectionsRead": 20,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I515:38334;61:67599",
+          "text": "撤销家庭共享？"
+        },
+        {
+          "id": "I515:38334;61:67600",
+          "text": "家人将失去这份内容的访问权限。原件仍保留在你的个人空间。"
+        },
+        {
+          "id": "I515:38334;5446:7598;5446:6673",
+          "text": "撤销共享"
+        },
+        {
+          "id": "I515:38334;5446:7604;5446:6675",
+          "text": "取消"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "515:38350",
+      "key": "revoke-chat-dialog",
+      "nodes": 45,
+      "hydratedNodes": 45,
+      "hydrationFailures": 0,
+      "visibleNodes": 15,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 14,
+      "childCollectionsRead": 20,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I515:38467;61:67599",
+          "text": "撤销家庭共享？"
+        },
+        {
+          "id": "I515:38467;61:67600",
+          "text": "家人将失去这份内容的访问权限。原件仍保留在你的个人空间。"
+        },
+        {
+          "id": "I515:38467;5446:7598;5446:6673",
+          "text": "撤销共享"
+        },
+        {
+          "id": "I515:38467;5446:7604;5446:6675",
+          "text": "取消"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

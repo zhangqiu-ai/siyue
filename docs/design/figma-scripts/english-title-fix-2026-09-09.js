@@ -1,0 +1,1 @@
+await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));let changed=[];for(const id of ["463:12279","463:12381","463:13300","463:13436"]){const n=await figma.getNodeByIdAsync(id);for(const s of n.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);n.lineHeight={unit:'PIXELS',value:32};changed.push(n.id);}return{mutatedNodeIds:changed};

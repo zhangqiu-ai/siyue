@@ -1,7 +1,7 @@
 import { useLocale, type MessageKey } from './i18n';
 import { Settings } from './Settings';
 import { useEffect, useRef, useState } from 'react';
-import type { LocalClient, PlanSnapshot } from '@siyue/adapters';
+import type { LocalClient, LocalRequest, PlanSnapshot } from '@siyue/adapters';
 import type { ActionDraft, AgentRun, GoalDraft } from '@siyue/contracts';
 
 const runMessages: Record<AgentRun['status'], MessageKey> = {
@@ -18,6 +18,7 @@ const lines = (text: string) => text.split('\n').map((line) => line.trim()).filt
 function describeError(error: unknown) {
   const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : '';
   const messages: Record<string, MessageKey> = {
+    manual_unknown: 'manualUnknown',
     conflict: 'errorConflict',
     version_conflict: 'errorConflict',
     forbidden: 'errorForbidden',
@@ -50,7 +51,11 @@ function usePlan() {
   const [value, setValue] = useState<GoalDraft>(blank);
   const [projects, setProjects] = useState('');
   const [tasks, setTasks] = useState('');
+  const manualRequest = useRef<{ payload: GoalDraft; request: LocalRequest } | null>(null);
+  const [manualUnknown, setManualUnknown] = useState(false);
   const payload: GoalDraft = { ...value, title: value.title.trim(), projectTitles: lines(projects), taskTitles: lines(tasks) };
+  const validProject = payload.projectTitles.length === 1;
+  const legacyProjects = !!draft && draft.command.kind === 'plan.create' && draft.command.payload.projectTitles.length > 1;
   const savedPayload = draft?.command.kind === 'plan.create' ? draft.command.payload : null;
   const dirty = !!savedPayload && JSON.stringify(payload) !== JSON.stringify({ ...savedPayload, rationale: savedPayload.rationale ?? '' });
   async function perform(label: MessageKey, operation: (api: LocalClient) => Promise<void>) {
@@ -88,23 +93,36 @@ function usePlan() {
     controller.current = null;
   }
   async function saveDraft() {
-    if (!draft) return;
+    if (!draft || !validProject || legacyProjects) return;
     await perform('savingDraft', async (api) => {
       const next = await api.editDraft(draft.id, draft.version, payload);
       setDraft(next); setValue(payload); setNotice('draftSaved');
     });
   }
   async function confirm() {
-    if (!draft || dirty) return;
+    if (!draft || dirty || !validProject || legacyProjects) return;
     await perform('confirming', async (api) => {
       const receipt = await api.confirmDraft(draft.id, draft.version);
       setEditing(false); setDraft(null); setValue(blank); setProjects(''); setTasks(''); setSavedCount(receipt.result.entities.length); setNotice('recordsSaved');
     });
   }
   async function manual() {
+    if (!validProject) return;
     await perform('savingManual', async (api) => {
-      const receipt = await api.saveManual(payload);
-      setEditing(false); setValue(blank); setProjects(''); setTasks(''); setSavedCount(receipt.result.entities.length); setNotice('recordsSaved');
+      manualRequest.current ??= { payload: structuredClone(payload), request: { commandId: crypto.randomUUID(), issuedAt: new Date().toISOString() } };
+      try {
+        const next = await api.createManualDraft(manualRequest.current.payload, manualRequest.current.request);
+        manualRequest.current = null; setManualUnknown(false);
+        loadEditor(next.command.kind === 'plan.create' ? next.command.payload : payload, next);
+        setNotice('manualDraftCreated');
+      } catch (failure) {
+        const code = failure && typeof failure === 'object' && 'code' in failure ? String(failure.code) : '';
+        if (['invalid_input', 'approval_expired', 'command_conflict', 'forbidden'].includes(code)) {
+          manualRequest.current = null; setManualUnknown(false); throw failure;
+        }
+        setManualUnknown(true);
+        throw Object.assign(new Error('manual_unknown'), { code: 'manual_unknown' });
+      }
     });
   }
   async function discard() {
@@ -117,7 +135,7 @@ function usePlan() {
   const update = (kind: 'goal' | 'project' | 'task', id: string, version: number, patch: Parameters<LocalClient['update']>[3]) =>
     perform('savingRecord', async (api) => { await api.update(kind, id, version, patch); setNotice('recordSaved'); });
   return { snapshot, busy, error, notice, savedCount, goal, setGoal, draft, editing, value, setValue, projects, setProjects, tasks, setTasks,
-    payload, dirty, refresh, propose, saveDraft, confirm, manual, discard, update,
+    payload, dirty, manualUnknown, validProject, legacyProjects, refresh, propose, saveDraft, confirm, manual, discard, update,
     cancel: () => controller.current?.abort(),
     startManual: () => loadEditor({ ...blank, title: goal.trim() }, null),
     resume: (item: ActionDraft) => { if (item.command.kind === 'plan.create') loadEditor(item.command.payload, item); },
@@ -167,25 +185,25 @@ export function App() {
       <section className="panel compose" aria-labelledby="compose-title"><h2 id="compose-title">{t('newGoal')}</h2>
         <label htmlFor="goal-input">{t('myGoal')}</label><textarea id="goal-input" rows={3} maxLength={160} value={plan.goal} onChange={(event) => plan.setGoal(event.target.value)} placeholder={t('goalPlaceholder')} />
         <p className="hint">{t('sampleHint')}</p>
-        <div className="actions"><button className="primary" disabled={disabled || !plan.goal.trim() || plan.editing} onClick={() => void plan.propose()}>{t('generate')}</button>
-          <button disabled={disabled || plan.editing} onClick={plan.startManual}>{t('createManual')}</button>
+        <div className="actions"><button className="primary" disabled={disabled || !plan.goal.trim() || plan.editing || plan.manualUnknown} onClick={() => void plan.propose()}>{t('generate')}</button>
+          <button disabled={disabled || plan.editing || plan.manualUnknown} onClick={plan.startManual}>{t('createManual')}</button>
           {plan.busy === 'generate' && <button onClick={plan.cancel}>{t('cancelGeneration')}</button>}</div>
         {!plan.editing && plan.value.title && <button className="text-button" disabled={disabled} onClick={plan.reopen}>{t('resumeEditor')}</button>}
         {plan.editing && <div className="editor"><div className="section-heading"><h3>{t(plan.draft ? 'reviewDraft' : 'manualEditor')}</h3><span className="tag">{t(plan.draft ? 'unsaved' : 'manual')}</span></div>
-          <label htmlFor="plan-title">{t('goalTitle')}</label><input id="plan-title" maxLength={160} value={plan.value.title} disabled={!!plan.busy} onChange={(event) => plan.setValue({ ...plan.value, title: event.target.value })} />
-          <label htmlFor="rationale">{t('rationale')}</label><textarea id="rationale" rows={2} maxLength={1000} disabled={!!plan.busy} value={plan.value.rationale ?? ''} onChange={(event) => plan.setValue({ ...plan.value, rationale: event.target.value })} />
-          <label htmlFor="projects">{t('projectsLabel')}</label><textarea id="projects" rows={3} disabled={!!plan.busy} value={plan.projects} onChange={(event) => plan.setProjects(event.target.value)} />
-          <label htmlFor="tasks">{t('tasksLabel')}</label><textarea id="tasks" rows={5} disabled={!!plan.busy} value={plan.tasks} onChange={(event) => plan.setTasks(event.target.value)} />
-          <p className="hint">{t('creationSummary', { projects: number(plan.payload.projectTitles.length), tasks: number(plan.payload.taskTitles.length) })}{plan.payload.projectTitles.length > 1 ? t('taskAssociation') : ''}</p>
+          <label htmlFor="plan-title">{t('goalTitle')}</label><input id="plan-title" maxLength={160} value={plan.value.title} disabled={!!plan.busy || plan.manualUnknown} onChange={(event) => plan.setValue({ ...plan.value, title: event.target.value })} />
+          <label htmlFor="rationale">{t('rationale')}</label><textarea id="rationale" rows={2} maxLength={1000} disabled={!!plan.busy || plan.manualUnknown} value={plan.value.rationale ?? ''} onChange={(event) => plan.setValue({ ...plan.value, rationale: event.target.value })} />
+          <label htmlFor="projects">{t('projectsLabel')}</label><>{plan.legacyProjects ? <textarea id="projects" rows={3} readOnly value={plan.projects} /> : <input id="projects" maxLength={160} disabled={!!plan.busy || plan.manualUnknown} value={plan.projects} onChange={(event) => plan.setProjects(event.target.value)} />}<p className="hint">{t(plan.legacyProjects ? 'legacyProjects' : 'projectRequired')}</p></>
+          <label htmlFor="tasks">{t('tasksLabel')}</label><textarea id="tasks" rows={5} disabled={!!plan.busy || plan.manualUnknown} value={plan.tasks} onChange={(event) => plan.setTasks(event.target.value)} />
+          <p className="hint">{t('creationSummary', { projects: number(plan.payload.projectTitles.length), tasks: number(plan.payload.taskTitles.length) })}</p>
           {plan.draft ? <><p className="hint">{t(plan.dirty ? 'draftDirty' : 'draftConfirm')}</p><div className="actions">
-            <button disabled={disabled || !plan.dirty || !plan.payload.title} onClick={() => void plan.saveDraft()}>{t('saveDraft')}</button>
-            <button className="primary" disabled={disabled || plan.dirty} onClick={() => void plan.confirm()}>{t('confirmDraft')}</button>
+            <button disabled={disabled || !plan.dirty || !plan.payload.title || !plan.validProject || plan.legacyProjects} onClick={() => void plan.saveDraft()}>{t('saveDraft')}</button>
+            <button className="primary" disabled={disabled || plan.dirty || !plan.validProject || plan.legacyProjects} onClick={() => void plan.confirm()}>{t('confirmDraft')}</button>
             <button disabled={disabled} onClick={() => void plan.discard()}>{t('reject')}</button></div></>
-            : <button className="primary" disabled={disabled || !plan.payload.title} onClick={() => void plan.manual()}>{t('confirmManual')}</button>}
+            : <button className="primary" disabled={disabled || !plan.payload.title || !plan.validProject} onClick={() => void plan.manual()}>{t(plan.manualUnknown ? 'retryManualDraft' : 'confirmManual')}</button>}
           <button className="text-button" disabled={!!plan.busy} onClick={plan.close}>{t('collapseEditor')}</button>
         </div>}
         {pending.length > 0 && <div className="draft-list"><h3>{t('pendingDrafts')}<span className="count">{number(pending.length)}</span></h3><p className="hint">{t('pendingHint')}</p>
-          {pending.map((item) => <button className="draft-item" key={item.id} disabled={disabled || plan.editing} onClick={() => plan.resume(item)}><span>{item.command.kind === 'plan.create' ? item.command.payload.title : t('planDraft')}</span><span className="draft-continue">{t('continue')}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></span></button>)}
+          {pending.map((item) => <button className="draft-item" key={item.id} disabled={disabled || plan.editing || plan.manualUnknown} onClick={() => plan.resume(item)}><span>{item.command.kind === 'plan.create' ? item.command.payload.title : t('planDraft')}</span><span className="draft-continue">{t('continue')}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></span></button>)}
         </div>}
       </section>
       <section className="panel saved" aria-labelledby="saved-title"><div className="section-heading"><h2 id="saved-title">{t('myActions')}</h2><button className="icon-button" aria-label={t('refresh')} title={t('refresh')} disabled={!!plan.busy} onClick={() => void plan.refresh()}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5" /><path d="M6 7a7 7 0 0 1 11-1l3 6M4 12l3 6a7 7 0 0 0 11-1" /></svg></button></div>

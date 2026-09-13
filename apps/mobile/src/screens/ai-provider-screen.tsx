@@ -11,6 +11,7 @@ import { fetchCompatibleModels } from '../settings/model-catalog';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAISettings } from '../settings/ai-settings';
 import { PROVIDERS, findProvider, type ProviderPreset } from '../settings/providers';
+import { aiProviderStatusTone, type AIProviderStatusTone } from '../settings/ai-provider-status';
 import { useTheme, type Theme } from '../ui/theme';
 
 export default function AIProviderScreen() {
@@ -173,8 +174,15 @@ export default function AIProviderScreen() {
   };
   const providerText = (item: ProviderPreset, field: 'name' | 'subtitle') => t(`provider.${item.id}.${field}` as keyof typeof zh);
   const filtered = PROVIDERS.filter(item => `${providerText(item, 'name')} ${providerText(item, 'subtitle')} ${item.name} ${item.id}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const status = (message: string, tone: AIProviderStatusTone) => {
+    const color = tone === 'error' ? theme.color.error : tone === 'success' ? theme.color.accent : theme.color.ink;
+    return <View accessibilityRole={tone === 'error' ? 'alert' : undefined} accessibilityLiveRegion="polite" style={styles.status}>
+      <AppIcon name={tone === 'error' ? 'warning' : tone === 'success' ? 'success' : 'info'} color={color} size={20} />
+      <Text style={[styles.statusText, {color}]}>{message}</Text>
+    </View>;
+  };
   return <SafeAreaView style={styles.page} edges={['bottom']}>
-    <Stack.Screen options={{ headerShown: true, title: t('settings.aiService'), headerBackTitle: t('settings.title'), headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
+    <Stack.Screen options={{ headerShown: true, title: t('settings.aiService'), headerBackTitle: t('common.back'), headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
     <ScrollView contentContainerStyle={styles.content} automaticallyAdjustKeyboardInsets keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
       <Pressable accessibilityRole="button" accessibilityLabel={t('ai.selectProviderLabel')} testID="ai-provider-picker" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { setQuery(''); setPickerOpen(true); }} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
         <Text style={[styles.rowTitle, styles.flex]}>{provider ? providerText(provider, 'name') : t('ai.selectProvider')}</Text>
@@ -209,7 +217,7 @@ export default function AIProviderScreen() {
         </View>
         <Text style={styles.footnote}>{t('ai.privacy', { host: baseUrl ? (() => { try { return new URL(baseUrl).hostname; } catch { return t('ai.enteredAddress'); } })() : t('ai.enteredAddress') })}</Text>
       </> : <Text style={styles.footnote}>{t('ai.compatible')}</Text>}
-      {settings.storageError ? <Text accessibilityRole="alert" style={styles.status}>{translateError(settings.storageError)}</Text> : null}
+      {settings.storageError ? status(translateError(settings.storageError), 'error') : null}
       {!settings.ready ? <Text style={styles.note}>{t('ai.loading')}</Text> : null}
       {provider ? <View style={styles.actions}>
         {button(busy === 'save' ? t('ai.saving') : t('common.save'), () => { void save(); }, { primary: true, disabled: disabled || !changed || !baseUrl.trim() || !model.trim(), testID: 'ai-save' })}
@@ -218,14 +226,14 @@ export default function AIProviderScreen() {
         <Text style={styles.footnote}>{changed && settings.config ? t('ai.saveFirst') : t('ai.testWarning')}</Text>
       </View> : null}
       {busy === 'models' ? button(t('ai.cancelFetch'), () => { cancelModels(); setNotice('ai.cancelledModels'); }, { testID: 'ai-model-cancel' }) : null}
-      {notice ? <Text accessibilityLiveRegion="polite" style={styles.status}>{Object.hasOwn(zh, notice) ? t(notice as keyof typeof zh) : translateError(notice)}</Text> : null}
+      {notice ? status(Object.hasOwn(zh, notice) ? t(notice as keyof typeof zh) : translateError(notice), aiProviderStatusTone(notice)) : null}
       {(settings.config || settings.hasKey || settings.storageError) ? button(busy === 'remove' ? t('ai.removing') : t('ai.removeConfig'), () => Alert.alert(t('ai.removeTitle'), t('ai.removeBody'), [{ text: t('common.cancel'), style: 'cancel' }, { text: t('common.remove'), style: 'destructive', onPress: () => { void remove(); } }]), { disabled, testID: 'ai-remove' }) : null}
     </ScrollView>
     <Modal visible={modelPickerOpen} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setModelPickerOpen(false)}>
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
         <View style={styles.modalContent}>
         <View style={styles.modalHeader}><Text style={styles.heading}>{t('ai.model')}</Text><Pressable accessibilityRole="button" accessibilityLabel={t('ai.closeModels')} onPress={() => setModelPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
-        <TextInput accessibilityLabel={t('ai.searchModels')} style={styles.search} value={modelQuery} onChangeText={setModelQuery} placeholder={t('ai.searchModels')} placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
+        <TextInput selectionColor={theme.color.accent} accessibilityLabel={t('ai.searchModels')} style={styles.search} value={modelQuery} onChangeText={setModelQuery} placeholder={t('ai.searchModels')} placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
           {models.filter(item => item.toLowerCase().includes(modelQuery.trim().toLowerCase())).map(item => <Pressable key={item} accessibilityRole="button" accessibilityState={{ selected: item === model }} onPress={() => { setModel(item); setModelPickerOpen(false); setNotice(''); }} style={({ pressed }) => [styles.providerRow, pressed && styles.pressed]}>
             <Text style={[styles.rowTitle, styles.flex]}>{item}</Text>{item === model ? <AppIcon name="check" /> : null}
@@ -239,7 +247,7 @@ export default function AIProviderScreen() {
       <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
         <View style={styles.modalContent}>
         <View style={styles.modalHeader}><Text style={styles.heading}>{t('ai.providers')}</Text><Pressable accessibilityRole="button" accessibilityLabel={t('ai.closeProviders')} onPress={() => setPickerOpen(false)} style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}><AppIcon name="close" /></Pressable></View>
-        <TextInput accessibilityLabel={t('ai.searchProviders')} testID="ai-provider-search" style={styles.search} value={query} onChangeText={setQuery} placeholder={t('ai.searchProviders')} placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
+        <TextInput selectionColor={theme.color.accent} accessibilityLabel={t('ai.searchProviders')} testID="ai-provider-search" style={styles.search} value={query} onChangeText={setQuery} placeholder={t('ai.searchProviders')} placeholderTextColor={theme.color.muted} autoCorrect={false} clearButtonMode="while-editing" />
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.providerList}>
           {filtered.map(item => <Pressable key={item.id} accessibilityRole="button" accessibilityState={{ selected: item.id === providerId }} onPress={() => selectProvider(item)} style={({ pressed }) => [styles.providerRow, pressed && styles.pressed]}>
             <View style={styles.flex}><Text style={styles.rowTitle}>{providerText(item, 'name')}</Text><Text style={styles.note}>{providerText(item, 'subtitle')}</Text></View><AppIcon name={item.id === providerId ? 'check' : 'chevronRight'} size={20} color={theme.color.muted} />
@@ -276,7 +284,8 @@ const makeStyles = (theme: Theme) => StyleSheet.create({
   pressed: { backgroundColor: theme.color.subtle },
   primaryPressed: { backgroundColor: theme.color.accentPressed },
   dimmed: { opacity: 0.4 },
-  status: { color: theme.color.ink, fontSize: 14, lineHeight: 22, padding: 12, marginBottom: 12, borderRadius: 12, backgroundColor: theme.color.subtle },
+  status: { padding: 12, marginBottom: 12, borderRadius: 12, backgroundColor: theme.color.subtle, flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
+  statusText: { flex: 1, fontSize: 14, lineHeight: 22 },
   modalContent: { flex: 1, width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center' },
   modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 },
   heading: { color: theme.color.ink, fontSize: 24, lineHeight: 36, flexShrink: 1, fontWeight: '600' },

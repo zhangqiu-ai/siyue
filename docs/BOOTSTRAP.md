@@ -274,3 +274,11 @@ xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
 ## 2026-09-07 · 当前 UI 规则审查
 
 显式声明已有传递依赖`expo-symbols@~57.0.2`，按SDK57安装并保持锁文件，iOS已有Pod版本无需更换。移动类型/61项现有测试/双端Hermes导出、桌面类型/构建/真实Electron闭环通过；本轮原生设备矩阵尚未齐，运行时直接更改字号存在待定位裁切。详细命令、原生构建结果和准确限制见[UI审查证据](evidence/ui-audit-2026-09-07.md)。不据此升级业务工作包或发布状态。
+
+### 2026-09-09 Sage 验收包版本同步
+
+现有生成的 iOS Info.plist 与旧安装包仍为0.1.0，根/Expo清单已是0.0.1。定点同步生成文件后，正常 Siyue Debug target 使用已有模拟器 entitlement 与 clang probe 构建通过，产物原生/Expo版本均为0.0.1；安装到验收iPad、设置显示及横屏复测通过。未清洁prebuild、未安装用户iPhone、未发布。准确命令、日志、旧包差异和开发服务恢复见 [Sage iPad 运行证据](evidence/sage-theme-2026-09-09/ipad-runtime.md)。
+
+## 2026-09-13 · 自动化 E2E 入口
+
+`corepack pnpm test:e2e` 构建共享包与桌面 renderer 后执行新增 Playwright 测试；复用现有依赖，不需要模拟器或 Computer Use。按场景筛选、隔离数据与移动覆盖边界见 [测试策略](testing.md)，本次运行见 [证据](evidence/playwright-first-2026-09-13.md)。

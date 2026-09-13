@@ -1,0 +1,875 @@
+{
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "pageId": "210:7",
+  "status": "in_progress",
+  "screens": [
+    {
+      "k": "adopt",
+      "title": "Bring your local content",
+      "sub": "Choose what to sync to alex@example.com.",
+      "rows": [
+        [
+          "Conversations",
+          "3 local conversations",
+          "Selected"
+        ],
+        [
+          "Goals & tasks",
+          "2 goals · 5 tasks",
+          "Selected"
+        ],
+        [
+          "Personal API keys",
+          "Stay on this device",
+          "Not uploaded"
+        ]
+      ],
+      "note": "Your local originals stay here. Joining a family does not share this content.",
+      "actions": [
+        "Sync selected content",
+        "Keep on this device for now"
+      ]
+    },
+    {
+      "k": "create-family",
+      "title": "Create a family space",
+      "sub": "Do things together. Keep your own space.",
+      "inputs": [
+        [
+          "Family name",
+          "周末家庭"
+        ]
+      ],
+      "note": "You will be the family owner. Members only see content you explicitly share.",
+      "actions": [
+        "Create family",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "family-empty",
+      "title": "周末家庭",
+      "sub": "Your family space is ready.",
+      "rows": [
+        [
+          "Invite family",
+          "They join after accepting",
+          ""
+        ],
+        [
+          "Add a child profile",
+          "A guardian creates it and connects a device",
+          ""
+        ],
+        [
+          "Share your first goal",
+          "Choose a goal and set access",
+          ""
+        ]
+      ],
+      "note": "Just you for now. Private chats and goals are not shared automatically.",
+      "actions": [
+        "Invite family",
+        "Back to my space"
+      ]
+    },
+    {
+      "k": "members",
+      "title": "Family members",
+      "sub": "周末家庭 · 3 members",
+      "rows": [
+        [
+          "Alex · You",
+          "Family owner",
+          "Manage"
+        ],
+        [
+          "Sam",
+          "Member",
+          "View"
+        ],
+        [
+          "小禾",
+          "Managed child · Guardian: Alex",
+          "Devices"
+        ],
+        [
+          "Pending invitations",
+          "1 invitation",
+          "View"
+        ]
+      ],
+      "actions": [
+        "Invite family",
+        "Add a child profile"
+      ]
+    },
+    {
+      "k": "invite",
+      "title": "Invite family",
+      "sub": "Join 周末家庭 after accepting.",
+      "inputs": [
+        [
+          "Email address",
+          "sam@example.com"
+        ]
+      ],
+      "rows": [
+        [
+          "Role",
+          "Member",
+          ""
+        ],
+        [
+          "Private content",
+          "Not shared automatically",
+          ""
+        ]
+      ],
+      "note": "Only the specified email can use this invitation. You can revoke it before they accept.",
+      "actions": [
+        "Create invitation",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "accept",
+      "title": "Join 周末家庭",
+      "sub": "Alex invited you to this family space.",
+      "rows": [
+        [
+          "Current account",
+          "sam@example.com",
+          "Switch"
+        ],
+        [
+          "Member",
+          "View or edit as each item allows",
+          ""
+        ],
+        [
+          "Your space",
+          "Your private content stays yours",
+          ""
+        ]
+      ],
+      "actions": [
+        "Accept invitation",
+        "Not now"
+      ]
+    },
+    {
+      "k": "member",
+      "title": "Sam",
+      "sub": "Member · 周末家庭",
+      "rows": [
+        [
+          "Family role",
+          "Member",
+          ""
+        ],
+        [
+          "Content access",
+          "Granted per item, separate from role",
+          ""
+        ]
+      ],
+      "note": "Removal stops new shared access. Offline devices lock when notified or when access expires.",
+      "actions": [
+        "Remove member",
+        "Back to members"
+      ]
+    },
+    {
+      "k": "child",
+      "title": "Add a child profile",
+      "sub": "Become their guardian and manage device access.",
+      "inputs": [
+        [
+          "Child’s name",
+          "小禾"
+        ]
+      ],
+      "rows": [
+        [
+          "Separate profile",
+          "No email needed",
+          ""
+        ],
+        [
+          "Guardian",
+          "Alex · You",
+          ""
+        ]
+      ],
+      "note": "Family admins are not automatically guardians. Pairing does not give access to all private child content.",
+      "actions": [
+        "Create & connect device",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "pair-child",
+      "title": "Connect with a guardian",
+      "sub": "Use the guardian’s signed-in device.",
+      "rows": [
+        [
+          "Pairing code",
+          "482 196",
+          ""
+        ],
+        [
+          "This device",
+          "小禾的 iPad",
+          ""
+        ],
+        [
+          "Waiting for confirmation",
+          "Ask the guardian to check this device and profile",
+          ""
+        ]
+      ],
+      "note": "Get a new code if it expires. A code alone cannot grant the guardian’s session.",
+      "actions": [
+        "Get a new code",
+        "Back to sign in"
+      ]
+    },
+    {
+      "k": "pair-guardian",
+      "title": "Connect child’s device",
+      "sub": "Check the details so 小禾 can sign in.",
+      "inputs": [
+        [
+          "Pairing code",
+          "482 196"
+        ]
+      ],
+      "rows": [
+        [
+          "Child profile",
+          "小禾",
+          ""
+        ],
+        [
+          "Device requesting access",
+          "iPad · Current pairing request",
+          ""
+        ]
+      ],
+      "note": "This creates a separate child session. Your account credentials stay private.",
+      "actions": [
+        "Confirm connection",
+        "Decline request"
+      ]
+    },
+    {
+      "k": "child-devices",
+      "title": "小禾’s devices",
+      "sub": "Guardian: Alex · Device access only",
+      "rows": [
+        [
+          "小禾的 iPad",
+          "Connected · Last used today",
+          "View"
+        ],
+        [
+          "Connect a new device",
+          "Start a new pairing request",
+          ""
+        ]
+      ],
+      "note": "Revoking a device stops session renewal and sync. It must pair again to reconnect.",
+      "actions": [
+        "Revoke this device",
+        "Reconnect device"
+      ]
+    },
+    {
+      "k": "share",
+      "title": "Share with family",
+      "sub": "提高工作交流能力",
+      "rows": [
+        [
+          "Share with",
+          "周末家庭",
+          "Choose"
+        ],
+        [
+          "Access",
+          "Can edit",
+          "Change"
+        ],
+        [
+          "Content included",
+          "This goal and the previewed tasks",
+          "Preview"
+        ]
+      ],
+      "note": "Everyone works on the same content. Changes sync to authorized members. You keep ownership.",
+      "actions": [
+        "Confirm sharing",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "share-chat",
+      "title": "Share this conversation",
+      "sub": "英语工作交流练习",
+      "rows": [
+        [
+          "Share with",
+          "周末家庭",
+          ""
+        ],
+        [
+          "Access",
+          "Can view",
+          ""
+        ],
+        [
+          "Content included",
+          "The entire chat, including future messages",
+          ""
+        ]
+      ],
+      "note": "A shared label stays visible. Other chats and personal API keys stay private.",
+      "actions": [
+        "Share entire conversation",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "share-manage",
+      "title": "Manage sharing",
+      "sub": "提高工作交流能力 · Owned by you",
+      "rows": [
+        [
+          "周末家庭",
+          "Can edit · Shared",
+          "Change"
+        ],
+        [
+          "Original location",
+          "Alex’s personal space",
+          ""
+        ]
+      ],
+      "note": "Revoking sharing removes family access. Your original stays in your space.",
+      "actions": [
+        "Revoke sharing",
+        "Back to goal"
+      ]
+    },
+    {
+      "k": "sync",
+      "title": "Sync center",
+      "sub": "Saved locally · 2 changes awaiting confirmation",
+      "rows": [
+        [
+          "练习计划",
+          "Waiting to upload · Saved locally",
+          "Retry"
+        ],
+        [
+          "每周一起阅读",
+          "Two versions need review",
+          "Compare"
+        ],
+        [
+          "Offline family access",
+          "Valid · You can edit until it expires",
+          "View"
+        ]
+      ],
+      "note": "On reconnect, we check access before uploading pending changes.",
+      "actions": [
+        "Reconnect",
+        "Back to space"
+      ]
+    },
+    {
+      "k": "conflict",
+      "title": "Which version to keep?",
+      "sub": "每周一起阅读 · Same task",
+      "rows": [
+        [
+          "Your change",
+          "每天阅读 15 分钟",
+          "Select"
+        ],
+        [
+          "Cloud change · Sam",
+          "每天阅读 20 分钟",
+          "Select"
+        ],
+        [
+          "Merge yourself",
+          "Edit using both versions",
+          ""
+        ]
+      ],
+      "note": "Both versions stay until you confirm. Your choice still needs to sync and receive cloud confirmation.",
+      "actions": [
+        "Keep my version",
+        "Use cloud version"
+      ]
+    },
+    {
+      "k": "expired",
+      "title": "Connect to continue",
+      "sub": "Offline family access has expired.",
+      "rows": [
+        [
+          "Content locked",
+          "Connect to verify access and continue",
+          ""
+        ],
+        [
+          "Pending input",
+          "Saved, not yet submitted",
+          ""
+        ]
+      ],
+      "note": "Local edits cannot extend access. If verification fails, you can recover your own pending input.",
+      "actions": [
+        "Verify access online",
+        "Back to my space"
+      ]
+    },
+    {
+      "k": "revoked",
+      "title": "Shared access ended",
+      "sub": "This content is no longer shared with you.",
+      "rows": [
+        [
+          "Shared content",
+          "Locked · No viewing or editing",
+          ""
+        ],
+        [
+          "Your pending input",
+          "Recover it as a private draft",
+          "View"
+        ]
+      ],
+      "note": "Recovery includes only your own pending input, not the shared content you lost access to.",
+      "actions": [
+        "View my pending input",
+        "Back to my space"
+      ]
+    },
+    {
+      "k": "devices",
+      "title": "Account devices",
+      "sub": "alex@example.com",
+      "rows": [
+        [
+          "This iPhone",
+          "Current device · Today",
+          ""
+        ],
+        [
+          "书房 iPad",
+          "Last used yesterday",
+          "Revoke"
+        ],
+        [
+          "桌面电脑",
+          "Last used Sep 7",
+          "Revoke"
+        ]
+      ],
+      "note": "Revoking a device stops future session renewal and sync access.",
+      "actions": [
+        "Back to settings"
+      ]
+    },
+    {
+      "k": "logout",
+      "title": "Review changes before signing out",
+      "sub": "2 changes are saved only on this device.",
+      "rows": [
+        [
+          "练习计划",
+          "Waiting to upload",
+          ""
+        ],
+        [
+          "阅读任务",
+          "Conflict needs review",
+          ""
+        ]
+      ],
+      "note": "After sign-out, this account’s content stays isolated. Another account cannot read or upload it.",
+      "actions": [
+        "Review sync",
+        "Cancel sign-out"
+      ]
+    },
+    {
+      "k": "transfer",
+      "title": "Transfer family ownership",
+      "sub": "周末家庭 · Choose a new owner",
+      "rows": [
+        [
+          "Sam",
+          "Adult member",
+          "Select"
+        ],
+        [
+          "小禾",
+          "Child profiles cannot manage a family",
+          "Unavailable"
+        ]
+      ],
+      "note": "After transfer, only the new owner can transfer ownership or dissolve this family.",
+      "actions": [
+        "Transfer to Sam",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "dissolve",
+      "title": "Dissolve 周末家庭",
+      "sub": "This ends shared access within the family.",
+      "rows": [
+        [
+          "Shared originals",
+          "Stay in their original spaces",
+          ""
+        ],
+        [
+          "Membership",
+          "Family access will end",
+          ""
+        ]
+      ],
+      "note": "Other members’ private content stays intact. Offline copies remain subject to the access expiry limit.",
+      "actions": [
+        "Dissolve family",
+        "Keep family"
+      ]
+    },
+    {
+      "k": "data",
+      "title": "Data & account",
+      "sub": "View and control your content.",
+      "rows": [
+        [
+          "Local content",
+          "Adoption and sync scope",
+          "View"
+        ],
+        [
+          "Sync status",
+          "Review pending changes",
+          ""
+        ],
+        [
+          "Delete account",
+          "Review impact and requirements first",
+          ""
+        ]
+      ],
+      "actions": [
+        "Back to settings"
+      ]
+    },
+    {
+      "k": "delete",
+      "title": "Before deleting your account",
+      "sub": "You are still the only owner of 周末家庭.",
+      "rows": [
+        [
+          "Resolve family ownership",
+          "Transfer ownership or dissolve the family",
+          "Open"
+        ],
+        [
+          "Shared originals",
+          "Resolve sharing before deletion",
+          ""
+        ],
+        [
+          "Private content",
+          "Review what you want to keep",
+          ""
+        ]
+      ],
+      "note": "You cannot delete your account while you are the sole family owner. Resolve ownership first.",
+      "actions": [
+        "Manage family ownership",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "recover",
+      "title": "Recover your input",
+      "sub": "Only your own unsubmitted text appears here.",
+      "inputs": [
+        [
+          "Your pending input",
+          "每天阅读 15 分钟"
+        ]
+      ],
+      "note": "Save it as your private draft. This does not restore the shared record or access.",
+      "actions": [
+        "Save as private draft",
+        "Not now"
+      ]
+    },
+    {
+      "k": "edit-task",
+      "title": "Edit task",
+      "sub": "提高工作交流能力",
+      "inputs": [
+        [
+          "Task name",
+          "练习三分钟自我介绍"
+        ],
+        [
+          "Practice tip",
+          "用三句话介绍自己和最近的工作"
+        ]
+      ],
+      "actions": [
+        "Save changes",
+        "Cancel"
+      ]
+    },
+    {
+      "k": "readonly",
+      "title": "每周一起阅读",
+      "sub": "周末家庭 · View only",
+      "rows": [
+        [
+          "阅读一篇短文",
+          "Today · Completed",
+          ""
+        ],
+        [
+          "记录一句收获",
+          "To do",
+          ""
+        ],
+        [
+          "讨论本周阅读",
+          "Weekend",
+          ""
+        ]
+      ],
+      "note": "You have view access. Contact the original owner if you need to edit.",
+      "actions": [
+        "Back to family"
+      ]
+    },
+    {
+      "k": "invitations",
+      "title": "Pending invitations",
+      "sub": "周末家庭",
+      "rows": [
+        [
+          "sam@example.com",
+          "Member · Awaiting acceptance",
+          "View"
+        ]
+      ],
+      "note": "They become a member only after accepting. A revoked invitation cannot be used.",
+      "actions": [
+        "Copy invitation link",
+        "Revoke invitation"
+      ]
+    },
+    {
+      "k": "invite-invalid",
+      "title": "Invitation unavailable",
+      "sub": "This invitation expired or was revoked.",
+      "rows": [
+        [
+          "You have not joined",
+          "Your personal space is unaffected",
+          ""
+        ]
+      ],
+      "note": "Ask the sender for a new invitation. The old link cannot restore access.",
+      "actions": [
+        "Back to my space"
+      ]
+    },
+    {
+      "k": "home-empty",
+      "title": "Your space is ready",
+      "sub": "Start with a goal you want to achieve.",
+      "rows": [
+        [
+          "Create your first goal",
+          "Turn an idea into an editable draft",
+          ""
+        ],
+        [
+          "Start a conversation",
+          "Discuss, refine, then confirm",
+          ""
+        ],
+        [
+          "Family space",
+          "Work toward goals with your family",
+          ""
+        ]
+      ],
+      "actions": [
+        "Talk about my goal"
+      ]
+    },
+    {
+      "k": "chat",
+      "title": "英语工作交流练习",
+      "sub": "Only you · Saved locally",
+      "rows": [
+        [
+          "You",
+          "我想提高英语工作交流能力。",
+          ""
+        ],
+        [
+          "Siyue",
+          "可以从自我介绍、工作进展和会议练习开始。",
+          ""
+        ],
+        [
+          "Practice plan draft",
+          "3 tasks · Edit before you confirm",
+          "View"
+        ]
+      ],
+      "actions": [
+        "Review & edit draft",
+        "Keep writing"
+      ]
+    },
+    {
+      "k": "draft",
+      "title": "Review your practice plan",
+      "sub": "AI draft · Not yet saved",
+      "inputs": [
+        [
+          "Goal name",
+          "提高工作交流能力"
+        ]
+      ],
+      "rows": [
+        [
+          "练习三分钟自我介绍",
+          "每天约 5 分钟",
+          "Edit"
+        ],
+        [
+          "复述一次工作进展",
+          "练习清楚地表达进度",
+          "Edit"
+        ],
+        [
+          "模拟一次英文会议",
+          "练习提问和回应",
+          "Edit"
+        ]
+      ],
+      "actions": [
+        "Confirm & save plan",
+        "Keep editing"
+      ]
+    },
+    {
+      "k": "saved",
+      "title": "Plan saved",
+      "sub": "In my space · Confirmed by cloud",
+      "rows": [
+        [
+          "提高工作交流能力",
+          "3 tasks · Saved as a goal",
+          "View"
+        ],
+        [
+          "Next step",
+          "Start with a three-minute introduction",
+          ""
+        ]
+      ],
+      "actions": [
+        "Start the first exercise",
+        "Back to my space"
+      ]
+    },
+    {
+      "k": "chat-shared",
+      "title": "讨论本周阅读",
+      "sub": "周末家庭 · Future messages are shared",
+      "rows": [
+        [
+          "Sam",
+          "这周读一篇短文，周末一起聊聊。",
+          ""
+        ],
+        [
+          "You",
+          "我来安排，每天留 15 分钟阅读。",
+          ""
+        ],
+        [
+          "Shared conversation",
+          "Authorized members can see future messages",
+          "Access"
+        ]
+      ],
+      "note": "Sharing with family does not authorize sharing with external AI. Separate permission is required.",
+      "actions": [
+        "Write a message",
+        "Manage sharing"
+      ]
+    },
+    {
+      "k": "unsaved",
+      "title": "Keep your changes?",
+      "sub": "You are editing a task. Switch spaces now?",
+      "rows": [
+        [
+          "Unsaved task",
+          "练习三分钟自我介绍",
+          ""
+        ],
+        [
+          "Current space",
+          "My space",
+          ""
+        ]
+      ],
+      "note": "Keep a draft before switching, or continue editing.",
+      "actions": [
+        "Keep draft & switch",
+        "Keep editing"
+      ]
+    },
+    {
+      "k": "sync-result",
+      "title": "Sync confirmed",
+      "sub": "The cloud accepted your local changes.",
+      "rows": [
+        [
+          "练习计划",
+          "New version confirmed",
+          ""
+        ],
+        [
+          "每周一起阅读",
+          "Conflict resolved · Input kept",
+          ""
+        ]
+      ],
+      "actions": [
+        "Back to family"
+      ]
+    }
+  ],
+  "locale": "en"
+}

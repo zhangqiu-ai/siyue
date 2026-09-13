@@ -1,0 +1,107 @@
+{
+  "time": "2026-09-08T18:49:08.231Z",
+  "browser": "151.0.7922.34",
+  "results": [
+    {
+      "name": "邮箱与验证码校验",
+      "status": "passed"
+    },
+    {
+      "name": "草稿隔离、确认保存与任务进度",
+      "status": "passed"
+    },
+    {
+      "name": "成员移除可取消且结果一致",
+      "status": "passed"
+    },
+    {
+      "name": "转移所有权不改变监护人",
+      "status": "passed"
+    },
+    {
+      "name": "儿童设备撤销需要重新配对",
+      "status": "passed"
+    },
+    {
+      "name": "共享会话只读与编辑权限",
+      "status": "passed"
+    },
+    {
+      "name": "重连保留冲突并采用所选版本",
+      "status": "passed"
+    },
+    {
+      "name": "恢复原输入为私人草稿",
+      "status": "passed"
+    },
+    {
+      "name": "切空间保护未发送输入",
+      "status": "passed"
+    },
+    {
+      "name": "切换语言主题保留表单输入",
+      "status": "passed"
+    },
+    {
+      "name": "接受邀请使用受邀账号且保留所有者",
+      "status": "passed"
+    },
+    {
+      "name": "解散家庭移除产品导航入口",
+      "status": "passed"
+    },
+    {
+      "name": "退出后不保留已登录导航",
+      "status": "passed"
+    },
+    {
+      "name": "正式任务编辑独立于草稿",
+      "status": "passed"
+    },
+    {
+      "name": "归档后可恢复目标",
+      "status": "passed"
+    },
+    {
+      "name": "账号设备撤销独立于儿童配对",
+      "status": "passed"
+    },
+    {
+      "name": "共享与撤销保持同一个会话",
+      "status": "passed"
+    },
+    {
+      "name": "新家庭不带入旧成员或共享记录",
+      "status": "passed"
+    },
+    {
+      "name": "儿童顶部入口不能进入成人管理",
+      "status": "passed"
+    },
+    {
+      "name": "目标权限不改变对话权限",
+      "status": "passed"
+    },
+    {
+      "name": "撤销对话移除家庭投影并阻止重新查看",
+      "status": "passed"
+    },
+    {
+      "name": "受邀成员遵循自己的共享身份和成员列表",
+      "status": "passed"
+    },
+    {
+      "name": "空家庭不创建无接收者共享",
+      "status": "passed"
+    },
+    {
+      "name": "共享按接收者与原件所有者显示操作",
+      "status": "passed"
+    },
+    {
+      "name": "新家庭共享目标跨页面遵循查看编辑和所有者权限",
+      "status": "passed"
+    }
+  ],
+  "pageErrors": []
+}

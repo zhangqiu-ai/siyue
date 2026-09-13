@@ -1,0 +1,45 @@
+{
+  "pairTitles": [
+    {
+      "id": "479:21668",
+      "width": 468,
+      "x": 52,
+      "parentWidth": 520,
+      "inside": true
+    },
+    {
+      "id": "479:22372",
+      "width": 468,
+      "x": 52,
+      "parentWidth": 520,
+      "inside": true
+    },
+    {
+      "id": "479:23076",
+      "width": 468,
+      "x": 52,
+      "parentWidth": 520,
+      "inside": true
+    },
+    {
+      "id": "479:23312",
+      "width": 468,
+      "x": 52,
+      "parentWidth": 520,
+      "inside": true
+    }
+  ],
+  "screenshotsReviewed": [
+    "ipad-shared-chat-en-dark.png",
+    "ipad-pair-refresh-en-light.png",
+    "ipad-child-en-dark.png",
+    "ipad-home-en-dark.png"
+  ],
+  "screenshotDirectory": "account-family-preview/evidence/figma",
+  "chatCheck": {
+    "root": "479:24435",
+    "Sam": "MIN (left)",
+    "You": "MAX (right)"
+  },
+  "note": "Actual node inspection and downloaded Figma screenshot review. Not native runtime evidence."
+}

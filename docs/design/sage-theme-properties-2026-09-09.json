@@ -1,0 +1,54 @@
+{
+  "createdNodeIds": [
+    "562:65",
+    "I562:65;5:108581",
+    "562:67",
+    "I562:67;550:46",
+    "I562:67;550:47",
+    "I562:67;550:48",
+    "I562:67;550:49",
+    "I562:67;550:50",
+    "I562:67;550:51",
+    "I562:67;550:52",
+    "I562:67;550:55",
+    "I562:67;550:56"
+  ],
+  "mutatedNodeIds": [
+    "550:57",
+    "550:46",
+    "550:47",
+    "550:50",
+    "550:52",
+    "548:33775"
+  ],
+  "properties": {
+    "Eyebrow": "Eyebrow#562:0",
+    "Title": "Title#562:1",
+    "Progress label": "Progress label#562:2",
+    "Action label": "Action label#562:3"
+  },
+  "buttonProperties": {
+    "Label#548:0": {
+      "type": "TEXT",
+      "value": "Continue"
+    }
+  },
+  "cardProperties": {
+    "Progress label#562:2": {
+      "type": "TEXT",
+      "value": "2 / 5 complete · About 5 min"
+    },
+    "Action label#562:3": {
+      "type": "TEXT",
+      "value": "Practice a short introduction"
+    },
+    "Title#562:1": {
+      "type": "TEXT",
+      "value": "Communicate with confidence"
+    },
+    "Eyebrow#562:0": {
+      "type": "TEXT",
+      "value": "Continue your goal"
+    }
+  }
+}

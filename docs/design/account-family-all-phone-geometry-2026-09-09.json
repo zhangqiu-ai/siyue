@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"checked\":384,\"texts\":5041,\"fonts\":[\"Noto Sans SC\"],\"issues\":[{\"key\":\"child-revoked\",\"id\":\"463:12271\",\"variant\":\"en-light\",\"text\":\"463:12279\",\"error\":\"text clipping\"},{\"key\":\"child-revoked\",\"id\":\"463:12373\",\"variant\":\"en-dark\",\"text\":\"463:12381\",\"error\":\"text clipping\"},{\"key\":\"pair-refresh\",\"id\":\"463:13292\",\"variant\":\"en-light\",\"text\":\"463:13300\",\"error\":\"text clipping\"},{\"key\":\"pair-refresh\",\"id\":\"463:13428\",\"variant\":\"en-dark\",\"text\":\"463:13436\",\"error\":\"text clipping\"}]}"
+    }
+  ],
+  "isError": false
+}

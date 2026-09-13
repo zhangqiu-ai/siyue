@@ -116,7 +116,7 @@ const makeStyles = (theme: Theme) => StyleSheet.create({
   userBubble: { maxWidth: '88%', backgroundColor: theme.color.subtle },
   messageText: { color: theme.color.ink, fontSize: 16, lineHeight: 26 },
   note: { color: theme.color.muted, fontSize: 13, lineHeight: 20 },
-  error: { color: theme.color.accent, fontSize: 14, marginTop: 8 },
+  error: { color: theme.color.error, fontSize: 14, marginTop: 8 },
   retry: { width: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' },
   composerArea: { width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center', paddingHorizontal: 20, paddingTop: 8, paddingBottom: 12 },
   composer: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: theme.color.surface, borderWidth: 1, borderColor: theme.color.controlBorder, borderRadius: theme.radius.card, padding: 8 },

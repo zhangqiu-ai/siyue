@@ -1,55 +1,34 @@
 # 思玥 · Siyue
 
-当前开发版本：**0.0.1（未发布）**。功能归属见 [版本计划](planning/releases/0.0.1.md)，流程见 [版本规则](planning/releases/README.md)，实际发布变化见 [CHANGELOG](CHANGELOG.md)。
-
-开发流程入口：[OpenSpec 规格与变更规则](openspec/README.md)。新功能先写规格，简单修改可说明豁免；验收后同步现行规格。
-
 AI-first 个人成长应用 / An AI-first personal growth app.
 
-> 立项基线 v0.1 · 2026-09-05；验证更新于 2026-09-06。当前已实现 M1 本地 Mock 目标闭环：macOS Electron 与 iOS 模拟器闭环、重启持久化及 iOS/Android JavaScript 打包通过；iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 应用与Runner签名验证通过，iPhone故障/后台及Android真机仍待验收；Android SDK 与专用模拟器已就绪，独立 UI 宿主已构建、安装并核验插桩目标；主应用重试构建、APK 签名校验与安装已通过；Android 模拟器两条独立 UI 用例分别通过（各 1 项、0 失败，336.319 秒与 325.679 秒），覆盖草稿闭环及真实断网下手动改名、完成、归档与重启保留。
+思玥帮助用户将目标转化为行动，并通过正式记录积累成长证据。语言学习、目标与项目管理、个人资产管理是长期核心域；当前交付范围以维护者已批准的版本计划为准。
 
-iOS与Android独立QA应用均复用正常原生客户端工厂，真实SQLite提交后丢响应/回执暂不可读、终止进程后对账分别通过（iOS 43.191秒、Android 12.053秒，各1项0失败）；恢复execute=0，同commandId/issuedAt/对象ID/完整快照hash不变，pending只在原回执验证后清除。每个平台两条正常用户UI用例与一条QA用例分别执行，不是同次3/3；不代表正常用户UI错误交互、真机、物理断电、生成取消/后台中断或升级通过，也不自动恢复表单。
+当前开发版本由 [package.json](package.json) 的 `version` 指定，对应 [0.0.1 计划](planning/releases/0.0.1.md)；发布状态与工件见该计划，已验收变化见 [CHANGELOG](CHANGELOG.md)。
 
-思玥帮助用户把目标转化为行动，在语言练习、项目推进和个人资产记录中积累真实证据，再由 AI 辅助理解、规划与复盘。个人成长操作系统是长期愿景，不意味着第一版覆盖全部生活领域。
+## 开始使用与开发
 
-## 已确认的产品约束
+- [开发入口](START_HERE.md)：确认本轮范围、选择所需文档与验证路径。
+- [工程运行](docs/BOOTSTRAP.md)：环境、安装与运行记录；实际脚本以各包 `package.json` 为准。
+- [协作规则](AGENTS.md)：授权、代码与数据保护、按需阅读和完成标准。
 
-| 项目 | 约束 |
+## 按任务查阅
+
+| 需要了解 | 文档 |
 |---|---|
-| 品牌 | 中文「思玥」，英文「Siyue」；工程标识建议 `siyue` |
-| 界面语言 | 中文、英文必须同时支持；这是交付要求，不代表现有界面已完成国际化 |
-| 定位 | AI-first 个人成长；语言学习、目标与项目管理、个人资产管理是长期核心域 |
-| 平台 | iPhone 与 iPad 必须同时适配（iPad 为未来主力，手机持续保障），同时支持 Android；桌面采用 Electron + React，不采用 Tauri |
-| 发展路线 | 初期个人开源项目，后续逐步商业化 |
+| 产品范围与已确认约束 | [项目章程](PROJECT_CHARTER.md)、[产品定义](PRODUCT.md) |
+| 当前工作与版本归属 | [版本计划](planning/releases/0.0.1.md)、[工作包](docs/backlog.md) |
+| 决策依据与待决事项 | [决策登记](docs/decisions.md) |
+| 功能规格与变更 | [OpenSpec](openspec/README.md) |
+| 界面方向与验收 | [设计规范](DESIGN.md)、[UI 验收](docs/design/ui-acceptance.md) |
+| 工程与领域边界 | [架构](ARCHITECTURE.md)、[领域模型](docs/domain-model.md) |
+| AI、存储与安全 | [AI 基础](docs/ai-foundation.md)、[数据同步](docs/data-sync.md)、[隐私安全](docs/privacy-security.md) |
+| 完成条件与证据 | [验收定义](docs/acceptance.md)、对应版本计划中的证据链接 |
 
-## 文档入口
+界面交付须覆盖中文与英文、iPhone 与 iPad，并支持 Android；桌面采用 Electron + React。具体产品约束以项目章程为准，视觉方向以 DESIGN 为准。工程和页面已经存在；实施与验收状态须分别核对，不重新初始化项目。
 
-1. [PROJECT_CHARTER.md](PROJECT_CHARTER.md)：为什么立项、范围、负责人职责与交付标准。
-2. [PRODUCT.md](PRODUCT.md)：首版用户场景、功能范围与非目标。
-3. [ARCHITECTURE.md](ARCHITECTURE.md)：客户端、业务、AI、数据与可选云服务的边界。
-4. [docs/ai-foundation.md](docs/ai-foundation.md)：模型、工具、审批、记忆、语音与运行状态。
-5. [docs/domain-model.md](docs/domain-model.md)：领域对象和数据约束。
-6. [docs/data-sync.md](docs/data-sync.md)：本地优先、写入权威、冲突、账号切换。
-7. [docs/privacy-security.md](docs/privacy-security.md)：敏感数据、权限、密钥与删除。
-8. [docs/roadmap.md](docs/roadmap.md)、[docs/backlog.md](docs/backlog.md)：里程碑与工作包。
-9. [docs/decisions.md](docs/decisions.md)、[docs/acceptance.md](docs/acceptance.md)：决策状态与验收。
-10. [START_HERE.md](START_HERE.md)、[AGENTS.md](AGENTS.md)：开发启动与 AI 编程协作规则。
-11. [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md)：本轮工程初始化、固定版本、运行命令和未验证项。
-12. [docs/product-philosophy.md](docs/product-philosophy.md)：2026-09-06 产品哲学、家庭自用方向、AI 原则、成长资产与记忆；区分已确认原则与待决方案，不自动扩大 M1。
+历史 Mock 闭环、移动 AI 设置和原生验证保留于 [M1 验证](docs/evidence/m1-validation.md)、[移动 AI 与设置](docs/evidence/mobile-ai-settings.md)、[设置改版](docs/evidence/settings-redesign.md)。这些记录只证明其注明版本、环境与路径，不代表当前正式界面或全部平台已验收。入口精简前的完整内容见 [历史快照](docs/evidence/rules-entry-history-2026-09-13.md)。
 
-## 当前工程状态
+## 开源与外部操作
 
-2026-09-06 移动基础补充：已增加 OpenAI 兼容个人密钥设置、连接测试及流式普通聊天；目标草稿仍使用原有 Mock。真实供应商与本轮真机尚未验收，详情见 [移动 AI 与设置验证](docs/evidence/mobile-ai-settings.md)。
-
-已实现移动与桌面目标草稿、确认保存、正式记录编辑和任务完成，复用 Domain / Contracts / AI / Adapters。`pnpm-lock.yaml` 已生成，共享业务、SQLite 及 IPC 测试已执行，桌面通过真实 Electron 闭环验证。iPhone 17 Pro 模拟器（iOS 26.5 / 23F77）已通过草稿编辑保存、重启后显式继续与确认、目标/项目/任务保存、任务完成与重启保留、拒绝不增记录及手动创建的 UI 测试；另一条独立用例验证手动目标/任务改名 ID 不变、任务完成后归档、重启后同 ID、归档状态与数量保留。两条 UI 用例分别执行通过，每次均为 1 项、0 失败，耗时分别为 167.126 秒与 151.684 秒。Android 环境与独立 UI 宿主已就绪，主应用重试构建、APK 签名校验及安装通过；Android 模拟器 UI 闭环通过（1 项、0 失败，336.319 秒），覆盖草稿编辑保存、重启显式继续、确认目标/项目/任务、任务完成后重启同 ID/状态保留、拒绝不增记录及手动创建；第二条 Android 独立用例在关闭 Wi-Fi/移动数据、确认无默认网络后通过（1 项、0 失败，325.679 秒），验证手动目标/任务改名同 ID、完成后归档、重启同 ID/名称/状态/数量保留及归档只读；网络设置已恢复。两次分别运行，不是同次 2/2；正常用户UI其余错误交互、升级故障、iPhone故障/后台及Android真机仍未验收；iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 CI 运行、生产同步、真实模型及发布流水线仍未验证或未实现。工作包与分层验收状态见 `planning/` 和 [本轮验证记录](docs/evidence/m1-validation.md)。远端仓库为 `zhangqiu-ai/siyue`。
-
-项目已在 GitHub 建立公开仓库 `zhangqiu-ai/siyue`。初始化阶段不注册域名、不购买外部服务，也不宣称尚未运行的构建或测试已经通过。
-
-## 开源状态
-
-开源是已确认的发展路线，具体许可证尚待维护者决定。此文档包不附有效 `LICENSE`，不宣称代码已获某一开源许可证授权。见 [docs/open-source-commercial.md](docs/open-source-commercial.md)。
-
-外部技术事实和检索范围见 [docs/sources.md](docs/sources.md)。
-
-
-2026-09-06：维护者要求移除初始化示例。移动正式导航现为对话主页，设置从侧栏进入（无底部栏），目标与行动示例及原生组件预览入口已移除；旧目标 UI 仅保留为隔离 QA fixture，数据库与业务代码未删除。历史目标 UI 验收属于旧界面，不能证明当前正式移动入口可用。正式目标页面需后续重新设计。 详见 [设置改版验收](docs/evidence/settings-redesign.md)。
+开源是已确认的发展路线，具体许可证由维护者决定；公开仓库不等于授予某种开源许可，见 [许可与商业边界](docs/open-source-commercial.md)。远端操作须遵循当次授权，仓库已存在不自动授权推送、公开其他内容、购买服务或部署。

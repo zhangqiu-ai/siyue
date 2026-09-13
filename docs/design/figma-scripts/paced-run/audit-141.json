@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "515:32244",
+      "key": "chat-readonly",
+      "nodes": 60,
+      "hydratedNodes": 60,
+      "hydrationFailures": 0,
+      "visibleNodes": 56,
+      "textNodes": 14,
+      "visibleTextNodes": 14,
+      "fontsChecked": 14,
+      "instances": 8,
+      "componentReferencesChecked": 8,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 55,
+      "childCollectionsRead": 33,
+      "fonts": {
+        "Noto Sans SC": 14
+      },
+      "textSamples": [
+        {
+          "id": "515:32246",
+          "text": "Siyue"
+        },
+        {
+          "id": "515:32247",
+          "text": "Spaces"
+        },
+        {
+          "id": "515:32252",
+          "text": "My space"
+        },
+        {
+          "id": "515:32259",
+          "text": "周末家庭"
+        },
+        {
+          "id": "515:32263",
+          "text": "Conversations"
+        },
+        {
+          "id": "515:32269",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "515:32397",
+      "key": "child-connection",
+      "nodes": 78,
+      "hydratedNodes": 78,
+      "hydrationFailures": 0,
+      "visibleNodes": 47,
+      "textNodes": 22,
+      "visibleTextNodes": 15,
+      "fontsChecked": 12,
+      "instances": 11,
+      "componentReferencesChecked": 11,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 46,
+      "childCollectionsRead": 40,
+      "fonts": {
+        "Noto Sans SC": 12
+      },
+      "textSamples": [
+        {
+          "id": "515:32523",
+          "text": "Device connection"
+        },
+        {
+          "id": "515:32524",
+          "text": "小禾 · Separate child profile"
+        },
+        {
+          "id": "I515:32526;550:50523",
+          "text": "Current device"
+        },
+        {
+          "id": "I515:32526;550:50524",
+          "text": "iPad · Connected"
+        },
+        {
+          "id": "I515:32526;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I515:32526;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "515:32580",
+      "key": "child-connection",
+      "nodes": 78,
+      "hydratedNodes": 78,
+      "hydrationFailures": 0,
+      "visibleNodes": 47,
+      "textNodes": 22,
+      "visibleTextNodes": 15,
+      "fontsChecked": 12,
+      "instances": 11,
+      "componentReferencesChecked": 11,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 46,
+      "childCollectionsRead": 40,
+      "fonts": {
+        "Noto Sans SC": 12
+      },
+      "textSamples": [
+        {
+          "id": "515:32706",
+          "text": "Device connection"
+        },
+        {
+          "id": "515:32707",
+          "text": "小禾 · Separate child profile"
+        },
+        {
+          "id": "I515:32709;550:50523",
+          "text": "Current device"
+        },
+        {
+          "id": "I515:32709;550:50524",
+          "text": "iPad · Connected"
+        },
+        {
+          "id": "I515:32709;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I515:32709;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "512:29435",
+      "key": "delete",
+      "nodes": 79,
+      "hydratedNodes": 79,
+      "hydrationFailures": 0,
+      "visibleNodes": 48,
+      "textNodes": 24,
+      "visibleTextNodes": 17,
+      "fontsChecked": 15,
+      "instances": 12,
+      "componentReferencesChecked": 12,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 47,
+      "childCollectionsRead": 41,
+      "fonts": {
+        "Noto Sans SC": 15
+      },
+      "textSamples": [
+        {
+          "id": "512:29559",
+          "text": "Before deleting your account"
+        },
+        {
+          "id": "512:29560",
+          "text": "You are still the only owner of 周末家庭."
+        },
+        {
+          "id": "I512:29562;550:50523",
+          "text": "Resolve family ownership"
+        },
+        {
+          "id": "I512:29562;550:50524",
+          "text": "Transfer ownership or dissolve the family"
+        },
+        {
+          "id": "I512:29562;550:50526;212:117599",
+          "text": "Open"
+        },
+        {
+          "id": "I512:29562;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "512:29619",
+      "key": "delete",
+      "nodes": 79,
+      "hydratedNodes": 79,
+      "hydrationFailures": 0,
+      "visibleNodes": 48,
+      "textNodes": 24,
+      "visibleTextNodes": 17,
+      "fontsChecked": 15,
+      "instances": 12,
+      "componentReferencesChecked": 12,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 47,
+      "childCollectionsRead": 41,
+      "fonts": {
+        "Noto Sans SC": 15
+      },
+      "textSamples": [
+        {
+          "id": "512:29743",
+          "text": "Before deleting your account"
+        },
+        {
+          "id": "512:29744",
+          "text": "You are still the only owner of 周末家庭."
+        },
+        {
+          "id": "I512:29746;550:50523",
+          "text": "Resolve family ownership"
+        },
+        {
+          "id": "I512:29746;550:50524",
+          "text": "Transfer ownership or dissolve the family"
+        },
+        {
+          "id": "I512:29746;550:50526;212:117599",
+          "text": "Open"
+        },
+        {
+          "id": "I512:29746;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "512:29803",
+      "key": "recover",
+      "nodes": 51,
+      "hydratedNodes": 51,
+      "hydrationFailures": 0,
+      "visibleNodes": 50,
+      "textNodes": 14,
+      "visibleTextNodes": 14,
+      "fontsChecked": 14,
+      "instances": 5,
+      "componentReferencesChecked": 5,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 49,
+      "childCollectionsRead": 23,
+      "fonts": {
+        "Noto Sans SC": 14
+      },
+      "textSamples": [
+        {
+          "id": "512:29805",
+          "text": "Siyue"
+        },
+        {
+          "id": "512:29806",
+          "text": "Spaces"
+        },
+        {
+          "id": "512:29811",
+          "text": "My space"
+        },
+        {
+          "id": "512:29818",
+          "text": "周末家庭"
+        },
+        {
+          "id": "512:29822",
+          "text": "Conversations"
+        },
+        {
+          "id": "512:29828",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

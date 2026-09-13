@@ -29,6 +29,10 @@ export function validateCall(message) {
   if (method === 'snapshot' && args.length === 0) return args;
   if (method === 'propose' && args.length === 1 && typeof args[0] === 'string' && args[0].trim().length > 0 && args[0].length <= 160) return [args[0].trim()];
   if (method === 'receipt' && args.length === 1 && isId(args[0])) return args;
+  if (method === 'createManualDraft' && args.length === 2) {
+    const payload = goalDraftSchema.safeParse(args[0]);
+    if (payload.success && payload.data.projectTitles.length === 1) return [payload.data, validateOperation(args[1])];
+  }
   if (method === 'saveManual' && (args.length === 1 || args.length === 2)) {
     const payload = goalDraftSchema.safeParse(args[0]);
     if (payload.success) return args.length === 1 ? [payload.data] : [payload.data, validateOperation(args[1])];

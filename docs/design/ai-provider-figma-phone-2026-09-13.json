@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-13",
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "pageId": "210:7",
+  "section": {
+    "id": "605:34748",
+    "name": "5.3 · AI 服务设置"
+  },
+  "unconfiguredBaselines": {
+    "zhLight": "605:34749",
+    "enLight": "605:34788",
+    "zhDark": "605:34827",
+    "enDark": "605:34866"
+  },
+  "providerPickers": {
+    "zhLight": "610:83",
+    "enLight": "610:232",
+    "zhDark": "610:378",
+    "enDark": "610:524"
+  },
+  "entryRoutes": {
+    "baseZhLight": { "source": "586:34486", "destination": "605:34749" },
+    "baseEnLight": { "source": "587:34506", "destination": "605:34788" },
+    "baseZhDark": { "source": "587:34565", "destination": "605:34827" },
+    "baseEnDark": { "source": "587:34622", "destination": "605:34866" },
+    "failureZhLight": { "source": "593:34704", "destination": "605:34749" },
+    "stoppedZhLight": { "source": "593:34764", "destination": "605:34749" }
+  },
+  "verified": [
+    "All four phone baselines reuse the existing back button and Tall Row component.",
+    "Each provider row navigates to a matching language and theme provider picker.",
+    "The provider picker contains search and five provider choices.",
+    "The section, selected frame, page list, and canvas were loaded in the signed-in Figma browser after the MCP edits.",
+    "Representative screenshots of the repaired section, Chinese light baseline, and Chinese light picker were visually inspected."
+  ],
+  "remaining": [
+    "Eight iPad baselines across language, theme, and orientation.",
+    "Configured form, model loading and picker, save success, recoverable error, and unsaved-leave alert representative states.",
+    "Creation-page routes for iPad and the busy-state routing rule.",
+    "Prototype click-through and native device acceptance."
+  ],
+  "failedAttempts": [
+    {
+      "operation": "configured phone screen creation",
+      "attempts": 2,
+      "result": "atomic rollback; no configured frame was created",
+      "reasons": ["invalid virtual child reference", "font was not loaded"]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:44577",
+      "key": "members-member",
+      "nodes": 73,
+      "hydratedNodes": 73,
+      "hydrationFailures": 0,
+      "visibleNodes": 69,
+      "textNodes": 15,
+      "visibleTextNodes": 15,
+      "fontsChecked": 15,
+      "instances": 13,
+      "componentReferencesChecked": 13,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 68,
+      "childCollectionsRead": 42,
+      "fonts": {
+        "Noto Sans SC": 15
+      },
+      "textSamples": [
+        {
+          "id": "513:44579",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:44580",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:44585",
+          "text": "My space"
+        },
+        {
+          "id": "513:44592",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:44596",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:44602",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:44761",
+      "key": "members-member",
+      "nodes": 73,
+      "hydratedNodes": 73,
+      "hydrationFailures": 0,
+      "visibleNodes": 69,
+      "textNodes": 15,
+      "visibleTextNodes": 15,
+      "fontsChecked": 15,
+      "instances": 13,
+      "componentReferencesChecked": 13,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 68,
+      "childCollectionsRead": 42,
+      "fonts": {
+        "Noto Sans SC": 15
+      },
+      "textSamples": [
+        {
+          "id": "513:44763",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:44764",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:44769",
+          "text": "My space"
+        },
+        {
+          "id": "513:44776",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:44780",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:44786",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:44945",
+      "key": "members-member",
+      "nodes": 73,
+      "hydratedNodes": 73,
+      "hydrationFailures": 0,
+      "visibleNodes": 69,
+      "textNodes": 15,
+      "visibleTextNodes": 15,
+      "fontsChecked": 15,
+      "instances": 13,
+      "componentReferencesChecked": 13,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 68,
+      "childCollectionsRead": 42,
+      "fonts": {
+        "Noto Sans SC": 15
+      },
+      "textSamples": [
+        {
+          "id": "513:44947",
+          "text": "思玥"
+        },
+        {
+          "id": "513:44948",
+          "text": "空间"
+        },
+        {
+          "id": "513:44953",
+          "text": "我的空间"
+        },
+        {
+          "id": "513:44960",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:44964",
+          "text": "对话"
+        },
+        {
+          "id": "513:44970",
+          "text": "目标"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

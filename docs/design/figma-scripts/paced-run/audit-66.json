@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:34919",
+      "key": "child-home",
+      "nodes": 69,
+      "hydratedNodes": 69,
+      "hydrationFailures": 0,
+      "visibleNodes": 38,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 37,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "513:35045",
+          "text": "小禾’s space"
+        },
+        {
+          "id": "513:35046",
+          "text": "Child profile · 周末家庭"
+        },
+        {
+          "id": "I513:35048;550:50523",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "I513:35048;550:50524",
+          "text": "Read a short story today"
+        },
+        {
+          "id": "I513:35048;550:50526;212:117599",
+          "text": "查看"
+        },
+        {
+          "id": "I513:35048;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:35087",
+      "key": "child-home",
+      "nodes": 69,
+      "hydratedNodes": 69,
+      "hydrationFailures": 0,
+      "visibleNodes": 38,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 37,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "513:35213",
+          "text": "小禾’s space"
+        },
+        {
+          "id": "513:35214",
+          "text": "Child profile · 周末家庭"
+        },
+        {
+          "id": "I513:35216;550:50523",
+          "text": "每周一起阅读"
+        },
+        {
+          "id": "I513:35216;550:50524",
+          "text": "Read a short story today"
+        },
+        {
+          "id": "I513:35216;550:50526;212:117599",
+          "text": "查看"
+        },
+        {
+          "id": "I513:35216;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:35255",
+      "key": "members-transferred",
+      "nodes": 80,
+      "hydratedNodes": 80,
+      "hydrationFailures": 0,
+      "visibleNodes": 77,
+      "textNodes": 22,
+      "visibleTextNodes": 22,
+      "fontsChecked": 22,
+      "instances": 13,
+      "componentReferencesChecked": 13,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 76,
+      "childCollectionsRead": 42,
+      "fonts": {
+        "Noto Sans SC": 22
+      },
+      "textSamples": [
+        {
+          "id": "513:35257",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:35258",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:35263",
+          "text": "My space"
+        },
+        {
+          "id": "513:35270",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:35274",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:35280",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

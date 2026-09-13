@@ -67,3 +67,15 @@
 #### Scenario: Delay or publish
 - **WHEN** 变更延期或版本准备发布
 - **THEN** 延期保留原因与去向，未定时按版本流程保留原登记并移出交付；实际发布成功前不得填写已发布状态或日期
+
+### Requirement: Prefer automated UI regression before Computer Use
+
+开发验证 SHALL 优先运行或补充覆盖同平台同场景的 Playwright E2E。通过后暂不重复 Computer Use；工具未覆盖的原生行为优先使用适用原生脚本，剩余缺口才定向 Computer Use。测试失败 MUST 先检查日志与断言，不能自动认定工具无法覆盖。具体范围见 docs/testing.md；平台、双语、双设备及发布真机要求不变。
+
+#### Scenario: Covered regression passes
+- **WHEN** 当前构建对应的 Playwright 场景通过
+- **THEN** 引用测试结果完成该范围的开发检查，不为重复确认调用 Computer Use，也不据此宣称其他平台通过
+
+#### Scenario: Native or visual coverage gap
+- **WHEN** 需要验证的原生交互或视觉判断无法由 Playwright 或适用原生脚本完成
+- **THEN** 说明具体缺口并定向使用 Computer Use，完成缺口后停止；未验证范围保持未完成

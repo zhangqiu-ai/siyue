@@ -32,6 +32,7 @@ export interface NativeClientOptions {
   decorateJournalStorage?: (storage: AsyncKeyValueStore) => AsyncKeyValueStore;
   mockDelayMs?: number;
   mockTimeoutMs?: number;
+  enableMock?: boolean;
 }
 
 /** Shared native host construction. Normal callers use the original databases and no decorators. */
@@ -59,17 +60,20 @@ export async function createNativeClient(options: NativeClientOptions = {}): Pro
     // After an interrupted response, the formal receipt decides whether to retry.
     const pendingDatabase = await SQLite.openDatabaseAsync(pendingDatabaseName);
     requestStorage = createSqliteRequestJournalStorage(wrapNativeConnection(pendingDatabase));
-    const executor = new MockAgentExecutor({ delayMs: options.mockDelayMs ?? 250 });
+    const executor = options.enableMock ? new MockAgentExecutor({ delayMs: options.mockDelayMs ?? 250 }) : undefined;
     return createLocalClient({
       service: options.decorateService?.(service) ?? service, runService, spaceId, actor, now, newId: Crypto.randomUUID,
       requestJournal: {
         storage: options.decorateJournalStorage?.(requestStorage) ?? requestStorage,
         hash: (input) => Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, input),
       },
-      propose: (goal, signal) => executor.createGoalPlan(goal, {
+      propose: (goal, signal) => {
+        if (!executor) return Promise.reject(Object.assign(new Error('An explicit model provider is required'), {code: 'configuration_required'}));
+        return executor.createGoalPlan(goal, {
         runId: Crypto.randomUUID(), spaceId, ...(signal ? { signal } : {}),
         ...(options.mockTimeoutMs !== undefined ? { timeoutMs: options.mockTimeoutMs } : {}),
-      }),
+        });
+      },
     });
   } catch (error) {
     // Preserve the database for recovery. Never replace it with an empty or in-memory store.

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:32348",
+      "key": "pair-success",
+      "nodes": 78,
+      "hydratedNodes": 78,
+      "hydrationFailures": 0,
+      "visibleNodes": 47,
+      "textNodes": 22,
+      "visibleTextNodes": 15,
+      "fontsChecked": 12,
+      "instances": 11,
+      "componentReferencesChecked": 11,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 46,
+      "childCollectionsRead": 40,
+      "fonts": {
+        "Noto Sans SC": 12
+      },
+      "textSamples": [
+        {
+          "id": "513:32474",
+          "text": "Device connected"
+        },
+        {
+          "id": "513:32475",
+          "text": "Your guardian confirmed this pairing."
+        },
+        {
+          "id": "I513:32477;550:50523",
+          "text": "Current profile"
+        },
+        {
+          "id": "I513:32477;550:50524",
+          "text": "小禾 · Separate child profile"
+        },
+        {
+          "id": "I513:32477;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:32477;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:32531",
+      "key": "sync-offline-valid",
+      "nodes": 78,
+      "hydratedNodes": 78,
+      "hydrationFailures": 0,
+      "visibleNodes": 77,
+      "textNodes": 23,
+      "visibleTextNodes": 23,
+      "fontsChecked": 20,
+      "instances": 12,
+      "componentReferencesChecked": 12,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 76,
+      "childCollectionsRead": 41,
+      "fonts": {
+        "Noto Sans SC": 20
+      },
+      "textSamples": [
+        {
+          "id": "513:32533",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:32534",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:32539",
+          "text": "My space"
+        },
+        {
+          "id": "513:32546",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:32550",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:32556",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:32714",
+      "key": "sync-offline-valid",
+      "nodes": 78,
+      "hydratedNodes": 78,
+      "hydrationFailures": 0,
+      "visibleNodes": 77,
+      "textNodes": 23,
+      "visibleTextNodes": 23,
+      "fontsChecked": 20,
+      "instances": 12,
+      "componentReferencesChecked": 12,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 76,
+      "childCollectionsRead": 41,
+      "fonts": {
+        "Noto Sans SC": 20
+      },
+      "textSamples": [
+        {
+          "id": "513:32716",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:32717",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:32722",
+          "text": "My space"
+        },
+        {
+          "id": "513:32729",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:32733",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:32739",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

@@ -24,7 +24,7 @@ export default function SettingsScreen() {
     <ScrollView contentContainerStyle={styles.content}>
       <Pressable accessibilityRole="button" accessibilityLabel={t('settings.aiLabel', { name: providerName })} testID="settings-ai-service" onPress={() => router.push('/ai-provider')} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
         <Text style={styles.label}>{t('settings.aiService')}</Text>
-        <View style={styles.trailing}><Text numberOfLines={1} style={styles.value}>{!settings.ready ? t('settings.reading') : settings.storageError ? t('settings.check') : providerName}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} /></View>
+        <View style={styles.trailing}><Text numberOfLines={fontScale > 1.4 ? undefined : 1} style={[styles.value, styles.serviceValue]}>{!settings.ready ? t('settings.reading') : settings.storageError ? t('settings.check') : providerName}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} /></View>
       </Pressable>
       <View style={[styles.row, styles.appearanceRow]}>
         <Text style={styles.label}>{t('settings.appearance')}</Text>
@@ -58,16 +58,17 @@ const makeStyles = (theme: Theme, fontScale: number) => StyleSheet.create({
   page: { flex: 1, backgroundColor: theme.color.background },
   content: { width: '100%', maxWidth: theme.layout.contentWidth, alignSelf: 'center', padding: 20, paddingTop: 20, paddingBottom: 32, gap: 24 },
   row: { minHeight: 56, paddingHorizontal: 16, paddingVertical: 12, backgroundColor: theme.color.surface, borderRadius: theme.radius.card, flexDirection: fontScale > 1.4 ? 'column' : 'row', alignItems: fontScale > 1.4 ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 12 },
-  appearanceRow: { flexWrap: 'wrap' },
+  appearanceRow: { flexWrap: fontScale > 1.4 ? 'nowrap' : 'wrap' },
   group: { backgroundColor: theme.color.surface, borderRadius: theme.radius.card, overflow: 'hidden' },
-  label: { color: theme.color.ink, fontSize: 16, lineHeight: 24, flexShrink: 1 },
-  value: { color: theme.color.muted, fontSize: 14, lineHeight: 22, flexShrink: 1, textAlign: fontScale > 1.4 ? 'left' : 'right' },
-  trailing: { flexDirection: 'row', alignItems: 'center', gap: 12, flexShrink: 1 },
+  label: { color: theme.color.ink, fontSize: 16, lineHeight: 24, flexShrink: fontScale > 1.4 ? 0 : 1 },
+  value: { color: theme.color.muted, fontSize: 14, lineHeight: 22, flexShrink: fontScale > 1.4 ? 0 : 1, textAlign: fontScale > 1.4 ? 'left' : 'right' },
+  serviceValue: { flexShrink: 1, minWidth: 0 },
+  trailing: { alignSelf: fontScale > 1.4 ? 'stretch' : 'auto', minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12, flexShrink: fontScale > 1.4 ? 0 : 1 },
   pressed: { backgroundColor: theme.color.subtle },
   primaryPressed: { backgroundColor: theme.color.accentPressed },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: theme.color.border, marginLeft: 16 },
-  segment: { flexDirection: fontScale > 1.4 ? 'column' : 'row', padding: 4, flexShrink: 1, backgroundColor: theme.color.subtle, borderRadius: theme.radius.field },
-  segmentButton: { minWidth: 64, flexShrink: 1, minHeight: 48, padding: 8, alignItems: 'center', justifyContent: 'center', borderRadius: theme.radius.field },
+  segment: { alignSelf: fontScale > 1.4 ? 'stretch' : 'auto', flexDirection: fontScale > 1.4 ? 'column' : 'row', padding: 4, flexShrink: fontScale > 1.4 ? 0 : 1, backgroundColor: theme.color.subtle, borderRadius: theme.radius.field },
+  segmentButton: { minWidth: 64, flexShrink: fontScale > 1.4 ? 0 : 1, minHeight: 48, padding: 8, alignItems: 'center', justifyContent: 'center', borderRadius: theme.radius.field },
   segmentSelected: { backgroundColor: theme.color.accent },
   segmentText: { color: theme.color.muted, fontSize: 16, lineHeight: 24 },
   segmentSelectedText: { color: theme.color.onAccent, fontWeight: '500' },

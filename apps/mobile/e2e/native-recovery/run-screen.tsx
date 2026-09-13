@@ -21,7 +21,7 @@ function load(caseId: string) {
   const filenames = names(caseId);
   let promise = clients.get(caseId);
   if (!promise) {
-    promise = createNativeClient({...filenames, mockDelayMs: 20_000, mockTimeoutMs: 30_000});
+    promise = createNativeClient({...filenames, enableMock: true, mockDelayMs: 20_000, mockTimeoutMs: 30_000});
     clients.set(caseId, promise);
   }
   return promise;

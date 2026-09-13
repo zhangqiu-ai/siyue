@@ -1,0 +1,29 @@
+{
+  "layout": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"checked\":216,\"fonts\":[\"Noto Sans SC\"],\"issues\":[]}"
+      }
+    ],
+    "isError": false
+  },
+  "text": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"checkedTextNodes\":3009,\"issues\":[]}"
+      }
+    ],
+    "isError": false
+  },
+  "routes": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"total\":387,\"crossCount\":257,\"sample\":[{\"key\":\"adopt\",\"mode\":\"englishRoots\",\"id\":\"258:1758\",\"to\":\"215:41\",\"toKey\":\"home-empty\",\"toMode\":\"roots\"},{\"key\":\"adopt\",\"mode\":\"englishRoots\",\"id\":\"258:1759\",\"to\":\"215:41\",\"toKey\":\"home-empty\",\"toMode\":\"roots\"},{\"key\":\"create-family\",\"mode\":\"englishRoots\",\"id\":\"258:1813\",\"to\":\"215:41\",\"toKey\":\"home-empty\",\"toMode\":\"roots\"},{\"key\":\"create-family\",\"mode\":\"englishRoots\",\"id\":\"258:1827\",\"to\":\"215:14\",\"toKey\":\"family-empty\",\"toMode\":\"roots\"},{\"key\":\"create-family\",\"mode\":\"englishRoots\",\"id\":\"258:1828\",\"to\":\"215:41\",\"toKey\":\"home-empty\",\"toMode\":\"roots\"}],\"external\":[{\"id\":\"210:9\",\"count\":22},{\"id\":\"221:1609\",\"count\":19},{\"id\":\"244:1668\",\"count\":3},{\"id\":\"221:1709\",\"count\":4},{\"id\":\"246:1717\",\"count\":3},{\"id\":\"221:1554\",\"count\":21},{\"id\":\"246:1734\",\"count\":3},{\"id\":\"221:1656\",\"count\":22},{\"id\":\"221:1500\",\"count\":19},{\"id\":\"221:1777\",\"count\":3},{\"id\":\"221:1813\",\"count\":4},{\"id\":\"221:1879\",\"count\":3},{\"id\":\"210:10\",\"count\":3},{\"id\":\"442:6142\",\"count\":1}]}"
+      }
+    ],
+    "isError": false
+  }
+}

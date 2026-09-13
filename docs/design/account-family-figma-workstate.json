@@ -1,0 +1,3526 @@
+{
+  "pageId": "210:7",
+  "assetsPageId": "210:8",
+  "helpers": "const ids=[];await figma.loadFontAsync({family:'Noto Sans SC',style:'Regular'});await figma.loadFontAsync({family:'Noto Sans SC',style:'Medium'});\nconst fill=h=>[{type:'SOLID',color:{r:parseInt(h.slice(0,2),16)/255,g:parseInt(h.slice(2,4),16)/255,b:parseInt(h.slice(4,6),16)/255}}];\nfunction box(parent,name,w,h,bg){const n=figma.createAutoLayout('VERTICAL');parent.appendChild(n);n.name=name;n.resize(w,h);n.primaryAxisSizingMode='FIXED';n.counterAxisSizingMode='FIXED';n.fills=bg?fill(bg):[];ids.push(n.id);return n;}\nfunction textNode(parent,name,value,size=16,width=342,color='171717'){const n=figma.createText();parent.appendChild(n);n.name=name;n.fontName={family:'Noto Sans SC',style:size>=24?'Medium':'Regular'};n.fontSize=size;n.lineHeight={unit:'PIXELS',value:size>=24?42:24};n.characters=value;n.resize(width,24);n.textAutoResize='HEIGHT';n.fills=fill(color);ids.push(n.id);return n;}\nasync function currentFonts(n){for(const t of n.findAllWithCriteria({types:['TEXT']}))for(const s of t.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);}\nasync function instance(parent,mainId,name,label,prop,w=342,h=52){const main=await figma.getNodeByIdAsync(mainId);await currentFonts(main);const n=main.createInstance();parent.appendChild(n);n.name=name;for(const t of n.findAllWithCriteria({types:['TEXT']})){t.fontName={family:'Noto Sans SC',style:'Regular'};}n.setProperties({[prop]:label});n.resize(w,h);ids.push(n.id,...n.findAll(()=>true).map(n=>n.id));return n;}",
+  "rowHelper": "\nasync function row(parent,title,subtitle='',detail=''){const main=await figma.getNodeByIdAsync(subtitle?'205:499':'205:500');await currentFonts(main);const n=main.createInstance();parent.appendChild(n);for(const t of n.findAllWithCriteria({types:['TEXT']}))t.fontName={family:'Noto Sans SC',style:'Regular'};n.setProperties({'Title#519:116':title,'Subtitle#519:149':subtitle,'Show Subtitle#525:450':!!subtitle});const tail=n.findAllWithCriteria({types:['INSTANCE']}).find(x=>x.name==='Contents - Trailing');tail.setProperties({'Detail Text#508:54':detail,'Show Symbol#212:5':false});n.name=title;n.resize(342,subtitle?76:60);ids.push(n.id,...n.findAll(()=>true).map(x=>x.id));return n;}",
+  "buildBatch": "const configs=load(\"fullScreens\"),roots=load(\"fullRootIds\");\nfor(let i=START;i<END;i++){\nconst c=configs[i],id=roots.find(x=>x.key===c.k).id;\nif(load(\"fullBuildProgress\").some(x=>x.key===c.k))continue;\nconst h=(c.rows?.length??0)*76+(c.inputs?.length??0)*90;\nconst r=await tools.mcp__codex_apps__figma_use_figma({fileKey:\"5OKY7OMJ2jQy2XAaGbNDGC\",skillNames:\"figma-use,figma-generate-design\",description:\"设计 \"+c.title+\" 的导航与内容分区\",code:load(\"uiHelpers\")+`await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));const root=await figma.getNodeByIdAsync('${id}');textNode(root,'status','9:41',12);await instance(root,'205:160','返回','返回','Label#488:0',64,44);textNode(root,'title',${JSON.stringify(c.title)},28);textNode(root,'subtitle',${JSON.stringify(c.sub)},14,342,'666666');const body=box(root,'内容',342,${h},'FFFFFF');body.cornerRadius=22;return {createdNodeIds:ids,bodyId:body.id};`});\nlet parsed;try{parsed=JSON.parse(r.content.filter(x=>x.type==='text').map(x=>x.text).join(''));}catch{text(r);exit();}\nconst bodyId=parsed.bodyId;\nconst r2=await tools.mcp__codex_apps__figma_use_figma({fileKey:\"5OKY7OMJ2jQy2XAaGbNDGC\",skillNames:\"figma-use,figma-generate-design\",description:\"填入 \"+c.title+\" 的真实组件内容\",code:load(\"uiHelpers\")+load(\"uiRows\")+`await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));const body=await figma.getNodeByIdAsync('${bodyId}');for(const [label,value] of ${JSON.stringify(c.inputs??[])}){textNode(body,label,'  '+label,13,326,'666666');await instance(body,'205:19',label,value,'Value#519:17');}for(const r of ${JSON.stringify(c.rows??[])})await row(body,...r);return {createdNodeIds:ids};`});\nif(r2.isError){text(r2);exit();}\nconst r3=await tools.mcp__codex_apps__figma_use_figma({fileKey:\"5OKY7OMJ2jQy2XAaGbNDGC\",skillNames:\"figma-use,figma-generate-design\",description:\"完成 \"+c.title+\" 的操作入口\",code:load(\"uiHelpers\")+`await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));const root=await figma.getNodeByIdAsync('${id}');${c.note?`textNode(root,'note',${JSON.stringify(c.note)},13,342,'666666');`:''}const actions=[];for(const [i,label] of ${JSON.stringify(c.actions)}.entries()){const a=await instance(root,i===0?'205:169':'205:160',label,label,'Label#488:0');if(i===0)a.fills=fill('47658F');actions.push({label,id:a.id});}return {createdNodeIds:ids,actions};`});\nif(r3.isError){text(r3);exit();}\nconst actions=JSON.parse(r3.content.filter(x=>x.type==='text').map(x=>x.text).join('')).actions;\nconst p=load(\"fullBuildProgress\");p.push({key:c.k,id,bodyId,actions});store(\"fullBuildProgress\",p);text({done:c.k,id});\n}",
+  "iconBatch": "for(let i=START;i<END;i+=2){const cs=load(\"fullBuildProgress\").slice(i,i+2).map(p=>({...p,svg:load(\"icons\")[load(\"screenIcons\")[p.key]]}));const r=await tools.mcp__codex_apps__figma_use_figma({fileKey:\"5OKY7OMJ2jQy2XAaGbNDGC\",skillNames:\"figma-use,figma-generate-design\",description:\"统一流程标题的图标和视觉层级\",code:load(\"uiHelpers\")+`await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));for(const c of ${JSON.stringify(cs)}){const root=await figma.getNodeByIdAsync(c.id),title=root.children.find(n=>n.name==='title');await currentFonts(root);const index=root.children.indexOf(title);const head=box(root,'标题栏',342,84);head.layoutMode='HORIZONTAL';head.counterAxisAlignItems='CENTER';head.itemSpacing=12;root.insertChild(index,head);const badge=box(head,'语义图标',40,40,'E6EDF6');badge.cornerRadius=14;badge.primaryAxisAlignItems='CENTER';badge.counterAxisAlignItems='CENTER';const icon=figma.createNodeFromSvg(c.svg.replace(/currentColor/g,'#47658F'));badge.appendChild(icon);icon.resize(22,22);head.appendChild(title);title.resize(290,42);title.textAutoResize='HEIGHT';title.fontSize=26;head.resize(342,Math.max(44,title.height));ids.push(icon.id,title.id,root.id);}return {mutatedNodeIds:ids};`});if(r.isError){text(r);exit();}store(\"iconProgress\",i+2);}text({iconsDone:load(\"iconProgress\")});",
+  "screens": [
+    {
+      "k": "adopt",
+      "title": "带上本机的内容",
+      "sub": "先选择，再同步到 alex@example.com。",
+      "rows": [
+        [
+          "对话",
+          "3 段本机对话",
+          "已选择"
+        ],
+        [
+          "目标与任务",
+          "2 个目标 · 5 项任务",
+          "已选择"
+        ],
+        [
+          "个人密钥",
+          "留在设备上",
+          "不上传"
+        ]
+      ],
+      "note": "原始本机数据会保留。加入家庭不会自动共享这些内容。",
+      "actions": [
+        "确认同步所选内容",
+        "暂时保留在本机"
+      ]
+    },
+    {
+      "k": "create-family",
+      "title": "创建家庭空间",
+      "sub": "一起做事，各自保留自己的空间。",
+      "inputs": [
+        [
+          "家庭名称",
+          "周末家庭"
+        ]
+      ],
+      "note": "你将成为家庭所有者。成员只会看到明确共享的内容。",
+      "actions": [
+        "创建家庭",
+        "取消"
+      ]
+    },
+    {
+      "k": "family-empty",
+      "title": "周末家庭",
+      "sub": "你的家庭空间已准备好。",
+      "rows": [
+        [
+          "邀请家人",
+          "发出邀请，对方接受后加入",
+          ""
+        ],
+        [
+          "添加儿童身份",
+          "由监护人创建并连接设备",
+          ""
+        ],
+        [
+          "共享第一个目标",
+          "选择已有目标，设定访问权限",
+          ""
+        ]
+      ],
+      "note": "目前只有你。私人对话和目标不会自动出现在这里。",
+      "actions": [
+        "邀请家人",
+        "回到我的空间"
+      ]
+    },
+    {
+      "k": "members",
+      "title": "家庭成员",
+      "sub": "周末家庭 · 3 位成员",
+      "rows": [
+        [
+          "Alex · 你",
+          "家庭所有者",
+          "管理"
+        ],
+        [
+          "Sam",
+          "普通成员",
+          "查看"
+        ],
+        [
+          "小禾",
+          "受管理儿童 · 监护人 Alex",
+          "设备"
+        ],
+        [
+          "待接受的邀请",
+          "1 封邀请",
+          "查看"
+        ]
+      ],
+      "actions": [
+        "邀请家人",
+        "添加儿童身份"
+      ]
+    },
+    {
+      "k": "invite",
+      "title": "邀请家人",
+      "sub": "对方接受后加入周末家庭。",
+      "inputs": [
+        [
+          "对方邮箱",
+          "sam@example.com"
+        ]
+      ],
+      "rows": [
+        [
+          "加入角色",
+          "普通成员",
+          ""
+        ],
+        [
+          "私人内容",
+          "不会自动共享",
+          ""
+        ]
+      ],
+      "note": "邀请仅供指定邮箱使用。对方接受前，你可以随时撤销。",
+      "actions": [
+        "创建邀请",
+        "取消"
+      ]
+    },
+    {
+      "k": "accept",
+      "title": "一起加入周末家庭",
+      "sub": "Alex 邀请你加入家庭空间。",
+      "rows": [
+        [
+          "当前账号",
+          "sam@example.com",
+          "切换"
+        ],
+        [
+          "普通成员",
+          "按每份内容的授权查看或编辑",
+          ""
+        ],
+        [
+          "自己的空间",
+          "私人内容依旧由你掌控",
+          ""
+        ]
+      ],
+      "actions": [
+        "接受邀请",
+        "暂不加入"
+      ]
+    },
+    {
+      "k": "member",
+      "title": "Sam",
+      "sub": "普通成员 · 周末家庭",
+      "rows": [
+        [
+          "家庭角色",
+          "普通成员",
+          ""
+        ],
+        [
+          "内容权限",
+          "逐份内容授权，不随角色扩大",
+          ""
+        ]
+      ],
+      "note": "移除后停止新的共享访问。已离线设备会在获知撤权或授权到期后锁定。",
+      "actions": [
+        "移除成员",
+        "返回成员列表"
+      ]
+    },
+    {
+      "k": "child",
+      "title": "添加儿童身份",
+      "sub": "由你建立监护关系并管理设备连接。",
+      "inputs": [
+        [
+          "儿童称呼",
+          "小禾"
+        ]
+      ],
+      "rows": [
+        [
+          "独立身份",
+          "儿童不需要邮箱",
+          ""
+        ],
+        [
+          "监护人",
+          "Alex · 你",
+          ""
+        ]
+      ],
+      "note": "家庭管理员不自动成为监护人。连接设备不会开放儿童全部私人内容。",
+      "actions": [
+        "创建并连接设备",
+        "取消"
+      ]
+    },
+    {
+      "k": "pair-child",
+      "title": "请监护人连接",
+      "sub": "在监护人已登录的设备上操作。",
+      "rows": [
+        [
+          "设备配对码",
+          "482 196",
+          ""
+        ],
+        [
+          "这台设备",
+          "小禾的 iPad",
+          ""
+        ],
+        [
+          "等待确认",
+          "请监护人核对设备与儿童身份",
+          ""
+        ]
+      ],
+      "note": "配对码失效后可重新获取。仅凭配对码不能取得监护人的会话。",
+      "actions": [
+        "重新获取配对码",
+        "返回登录"
+      ]
+    },
+    {
+      "k": "pair-guardian",
+      "title": "连接儿童设备",
+      "sub": "核对后，让小禾在自己的设备进入。",
+      "inputs": [
+        [
+          "设备配对码",
+          "482 196"
+        ]
+      ],
+      "rows": [
+        [
+          "儿童身份",
+          "小禾",
+          ""
+        ],
+        [
+          "请求连接的设备",
+          "iPad · 当前配对请求",
+          ""
+        ]
+      ],
+      "note": "只为儿童签发独立权限，设备不会获得你的账号凭证。",
+      "actions": [
+        "确认连接",
+        "拒绝请求"
+      ]
+    },
+    {
+      "k": "child-devices",
+      "title": "小禾的设备",
+      "sub": "监护人 Alex · 仅管理连接权限",
+      "rows": [
+        [
+          "小禾的 iPad",
+          "已连接 · 最近使用：今天",
+          "查看"
+        ],
+        [
+          "连接新设备",
+          "生成新的配对请求",
+          ""
+        ]
+      ],
+      "note": "撤销设备后，服务端拒绝刷新与同步；重新使用需要再次配对。",
+      "actions": [
+        "撤销这台设备",
+        "重新连接设备"
+      ]
+    },
+    {
+      "k": "share",
+      "title": "共享到家庭",
+      "sub": "提高工作交流能力",
+      "rows": [
+        [
+          "共享给",
+          "周末家庭",
+          "选择"
+        ],
+        [
+          "访问权限",
+          "可以编辑",
+          "调整"
+        ],
+        [
+          "内容范围",
+          "此目标及预览中的任务",
+          "查看"
+        ]
+      ],
+      "note": "共享同一份内容。家人的修改会同步给获授权成员，原件仍属于你。",
+      "actions": [
+        "确认共享",
+        "取消"
+      ]
+    },
+    {
+      "k": "share-chat",
+      "title": "共享这段对话",
+      "sub": "英语工作交流练习",
+      "rows": [
+        [
+          "共享给",
+          "周末家庭",
+          ""
+        ],
+        [
+          "访问权限",
+          "可以查看",
+          ""
+        ],
+        [
+          "包含的内容",
+          "整个会话和之后新增的消息",
+          ""
+        ]
+      ],
+      "note": "共享期间会持续显示标识。其他对话、个人密钥不会一起共享。",
+      "actions": [
+        "确认共享整个会话",
+        "取消"
+      ]
+    },
+    {
+      "k": "share-manage",
+      "title": "管理共享",
+      "sub": "提高工作交流能力 · 原件属于你",
+      "rows": [
+        [
+          "周末家庭",
+          "可以编辑 · 当前共享中",
+          "调整"
+        ],
+        [
+          "原件归属",
+          "Alex 的个人空间",
+          ""
+        ]
+      ],
+      "note": "撤销共享只收回家庭访问权限，不删除你的原件。",
+      "actions": [
+        "撤销共享",
+        "返回目标"
+      ]
+    },
+    {
+      "k": "sync",
+      "title": "同步中心",
+      "sub": "本机已保存 · 2 项等待云端确认",
+      "rows": [
+        [
+          "练习计划",
+          "等待上传 · 本机修改已保留",
+          "重试"
+        ],
+        [
+          "每周一起阅读",
+          "存在两份修改",
+          "比较"
+        ],
+        [
+          "家庭离线授权",
+          "仍有效 · 到期前可离线编辑",
+          "查看"
+        ]
+      ],
+      "note": "重新联网后先核验当前权限，再提交待同步内容。",
+      "actions": [
+        "重新连接",
+        "返回空间"
+      ]
+    },
+    {
+      "k": "conflict",
+      "title": "保留哪一份修改",
+      "sub": "每周一起阅读 · 同一项任务",
+      "rows": [
+        [
+          "你的修改",
+          "每天阅读 15 分钟",
+          "选择"
+        ],
+        [
+          "云端修改 · Sam",
+          "每天阅读 20 分钟",
+          "选择"
+        ],
+        [
+          "自己合并",
+          "在两份内容基础上编辑",
+          ""
+        ]
+      ],
+      "note": "确认前，两份修改均会保留。选择后仍需提交并取得云端确认。",
+      "actions": [
+        "保留我的修改",
+        "使用云端修改"
+      ]
+    },
+    {
+      "k": "expired",
+      "title": "联网后继续",
+      "sub": "家庭内容的离线授权已到期。",
+      "rows": [
+        [
+          "内容已锁定",
+          "联网核验权限后才能继续",
+          ""
+        ],
+        [
+          "待同步输入",
+          "已保留，暂未提交",
+          ""
+        ]
+      ],
+      "note": "本地操作不能延长授权。核验失败时可以恢复你本人未提交的输入。",
+      "actions": [
+        "联网核验",
+        "返回我的空间"
+      ]
+    },
+    {
+      "k": "revoked",
+      "title": "共享访问已结束",
+      "sub": "这份内容不再向你共享。",
+      "rows": [
+        [
+          "共享正文",
+          "已锁定，无法继续查看或编辑",
+          ""
+        ],
+        [
+          "你尚未提交的输入",
+          "可恢复到私人草稿",
+          "查看"
+        ]
+      ],
+      "note": "恢复仅包含你自己的未提交输入，不恢复已撤权的共享正文。",
+      "actions": [
+        "查看本人未提交输入",
+        "返回我的空间"
+      ]
+    },
+    {
+      "k": "devices",
+      "title": "账号设备",
+      "sub": "alex@example.com",
+      "rows": [
+        [
+          "这台 iPhone",
+          "当前设备 · 今天",
+          ""
+        ],
+        [
+          "书房 iPad",
+          "最近使用：昨天",
+          "撤销"
+        ],
+        [
+          "桌面电脑",
+          "最近使用：9 月 7 日",
+          "撤销"
+        ]
+      ],
+      "note": "撤销设备会终止其后续会话刷新和同步访问。",
+      "actions": [
+        "返回设置"
+      ]
+    },
+    {
+      "k": "logout",
+      "title": "退出前处理未同步内容",
+      "sub": "仍有 2 项修改只保存在这台设备。",
+      "rows": [
+        [
+          "练习计划",
+          "等待上传",
+          ""
+        ],
+        [
+          "阅读任务",
+          "冲突待处理",
+          ""
+        ]
+      ],
+      "note": "退出后账号内容会隔离，不能由下一个账号读取或上传。",
+      "actions": [
+        "先处理同步",
+        "取消退出"
+      ]
+    },
+    {
+      "k": "transfer",
+      "title": "转移家庭所有权",
+      "sub": "周末家庭 · 选择新的所有者",
+      "rows": [
+        [
+          "Sam",
+          "成人成员",
+          "选择"
+        ],
+        [
+          "小禾",
+          "儿童身份不能承担管理权限",
+          "不可选"
+        ]
+      ],
+      "note": "转移生效后，只有新的所有者可以转移或解散家庭。",
+      "actions": [
+        "确认转移给 Sam",
+        "取消"
+      ]
+    },
+    {
+      "k": "dissolve",
+      "title": "解散周末家庭",
+      "sub": "此操作会结束家庭内的共享访问。",
+      "rows": [
+        [
+          "共享原件",
+          "仍保留在各自的原空间",
+          ""
+        ],
+        [
+          "成员资格",
+          "家庭访问权限将结束",
+          ""
+        ]
+      ],
+      "note": "不会删除其他成员的私人内容。离线副本仍受既定授权期限约束。",
+      "actions": [
+        "确认解散家庭",
+        "保留家庭"
+      ]
+    },
+    {
+      "k": "data",
+      "title": "数据与账号",
+      "sub": "查看和控制自己的内容。",
+      "rows": [
+        [
+          "本机内容",
+          "认领与同步范围",
+          "查看"
+        ],
+        [
+          "同步状态",
+          "查看未提交的修改",
+          ""
+        ],
+        [
+          "删除账号",
+          "先查看影响与处理条件",
+          ""
+        ]
+      ],
+      "actions": [
+        "返回设置"
+      ]
+    },
+    {
+      "k": "delete",
+      "title": "删除账号前",
+      "sub": "你仍是周末家庭的唯一所有者。",
+      "rows": [
+        [
+          "先处理家庭",
+          "转移所有权或明确解散",
+          "前往"
+        ],
+        [
+          "共享原件",
+          "删除前需要处理共享关系",
+          ""
+        ],
+        [
+          "私人内容",
+          "先确认需要保留的内容",
+          ""
+        ]
+      ],
+      "note": "你仍是唯一所有者，暂时无法删除账号。完成家庭所有权处理后再继续。",
+      "actions": [
+        "管理家庭所有权",
+        "取消"
+      ]
+    },
+    {
+      "k": "recover",
+      "title": "恢复你的输入",
+      "sub": "仅显示你本人尚未提交的文字。",
+      "inputs": [
+        [
+          "你的未提交内容",
+          "每天阅读 15 分钟"
+        ]
+      ],
+      "note": "保存到自己的私人草稿，不恢复原共享记录或访问权限。",
+      "actions": [
+        "保存为私人草稿",
+        "暂不恢复"
+      ]
+    },
+    {
+      "k": "edit-task",
+      "title": "编辑任务",
+      "sub": "提高工作交流能力",
+      "inputs": [
+        [
+          "任务名称",
+          "练习三分钟自我介绍"
+        ],
+        [
+          "练习提示",
+          "用三句话介绍自己和最近的工作"
+        ]
+      ],
+      "actions": [
+        "保存修改",
+        "取消"
+      ]
+    },
+    {
+      "k": "readonly",
+      "title": "每周一起阅读",
+      "sub": "周末家庭 · 仅可查看",
+      "rows": [
+        [
+          "阅读一篇短文",
+          "今天 · 已完成",
+          ""
+        ],
+        [
+          "记录一句收获",
+          "等待完成",
+          ""
+        ],
+        [
+          "讨论本周阅读",
+          "周末",
+          ""
+        ]
+      ],
+      "note": "你拥有查看权限。需要编辑时，请联系原件所有者。",
+      "actions": [
+        "返回家庭"
+      ]
+    },
+    {
+      "k": "invitations",
+      "title": "待接受邀请",
+      "sub": "周末家庭",
+      "rows": [
+        [
+          "sam@example.com",
+          "普通成员 · 等待接受",
+          "查看"
+        ]
+      ],
+      "note": "对方接受前不会成为成员。撤销后邀请无法继续使用。",
+      "actions": [
+        "复制邀请链接",
+        "撤销邀请"
+      ]
+    },
+    {
+      "k": "invite-invalid",
+      "title": "邀请已失效",
+      "sub": "这份邀请已过期或被撤销。",
+      "rows": [
+        [
+          "尚未加入家庭",
+          "私人空间不受影响",
+          ""
+        ]
+      ],
+      "note": "请邀请人重新创建邀请。旧链接不会重新授予访问权限。",
+      "actions": [
+        "回到我的空间"
+      ]
+    },
+    {
+      "k": "home-empty",
+      "title": "你的空间，准备好了",
+      "sub": "从一个想实现的小目标开始。",
+      "rows": [
+        [
+          "创建第一个目标",
+          "输入想法，生成可编辑草稿",
+          ""
+        ],
+        [
+          "继续一段对话",
+          "讨论、整理，再明确确认",
+          ""
+        ],
+        [
+          "家庭空间",
+          "邀请家人一起完成目标",
+          ""
+        ]
+      ],
+      "actions": [
+        "聊聊我的目标"
+      ]
+    },
+    {
+      "k": "chat",
+      "title": "英语工作交流练习",
+      "sub": "仅自己可见 · 本机已保存",
+      "rows": [
+        [
+          "你",
+          "我想提高英语工作交流能力。",
+          ""
+        ],
+        [
+          "思玥",
+          "可以从自我介绍、工作进展和会议练习开始。",
+          ""
+        ],
+        [
+          "练习计划草稿",
+          "3 项任务 · 可以先修改，再确认保存",
+          "查看"
+        ]
+      ],
+      "actions": [
+        "查看并编辑草稿",
+        "继续输入"
+      ]
+    },
+    {
+      "k": "draft",
+      "title": "确认你的练习计划",
+      "sub": "AI 草稿 · 尚未正式保存",
+      "inputs": [
+        [
+          "目标名称",
+          "提高工作交流能力"
+        ]
+      ],
+      "rows": [
+        [
+          "练习三分钟自我介绍",
+          "每天约 5 分钟",
+          "编辑"
+        ],
+        [
+          "复述一次工作进展",
+          "练习清楚地表达进度",
+          "编辑"
+        ],
+        [
+          "模拟一次英文会议",
+          "练习提问和回应",
+          "编辑"
+        ]
+      ],
+      "actions": [
+        "确认保存计划",
+        "继续修改"
+      ]
+    },
+    {
+      "k": "saved",
+      "title": "计划已保存",
+      "sub": "已保存到我的空间 · 云端已确认",
+      "rows": [
+        [
+          "提高工作交流能力",
+          "3 项任务 · 已创建正式记录",
+          "查看"
+        ],
+        [
+          "下一步",
+          "从三分钟自我介绍开始",
+          ""
+        ]
+      ],
+      "actions": [
+        "开始第一项练习",
+        "回到我的空间"
+      ]
+    },
+    {
+      "k": "chat-shared",
+      "title": "讨论本周阅读",
+      "sub": "周末家庭 · 正在共享后续消息",
+      "rows": [
+        [
+          "Sam",
+          "这周读一篇短文，周末一起聊聊。",
+          ""
+        ],
+        [
+          "你",
+          "我来安排，每天留 15 分钟阅读。",
+          ""
+        ],
+        [
+          "共享中的会话",
+          "获授权成员可以看到之后的消息",
+          "权限"
+        ]
+      ],
+      "note": "发送给家庭不等于允许外发 AI；使用外部 AI 前需要单独授权。",
+      "actions": [
+        "输入消息",
+        "管理共享"
+      ]
+    },
+    {
+      "k": "unsaved",
+      "title": "先处理当前修改",
+      "sub": "你正在编辑任务，现在切换空间？",
+      "rows": [
+        [
+          "未保存的任务",
+          "练习三分钟自我介绍",
+          ""
+        ],
+        [
+          "当前空间",
+          "我的空间",
+          ""
+        ]
+      ],
+      "note": "可以保留草稿再切换，或继续编辑。",
+      "actions": [
+        "保留草稿并切换",
+        "继续编辑"
+      ]
+    },
+    {
+      "k": "sync-result",
+      "title": "已确认同步",
+      "sub": "本机修改已被云端接受。",
+      "rows": [
+        [
+          "练习计划",
+          "新版本已确认",
+          ""
+        ],
+        [
+          "每周一起阅读",
+          "冲突已解决 · 输入保留",
+          ""
+        ]
+      ],
+      "actions": [
+        "返回家庭"
+      ]
+    }
+  ],
+  "roots": [
+    {
+      "key": "adopt",
+      "id": "215:12"
+    },
+    {
+      "key": "create-family",
+      "id": "215:13"
+    },
+    {
+      "key": "family-empty",
+      "id": "215:14"
+    },
+    {
+      "key": "members",
+      "id": "215:15"
+    },
+    {
+      "key": "invite",
+      "id": "215:16"
+    },
+    {
+      "key": "accept",
+      "id": "215:17"
+    },
+    {
+      "key": "member",
+      "id": "215:18"
+    },
+    {
+      "key": "child",
+      "id": "215:19"
+    },
+    {
+      "key": "pair-child",
+      "id": "215:20"
+    },
+    {
+      "key": "pair-guardian",
+      "id": "215:21"
+    },
+    {
+      "key": "child-devices",
+      "id": "215:22"
+    },
+    {
+      "key": "share",
+      "id": "215:23"
+    },
+    {
+      "key": "share-chat",
+      "id": "215:24"
+    },
+    {
+      "key": "share-manage",
+      "id": "215:25"
+    },
+    {
+      "key": "sync",
+      "id": "215:26"
+    },
+    {
+      "key": "conflict",
+      "id": "215:27"
+    },
+    {
+      "key": "expired",
+      "id": "215:28"
+    },
+    {
+      "key": "revoked",
+      "id": "215:29"
+    },
+    {
+      "key": "devices",
+      "id": "215:30"
+    },
+    {
+      "key": "logout",
+      "id": "215:31"
+    },
+    {
+      "key": "transfer",
+      "id": "215:32"
+    },
+    {
+      "key": "dissolve",
+      "id": "215:33"
+    },
+    {
+      "key": "data",
+      "id": "215:34"
+    },
+    {
+      "key": "delete",
+      "id": "215:35"
+    },
+    {
+      "key": "recover",
+      "id": "215:36"
+    },
+    {
+      "key": "edit-task",
+      "id": "215:37"
+    },
+    {
+      "key": "readonly",
+      "id": "215:38"
+    },
+    {
+      "key": "invitations",
+      "id": "215:39"
+    },
+    {
+      "key": "invite-invalid",
+      "id": "215:40"
+    },
+    {
+      "key": "home-empty",
+      "id": "215:41"
+    },
+    {
+      "key": "chat",
+      "id": "220:1195"
+    },
+    {
+      "key": "draft",
+      "id": "220:1196"
+    },
+    {
+      "key": "saved",
+      "id": "220:1197"
+    },
+    {
+      "key": "chat-shared",
+      "id": "220:1198"
+    },
+    {
+      "key": "unsaved",
+      "id": "220:1199"
+    },
+    {
+      "key": "sync-result",
+      "id": "220:1200"
+    }
+  ],
+  "progress": [
+    {
+      "key": "adopt",
+      "id": "215:12",
+      "bodyId": "215:47",
+      "actions": [
+        {
+          "label": "确认同步所选内容",
+          "id": "215:136"
+        },
+        {
+          "label": "暂时保留在本机",
+          "id": "215:138"
+        }
+      ]
+    },
+    {
+      "key": "create-family",
+      "id": "215:13",
+      "bodyId": "215:145",
+      "actions": [
+        {
+          "label": "创建家庭",
+          "id": "215:152"
+        },
+        {
+          "label": "取消",
+          "id": "215:154"
+        }
+      ]
+    },
+    {
+      "key": "family-empty",
+      "id": "215:14",
+      "bodyId": "215:161",
+      "actions": [
+        {
+          "label": "邀请家人",
+          "id": "215:223"
+        },
+        {
+          "label": "回到我的空间",
+          "id": "215:225"
+        }
+      ]
+    },
+    {
+      "key": "members",
+      "id": "215:15",
+      "bodyId": "215:232",
+      "actions": [
+        {
+          "label": "邀请家人",
+          "id": "215:313"
+        },
+        {
+          "label": "添加儿童身份",
+          "id": "215:315"
+        }
+      ]
+    },
+    {
+      "key": "invite",
+      "id": "215:16",
+      "bodyId": "215:322",
+      "actions": [
+        {
+          "label": "创建邀请",
+          "id": "215:364"
+        },
+        {
+          "label": "取消",
+          "id": "215:366"
+        }
+      ]
+    },
+    {
+      "key": "accept",
+      "id": "215:17",
+      "bodyId": "217:232",
+      "actions": [
+        {
+          "label": "接受邀请",
+          "id": "217:326"
+        },
+        {
+          "label": "暂不加入",
+          "id": "217:328"
+        }
+      ]
+    },
+    {
+      "key": "member",
+      "id": "215:18",
+      "bodyId": "217:335",
+      "actions": [
+        {
+          "label": "移除成员",
+          "id": "217:381"
+        },
+        {
+          "label": "返回成员列表",
+          "id": "217:383"
+        }
+      ]
+    },
+    {
+      "key": "child",
+      "id": "215:19",
+      "bodyId": "217:390",
+      "actions": [
+        {
+          "label": "创建并连接设备",
+          "id": "217:441"
+        },
+        {
+          "label": "取消",
+          "id": "217:443"
+        }
+      ]
+    },
+    {
+      "key": "pair-child",
+      "id": "215:20",
+      "bodyId": "217:450",
+      "actions": [
+        {
+          "label": "重新获取配对码",
+          "id": "217:518"
+        },
+        {
+          "label": "返回登录",
+          "id": "217:520"
+        }
+      ]
+    },
+    {
+      "key": "pair-guardian",
+      "id": "215:21",
+      "bodyId": "217:527",
+      "actions": [
+        {
+          "label": "确认连接",
+          "id": "217:578"
+        },
+        {
+          "label": "拒绝请求",
+          "id": "217:580"
+        }
+      ]
+    },
+    {
+      "key": "child-devices",
+      "id": "215:22",
+      "bodyId": "217:587",
+      "actions": [
+        {
+          "label": "撤销这台设备",
+          "id": "218:474"
+        },
+        {
+          "label": "重新连接设备",
+          "id": "218:476"
+        }
+      ]
+    },
+    {
+      "key": "share",
+      "id": "215:23",
+      "bodyId": "218:507",
+      "actions": [
+        {
+          "label": "确认共享",
+          "id": "218:578"
+        },
+        {
+          "label": "取消",
+          "id": "218:580"
+        }
+      ]
+    },
+    {
+      "key": "share-chat",
+      "id": "215:24",
+      "bodyId": "218:587",
+      "actions": [
+        {
+          "label": "确认共享整个会话",
+          "id": "218:655"
+        },
+        {
+          "label": "取消",
+          "id": "218:657"
+        }
+      ]
+    },
+    {
+      "key": "share-manage",
+      "id": "215:25",
+      "bodyId": "218:664",
+      "actions": [
+        {
+          "label": "撤销共享",
+          "id": "218:710"
+        },
+        {
+          "label": "返回目标",
+          "id": "218:712"
+        }
+      ]
+    },
+    {
+      "key": "sync",
+      "id": "215:26",
+      "bodyId": "218:719",
+      "actions": [
+        {
+          "label": "重新连接",
+          "id": "218:787"
+        },
+        {
+          "label": "返回空间",
+          "id": "218:789"
+        }
+      ]
+    },
+    {
+      "key": "conflict",
+      "id": "215:27",
+      "bodyId": "218:796",
+      "actions": [
+        {
+          "label": "保留我的修改",
+          "id": "218:864"
+        },
+        {
+          "label": "使用云端修改",
+          "id": "218:866"
+        }
+      ]
+    },
+    {
+      "key": "expired",
+      "id": "215:28",
+      "bodyId": "218:873",
+      "actions": [
+        {
+          "label": "联网核验",
+          "id": "218:919"
+        },
+        {
+          "label": "返回我的空间",
+          "id": "218:921"
+        }
+      ]
+    },
+    {
+      "key": "revoked",
+      "id": "215:29",
+      "bodyId": "218:928",
+      "actions": [
+        {
+          "label": "查看本人未提交输入",
+          "id": "218:974"
+        },
+        {
+          "label": "返回我的空间",
+          "id": "218:976"
+        }
+      ]
+    },
+    {
+      "key": "devices",
+      "id": "215:30",
+      "bodyId": "218:983",
+      "actions": [
+        {
+          "label": "返回设置",
+          "id": "218:1051"
+        }
+      ]
+    },
+    {
+      "key": "logout",
+      "id": "215:31",
+      "bodyId": "218:1058",
+      "actions": [
+        {
+          "label": "先处理同步",
+          "id": "218:1104"
+        },
+        {
+          "label": "取消退出",
+          "id": "218:1106"
+        }
+      ]
+    },
+    {
+      "key": "transfer",
+      "id": "215:32",
+      "bodyId": "218:1113",
+      "actions": [
+        {
+          "label": "确认转移给 Sam",
+          "id": "218:1159"
+        },
+        {
+          "label": "取消",
+          "id": "218:1161"
+        }
+      ]
+    },
+    {
+      "key": "dissolve",
+      "id": "215:33",
+      "bodyId": "218:1168",
+      "actions": [
+        {
+          "label": "确认解散家庭",
+          "id": "218:1214"
+        },
+        {
+          "label": "保留家庭",
+          "id": "218:1216"
+        }
+      ]
+    },
+    {
+      "key": "data",
+      "id": "215:34",
+      "bodyId": "218:1223",
+      "actions": [
+        {
+          "label": "返回设置",
+          "id": "218:1290"
+        }
+      ]
+    },
+    {
+      "key": "delete",
+      "id": "215:35",
+      "bodyId": "218:1297",
+      "actions": [
+        {
+          "label": "管理家庭所有权",
+          "id": "218:1365"
+        },
+        {
+          "label": "取消",
+          "id": "218:1367"
+        }
+      ]
+    },
+    {
+      "key": "recover",
+      "id": "215:36",
+      "bodyId": "218:1374",
+      "actions": [
+        {
+          "label": "保存为私人草稿",
+          "id": "218:1381"
+        },
+        {
+          "label": "暂不恢复",
+          "id": "218:1383"
+        }
+      ]
+    },
+    {
+      "key": "edit-task",
+      "id": "215:37",
+      "bodyId": "218:1390",
+      "actions": [
+        {
+          "label": "保存修改",
+          "id": "218:1401"
+        },
+        {
+          "label": "取消",
+          "id": "218:1403"
+        }
+      ]
+    },
+    {
+      "key": "readonly",
+      "id": "215:38",
+      "bodyId": "218:1410",
+      "actions": [
+        {
+          "label": "返回家庭",
+          "id": "218:1478"
+        }
+      ]
+    },
+    {
+      "key": "invitations",
+      "id": "215:39",
+      "bodyId": "218:1485",
+      "actions": [
+        {
+          "label": "复制邀请链接",
+          "id": "218:1509"
+        },
+        {
+          "label": "撤销邀请",
+          "id": "218:1511"
+        }
+      ]
+    },
+    {
+      "key": "invite-invalid",
+      "id": "215:40",
+      "bodyId": "218:1518",
+      "actions": [
+        {
+          "label": "回到我的空间",
+          "id": "218:1542"
+        }
+      ]
+    },
+    {
+      "key": "home-empty",
+      "id": "215:41",
+      "bodyId": "218:1549",
+      "actions": [
+        {
+          "label": "聊聊我的目标",
+          "id": "218:1616"
+        }
+      ]
+    },
+    {
+      "key": "chat",
+      "id": "220:1195",
+      "bodyId": "220:1206",
+      "actions": [
+        {
+          "label": "查看并编辑草稿",
+          "id": "220:1300"
+        },
+        {
+          "label": "继续输入",
+          "id": "220:1302"
+        }
+      ]
+    },
+    {
+      "key": "draft",
+      "id": "220:1196",
+      "bodyId": "220:1309",
+      "actions": [
+        {
+          "label": "确认保存计划",
+          "id": "220:1381"
+        },
+        {
+          "label": "继续修改",
+          "id": "220:1383"
+        }
+      ]
+    },
+    {
+      "key": "saved",
+      "id": "220:1197",
+      "bodyId": "220:1390",
+      "actions": [
+        {
+          "label": "开始第一项练习",
+          "id": "220:1435"
+        },
+        {
+          "label": "回到我的空间",
+          "id": "220:1437"
+        }
+      ]
+    },
+    {
+      "key": "chat-shared",
+      "id": "220:1198",
+      "bodyId": "220:1444",
+      "actions": [
+        {
+          "label": "输入消息",
+          "id": "220:1512"
+        },
+        {
+          "label": "管理共享",
+          "id": "220:1514"
+        }
+      ]
+    },
+    {
+      "key": "unsaved",
+      "id": "220:1199",
+      "bodyId": "220:1521",
+      "actions": [
+        {
+          "label": "保留草稿并切换",
+          "id": "220:1567"
+        },
+        {
+          "label": "继续编辑",
+          "id": "220:1569"
+        }
+      ]
+    },
+    {
+      "key": "sync-result",
+      "id": "220:1200",
+      "bodyId": "220:1576",
+      "actions": [
+        {
+          "label": "返回家庭",
+          "id": "220:1621"
+        }
+      ]
+    }
+  ],
+  "routeIds": {
+    "adopt": "215:12",
+    "create-family": "215:13",
+    "family-empty": "215:14",
+    "members": "215:15",
+    "invite": "215:16",
+    "accept": "215:17",
+    "member": "215:18",
+    "child": "215:19",
+    "pair-child": "215:20",
+    "pair-guardian": "215:21",
+    "child-devices": "215:22",
+    "share": "215:23",
+    "share-chat": "215:24",
+    "share-manage": "215:25",
+    "sync": "215:26",
+    "conflict": "215:27",
+    "expired": "215:28",
+    "revoked": "215:29",
+    "devices": "215:30",
+    "logout": "215:31",
+    "transfer": "215:32",
+    "dissolve": "215:33",
+    "data": "215:34",
+    "delete": "215:35",
+    "recover": "215:36",
+    "edit-task": "215:37",
+    "readonly": "215:38",
+    "invitations": "215:39",
+    "invite-invalid": "215:40",
+    "home-empty": "215:41",
+    "chat": "220:1195",
+    "draft": "220:1196",
+    "saved": "220:1197",
+    "chat-shared": "220:1198",
+    "unsaved": "220:1199",
+    "sync-result": "220:1200",
+    "login": "210:9",
+    "home": "221:1500",
+    "goal": "221:1554",
+    "family": "221:1609",
+    "settings": "221:1656",
+    "pair-refresh": "221:1709",
+    "invite-copied": "221:1777",
+    "chat-input": "221:1813",
+    "shared-input": "221:1879"
+  },
+  "routes": {
+    "adopt": [
+      "home-empty",
+      "home-empty"
+    ],
+    "create-family": [
+      "family-empty",
+      "home-empty"
+    ],
+    "family-empty": [
+      "invite",
+      "home-empty"
+    ],
+    "members": [
+      "invite",
+      "child"
+    ],
+    "invite": [
+      "invitations",
+      "members"
+    ],
+    "accept": [
+      "family-empty",
+      "home-empty"
+    ],
+    "member": [
+      "members",
+      "members"
+    ],
+    "child": [
+      "pair-guardian",
+      "members"
+    ],
+    "pair-child": [
+      "pair-refresh",
+      "login"
+    ],
+    "pair-guardian": [
+      "child-devices",
+      "members"
+    ],
+    "child-devices": [
+      "expired",
+      "pair-guardian"
+    ],
+    "share": [
+      "share-manage",
+      "goal"
+    ],
+    "share-chat": [
+      "chat-shared",
+      "chat"
+    ],
+    "share-manage": [
+      "goal",
+      "goal"
+    ],
+    "sync": [
+      "sync-result",
+      "home-empty"
+    ],
+    "conflict": [
+      "sync-result",
+      "sync-result"
+    ],
+    "expired": [
+      "sync",
+      "home-empty"
+    ],
+    "revoked": [
+      "recover",
+      "home-empty"
+    ],
+    "devices": [
+      "settings"
+    ],
+    "logout": [
+      "sync",
+      "settings"
+    ],
+    "transfer": [
+      "members",
+      "members"
+    ],
+    "dissolve": [
+      "home-empty",
+      "members"
+    ],
+    "data": [
+      "settings"
+    ],
+    "delete": [
+      "transfer",
+      "data"
+    ],
+    "recover": [
+      "draft",
+      "home-empty"
+    ],
+    "edit-task": [
+      "goal",
+      "goal"
+    ],
+    "readonly": [
+      "family"
+    ],
+    "invitations": [
+      "invite-copied",
+      "invite-invalid"
+    ],
+    "invite-invalid": [
+      "home-empty"
+    ],
+    "home-empty": [
+      "chat"
+    ],
+    "chat": [
+      "draft",
+      "chat-input"
+    ],
+    "draft": [
+      "saved",
+      "edit-task"
+    ],
+    "saved": [
+      "goal",
+      "home"
+    ],
+    "chat-shared": [
+      "shared-input",
+      "share-manage"
+    ],
+    "unsaved": [
+      "family",
+      "edit-task"
+    ],
+    "sync-result": [
+      "family"
+    ]
+  },
+  "backMap": {
+    "adopt": "login",
+    "create-family": "home-empty",
+    "family-empty": "home-empty",
+    "members": "family",
+    "invite": "members",
+    "accept": "login",
+    "member": "members",
+    "child": "members",
+    "pair-child": "login",
+    "pair-guardian": "members",
+    "child-devices": "members",
+    "share": "goal",
+    "share-chat": "chat",
+    "share-manage": "goal",
+    "sync": "settings",
+    "conflict": "sync",
+    "expired": "home",
+    "revoked": "home",
+    "devices": "settings",
+    "logout": "settings",
+    "transfer": "members",
+    "dissolve": "members",
+    "data": "settings",
+    "delete": "data",
+    "recover": "revoked",
+    "edit-task": "draft",
+    "readonly": "family",
+    "invitations": "members",
+    "invite-invalid": "home",
+    "home-empty": "login",
+    "chat": "home",
+    "draft": "chat",
+    "saved": "home",
+    "chat-shared": "family",
+    "unsaved": "edit-task",
+    "sync-result": "sync"
+  },
+  "primaryRoutes": [
+    {
+      "from": "215:136",
+      "to": "215:41",
+      "label": "确认同步所选内容",
+      "key": "adopt"
+    },
+    {
+      "from": "215:138",
+      "to": "215:41",
+      "label": "暂时保留在本机",
+      "key": "adopt"
+    },
+    {
+      "from": "215:152",
+      "to": "215:14",
+      "label": "创建家庭",
+      "key": "create-family"
+    },
+    {
+      "from": "215:154",
+      "to": "215:41",
+      "label": "取消",
+      "key": "create-family"
+    },
+    {
+      "from": "215:223",
+      "to": "215:16",
+      "label": "邀请家人",
+      "key": "family-empty"
+    },
+    {
+      "from": "215:225",
+      "to": "215:41",
+      "label": "回到我的空间",
+      "key": "family-empty"
+    },
+    {
+      "from": "215:313",
+      "to": "215:16",
+      "label": "邀请家人",
+      "key": "members"
+    },
+    {
+      "from": "215:315",
+      "to": "215:19",
+      "label": "添加儿童身份",
+      "key": "members"
+    },
+    {
+      "from": "215:364",
+      "to": "215:39",
+      "label": "创建邀请",
+      "key": "invite"
+    },
+    {
+      "from": "215:366",
+      "to": "215:15",
+      "label": "取消",
+      "key": "invite"
+    },
+    {
+      "from": "217:326",
+      "to": "215:14",
+      "label": "接受邀请",
+      "key": "accept"
+    },
+    {
+      "from": "217:328",
+      "to": "215:41",
+      "label": "暂不加入",
+      "key": "accept"
+    },
+    {
+      "from": "217:381",
+      "to": "215:15",
+      "label": "移除成员",
+      "key": "member"
+    },
+    {
+      "from": "217:383",
+      "to": "215:15",
+      "label": "返回成员列表",
+      "key": "member"
+    },
+    {
+      "from": "217:441",
+      "to": "215:21",
+      "label": "创建并连接设备",
+      "key": "child"
+    },
+    {
+      "from": "217:443",
+      "to": "215:15",
+      "label": "取消",
+      "key": "child"
+    },
+    {
+      "from": "217:518",
+      "to": "221:1709",
+      "label": "重新获取配对码",
+      "key": "pair-child"
+    },
+    {
+      "from": "217:520",
+      "to": "210:9",
+      "label": "返回登录",
+      "key": "pair-child"
+    },
+    {
+      "from": "217:578",
+      "to": "215:22",
+      "label": "确认连接",
+      "key": "pair-guardian"
+    },
+    {
+      "from": "217:580",
+      "to": "215:15",
+      "label": "拒绝请求",
+      "key": "pair-guardian"
+    },
+    {
+      "from": "218:474",
+      "to": "215:28",
+      "label": "撤销这台设备",
+      "key": "child-devices"
+    },
+    {
+      "from": "218:476",
+      "to": "215:21",
+      "label": "重新连接设备",
+      "key": "child-devices"
+    },
+    {
+      "from": "218:578",
+      "to": "215:25",
+      "label": "确认共享",
+      "key": "share"
+    },
+    {
+      "from": "218:580",
+      "to": "221:1554",
+      "label": "取消",
+      "key": "share"
+    },
+    {
+      "from": "218:655",
+      "to": "220:1198",
+      "label": "确认共享整个会话",
+      "key": "share-chat"
+    },
+    {
+      "from": "218:657",
+      "to": "220:1195",
+      "label": "取消",
+      "key": "share-chat"
+    },
+    {
+      "from": "218:710",
+      "to": "221:1554",
+      "label": "撤销共享",
+      "key": "share-manage"
+    },
+    {
+      "from": "218:712",
+      "to": "221:1554",
+      "label": "返回目标",
+      "key": "share-manage"
+    },
+    {
+      "from": "218:787",
+      "to": "220:1200",
+      "label": "重新连接",
+      "key": "sync"
+    },
+    {
+      "from": "218:789",
+      "to": "215:41",
+      "label": "返回空间",
+      "key": "sync"
+    },
+    {
+      "from": "218:864",
+      "to": "220:1200",
+      "label": "保留我的修改",
+      "key": "conflict"
+    },
+    {
+      "from": "218:866",
+      "to": "220:1200",
+      "label": "使用云端修改",
+      "key": "conflict"
+    },
+    {
+      "from": "218:919",
+      "to": "215:26",
+      "label": "联网核验",
+      "key": "expired"
+    },
+    {
+      "from": "218:921",
+      "to": "215:41",
+      "label": "返回我的空间",
+      "key": "expired"
+    },
+    {
+      "from": "218:974",
+      "to": "215:36",
+      "label": "查看本人未提交输入",
+      "key": "revoked"
+    },
+    {
+      "from": "218:976",
+      "to": "215:41",
+      "label": "返回我的空间",
+      "key": "revoked"
+    },
+    {
+      "from": "218:1051",
+      "to": "221:1656",
+      "label": "返回设置",
+      "key": "devices"
+    },
+    {
+      "from": "218:1104",
+      "to": "215:26",
+      "label": "先处理同步",
+      "key": "logout"
+    },
+    {
+      "from": "218:1106",
+      "to": "221:1656",
+      "label": "取消退出",
+      "key": "logout"
+    },
+    {
+      "from": "218:1159",
+      "to": "215:15",
+      "label": "确认转移给 Sam",
+      "key": "transfer"
+    },
+    {
+      "from": "218:1161",
+      "to": "215:15",
+      "label": "取消",
+      "key": "transfer"
+    },
+    {
+      "from": "218:1214",
+      "to": "215:41",
+      "label": "确认解散家庭",
+      "key": "dissolve"
+    },
+    {
+      "from": "218:1216",
+      "to": "215:15",
+      "label": "保留家庭",
+      "key": "dissolve"
+    },
+    {
+      "from": "218:1290",
+      "to": "221:1656",
+      "label": "返回设置",
+      "key": "data"
+    },
+    {
+      "from": "218:1365",
+      "to": "215:32",
+      "label": "管理家庭所有权",
+      "key": "delete"
+    },
+    {
+      "from": "218:1367",
+      "to": "215:34",
+      "label": "取消",
+      "key": "delete"
+    },
+    {
+      "from": "218:1381",
+      "to": "220:1196",
+      "label": "保存为私人草稿",
+      "key": "recover"
+    },
+    {
+      "from": "218:1383",
+      "to": "215:41",
+      "label": "暂不恢复",
+      "key": "recover"
+    },
+    {
+      "from": "218:1401",
+      "to": "221:1554",
+      "label": "保存修改",
+      "key": "edit-task"
+    },
+    {
+      "from": "218:1403",
+      "to": "221:1554",
+      "label": "取消",
+      "key": "edit-task"
+    },
+    {
+      "from": "218:1478",
+      "to": "221:1609",
+      "label": "返回家庭",
+      "key": "readonly"
+    },
+    {
+      "from": "218:1509",
+      "to": "221:1777",
+      "label": "复制邀请链接",
+      "key": "invitations"
+    },
+    {
+      "from": "218:1511",
+      "to": "215:40",
+      "label": "撤销邀请",
+      "key": "invitations"
+    },
+    {
+      "from": "218:1542",
+      "to": "215:41",
+      "label": "回到我的空间",
+      "key": "invite-invalid"
+    },
+    {
+      "from": "218:1616",
+      "to": "220:1195",
+      "label": "聊聊我的目标",
+      "key": "home-empty"
+    },
+    {
+      "from": "220:1300",
+      "to": "220:1196",
+      "label": "查看并编辑草稿",
+      "key": "chat"
+    },
+    {
+      "from": "220:1302",
+      "to": "221:1813",
+      "label": "继续输入",
+      "key": "chat"
+    },
+    {
+      "from": "220:1381",
+      "to": "220:1197",
+      "label": "确认保存计划",
+      "key": "draft"
+    },
+    {
+      "from": "220:1383",
+      "to": "215:37",
+      "label": "继续修改",
+      "key": "draft"
+    },
+    {
+      "from": "220:1435",
+      "to": "221:1554",
+      "label": "开始第一项练习",
+      "key": "saved"
+    },
+    {
+      "from": "220:1437",
+      "to": "221:1500",
+      "label": "回到我的空间",
+      "key": "saved"
+    },
+    {
+      "from": "220:1512",
+      "to": "221:1879",
+      "label": "输入消息",
+      "key": "chat-shared"
+    },
+    {
+      "from": "220:1514",
+      "to": "215:25",
+      "label": "管理共享",
+      "key": "chat-shared"
+    },
+    {
+      "from": "220:1567",
+      "to": "221:1609",
+      "label": "保留草稿并切换",
+      "key": "unsaved"
+    },
+    {
+      "from": "220:1569",
+      "to": "215:37",
+      "label": "继续编辑",
+      "key": "unsaved"
+    },
+    {
+      "from": "220:1621",
+      "to": "221:1609",
+      "label": "返回家庭",
+      "key": "sync-result"
+    }
+  ],
+  "extraRoutes": [
+    [
+      "210:33",
+      "210:10"
+    ],
+    [
+      "210:36",
+      "215:20"
+    ],
+    [
+      "210:39",
+      "210:9"
+    ],
+    [
+      "212:11",
+      "215:12"
+    ],
+    [
+      "215:182",
+      "215:19"
+    ],
+    [
+      "215:202",
+      "215:23"
+    ],
+    [
+      "215:253",
+      "215:18"
+    ],
+    [
+      "215:273",
+      "215:22"
+    ],
+    [
+      "215:293",
+      "215:39"
+    ],
+    [
+      "218:742",
+      "215:27"
+    ],
+    [
+      "218:764",
+      "215:28"
+    ],
+    [
+      "218:841",
+      "215:37"
+    ],
+    [
+      "218:951",
+      "215:36"
+    ],
+    [
+      "218:1224",
+      "215:12"
+    ],
+    [
+      "218:1246",
+      "215:26"
+    ],
+    [
+      "218:1268",
+      "215:35"
+    ],
+    [
+      "218:1298",
+      "215:32"
+    ],
+    [
+      "218:1594",
+      "215:13"
+    ],
+    [
+      "220:1278",
+      "220:1196"
+    ],
+    [
+      "220:1315",
+      "215:37"
+    ]
+  ],
+  "icons": {
+    "adopt": "cloud-check",
+    "create-family": "users",
+    "family-empty": "users",
+    "members": "users",
+    "invite": "users",
+    "accept": "users",
+    "member": "users",
+    "child": "users",
+    "pair-child": "lock",
+    "pair-guardian": "lock",
+    "child-devices": "lock",
+    "share": "users",
+    "share-chat": "message-circle",
+    "share-manage": "users",
+    "sync": "cloud-check",
+    "conflict": "square-pen",
+    "expired": "lock",
+    "revoked": "lock",
+    "devices": "lock",
+    "logout": "cloud-check",
+    "transfer": "users",
+    "dissolve": "users",
+    "data": "settings",
+    "delete": "lock",
+    "recover": "square-pen",
+    "edit-task": "target",
+    "readonly": "target",
+    "invitations": "users",
+    "invite-invalid": "users",
+    "home-empty": "target",
+    "chat": "message-circle",
+    "draft": "target",
+    "saved": "check",
+    "chat-shared": "message-circle",
+    "unsaved": "square-pen",
+    "sync-result": "cloud-check"
+  },
+  "dialogs": [
+    {
+      "mutatedNodeIds": [
+        "246:1717",
+        "246:1718",
+        "I246:1718;5742:38608",
+        "I246:1718;5742:38608;5607:25956",
+        "I246:1718;5742:38608;5607:25843",
+        "I246:1718;61:67654",
+        "I246:1718;61:67599",
+        "I246:1718;61:67600",
+        "I246:1718;537:39280",
+        "I246:1718;5446:7598",
+        "I246:1718;5446:7598;5446:9932",
+        "I246:1718;5446:7598;5446:6665",
+        "I246:1718;5446:7604",
+        "I246:1718;5446:7604;5446:9891",
+        "I246:1718;5446:7604;5446:6662"
+      ],
+      "root": "246:1717",
+      "confirm": "I246:1718;5446:7598",
+      "cancel": "I246:1718;5446:7604",
+      "key": "confirm-device"
+    },
+    {
+      "mutatedNodeIds": [
+        "246:1734",
+        "246:1735",
+        "I246:1735;5742:38608",
+        "I246:1735;5742:38608;5607:25956",
+        "I246:1735;5742:38608;5607:25843",
+        "I246:1735;61:67654",
+        "I246:1735;61:67599",
+        "I246:1735;61:67600",
+        "I246:1735;537:39280",
+        "I246:1735;5446:7598",
+        "I246:1735;5446:7598;5446:9932",
+        "I246:1735;5446:7598;5446:6665",
+        "I246:1735;5446:7604",
+        "I246:1735;5446:7604;5446:9891",
+        "I246:1735;5446:7604;5446:6662"
+      ],
+      "root": "246:1734",
+      "confirm": "I246:1735;5446:7598",
+      "cancel": "I246:1735;5446:7604",
+      "key": "confirm-share"
+    },
+    {
+      "mutatedNodeIds": [
+        "246:1751",
+        "246:1752",
+        "I246:1752;5742:38608",
+        "I246:1752;5742:38608;5607:25956",
+        "I246:1752;5742:38608;5607:25843",
+        "I246:1752;61:67654",
+        "I246:1752;61:67599",
+        "I246:1752;61:67600",
+        "I246:1752;537:39280",
+        "I246:1752;5446:7598",
+        "I246:1752;5446:7598;5446:9932",
+        "I246:1752;5446:7598;5446:6665",
+        "I246:1752;5446:7604",
+        "I246:1752;5446:7604;5446:9891",
+        "I246:1752;5446:7604;5446:6662"
+      ],
+      "root": "246:1751",
+      "confirm": "I246:1752;5446:7598",
+      "cancel": "I246:1752;5446:7604",
+      "key": "confirm-leave"
+    },
+    {
+      "mutatedNodeIds": [
+        "246:1768",
+        "246:1769",
+        "I246:1769;5742:38608",
+        "I246:1769;5742:38608;5607:25956",
+        "I246:1769;5742:38608;5607:25843",
+        "I246:1769;61:67654",
+        "I246:1769;61:67599",
+        "I246:1769;61:67600",
+        "I246:1769;537:39280",
+        "I246:1769;5446:7598",
+        "I246:1769;5446:7598;5446:9932",
+        "I246:1769;5446:7598;5446:6665",
+        "I246:1769;5446:7604",
+        "I246:1769;5446:7604;5446:9891",
+        "I246:1769;5446:7604;5446:6662"
+      ],
+      "root": "246:1768",
+      "confirm": "I246:1769;5446:7598",
+      "cancel": "I246:1769;5446:7604",
+      "key": "confirm-archive"
+    }
+  ],
+  "removeDialog": {
+    "createdNodeIds": [
+      "244:1668",
+      "244:1669",
+      "I244:1669;5742:38608",
+      "I244:1669;5742:38608;5607:25956",
+      "I244:1669;5742:38608;5607:25843",
+      "I244:1669;61:67654",
+      "I244:1669;61:67599",
+      "I244:1669;61:67600",
+      "I244:1669;537:39280",
+      "I244:1669;5446:7598",
+      "I244:1669;5446:7598;5446:9932",
+      "I244:1669;5446:7598;5446:6665",
+      "I244:1669;5446:7604",
+      "I244:1669;5446:7604;5446:9891",
+      "I244:1669;5446:7604;5446:6662"
+    ],
+    "root": "244:1668",
+    "confirm": "I244:1669;5446:7598",
+    "cancel": "I244:1669;5446:7604"
+  },
+  "englishRoots": [
+    {
+      "key": "adopt",
+      "id": "258:1743"
+    },
+    {
+      "key": "create-family",
+      "id": "258:1811"
+    },
+    {
+      "key": "family-empty",
+      "id": "258:1835"
+    },
+    {
+      "key": "members",
+      "id": "258:1905"
+    },
+    {
+      "key": "invite",
+      "id": "258:1991"
+    },
+    {
+      "key": "accept",
+      "id": "258:2049"
+    },
+    {
+      "key": "member",
+      "id": "258:2118"
+    },
+    {
+      "key": "child",
+      "id": "258:2171"
+    },
+    {
+      "key": "pair-child",
+      "id": "258:2229"
+    },
+    {
+      "key": "pair-guardian",
+      "id": "258:2297"
+    },
+    {
+      "key": "child-devices",
+      "id": "258:2353"
+    },
+    {
+      "key": "share",
+      "id": "258:2404"
+    },
+    {
+      "key": "share-chat",
+      "id": "258:2474"
+    },
+    {
+      "key": "share-manage",
+      "id": "258:2541"
+    },
+    {
+      "key": "sync",
+      "id": "258:2594"
+    },
+    {
+      "key": "conflict",
+      "id": "258:2662"
+    },
+    {
+      "key": "expired",
+      "id": "258:2730"
+    },
+    {
+      "key": "revoked",
+      "id": "258:2781"
+    },
+    {
+      "key": "devices",
+      "id": "258:2832"
+    },
+    {
+      "key": "logout",
+      "id": "258:2898"
+    },
+    {
+      "key": "transfer",
+      "id": "258:2949"
+    },
+    {
+      "key": "dissolve",
+      "id": "258:3002"
+    },
+    {
+      "key": "data",
+      "id": "258:3055"
+    },
+    {
+      "key": "delete",
+      "id": "258:3120"
+    },
+    {
+      "key": "recover",
+      "id": "258:3188"
+    },
+    {
+      "key": "edit-task",
+      "id": "258:3210"
+    },
+    {
+      "key": "readonly",
+      "id": "258:3237"
+    },
+    {
+      "key": "invitations",
+      "id": "258:3304"
+    },
+    {
+      "key": "invite-invalid",
+      "id": "258:3340"
+    },
+    {
+      "key": "home-empty",
+      "id": "258:3374"
+    },
+    {
+      "key": "chat",
+      "id": "384:4359"
+    },
+    {
+      "key": "draft",
+      "id": "384:4425"
+    },
+    {
+      "key": "saved",
+      "id": "384:4498"
+    },
+    {
+      "key": "chat-shared",
+      "id": "384:4547"
+    },
+    {
+      "key": "unsaved",
+      "id": "384:4614"
+    },
+    {
+      "key": "sync-result",
+      "id": "384:4665"
+    }
+  ],
+  "englishMaps": [
+    {
+      "key": "adopt",
+      "id": "258:1743",
+      "map": {
+        "返回": "Back",
+        "带上本机的内容": "Bring your local content",
+        "先选择，再同步到 alex@example.com。": "Choose what to sync to alex@example.com.",
+        "原始本机数据会保留。加入家庭不会自动共享这些内容。": "Your local originals stay here. Joining a family does not share this content.",
+        "对话": "Conversations",
+        "  对话": "  Conversations",
+        "3 段本机对话": "3 local conversations",
+        "  3 段本机对话": "  3 local conversations",
+        "已选择": "Selected",
+        "  已选择": "  Selected",
+        "目标与任务": "Goals & tasks",
+        "  目标与任务": "  Goals & tasks",
+        "2 个目标 · 5 项任务": "2 goals · 5 tasks",
+        "  2 个目标 · 5 项任务": "  2 goals · 5 tasks",
+        "个人密钥": "Personal API keys",
+        "  个人密钥": "  Personal API keys",
+        "留在设备上": "Stay on this device",
+        "  留在设备上": "  Stay on this device",
+        "不上传": "Not uploaded",
+        "  不上传": "  Not uploaded",
+        "确认同步所选内容": "Sync selected content",
+        "暂时保留在本机": "Keep on this device for now"
+      }
+    },
+    {
+      "key": "create-family",
+      "id": "258:1811",
+      "map": {
+        "返回": "Back",
+        "创建家庭空间": "Create a family space",
+        "一起做事，各自保留自己的空间。": "Do things together. Keep your own space.",
+        "你将成为家庭所有者。成员只会看到明确共享的内容。": "You will be the family owner. Members only see content you explicitly share.",
+        "家庭名称": "Family name",
+        "  家庭名称": "  Family name",
+        "周末家庭": "周末家庭",
+        "  周末家庭": "  周末家庭",
+        "创建家庭": "Create family",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "family-empty",
+      "id": "258:1835",
+      "map": {
+        "返回": "Back",
+        "周末家庭": "周末家庭",
+        "你的家庭空间已准备好。": "Your family space is ready.",
+        "目前只有你。私人对话和目标不会自动出现在这里。": "Just you for now. Private chats and goals are not shared automatically.",
+        "邀请家人": "Invite family",
+        "  邀请家人": "  Invite family",
+        "发出邀请，对方接受后加入": "They join after accepting",
+        "  发出邀请，对方接受后加入": "  They join after accepting",
+        "添加儿童身份": "Add a child profile",
+        "  添加儿童身份": "  Add a child profile",
+        "由监护人创建并连接设备": "A guardian creates it and connects a device",
+        "  由监护人创建并连接设备": "  A guardian creates it and connects a device",
+        "共享第一个目标": "Share your first goal",
+        "  共享第一个目标": "  Share your first goal",
+        "选择已有目标，设定访问权限": "Choose a goal and set access",
+        "  选择已有目标，设定访问权限": "  Choose a goal and set access",
+        "回到我的空间": "Back to my space"
+      }
+    },
+    {
+      "key": "members",
+      "id": "258:1905",
+      "map": {
+        "返回": "Back",
+        "家庭成员": "Family members",
+        "周末家庭 · 3 位成员": "周末家庭 · 3 members",
+        "Alex · 你": "Alex · You",
+        "  Alex · 你": "  Alex · You",
+        "家庭所有者": "Family owner",
+        "  家庭所有者": "  Family owner",
+        "管理": "Manage",
+        "  管理": "  Manage",
+        "Sam": "Sam",
+        "  Sam": "  Sam",
+        "普通成员": "Member",
+        "  普通成员": "  Member",
+        "查看": "View",
+        "  查看": "  View",
+        "小禾": "小禾",
+        "  小禾": "  小禾",
+        "受管理儿童 · 监护人 Alex": "Managed child · Guardian: Alex",
+        "  受管理儿童 · 监护人 Alex": "  Managed child · Guardian: Alex",
+        "设备": "Devices",
+        "  设备": "  Devices",
+        "待接受的邀请": "Pending invitations",
+        "  待接受的邀请": "  Pending invitations",
+        "1 封邀请": "1 invitation",
+        "  1 封邀请": "  1 invitation",
+        "邀请家人": "Invite family",
+        "添加儿童身份": "Add a child profile"
+      }
+    },
+    {
+      "key": "invite",
+      "id": "258:1991",
+      "map": {
+        "返回": "Back",
+        "邀请家人": "Invite family",
+        "对方接受后加入周末家庭。": "Join 周末家庭 after accepting.",
+        "邀请仅供指定邮箱使用。对方接受前，你可以随时撤销。": "Only the specified email can use this invitation. You can revoke it before they accept.",
+        "加入角色": "Role",
+        "  加入角色": "  Role",
+        "普通成员": "Member",
+        "  普通成员": "  Member",
+        "私人内容": "Private content",
+        "  私人内容": "  Private content",
+        "不会自动共享": "Not shared automatically",
+        "  不会自动共享": "  Not shared automatically",
+        "对方邮箱": "Email address",
+        "  对方邮箱": "  Email address",
+        "sam@example.com": "sam@example.com",
+        "  sam@example.com": "  sam@example.com",
+        "创建邀请": "Create invitation",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "accept",
+      "id": "258:2049",
+      "map": {
+        "返回": "Back",
+        "一起加入周末家庭": "Join 周末家庭",
+        "Alex 邀请你加入家庭空间。": "Alex invited you to this family space.",
+        "当前账号": "Current account",
+        "  当前账号": "  Current account",
+        "sam@example.com": "sam@example.com",
+        "  sam@example.com": "  sam@example.com",
+        "切换": "Switch",
+        "  切换": "  Switch",
+        "普通成员": "Member",
+        "  普通成员": "  Member",
+        "按每份内容的授权查看或编辑": "View or edit as each item allows",
+        "  按每份内容的授权查看或编辑": "  View or edit as each item allows",
+        "自己的空间": "Your space",
+        "  自己的空间": "  Your space",
+        "私人内容依旧由你掌控": "Your private content stays yours",
+        "  私人内容依旧由你掌控": "  Your private content stays yours",
+        "接受邀请": "Accept invitation",
+        "暂不加入": "Not now"
+      }
+    },
+    {
+      "key": "member",
+      "id": "258:2118",
+      "map": {
+        "返回": "Back",
+        "Sam": "Sam",
+        "普通成员 · 周末家庭": "Member · 周末家庭",
+        "移除后停止新的共享访问。已离线设备会在获知撤权或授权到期后锁定。": "Removal stops new shared access. Offline devices lock when notified or when access expires.",
+        "家庭角色": "Family role",
+        "  家庭角色": "  Family role",
+        "普通成员": "Member",
+        "  普通成员": "  Member",
+        "内容权限": "Content access",
+        "  内容权限": "  Content access",
+        "逐份内容授权，不随角色扩大": "Granted per item, separate from role",
+        "  逐份内容授权，不随角色扩大": "  Granted per item, separate from role",
+        "移除成员": "Remove member",
+        "返回成员列表": "Back to members"
+      }
+    },
+    {
+      "key": "child",
+      "id": "258:2171",
+      "map": {
+        "返回": "Back",
+        "添加儿童身份": "Add a child profile",
+        "由你建立监护关系并管理设备连接。": "Become their guardian and manage device access.",
+        "家庭管理员不自动成为监护人。连接设备不会开放儿童全部私人内容。": "Family admins are not automatically guardians. Pairing does not give access to all private child content.",
+        "独立身份": "Separate profile",
+        "  独立身份": "  Separate profile",
+        "儿童不需要邮箱": "No email needed",
+        "  儿童不需要邮箱": "  No email needed",
+        "监护人": "Guardian",
+        "  监护人": "  Guardian",
+        "Alex · 你": "Alex · You",
+        "  Alex · 你": "  Alex · You",
+        "儿童称呼": "Child’s name",
+        "  儿童称呼": "  Child’s name",
+        "小禾": "小禾",
+        "  小禾": "  小禾",
+        "创建并连接设备": "Create & connect device",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "pair-child",
+      "id": "258:2229",
+      "map": {
+        "返回": "Back",
+        "请监护人连接": "Connect with a guardian",
+        "在监护人已登录的设备上操作。": "Use the guardian’s signed-in device.",
+        "配对码失效后可重新获取。仅凭配对码不能取得监护人的会话。": "Get a new code if it expires. A code alone cannot grant the guardian’s session.",
+        "设备配对码": "Pairing code",
+        "  设备配对码": "  Pairing code",
+        "482 196": "482 196",
+        "  482 196": "  482 196",
+        "这台设备": "This device",
+        "  这台设备": "  This device",
+        "小禾的 iPad": "小禾的 iPad",
+        "  小禾的 iPad": "  小禾的 iPad",
+        "等待确认": "Waiting for confirmation",
+        "  等待确认": "  Waiting for confirmation",
+        "请监护人核对设备与儿童身份": "Ask the guardian to check this device and profile",
+        "  请监护人核对设备与儿童身份": "  Ask the guardian to check this device and profile",
+        "重新获取配对码": "Get a new code",
+        "返回登录": "Back to sign in"
+      }
+    },
+    {
+      "key": "pair-guardian",
+      "id": "258:2297",
+      "map": {
+        "返回": "Back",
+        "连接儿童设备": "Connect child’s device",
+        "核对后，让小禾在自己的设备进入。": "Check the details so 小禾 can sign in.",
+        "只为儿童签发独立权限，设备不会获得你的账号凭证。": "This creates a separate child session. Your account credentials stay private.",
+        "儿童身份": "Child profile",
+        "  儿童身份": "  Child profile",
+        "小禾": "小禾",
+        "  小禾": "  小禾",
+        "请求连接的设备": "Device requesting access",
+        "  请求连接的设备": "  Device requesting access",
+        "iPad · 当前配对请求": "iPad · Current pairing request",
+        "  iPad · 当前配对请求": "  iPad · Current pairing request",
+        "设备配对码": "Pairing code",
+        "  设备配对码": "  Pairing code",
+        "482 196": "482 196",
+        "  482 196": "  482 196",
+        "确认连接": "Confirm connection",
+        "拒绝请求": "Decline request"
+      }
+    },
+    {
+      "key": "child-devices",
+      "id": "258:2353",
+      "map": {
+        "返回": "Back",
+        "小禾的设备": "小禾’s devices",
+        "监护人 Alex · 仅管理连接权限": "Guardian: Alex · Device access only",
+        "撤销设备后，服务端拒绝刷新与同步；重新使用需要再次配对。": "Revoking a device stops session renewal and sync. It must pair again to reconnect.",
+        "小禾的 iPad": "小禾的 iPad",
+        "  小禾的 iPad": "  小禾的 iPad",
+        "已连接 · 最近使用：今天": "Connected · Last used today",
+        "  已连接 · 最近使用：今天": "  Connected · Last used today",
+        "查看": "View",
+        "  查看": "  View",
+        "连接新设备": "Connect a new device",
+        "  连接新设备": "  Connect a new device",
+        "生成新的配对请求": "Start a new pairing request",
+        "  生成新的配对请求": "  Start a new pairing request",
+        "撤销这台设备": "Revoke this device",
+        "重新连接设备": "Reconnect device"
+      }
+    },
+    {
+      "key": "share",
+      "id": "258:2404",
+      "map": {
+        "返回": "Back",
+        "共享到家庭": "Share with family",
+        "提高工作交流能力": "提高工作交流能力",
+        "共享同一份内容。家人的修改会同步给获授权成员，原件仍属于你。": "Everyone works on the same content. Changes sync to authorized members. You keep ownership.",
+        "共享给": "Share with",
+        "  共享给": "  Share with",
+        "周末家庭": "周末家庭",
+        "  周末家庭": "  周末家庭",
+        "选择": "Choose",
+        "  选择": "  Choose",
+        "访问权限": "Access",
+        "  访问权限": "  Access",
+        "可以编辑": "Can edit",
+        "  可以编辑": "  Can edit",
+        "调整": "Change",
+        "  调整": "  Change",
+        "内容范围": "Content included",
+        "  内容范围": "  Content included",
+        "此目标及预览中的任务": "This goal and the previewed tasks",
+        "  此目标及预览中的任务": "  This goal and the previewed tasks",
+        "查看": "Preview",
+        "  查看": "  Preview",
+        "确认共享": "Confirm sharing",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "share-chat",
+      "id": "258:2474",
+      "map": {
+        "返回": "Back",
+        "共享这段对话": "Share this conversation",
+        "英语工作交流练习": "英语工作交流练习",
+        "共享期间会持续显示标识。其他对话、个人密钥不会一起共享。": "A shared label stays visible. Other chats and personal API keys stay private.",
+        "共享给": "Share with",
+        "  共享给": "  Share with",
+        "周末家庭": "周末家庭",
+        "  周末家庭": "  周末家庭",
+        "访问权限": "Access",
+        "  访问权限": "  Access",
+        "可以查看": "Can view",
+        "  可以查看": "  Can view",
+        "包含的内容": "Content included",
+        "  包含的内容": "  Content included",
+        "整个会话和之后新增的消息": "The entire chat, including future messages",
+        "  整个会话和之后新增的消息": "  The entire chat, including future messages",
+        "确认共享整个会话": "Share entire conversation",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "share-manage",
+      "id": "258:2541",
+      "map": {
+        "返回": "Back",
+        "管理共享": "Manage sharing",
+        "提高工作交流能力 · 原件属于你": "提高工作交流能力 · Owned by you",
+        "撤销共享只收回家庭访问权限，不删除你的原件。": "Revoking sharing removes family access. Your original stays in your space.",
+        "周末家庭": "周末家庭",
+        "  周末家庭": "  周末家庭",
+        "可以编辑 · 当前共享中": "Can edit · Shared",
+        "  可以编辑 · 当前共享中": "  Can edit · Shared",
+        "调整": "Change",
+        "  调整": "  Change",
+        "原件归属": "Original location",
+        "  原件归属": "  Original location",
+        "Alex 的个人空间": "Alex’s personal space",
+        "  Alex 的个人空间": "  Alex’s personal space",
+        "撤销共享": "Revoke sharing",
+        "返回目标": "Back to goal"
+      }
+    },
+    {
+      "key": "sync",
+      "id": "258:2594",
+      "map": {
+        "返回": "Back",
+        "同步中心": "Sync center",
+        "本机已保存 · 2 项等待云端确认": "Saved locally · 2 changes awaiting confirmation",
+        "重新联网后先核验当前权限，再提交待同步内容。": "On reconnect, we check access before uploading pending changes.",
+        "练习计划": "练习计划",
+        "  练习计划": "  练习计划",
+        "等待上传 · 本机修改已保留": "Waiting to upload · Saved locally",
+        "  等待上传 · 本机修改已保留": "  Waiting to upload · Saved locally",
+        "重试": "Retry",
+        "  重试": "  Retry",
+        "每周一起阅读": "每周一起阅读",
+        "  每周一起阅读": "  每周一起阅读",
+        "存在两份修改": "Two versions need review",
+        "  存在两份修改": "  Two versions need review",
+        "比较": "Compare",
+        "  比较": "  Compare",
+        "家庭离线授权": "Offline family access",
+        "  家庭离线授权": "  Offline family access",
+        "仍有效 · 到期前可离线编辑": "Valid · You can edit until it expires",
+        "  仍有效 · 到期前可离线编辑": "  Valid · You can edit until it expires",
+        "查看": "View",
+        "  查看": "  View",
+        "重新连接": "Reconnect",
+        "返回空间": "Back to space"
+      }
+    },
+    {
+      "key": "conflict",
+      "id": "258:2662",
+      "map": {
+        "返回": "Back",
+        "保留哪一份修改": "Which version to keep?",
+        "每周一起阅读 · 同一项任务": "每周一起阅读 · Same task",
+        "确认前，两份修改均会保留。选择后仍需提交并取得云端确认。": "Both versions stay until you confirm. Your choice still needs to sync and receive cloud confirmation.",
+        "你的修改": "Your change",
+        "  你的修改": "  Your change",
+        "每天阅读 15 分钟": "每天阅读 15 分钟",
+        "  每天阅读 15 分钟": "  每天阅读 15 分钟",
+        "选择": "Select",
+        "  选择": "  Select",
+        "云端修改 · Sam": "Cloud change · Sam",
+        "  云端修改 · Sam": "  Cloud change · Sam",
+        "每天阅读 20 分钟": "每天阅读 20 分钟",
+        "  每天阅读 20 分钟": "  每天阅读 20 分钟",
+        "自己合并": "Merge yourself",
+        "  自己合并": "  Merge yourself",
+        "在两份内容基础上编辑": "Edit using both versions",
+        "  在两份内容基础上编辑": "  Edit using both versions",
+        "保留我的修改": "Keep my version",
+        "使用云端修改": "Use cloud version"
+      }
+    },
+    {
+      "key": "expired",
+      "id": "258:2730",
+      "map": {
+        "返回": "Back",
+        "联网后继续": "Connect to continue",
+        "家庭内容的离线授权已到期。": "Offline family access has expired.",
+        "本地操作不能延长授权。核验失败时可以恢复你本人未提交的输入。": "Local edits cannot extend access. If verification fails, you can recover your own pending input.",
+        "内容已锁定": "Content locked",
+        "  内容已锁定": "  Content locked",
+        "联网核验权限后才能继续": "Connect to verify access and continue",
+        "  联网核验权限后才能继续": "  Connect to verify access and continue",
+        "待同步输入": "Pending input",
+        "  待同步输入": "  Pending input",
+        "已保留，暂未提交": "Saved, not yet submitted",
+        "  已保留，暂未提交": "  Saved, not yet submitted",
+        "联网核验": "Verify access online",
+        "返回我的空间": "Back to my space"
+      }
+    },
+    {
+      "key": "revoked",
+      "id": "258:2781",
+      "map": {
+        "返回": "Back",
+        "共享访问已结束": "Shared access ended",
+        "这份内容不再向你共享。": "This content is no longer shared with you.",
+        "恢复仅包含你自己的未提交输入，不恢复已撤权的共享正文。": "Recovery includes only your own pending input, not the shared content you lost access to.",
+        "共享正文": "Shared content",
+        "  共享正文": "  Shared content",
+        "已锁定，无法继续查看或编辑": "Locked · No viewing or editing",
+        "  已锁定，无法继续查看或编辑": "  Locked · No viewing or editing",
+        "你尚未提交的输入": "Your pending input",
+        "  你尚未提交的输入": "  Your pending input",
+        "可恢复到私人草稿": "Recover it as a private draft",
+        "  可恢复到私人草稿": "  Recover it as a private draft",
+        "查看": "View",
+        "  查看": "  View",
+        "查看本人未提交输入": "View my pending input",
+        "返回我的空间": "Back to my space"
+      }
+    },
+    {
+      "key": "devices",
+      "id": "258:2832",
+      "map": {
+        "返回": "Back",
+        "账号设备": "Account devices",
+        "alex@example.com": "alex@example.com",
+        "撤销设备会终止其后续会话刷新和同步访问。": "Revoking a device stops future session renewal and sync access.",
+        "这台 iPhone": "This iPhone",
+        "  这台 iPhone": "  This iPhone",
+        "当前设备 · 今天": "Current device · Today",
+        "  当前设备 · 今天": "  Current device · Today",
+        "书房 iPad": "书房 iPad",
+        "  书房 iPad": "  书房 iPad",
+        "最近使用：昨天": "Last used yesterday",
+        "  最近使用：昨天": "  Last used yesterday",
+        "撤销": "Revoke",
+        "  撤销": "  Revoke",
+        "桌面电脑": "桌面电脑",
+        "  桌面电脑": "  桌面电脑",
+        "最近使用：9 月 7 日": "Last used Sep 7",
+        "  最近使用：9 月 7 日": "  Last used Sep 7",
+        "返回设置": "Back to settings"
+      }
+    },
+    {
+      "key": "logout",
+      "id": "258:2898",
+      "map": {
+        "返回": "Back",
+        "退出前处理未同步内容": "Review changes before signing out",
+        "仍有 2 项修改只保存在这台设备。": "2 changes are saved only on this device.",
+        "退出后账号内容会隔离，不能由下一个账号读取或上传。": "After sign-out, this account’s content stays isolated. Another account cannot read or upload it.",
+        "练习计划": "练习计划",
+        "  练习计划": "  练习计划",
+        "等待上传": "Waiting to upload",
+        "  等待上传": "  Waiting to upload",
+        "阅读任务": "阅读任务",
+        "  阅读任务": "  阅读任务",
+        "冲突待处理": "Conflict needs review",
+        "  冲突待处理": "  Conflict needs review",
+        "先处理同步": "Review sync",
+        "取消退出": "Cancel sign-out"
+      }
+    },
+    {
+      "key": "transfer",
+      "id": "258:2949",
+      "map": {
+        "返回": "Back",
+        "转移家庭所有权": "Transfer family ownership",
+        "周末家庭 · 选择新的所有者": "周末家庭 · Choose a new owner",
+        "转移生效后，只有新的所有者可以转移或解散家庭。": "After transfer, only the new owner can transfer ownership or dissolve this family.",
+        "Sam": "Sam",
+        "  Sam": "  Sam",
+        "成人成员": "Adult member",
+        "  成人成员": "  Adult member",
+        "选择": "Select",
+        "  选择": "  Select",
+        "小禾": "小禾",
+        "  小禾": "  小禾",
+        "儿童身份不能承担管理权限": "Child profiles cannot manage a family",
+        "  儿童身份不能承担管理权限": "  Child profiles cannot manage a family",
+        "不可选": "Unavailable",
+        "  不可选": "  Unavailable",
+        "确认转移给 Sam": "Transfer to Sam",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "dissolve",
+      "id": "258:3002",
+      "map": {
+        "返回": "Back",
+        "解散周末家庭": "Dissolve 周末家庭",
+        "此操作会结束家庭内的共享访问。": "This ends shared access within the family.",
+        "不会删除其他成员的私人内容。离线副本仍受既定授权期限约束。": "Other members’ private content stays intact. Offline copies remain subject to the access expiry limit.",
+        "共享原件": "Shared originals",
+        "  共享原件": "  Shared originals",
+        "仍保留在各自的原空间": "Stay in their original spaces",
+        "  仍保留在各自的原空间": "  Stay in their original spaces",
+        "成员资格": "Membership",
+        "  成员资格": "  Membership",
+        "家庭访问权限将结束": "Family access will end",
+        "  家庭访问权限将结束": "  Family access will end",
+        "确认解散家庭": "Dissolve family",
+        "保留家庭": "Keep family"
+      }
+    },
+    {
+      "key": "data",
+      "id": "258:3055",
+      "map": {
+        "返回": "Back",
+        "数据与账号": "Data & account",
+        "查看和控制自己的内容。": "View and control your content.",
+        "本机内容": "Local content",
+        "  本机内容": "  Local content",
+        "认领与同步范围": "Adoption and sync scope",
+        "  认领与同步范围": "  Adoption and sync scope",
+        "查看": "View",
+        "  查看": "  View",
+        "同步状态": "Sync status",
+        "  同步状态": "  Sync status",
+        "查看未提交的修改": "Review pending changes",
+        "  查看未提交的修改": "  Review pending changes",
+        "删除账号": "Delete account",
+        "  删除账号": "  Delete account",
+        "先查看影响与处理条件": "Review impact and requirements first",
+        "  先查看影响与处理条件": "  Review impact and requirements first",
+        "返回设置": "Back to settings"
+      }
+    },
+    {
+      "key": "delete",
+      "id": "258:3120",
+      "map": {
+        "返回": "Back",
+        "删除账号前": "Before deleting your account",
+        "你仍是周末家庭的唯一所有者。": "You are still the only owner of 周末家庭.",
+        "你仍是唯一所有者，暂时无法删除账号。完成家庭所有权处理后再继续。": "You cannot delete your account while you are the sole family owner. Resolve ownership first.",
+        "先处理家庭": "Resolve family ownership",
+        "  先处理家庭": "  Resolve family ownership",
+        "转移所有权或明确解散": "Transfer ownership or dissolve the family",
+        "  转移所有权或明确解散": "  Transfer ownership or dissolve the family",
+        "前往": "Open",
+        "  前往": "  Open",
+        "共享原件": "Shared originals",
+        "  共享原件": "  Shared originals",
+        "删除前需要处理共享关系": "Resolve sharing before deletion",
+        "  删除前需要处理共享关系": "  Resolve sharing before deletion",
+        "私人内容": "Private content",
+        "  私人内容": "  Private content",
+        "先确认需要保留的内容": "Review what you want to keep",
+        "  先确认需要保留的内容": "  Review what you want to keep",
+        "管理家庭所有权": "Manage family ownership",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "recover",
+      "id": "258:3188",
+      "map": {
+        "返回": "Back",
+        "恢复你的输入": "Recover your input",
+        "仅显示你本人尚未提交的文字。": "Only your own unsubmitted text appears here.",
+        "保存到自己的私人草稿，不恢复原共享记录或访问权限。": "Save it as your private draft. This does not restore the shared record or access.",
+        "你的未提交内容": "Your pending input",
+        "  你的未提交内容": "  Your pending input",
+        "每天阅读 15 分钟": "每天阅读 15 分钟",
+        "  每天阅读 15 分钟": "  每天阅读 15 分钟",
+        "保存为私人草稿": "Save as private draft",
+        "暂不恢复": "Not now"
+      }
+    },
+    {
+      "key": "edit-task",
+      "id": "258:3210",
+      "map": {
+        "返回": "Back",
+        "编辑任务": "Edit task",
+        "提高工作交流能力": "提高工作交流能力",
+        "任务名称": "Task name",
+        "  任务名称": "  Task name",
+        "练习三分钟自我介绍": "练习三分钟自我介绍",
+        "  练习三分钟自我介绍": "  练习三分钟自我介绍",
+        "练习提示": "Practice tip",
+        "  练习提示": "  Practice tip",
+        "用三句话介绍自己和最近的工作": "用三句话介绍自己和最近的工作",
+        "  用三句话介绍自己和最近的工作": "  用三句话介绍自己和最近的工作",
+        "保存修改": "Save changes",
+        "取消": "Cancel"
+      }
+    },
+    {
+      "key": "readonly",
+      "id": "258:3237",
+      "map": {
+        "返回": "Back",
+        "每周一起阅读": "每周一起阅读",
+        "周末家庭 · 仅可查看": "周末家庭 · View only",
+        "你拥有查看权限。需要编辑时，请联系原件所有者。": "You have view access. Contact the original owner if you need to edit.",
+        "阅读一篇短文": "阅读一篇短文",
+        "  阅读一篇短文": "  阅读一篇短文",
+        "今天 · 已完成": "Today · Completed",
+        "  今天 · 已完成": "  Today · Completed",
+        "记录一句收获": "记录一句收获",
+        "  记录一句收获": "  记录一句收获",
+        "等待完成": "To do",
+        "  等待完成": "  To do",
+        "讨论本周阅读": "讨论本周阅读",
+        "  讨论本周阅读": "  讨论本周阅读",
+        "周末": "Weekend",
+        "  周末": "  Weekend",
+        "返回家庭": "Back to family"
+      }
+    },
+    {
+      "key": "invitations",
+      "id": "258:3304",
+      "map": {
+        "返回": "Back",
+        "待接受邀请": "Pending invitations",
+        "周末家庭": "周末家庭",
+        "对方接受前不会成为成员。撤销后邀请无法继续使用。": "They become a member only after accepting. A revoked invitation cannot be used.",
+        "sam@example.com": "sam@example.com",
+        "  sam@example.com": "  sam@example.com",
+        "普通成员 · 等待接受": "Member · Awaiting acceptance",
+        "  普通成员 · 等待接受": "  Member · Awaiting acceptance",
+        "查看": "View",
+        "  查看": "  View",
+        "复制邀请链接": "Copy invitation link",
+        "撤销邀请": "Revoke invitation"
+      }
+    },
+    {
+      "key": "invite-invalid",
+      "id": "258:3340",
+      "map": {
+        "返回": "Back",
+        "邀请已失效": "Invitation unavailable",
+        "这份邀请已过期或被撤销。": "This invitation expired or was revoked.",
+        "请邀请人重新创建邀请。旧链接不会重新授予访问权限。": "Ask the sender for a new invitation. The old link cannot restore access.",
+        "尚未加入家庭": "You have not joined",
+        "  尚未加入家庭": "  You have not joined",
+        "私人空间不受影响": "Your personal space is unaffected",
+        "  私人空间不受影响": "  Your personal space is unaffected",
+        "回到我的空间": "Back to my space"
+      }
+    },
+    {
+      "key": "home-empty",
+      "id": "258:3374",
+      "map": {
+        "返回": "Back",
+        "你的空间，准备好了": "Your space is ready",
+        "从一个想实现的小目标开始。": "Start with a goal you want to achieve.",
+        "创建第一个目标": "Create your first goal",
+        "  创建第一个目标": "  Create your first goal",
+        "输入想法，生成可编辑草稿": "Turn an idea into an editable draft",
+        "  输入想法，生成可编辑草稿": "  Turn an idea into an editable draft",
+        "继续一段对话": "Start a conversation",
+        "  继续一段对话": "  Start a conversation",
+        "讨论、整理，再明确确认": "Discuss, refine, then confirm",
+        "  讨论、整理，再明确确认": "  Discuss, refine, then confirm",
+        "家庭空间": "Family space",
+        "  家庭空间": "  Family space",
+        "邀请家人一起完成目标": "Work toward goals with your family",
+        "  邀请家人一起完成目标": "  Work toward goals with your family",
+        "聊聊我的目标": "Talk about my goal"
+      }
+    },
+    {
+      "key": "chat",
+      "id": "384:4359",
+      "map": {
+        "返回": "Back",
+        "英语工作交流练习": "英语工作交流练习",
+        "仅自己可见 · 本机已保存": "Only you · Saved locally",
+        "你": "You",
+        "  你": "  You",
+        "我想提高英语工作交流能力。": "我想提高英语工作交流能力。",
+        "  我想提高英语工作交流能力。": "  我想提高英语工作交流能力。",
+        "思玥": "Siyue",
+        "  思玥": "  Siyue",
+        "可以从自我介绍、工作进展和会议练习开始。": "可以从自我介绍、工作进展和会议练习开始。",
+        "  可以从自我介绍、工作进展和会议练习开始。": "  可以从自我介绍、工作进展和会议练习开始。",
+        "练习计划草稿": "Practice plan draft",
+        "  练习计划草稿": "  Practice plan draft",
+        "3 项任务 · 可以先修改，再确认保存": "3 tasks · Edit before you confirm",
+        "  3 项任务 · 可以先修改，再确认保存": "  3 tasks · Edit before you confirm",
+        "查看": "View",
+        "  查看": "  View",
+        "查看并编辑草稿": "Review & edit draft",
+        "继续输入": "Keep writing"
+      }
+    },
+    {
+      "key": "draft",
+      "id": "384:4425",
+      "map": {
+        "返回": "Back",
+        "确认你的练习计划": "Review your practice plan",
+        "AI 草稿 · 尚未正式保存": "AI draft · Not yet saved",
+        "练习三分钟自我介绍": "练习三分钟自我介绍",
+        "  练习三分钟自我介绍": "  练习三分钟自我介绍",
+        "每天约 5 分钟": "每天约 5 分钟",
+        "  每天约 5 分钟": "  每天约 5 分钟",
+        "编辑": "Edit",
+        "  编辑": "  Edit",
+        "复述一次工作进展": "复述一次工作进展",
+        "  复述一次工作进展": "  复述一次工作进展",
+        "练习清楚地表达进度": "练习清楚地表达进度",
+        "  练习清楚地表达进度": "  练习清楚地表达进度",
+        "模拟一次英文会议": "模拟一次英文会议",
+        "  模拟一次英文会议": "  模拟一次英文会议",
+        "练习提问和回应": "练习提问和回应",
+        "  练习提问和回应": "  练习提问和回应",
+        "目标名称": "Goal name",
+        "  目标名称": "  Goal name",
+        "提高工作交流能力": "提高工作交流能力",
+        "  提高工作交流能力": "  提高工作交流能力",
+        "确认保存计划": "Confirm & save plan",
+        "继续修改": "Keep editing"
+      }
+    },
+    {
+      "key": "saved",
+      "id": "384:4498",
+      "map": {
+        "返回": "Back",
+        "计划已保存": "Plan saved",
+        "已保存到我的空间 · 云端已确认": "In my space · Confirmed by cloud",
+        "提高工作交流能力": "提高工作交流能力",
+        "  提高工作交流能力": "  提高工作交流能力",
+        "3 项任务 · 已创建正式记录": "3 tasks · Saved as a goal",
+        "  3 项任务 · 已创建正式记录": "  3 tasks · Saved as a goal",
+        "查看": "View",
+        "  查看": "  View",
+        "下一步": "Next step",
+        "  下一步": "  Next step",
+        "从三分钟自我介绍开始": "Start with a three-minute introduction",
+        "  从三分钟自我介绍开始": "  Start with a three-minute introduction",
+        "开始第一项练习": "Start the first exercise",
+        "回到我的空间": "Back to my space"
+      }
+    },
+    {
+      "key": "chat-shared",
+      "id": "384:4547",
+      "map": {
+        "返回": "Back",
+        "讨论本周阅读": "讨论本周阅读",
+        "周末家庭 · 正在共享后续消息": "周末家庭 · Future messages are shared",
+        "发送给家庭不等于允许外发 AI；使用外部 AI 前需要单独授权。": "Sharing with family does not authorize sharing with external AI. Separate permission is required.",
+        "Sam": "Sam",
+        "  Sam": "  Sam",
+        "这周读一篇短文，周末一起聊聊。": "这周读一篇短文，周末一起聊聊。",
+        "  这周读一篇短文，周末一起聊聊。": "  这周读一篇短文，周末一起聊聊。",
+        "你": "You",
+        "  你": "  You",
+        "我来安排，每天留 15 分钟阅读。": "我来安排，每天留 15 分钟阅读。",
+        "  我来安排，每天留 15 分钟阅读。": "  我来安排，每天留 15 分钟阅读。",
+        "共享中的会话": "Shared conversation",
+        "  共享中的会话": "  Shared conversation",
+        "获授权成员可以看到之后的消息": "Authorized members can see future messages",
+        "  获授权成员可以看到之后的消息": "  Authorized members can see future messages",
+        "权限": "Access",
+        "  权限": "  Access",
+        "输入消息": "Write a message",
+        "管理共享": "Manage sharing"
+      }
+    },
+    {
+      "key": "unsaved",
+      "id": "384:4614",
+      "map": {
+        "返回": "Back",
+        "先处理当前修改": "Keep your changes?",
+        "你正在编辑任务，现在切换空间？": "You are editing a task. Switch spaces now?",
+        "可以保留草稿再切换，或继续编辑。": "Keep a draft before switching, or continue editing.",
+        "未保存的任务": "Unsaved task",
+        "  未保存的任务": "  Unsaved task",
+        "练习三分钟自我介绍": "练习三分钟自我介绍",
+        "  练习三分钟自我介绍": "  练习三分钟自我介绍",
+        "当前空间": "Current space",
+        "  当前空间": "  Current space",
+        "我的空间": "My space",
+        "  我的空间": "  My space",
+        "保留草稿并切换": "Keep draft & switch",
+        "继续编辑": "Keep editing"
+      }
+    },
+    {
+      "key": "sync-result",
+      "id": "384:4665",
+      "map": {
+        "返回": "Back",
+        "已确认同步": "Sync confirmed",
+        "本机修改已被云端接受。": "The cloud accepted your local changes.",
+        "练习计划": "练习计划",
+        "  练习计划": "  练习计划",
+        "新版本已确认": "New version confirmed",
+        "  新版本已确认": "  New version confirmed",
+        "每周一起阅读": "每周一起阅读",
+        "  每周一起阅读": "  每周一起阅读",
+        "冲突已解决 · 输入保留": "Conflict resolved · Input kept",
+        "  冲突已解决 · 输入保留": "  Conflict resolved · Input kept",
+        "返回家庭": "Back to family"
+      }
+    }
+  ],
+  "darkRoots": [
+    {
+      "key": "adopt",
+      "id": "314:2921"
+    },
+    {
+      "key": "create-family",
+      "id": "314:2989"
+    },
+    {
+      "key": "family-empty",
+      "id": "314:3013"
+    },
+    {
+      "key": "members",
+      "id": "314:3083"
+    },
+    {
+      "key": "invite",
+      "id": "314:3169"
+    },
+    {
+      "key": "accept",
+      "id": "314:3227"
+    },
+    {
+      "key": "member",
+      "id": "314:3296"
+    },
+    {
+      "key": "child",
+      "id": "314:3349"
+    },
+    {
+      "key": "pair-child",
+      "id": "314:3407"
+    },
+    {
+      "key": "pair-guardian",
+      "id": "314:3475"
+    },
+    {
+      "key": "child-devices",
+      "id": "314:3531"
+    },
+    {
+      "key": "share",
+      "id": "314:3582"
+    },
+    {
+      "key": "share-chat",
+      "id": "314:3652"
+    },
+    {
+      "key": "share-manage",
+      "id": "314:3719"
+    },
+    {
+      "key": "sync",
+      "id": "314:3772"
+    },
+    {
+      "key": "conflict",
+      "id": "314:3840"
+    },
+    {
+      "key": "expired",
+      "id": "314:3908"
+    },
+    {
+      "key": "revoked",
+      "id": "314:3959"
+    },
+    {
+      "key": "devices",
+      "id": "314:4010"
+    },
+    {
+      "key": "logout",
+      "id": "314:4076"
+    },
+    {
+      "key": "transfer",
+      "id": "314:4127"
+    },
+    {
+      "key": "dissolve",
+      "id": "314:4180"
+    },
+    {
+      "key": "data",
+      "id": "314:4233"
+    },
+    {
+      "key": "delete",
+      "id": "314:4298"
+    },
+    {
+      "key": "recover",
+      "id": "314:4366"
+    },
+    {
+      "key": "edit-task",
+      "id": "314:4388"
+    },
+    {
+      "key": "readonly",
+      "id": "314:4415"
+    },
+    {
+      "key": "invitations",
+      "id": "314:4482"
+    },
+    {
+      "key": "invite-invalid",
+      "id": "314:4518"
+    },
+    {
+      "key": "home-empty",
+      "id": "314:4552"
+    },
+    {
+      "key": "chat",
+      "id": "314:4618"
+    },
+    {
+      "key": "draft",
+      "id": "314:4684"
+    },
+    {
+      "key": "saved",
+      "id": "314:4757"
+    },
+    {
+      "key": "chat-shared",
+      "id": "314:4806"
+    },
+    {
+      "key": "unsaved",
+      "id": "314:4873"
+    },
+    {
+      "key": "sync-result",
+      "id": "314:4924"
+    }
+  ],
+  "darkPlanner": "const plans=[];const map={'F6F7F9':'101216','E6EDF6':'26364C','E6E6E6':'343C48','171717':'F5F5F5','000000':'F5F5F5','666666':'ACB4C0','3C3C43':'ACB4C0','0088FF':'ACC7EA'};for(const c of ROOTS){const r=await figma.getNodeByIdAsync(c.id);for(const n of [r,...r.findAll(()=>true)]){const change={id:n.id};for(const prop of ['fills','strokes'])if(Array.isArray(n[prop])){let edited=false;const paints=n[prop].map(p=>{if(p.type!=='SOLID')return p;const hex=[p.color.r,p.color.g,p.color.b].map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('').toUpperCase();let target=map[hex];if(hex==='FFFFFF')target=n.type==='TEXT'?'F5F5F5':'1C2027';if(hex==='47658F'&&(n.type==='TEXT'||n.type==='VECTOR'))target='ACC7EA';if(!target)return p;edited=true;return {type:'SOLID',visible:p.visible!==false,opacity:1,color:{r:parseInt(target.slice(0,2),16)/255,g:parseInt(target.slice(2,4),16)/255,b:parseInt(target.slice(4,6),16)/255}};});if(edited)change[prop]=paints;}if(change.fills||change.strokes)plans.push(change);}}return {plans};",
+  "darkModeCollection": "VariableCollectionId:0f8f6921a9a4bfc5bade1f3d7d9f01bf5dd3f77f/5720:155",
+  "darkModeId": "404:1",
+  "pending": "All UI still in progress: error states, iPad, English dark, validation and semantic post-action corrections required."
+}

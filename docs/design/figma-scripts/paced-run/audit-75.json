@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:36550",
+      "key": "members-transferred",
+      "nodes": 80,
+      "hydratedNodes": 80,
+      "hydrationFailures": 0,
+      "visibleNodes": 77,
+      "textNodes": 22,
+      "visibleTextNodes": 22,
+      "fontsChecked": 22,
+      "instances": 13,
+      "componentReferencesChecked": 13,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 76,
+      "childCollectionsRead": 42,
+      "fonts": {
+        "Noto Sans SC": 22
+      },
+      "textSamples": [
+        {
+          "id": "513:36552",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:36553",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:36558",
+          "text": "My space"
+        },
+        {
+          "id": "513:36565",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:36569",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:36575",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:36735",
+      "key": "child-revoked",
+      "nodes": 68,
+      "hydratedNodes": 68,
+      "hydrationFailures": 0,
+      "visibleNodes": 37,
+      "textNodes": 20,
+      "visibleTextNodes": 13,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 36,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "513:36859",
+          "text": "Device connection revoked"
+        },
+        {
+          "id": "513:36860",
+          "text": "This device can no longer access the child space."
+        },
+        {
+          "id": "I513:36862;550:50523",
+          "text": "Content locked"
+        },
+        {
+          "id": "I513:36862;550:50524",
+          "text": "A guardian must pair this device again"
+        },
+        {
+          "id": "I513:36862;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:36862;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:36902",
+      "key": "child-revoked",
+      "nodes": 68,
+      "hydratedNodes": 68,
+      "hydrationFailures": 0,
+      "visibleNodes": 37,
+      "textNodes": 20,
+      "visibleTextNodes": 13,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 36,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "513:37026",
+          "text": "Device connection revoked"
+        },
+        {
+          "id": "513:37027",
+          "text": "This device can no longer access the child space."
+        },
+        {
+          "id": "I513:37029;550:50523",
+          "text": "Content locked"
+        },
+        {
+          "id": "I513:37029;550:50524",
+          "text": "A guardian must pair this device again"
+        },
+        {
+          "id": "I513:37029;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:37029;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:29807",
+      "key": "otp-expired",
+      "nodes": 67,
+      "hydratedNodes": 67,
+      "hydrationFailures": 0,
+      "visibleNodes": 36,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 10,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 35,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "513:29931",
+          "text": "Code expired"
+        },
+        {
+          "id": "513:29932",
+          "text": "Get a new code to continue."
+        },
+        {
+          "id": "I513:29934;550:50523",
+          "text": "Old code"
+        },
+        {
+          "id": "I513:29934;550:50524",
+          "text": "No longer valid"
+        },
+        {
+          "id": "I513:29934;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:29934;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:29973",
+      "key": "otp-expired",
+      "nodes": 67,
+      "hydratedNodes": 67,
+      "hydrationFailures": 0,
+      "visibleNodes": 36,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 10,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 35,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "513:30097",
+          "text": "Code expired"
+        },
+        {
+          "id": "513:30098",
+          "text": "Get a new code to continue."
+        },
+        {
+          "id": "I513:30100;550:50523",
+          "text": "Old code"
+        },
+        {
+          "id": "I513:30100;550:50524",
+          "text": "No longer valid"
+        },
+        {
+          "id": "I513:30100;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:30100;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:30139",
+      "key": "otp-rate-limited",
+      "nodes": 67,
+      "hydratedNodes": 67,
+      "hydrationFailures": 0,
+      "visibleNodes": 36,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 10,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 35,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "513:30263",
+          "text": "Please wait before retrying"
+        },
+        {
+          "id": "513:30264",
+          "text": "Code requests are temporarily limited."
+        },
+        {
+          "id": "I513:30266;550:50523",
+          "text": "Code request"
+        },
+        {
+          "id": "I513:30266;550:50524",
+          "text": "Cannot send right now"
+        },
+        {
+          "id": "I513:30266;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I513:30266;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "512:30379",
+      "key": "home-empty",
+      "nodes": 77,
+      "hydratedNodes": 77,
+      "hydrationFailures": 0,
+      "visibleNodes": 76,
+      "textNodes": 22,
+      "visibleTextNodes": 22,
+      "fontsChecked": 19,
+      "instances": 11,
+      "componentReferencesChecked": 11,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 75,
+      "childCollectionsRead": 40,
+      "fonts": {
+        "Noto Sans SC": 19
+      },
+      "textSamples": [
+        {
+          "id": "512:30381",
+          "text": "Siyue"
+        },
+        {
+          "id": "512:30382",
+          "text": "Spaces"
+        },
+        {
+          "id": "512:30387",
+          "text": "My space"
+        },
+        {
+          "id": "512:30394",
+          "text": "周末家庭"
+        },
+        {
+          "id": "512:30398",
+          "text": "Conversations"
+        },
+        {
+          "id": "512:30404",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "512:30561",
+      "key": "home-empty",
+      "nodes": 77,
+      "hydratedNodes": 77,
+      "hydrationFailures": 0,
+      "visibleNodes": 76,
+      "textNodes": 22,
+      "visibleTextNodes": 22,
+      "fontsChecked": 19,
+      "instances": 11,
+      "componentReferencesChecked": 11,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 75,
+      "childCollectionsRead": 40,
+      "fonts": {
+        "Noto Sans SC": 19
+      },
+      "textSamples": [
+        {
+          "id": "512:30563",
+          "text": "Siyue"
+        },
+        {
+          "id": "512:30564",
+          "text": "Spaces"
+        },
+        {
+          "id": "512:30569",
+          "text": "My space"
+        },
+        {
+          "id": "512:30576",
+          "text": "周末家庭"
+        },
+        {
+          "id": "512:30580",
+          "text": "Conversations"
+        },
+        {
+          "id": "512:30586",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "512:30743",
+      "key": "unsaved",
+      "nodes": 68,
+      "hydratedNodes": 68,
+      "hydrationFailures": 0,
+      "visibleNodes": 37,
+      "textNodes": 20,
+      "visibleTextNodes": 13,
+      "fontsChecked": 11,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 36,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 11
+      },
+      "textSamples": [
+        {
+          "id": "512:30867",
+          "text": "Keep your changes?"
+        },
+        {
+          "id": "512:30868",
+          "text": "You are editing a task. Switch spaces now?"
+        },
+        {
+          "id": "I512:30870;550:50523",
+          "text": "Unsaved task"
+        },
+        {
+          "id": "I512:30870;550:50524",
+          "text": "练习三分钟自我介绍"
+        },
+        {
+          "id": "I512:30870;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I512:30870;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

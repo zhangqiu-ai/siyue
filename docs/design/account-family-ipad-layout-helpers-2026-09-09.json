@@ -1,0 +1,80 @@
+{
+  "compose": "await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));async function fonts(n){for(const t of n.findAllWithCriteria({types:['TEXT']}))for(const s of t.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);}const out=[];for(const c of CONFIGS){const template=await figma.getNodeByIdAsync(c.template),source=await figma.getNodeByIdAsync(c.source);await fonts(template);await fonts(source);const n=template.clone();figma.currentPage.appendChild(n);n.name='iPad supplement · '+c.key+' · '+c.lang+' · '+c.mode+' · '+c.theme;n.x=c.x;n.y=c.y;n.children[1].remove();const pane=source.clone();n.appendChild(pane);pane.name='iPad content';out.push({...c,id:n.id,sidebar:n.children[0].id,content:pane.id,createdNodeIds:[n.id,...n.findAll(()=>true).map(x=>x.id)]});}return out;",
+  "hydrate": "await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));async function fonts(n){for(const t of n.findAllWithCriteria({types:['TEXT']}))for(const s of t.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);}const output=[];for(const c of CONFIGS){const root=await figma.getNodeByIdAsync(c.id);await fonts(root);const pane=root.children[1],side=root.children[0],auth=['login','otp'].includes(c.key),sw=c.mode==='portrait'?180:220,cw=auth?520:(c.mode==='portrait'?520:660),pw=auth?root.width-48:root.width-sw-80;const ids=[root.id,pane.id,side.id],removed=[];side.visible=!auth;\nconst old=new Map();function collect(n){old.set(n.id,{w:n.width,h:n.height,pl:n.paddingLeft||0,pr:n.paddingRight||0,pt:n.paddingTop||0,pb:n.paddingBottom||0,mode:n.layoutMode,auto:n.primaryAxisSizingMode});if(n.type!=='INSTANCE'&&n.children)for(const ch of n.children)collect(ch);}collect(pane);\nfunction resize(n,w){if(n.type==='TEXT'){n.resize(Math.max(1,w),n.height);n.textAutoResize='HEIGHT';ids.push(n.id);}else{n.resize(Math.max(1,w),n.height);ids.push(n.id);}}\nfunction walk(n,w){const o=old.get(n.id);resize(n,w);if(n.type==='INSTANCE'||!n.children)return;const oi=o.w-o.pl-o.pr,ni=n.width-n.paddingLeft-n.paddingRight;const children=n.children.filter(x=>x.visible);let flex=null;if(n.layoutMode==='HORIZONTAL'&&oi>100){flex=children.filter(x=>old.has(x.id)&&x.width>70).sort((a,b)=>old.get(b.id).w-old.get(a.id).w)[0];}for(const ch of children){const co=old.get(ch.id);if(!co)continue;let nw=co.w;if(n.layoutMode==='VERTICAL'&&oi>100&&co.w>=oi*.75)nw=ni;if(n.layoutMode==='HORIZONTAL'&&ch===flex)nw=Math.max(co.w,co.w+ni-oi);if(o.h<=12&&oi>60)nw=co.w*ni/oi;if(ch.type==='FRAME')walk(ch,nw);else if(ch.type==='INSTANCE'||ch.type==='TEXT')resize(ch,nw);}if(n.layoutMode==='VERTICAL'){const bottom=Math.max(0,...n.children.filter(x=>x.visible).map(x=>x.y+x.height))+n.paddingBottom;if(bottom>n.height)n.resize(n.width,bottom);if(o.auto==='AUTO')n.primaryAxisSizingMode='AUTO';}}\npane.paddingLeft=pane.paddingRight=(pw-cw)/2;pane.paddingTop=pane.paddingBottom=auth?64:32;pane.cornerRadius=0;pane.clipsContent=false;pane.resize(pw,root.height-48);pane.primaryAxisSizingMode='FIXED';pane.counterAxisSizingMode='FIXED';\nfor(const n of [...pane.children])if(['status','状态栏'].includes(n.name)){removed.push(n.id,...(n.type==='FRAME'?n.findAll(()=>true).map(x=>x.id):[]));n.remove();}\nfor(const ch of pane.children){if(ch.name==='返回'&&ch.type==='INSTANCE'){ch.visible=false;ids.push(ch.id);}const co=old.get(ch.id);if(!co)continue;const width=co.w>=280?cw:co.w;if(ch.type==='FRAME')walk(ch,width);else if(ch.type==='INSTANCE'||ch.type==='TEXT')resize(ch,width);}\nfor(const inst of pane.findAllWithCriteria({types:['INSTANCE']})){const column=inst.findAllWithCriteria({types:['FRAME']}).find(n=>n.name==='Title and Detail');if(column){column.primaryAxisSizingMode='AUTO';ids.push(column.id);}}\nconst selected=side.children.find(n=>n.type==='FRAME'&&n.fills?.some(p=>p.type==='SOLID'&&p.visible!==false))?.fills||[];const chosen=['member','child-devices','invitations','child','sync-result','family'].includes(c.key)?'周末家庭':['spaces','language','appearance','sync','data','devices','logout'].includes(c.key)?'设置':'我的空间';for(const row of side.children.filter(n=>n.type==='FRAME')){row.fills=row.name.includes(chosen)?selected:[];row.cornerRadius=12;ids.push(row.id);}\npane.resize(pw,root.height-48);output.push({id:root.id,mutatedNodeIds:[...new Set(ids)],removedNodeIds:removed,contentWidth:cw,paneHeight:pane.height,contentBottom:Math.max(...pane.children.filter(n=>n.visible).map(n=>n.y+n.height))});}return output;",
+  "polish": "await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));async function fonts(n){for(const t of n.findAllWithCriteria({types:['TEXT']}))for(const s of t.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);}const out=[];function paint(hex){return[{type:'SOLID',color:{r:parseInt(hex.slice(0,2),16)/255,g:parseInt(hex.slice(2,4),16)/255,b:parseInt(hex.slice(4,6),16)/255}}];}for(const c of CONFIGS){const n=await figma.getNodeByIdAsync(c.id);await fonts(n);const side=n.children[0],pane=n.children[1],ids=[];for(const t of pane.findAllWithCriteria({types:['TEXT']})){if(['Subtitle','Detail'].includes(t.name)){t.fills=paint(c.theme==='dark'?'ACB4C0':'616975');ids.push(t.id);}if(['思玥','Siyue'].includes(t.characters.trim())){if(c.key==='login'){t.visible=false;}else if(c.key==='chat-input'){t.characters=c.lang==='en'?'Assistant':'助手';}ids.push(t.id);}if(t.characters==='周末读什么？'){t.characters='讨论本周阅读';ids.push(t.id);}}\nfor(const row of side.children.filter(x=>x.type==='FRAME')){const active=row.fills.length>0;for(const t of row.findAllWithCriteria({types:['TEXT']})){t.fills=paint(active?(c.theme==='dark'?'ACC7EA':'47658F'):(c.theme==='dark'?'ACB4C0':'616975'));ids.push(t.id);}}\nif(c.theme==='dark')for(const f of pane.findAllWithCriteria({types:['FRAME']})){if(f.height<=12&&f.width>60&&f.children.length){f.fills=paint('343B46');ids.push(f.id);}}\nif(c.key==='child')side.visible=false;\nout.push({id:n.id,mutatedNodeIds:[...new Set(ids),...(c.key==='child'?[side.id]:[])]});}return out;",
+  "audit": "await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));const out=[];function visible(n,root){for(let p=n;p&&p.id!==root.id;p=p.parent)if(!p.visible)return false;return true;}for(const c of CONFIGS){const n=await figma.getNodeByIdAsync(c.id);const overflow=[],badfonts=[],broken=[],routes=[];const ts=n.findAllWithCriteria({types:['TEXT']});for(const t of ts)if(visible(t,n)&&t.getStyledTextSegments(['fontName']).some(s=>s.fontName.family!=='Noto Sans SC'))badfonts.push(t.id);for(const i of n.findAllWithCriteria({types:['INSTANCE']}))if(!await i.getMainComponentAsync())broken.push(i.id);for(const x of n.findAll(()=>true)){if(!visible(x,n))continue;const p=x.parent;if(p.type!=='PAGE'&&x.width>0&&(x.x<-.6||x.y<-.6||x.x+x.width>p.width+.8||x.y+x.height>p.height+.8))overflow.push({id:x.id,name:x.name,parent:p.id,x:x.x,y:x.y,w:x.width,h:x.height,pw:p.width,ph:p.height});if(x.reactions?.length)for(const r of x.reactions)for(const a of r.actions||[])if(a.type==='NODE')routes.push({id:x.id,target:a.destinationId});}out.push({id:n.id,key:c.key,overflow,badfonts,broken,instances:n.findAllWithCriteria({types:['INSTANCE']}).length,routes});}return out;",
+  "templates": [
+    {
+      "id": "443:10078",
+      "key": "members",
+      "lang": "zh",
+      "mode": "landscape",
+      "theme": "light",
+      "content": "443:10109",
+      "sidebar": "443:10079"
+    },
+    {
+      "id": "443:10196",
+      "key": "members",
+      "lang": "zh",
+      "mode": "portrait",
+      "theme": "light",
+      "content": "443:10227",
+      "sidebar": "443:10197"
+    },
+    {
+      "id": "452:10047",
+      "key": "members",
+      "lang": "en",
+      "mode": "landscape",
+      "theme": "light",
+      "content": "452:10095",
+      "sidebar": "452:10048"
+    },
+    {
+      "id": "456:12153",
+      "key": "members",
+      "lang": "en",
+      "mode": "portrait",
+      "theme": "light",
+      "content": "456:12184",
+      "sidebar": "456:12154"
+    },
+    {
+      "id": "458:10587",
+      "key": "members",
+      "lang": "zh",
+      "mode": "landscape",
+      "theme": "dark",
+      "content": "458:10618",
+      "sidebar": "458:10588"
+    },
+    {
+      "id": "458:10703",
+      "key": "members",
+      "lang": "zh",
+      "mode": "portrait",
+      "theme": "dark",
+      "content": "458:10734",
+      "sidebar": "458:10704"
+    },
+    {
+      "id": "460:11249",
+      "key": "members",
+      "lang": "en",
+      "mode": "landscape",
+      "theme": "dark",
+      "content": "460:11280",
+      "sidebar": "460:11250"
+    },
+    {
+      "id": "460:11566",
+      "key": "members",
+      "lang": "en",
+      "mode": "portrait",
+      "theme": "dark",
+      "content": "460:11597",
+      "sidebar": "460:11567"
+    }
+  ]
+}

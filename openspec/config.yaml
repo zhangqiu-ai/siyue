@@ -1,16 +1,11 @@
 schema: spec-driven
 context: |
-  项目：思玥 Siyue，个人与家庭成长；中文沟通，规格保留 OpenSpec 英文结构标题。
-  先读 AGENTS.md 和 openspec/README.md。维护者当前明确要求、PROJECT_CHARTER.md、
-  docs/decisions.md 的约束优先；本配置不能批准产品方向或外部操作。
-  pnpm workspace；移动 React Native + Expo（iPhone 与 iPad 同时适配，iPad 为未来主力；支持 Android），桌面 Electron + React。
-  domain/contracts 保持平台中立，AI 与 UI 共用业务命令；正式写入需有效审批与事务回执。
-  黑白灰明暗主题，设计遵循 DESIGN.md；密钥不得进入规格、日志或测试样例。
-  产品界面必须支持中文和英文，覆盖已支持平台；开发文档用中文不表示单语产品。
-  中文变体、默认语言、切换与回退策略尚需功能规格明确；不要自动翻译用户原文或模型标识。
-  PRODUCT.md 管范围，docs/decisions.md 管决策，openspec/specs 管已验收的现行行为；
-  changes 管拟议变化，backlog 管排期，docs/evidence 管真实证据。不要重复维护同一事实。
-  当前历史功能未全部迁入 specs；缺规格不代表缺功能。只在涉及该功能时按代码与证据补基线。
+  思玥 Siyue：个人与家庭成长。中文填写，保留 OpenSpec 结构标题。
+  授权边界见 AGENTS.md；本流程按 openspec/README.md 执行，只加载任务相关资料。
+  适用产品约束见 PROJECT_CHARTER.md / PRODUCT.md，后续决策见 docs/decisions.md。
+  UI 的当前方向及工具选择统一以 DESIGN.md 为准，不在模板复制色板或历史状态。
+  密钥和个人数据不得进入规格、日志或样例。历史功能缺少规格不等于未实现；
+  仅在修改相关能力时，按代码和证据补基线。现行规格、提案、排期与证据分别维护并互相链接。
 rules:
   proposal:
     - "必须有唯一一行 Target release 指定版本（例如 Target release: 0.0.1）；在 planning/releases 对应版本文件登记变更、工作包和状态。"

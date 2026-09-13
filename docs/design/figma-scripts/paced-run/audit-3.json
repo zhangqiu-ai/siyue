@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "510:28329",
+      "key": "sync-checking",
+      "nodes": 76,
+      "hydratedNodes": 76,
+      "hydrationFailures": 0,
+      "visibleNodes": 75,
+      "textNodes": 22,
+      "visibleTextNodes": 22,
+      "fontsChecked": 19,
+      "instances": 11,
+      "componentReferencesChecked": 11,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 74,
+      "childCollectionsRead": 40,
+      "fonts": {
+        "Noto Sans SC": 19
+      },
+      "textSamples": [
+        {
+          "id": "510:28331",
+          "text": "思玥"
+        },
+        {
+          "id": "510:28332",
+          "text": "空间"
+        },
+        {
+          "id": "510:28337",
+          "text": "我的空间"
+        },
+        {
+          "id": "510:28344",
+          "text": "周末家庭"
+        },
+        {
+          "id": "510:28348",
+          "text": "对话"
+        },
+        {
+          "id": "510:28354",
+          "text": "目标"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "510:28510",
+      "key": "delete-conflict",
+      "nodes": 67,
+      "hydratedNodes": 67,
+      "hydrationFailures": 0,
+      "visibleNodes": 36,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 10,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 35,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "510:28634",
+          "text": "原记录已删除"
+        },
+        {
+          "id": "510:28635",
+          "text": "你的离线修改尚未提交。"
+        },
+        {
+          "id": "I510:28637;550:50523",
+          "text": "云端原记录"
+        },
+        {
+          "id": "I510:28637;550:50524",
+          "text": "已删除，不会被旧修改重新创建"
+        },
+        {
+          "id": "I510:28637;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I510:28637;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "510:28676",
+      "key": "delete-conflict",
+      "nodes": 67,
+      "hydratedNodes": 67,
+      "hydrationFailures": 0,
+      "visibleNodes": 36,
+      "textNodes": 19,
+      "visibleTextNodes": 12,
+      "fontsChecked": 10,
+      "instances": 9,
+      "componentReferencesChecked": 9,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 35,
+      "childCollectionsRead": 34,
+      "fonts": {
+        "Noto Sans SC": 10
+      },
+      "textSamples": [
+        {
+          "id": "510:28800",
+          "text": "原记录已删除"
+        },
+        {
+          "id": "510:28801",
+          "text": "你的离线修改尚未提交。"
+        },
+        {
+          "id": "I510:28803;550:50523",
+          "text": "云端原记录"
+        },
+        {
+          "id": "I510:28803;550:50524",
+          "text": "已删除，不会被旧修改重新创建"
+        },
+        {
+          "id": "I510:28803;550:50526;212:117599",
+          "text": ""
+        },
+        {
+          "id": "I510:28803;550:50526;212:124674",
+          "text": "􀆊"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

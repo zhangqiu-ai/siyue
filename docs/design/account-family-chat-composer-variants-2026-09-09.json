@@ -1,0 +1,88 @@
+{
+  "frames": [
+    {
+      "id": "384:4359",
+      "source": "463:13636",
+      "lang": "en",
+      "dark": false,
+      "composer": "468:14614",
+      "children": [
+        {
+          "id": "468:14615",
+          "name": "消息输入"
+        },
+        {
+          "id": "468:14616",
+          "name": "发送消息"
+        }
+      ],
+      "input": "468:14615",
+      "send": "468:14616",
+      "value": "I468:14615;553:23064",
+      "mutatedNodeIds": [
+        "468:14614",
+        "468:14615",
+        "I468:14615;553:23064",
+        "468:14616"
+      ]
+    },
+    {
+      "id": "314:4618",
+      "source": "463:13701",
+      "lang": "zh",
+      "dark": true,
+      "composer": "468:14621",
+      "children": [
+        {
+          "id": "468:14622",
+          "name": "消息输入"
+        },
+        {
+          "id": "468:14623",
+          "name": "发送消息"
+        }
+      ],
+      "input": "468:14622",
+      "send": "468:14623",
+      "value": "I468:14622;553:23064",
+      "mutatedNodeIds": [
+        "468:14621",
+        "468:14622",
+        "I468:14622;553:23064",
+        "468:14623"
+      ]
+    },
+    {
+      "id": "443:8780",
+      "source": "463:13766",
+      "lang": "en",
+      "dark": true,
+      "composer": "468:14628",
+      "children": [
+        {
+          "id": "468:14629",
+          "name": "消息输入"
+        },
+        {
+          "id": "468:14630",
+          "name": "发送消息"
+        }
+      ],
+      "input": "468:14629",
+      "send": "468:14630",
+      "value": "I468:14629;553:23064",
+      "mutatedNodeIds": [
+        "468:14628",
+        "468:14629",
+        "I468:14629;553:23064",
+        "468:14630"
+      ]
+    }
+  ],
+  "review": {
+    "screenshot": "/tmp/chat-composer-final.png",
+    "composer": "Empty placeholders and disabled send visible; duplicate buttons hidden.",
+    "sourceIssue": "EN-dark 443:8780 existing message/draft card backgrounds remain light against white text; reported to parent for global dark repair.",
+    "routing": "Parent owns input and draft routes. Disabled send has no reactions."
+  }
+}

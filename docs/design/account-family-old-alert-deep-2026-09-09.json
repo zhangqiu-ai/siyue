@@ -1,0 +1,98 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 2,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "500:28182",
+      "key": "confirm-share",
+      "nodes": 46,
+      "hydratedNodes": 46,
+      "hydrationFailures": 0,
+      "visibleNodes": 16,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 15,
+      "childCollectionsRead": 21,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I500:28299;61:67599",
+          "text": "Revoke family sharing?"
+        },
+        {
+          "id": "I500:28299;61:67600",
+          "text": "Family members lose access to this content. The original stays in your space."
+        },
+        {
+          "id": "I500:28299;5446:7598;5446:6665",
+          "text": "Revoke sharing"
+        },
+        {
+          "id": "I500:28299;5446:7604;5446:6662",
+          "text": "Cancel"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "500:28315",
+      "key": "confirm-share",
+      "nodes": 46,
+      "hydratedNodes": 46,
+      "hydrationFailures": 0,
+      "visibleNodes": 16,
+      "textNodes": 11,
+      "visibleTextNodes": 4,
+      "fontsChecked": 4,
+      "instances": 4,
+      "componentReferencesChecked": 4,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 15,
+      "childCollectionsRead": 21,
+      "fonts": {
+        "Noto Sans SC": 4
+      },
+      "textSamples": [
+        {
+          "id": "I500:28432;61:67599",
+          "text": "Revoke family sharing?"
+        },
+        {
+          "id": "I500:28432;61:67600",
+          "text": "Family members lose access to this content. The original stays in your space."
+        },
+        {
+          "id": "I500:28432;5446:7598;5446:6665",
+          "text": "Revoke sharing"
+        },
+        {
+          "id": "I500:28432;5446:7604;5446:6662",
+          "text": "Cancel"
+        }
+      ],
+      "textExpectedInstances": 3,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

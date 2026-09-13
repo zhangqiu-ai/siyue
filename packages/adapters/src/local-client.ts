@@ -1,4 +1,4 @@
-import { businessCommandSchema, commandEnvelopeSchema, commandReceiptSchema, goalDraftSchema, type ActionDraft, type AgentRun, type BusinessCommand, type GoalDraft } from '@siyue/contracts';
+import { runExecutionMetadataSchema, type RunExecutionMetadata, businessCommandSchema, commandEnvelopeSchema, commandReceiptSchema, goalDraftSchema, type ActionDraft, type AgentRun, type BusinessCommand, type GoalDraft } from '@siyue/contracts';
 import { canonicalize, CommandError, type Actor, type CommandService, type RunService } from '@siyue/domain';
 import type { RequestJournal } from './request-journal.js';
 
@@ -13,6 +13,7 @@ export interface LocalClientOptions {
   now: () => string;
   propose: (goal: string, signal?: AbortSignal) => Promise<GoalDraft>;
 }
+export interface RequestPlanProposer { propose: LocalClientOptions['propose']; execution: RunExecutionMetadata }
 type UpdateCommand = Extract<BusinessCommand, {entityId: string}>;
 export interface LocalRequest { commandId: string; issuedAt: string }
 
@@ -105,15 +106,20 @@ export function createLocalClient(options: LocalClientOptions) {
   }
   return {
     snapshot,
-    async propose(goal: string, signal?: AbortSignal) {
+    async propose(goal: string, signal?: AbortSignal, proposer?: RequestPlanProposer) {
       checkCancelled(signal);
-      const run = await options.runService?.start(spaceId, actor);
+      const metadata = proposer === undefined ? undefined : runExecutionMetadataSchema.safeParse(proposer?.execution);
+      if (proposer !== undefined && (typeof proposer?.propose !== 'function' || !metadata?.success)) {
+        throw new CommandError('invalid_input', 'Request-scoped generation requires explicit execution metadata');
+      }
+      const generate = proposer?.propose ?? options.propose;
+      const run = await options.runService?.start(spaceId, actor, metadata?.success ? metadata.data : undefined);
       let draft: ActionDraft | undefined;
       let draftCommand: BusinessCommand | undefined;
       let errorCode = 'provider_error';
       try {
         checkCancelled(signal);
-        const output = await options.propose(goal, signal);
+        const output = await generate(goal, signal);
         checkCancelled(signal);
         errorCode = 'invalid_output';
         const payload = goalDraftSchema.parse(output);
@@ -147,6 +153,33 @@ export function createLocalClient(options: LocalClientOptions) {
         }
         if (cancelled) throw Object.assign(new Error('Operation was cancelled'), {name: 'AbortError', code: 'cancelled'});
         throw error;
+      }
+    },
+    async createManualDraft(payload: GoalDraft, request: LocalRequest): Promise<ActionDraft> {
+      // Parse before awaiting so later caller edits cannot change this attempt.
+      const parsed = businessCommandSchema.safeParse({schemaVersion: 1, spaceId,
+        commandId: request?.commandId, issuedAt: request?.issuedAt, kind: 'plan.create', payload});
+      if (!parsed.success || parsed.data.kind !== 'plan.create' || parsed.data.payload.projectTitles.length !== 1) {
+        throw new CommandError('invalid_input', 'A manual draft requires one project and a stable command identity');
+      }
+      const command = parsed.data;
+      const expiresAt = new Date(Date.parse(command.issuedAt) + 30 * 60 * 1000).toISOString();
+      const verify = (draft: ActionDraft): ActionDraft => {
+        if (draft.spaceId !== spaceId || draft.actorId !== actor.id || draft.actorKind !== actor.kind ||
+            draft.source !== 'ui' || canonicalize(draft.command) !== canonicalize(command)) {
+          throw new CommandError('command_conflict', 'Draft does not match the original manual request');
+        }
+        return draft;
+      };
+      try {
+        return verify(await service.createDraft(command, actor, {source: 'ui', expiresAt}));
+      } catch (error) {
+        if (error instanceof CommandError && error.code !== 'approval_expired') throw error;
+        // Expiry does not prove an earlier unknown save failed. Recover the original
+        // draft as read-only evidence; do not renew its expiry or allocate another identity.
+        const existing = (await service.listPlan(spaceId, actor)).drafts.find(item => item.command.commandId === command.commandId);
+        if (!existing) throw error;
+        return verify(existing);
       }
     },
     saveManual(payload: GoalDraft, request?: LocalRequest) { return execute({kind: 'plan.create', payload}, request); },

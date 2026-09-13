@@ -90,17 +90,27 @@ export const agentRunEventSchema = z.object({
 const persistedRunEventSchema = agentRunEventSchema.extend({
   schemaVersion: z.literal(schemaVersion).default(schemaVersion), runId: id.optional(),
 });
-export const agentRunSchema = z.object({
+export const runExecutionMetadataSchema = z.discriminatedUnion('executor', [
+  z.object({executor: z.literal('mock'), modelVersion: z.literal('deterministic-mock-v1'), promptVersion: z.literal('mock-plan-v1')}).strict(),
+  z.object({executor: z.literal('compatible'), modelVersion: z.string().trim().min(1).max(200), promptVersion: z.string().trim().min(1).max(100)}).strict(),
+]);
+export type RunExecutionMetadata = z.infer<typeof runExecutionMetadataSchema>;
+const agentRunBaseSchema = z.object({
   id, spaceId: id, actorId: id, actorKind: z.enum(['user', 'ai']),
-  executor: z.literal('mock'), policyVersion: z.literal('1'), schemaVersion: z.literal(schemaVersion),
-  modelVersion: z.literal('deterministic-mock-v1').default('deterministic-mock-v1'),
-  promptVersion: z.literal('mock-plan-v1').default('mock-plan-v1'),
+  policyVersion: z.literal('1'), schemaVersion: z.literal(schemaVersion),
+  usage: z.null().default(null),
   dataCutoff: instant.nullable().default(null),
   status: runStatusSchema, createdAt: instant, updatedAt: instant,
   seq: z.number().int().positive(),
   events: z.array(persistedRunEventSchema).min(1),
   draftId: id.optional(), commandId: id.optional(), errorCode: runErrorCodeSchema.optional(),
-}).strict().superRefine((run, ctx) => {
+}).strict();
+// New readers retain historical mock defaults; compatible runs require explicit provenance.
+// modelVersion identifies the requested public model, not an immutable provider revision.
+export const agentRunSchema = z.discriminatedUnion('executor', [
+  agentRunBaseSchema.extend({executor: z.literal('mock'), modelVersion: z.literal('deterministic-mock-v1').default('deterministic-mock-v1'), promptVersion: z.literal('mock-plan-v1').default('mock-plan-v1')}),
+  agentRunBaseSchema.extend({executor: z.literal('compatible'), modelVersion: z.string().trim().min(1).max(200), promptVersion: z.string().trim().min(1).max(100)}),
+]).superRefine((run, ctx) => {
   if (run.events.some((event) => event.runId !== undefined && event.runId !== run.id))
     ctx.addIssue({code: 'custom', message: 'Run event belongs to another run'});
   const first = run.events[0];
@@ -203,3 +213,5 @@ export type RunStatus = z.infer<typeof runStatusSchema>;
 
 export type AgentRunEvent = z.infer<typeof agentRunEventSchema>;
 export type RunEventReplay = z.infer<typeof runEventReplaySchema>;
+
+export * from './family-policy.js';

@@ -1,0 +1,266 @@
+{
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "url": "https://www.figma.com/design/5OKY7OMJ2jQy2XAaGbNDGC",
+  "stage": "core-r3-visual-review-in-progress",
+  "blocker": null,
+  "existing": [
+    {
+      "id": "3:2",
+      "title": "登录",
+      "note": "用邮箱验证码进入你的空间。",
+      "body": "邮箱\nalex@example.com\n\n首次验证会创建账号。\n个人内容默认仅自己可见。",
+      "primary": "获取验证码",
+      "secondary": "儿童设备 · 由监护人连接",
+      "figmaNode": "3:2",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:7",
+        "4:9"
+      ]
+    },
+    {
+      "id": "3:3",
+      "title": "查看你的邮箱",
+      "note": "验证码已发送至 alex@example.com",
+      "body": "输入验证码\n0  0  0  0  0  0\n\n未收到？检查垃圾邮件。\n验证码仅用于本次登录。",
+      "primary": "验证并进入",
+      "secondary": "返回修改邮箱",
+      "figmaNode": "3:3",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:16",
+        "4:18"
+      ]
+    },
+    {
+      "id": "3:4",
+      "title": "我的空间",
+      "note": "仅自己可见 · 已同步",
+      "body": "最近对话\n英语工作交流练习\n\n我的目标\n提高工作交流能力\n已完成 2 / 5 项任务",
+      "primary": "查看目标",
+      "secondary": "切换空间",
+      "figmaNode": "3:4",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:25",
+        "4:27"
+      ]
+    },
+    {
+      "id": "3:5",
+      "title": "周末家庭",
+      "note": "3 位成员 · 已同步",
+      "body": "共享目标\n每周一起阅读\n已完成 1 / 3 项任务\n\n共享对话\n讨论周末的阅读计划\n成员修改同步到同一份内容",
+      "primary": "查看共享目标",
+      "secondary": "管理家庭",
+      "figmaNode": "3:5",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:34",
+        "4:36"
+      ]
+    },
+    {
+      "id": "3:6",
+      "title": "邀请家人",
+      "note": "对方接受后才会加入。",
+      "body": "对方邮箱\nsam@example.com\n\n角色\n普通成员\n\n私人内容不会自动共享。",
+      "primary": "创建邀请",
+      "secondary": "取消",
+      "figmaNode": "3:6",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:43",
+        "4:45"
+      ]
+    },
+    {
+      "id": "3:7",
+      "title": "加入周末家庭",
+      "note": "来自 Alex 的邀请",
+      "body": "你将作为普通成员加入。\n\n可查看获授权的家庭内容。\n你的私人对话和目标仍属自己。\n\n当前账号\nsam@example.com",
+      "primary": "接受邀请",
+      "secondary": "暂不加入",
+      "figmaNode": "3:7",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:52",
+        "4:54"
+      ]
+    },
+    {
+      "id": "3:8",
+      "title": "添加儿童身份",
+      "note": "由你管理设备连接与恢复。",
+      "body": "称呼\n小禾\n\n儿童无需提供邮箱。\n\n儿童使用独立身份。\n家庭管理员不自动成为监护人。",
+      "primary": "创建并连接设备",
+      "secondary": "返回家庭",
+      "figmaNode": "3:8",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:70",
+        "4:72"
+      ]
+    },
+    {
+      "id": "3:9",
+      "title": "由监护人连接",
+      "note": "请在监护人已登录的设备上操作。",
+      "body": "设备配对码\n482 196\n\n请监护人打开“儿童设备”，\n输入此码并核对设备。\n\n等待监护人确认…",
+      "primary": "演示 · 配对完成",
+      "secondary": "返回登录",
+      "figmaNode": "3:9",
+      "status": "created; visual recheck pending",
+      "actions": [
+        "4:61",
+        "4:63"
+      ]
+    }
+  ],
+  "pending": [
+    {
+      "key": "guardian-confirm",
+      "title": "确认儿童设备",
+      "device": "iPhone",
+      "content": [
+        "小禾 · iPad",
+        "配对码 482 196",
+        "仅在你面前的设备上确认"
+      ],
+      "actions": [
+        "确认连接",
+        "拒绝"
+      ]
+    },
+    {
+      "key": "members",
+      "title": "家庭成员",
+      "device": "iPhone",
+      "content": [
+        "Alex · 所有者",
+        "Sam · 普通成员",
+        "小禾 · 受管理身份"
+      ],
+      "actions": [
+        "邀请家人",
+        "儿童设备"
+      ]
+    },
+    {
+      "key": "shared-preview",
+      "title": "共享到家庭",
+      "device": "iPhone",
+      "content": [
+        "英语工作交流练习",
+        "周末家庭 · 可查看",
+        "共享整个对话，包含之后的新消息",
+        "密钥和其他对话不会共享"
+      ],
+      "actions": [
+        "确认共享",
+        "取消"
+      ]
+    },
+    {
+      "key": "goal",
+      "title": "提高工作交流能力",
+      "device": "iPhone",
+      "content": [
+        "已完成 2 / 5",
+        "□ 练习三分钟自我介绍",
+        "□ 复述一次工作进展",
+        "共享成员修改同步到同一份内容"
+      ],
+      "actions": [
+        "完成任务",
+        "共享与权限"
+      ]
+    },
+    {
+      "key": "conflict",
+      "title": "选择保留的修改",
+      "device": "iPhone",
+      "content": [
+        "你的修改：练习三分钟自我介绍",
+        "云端修改：练习五分钟自我介绍",
+        "由 Sam 修改；未提交的文字仍保留"
+      ],
+      "actions": [
+        "保留我的修改",
+        "使用云端修改"
+      ]
+    },
+    {
+      "key": "offline-expired",
+      "title": "联网后继续",
+      "device": "iPhone",
+      "content": [
+        "家庭内容的离线授权已到期",
+        "待同步修改已保留",
+        "连接网络后重新校验权限"
+      ],
+      "actions": [
+        "重新连接",
+        "返回我的空间"
+      ]
+    },
+    {
+      "key": "revoked",
+      "title": "共享访问已结束",
+      "device": "iPhone",
+      "content": [
+        "你已无法访问这份家庭内容",
+        "本人未提交输入仍受控保留",
+        "恢复入口不展示已撤权正文"
+      ],
+      "actions": [
+        "查看本人未提交输入",
+        "返回我的空间"
+      ]
+    },
+    {
+      "key": "ipad-family",
+      "title": "家庭空间 · 三栏",
+      "device": "iPad landscape 1180×820",
+      "content": [
+        "左：个人/家庭空间、对话、目标、设置",
+        "中：家庭目标列表与同步状态",
+        "右：所选目标详情、可编辑任务和成员权限"
+      ],
+      "actions": [
+        "共享权限",
+        "管理家庭"
+      ]
+    },
+    {
+      "key": "ipad-child",
+      "title": "儿童设备配对",
+      "device": "iPad portrait 820×1180",
+      "content": [
+        "短时配对码",
+        "等待监护人核对与确认",
+        "不能访问监护人私人内容"
+      ],
+      "actions": [
+        "等待确认",
+        "取消连接"
+      ]
+    },
+    {
+      "key": "ipad-conflict-en-dark",
+      "title": "Resolve changes",
+      "device": "iPad landscape, English, dark",
+      "content": [
+        "Your edit",
+        "Cloud edit",
+        "Keep unsynced input; no silent overwrite"
+      ],
+      "actions": [
+        "Keep my version",
+        "Use cloud version"
+      ]
+    }
+  ],
+  "currentReviewManifest": "account-family-figma-r3.json",
+  "note": "原有 existing/pending 为首次流程草稿续作清单；当前节点以 R3 清单和 Figma 实际状态为准，完整流程仍未完成。"
+}

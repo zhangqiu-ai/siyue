@@ -3,11 +3,15 @@ import { Platform, View, useWindowDimensions } from 'react-native';
 import { useTheme } from './theme';
 
 const symbols = {
+  target: { ios: 'target', android: 'track_changes', web: 'track_changes' },
   back: { ios: 'chevron.left', android: 'arrow_back', web: 'arrow_back' },
   close: { ios: 'xmark', android: 'close', web: 'close' },
   chevronRight: { ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' },
   chevronDown: { ios: 'chevron.down', android: 'expand_more', web: 'expand_more' },
   check: { ios: 'checkmark', android: 'check', web: 'check' },
+  success: { ios: 'checkmark.circle.fill', android: 'check_circle', web: 'check_circle' },
+  info: { ios: 'info.circle.fill', android: 'info', web: 'info' },
+  warning: { ios: 'exclamationmark.triangle.fill', android: 'warning', web: 'warning' },
   settings: { ios: 'gearshape', android: 'settings', web: 'settings' },
   compose: { ios: 'square.and.pencil', android: 'edit_square', web: 'edit_square' },
   retry: { ios: 'arrow.clockwise', android: 'refresh', web: 'refresh' },

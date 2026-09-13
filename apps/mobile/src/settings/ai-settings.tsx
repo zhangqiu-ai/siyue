@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { fetch as expoFetch } from 'expo/fetch';
 import { streamCompatibleReply, type CompatibleConfig } from '../chat/compatible-transport';
 import { createCredentialStore, SettingsError } from './credential-store';
+import { createAISettingsSession, removeAndReplaceSession, replaceSessionForAppState, saveAndReplaceSession, type AISettingsSession } from './ai-settings-session';
 
 const key = 'siyue.ai.configuration.v1';
 const options = { keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY };
@@ -29,21 +30,19 @@ export function AISettingsProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<PublicConfig | null>(null);
   const [storageError, setStorageError] = useState<string | null>(null);
   const [revision, setRevision] = useState(0);
-  const session = useRef(new AbortController());
+  const session = useRef<AISettingsSession | null>(null);
+  session.current ??= createAISettingsSession();
   useEffect(() => {
-    if (session.current.signal.aborted) session.current = new AbortController();
+    if (session.current!.getSignal().aborted) session.current!.replace();
     let mounted = true;
     void store.load().then((value) => { if (mounted) setConfig(publicConfig(value)); })
       .catch(() => { if (mounted) setStorageError('无法读取 AI 安全配置，请在设置中重新保存或移除。'); })
       .finally(() => { if (mounted) setReady(true); });
-    return () => { mounted = false; session.current.abort(); };
+    return () => { mounted = false; session.current?.dispose(); };
   }, []);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
-      if (state !== 'active') {
-        session.current.abort();
-        session.current = new AbortController();
-      }
+      if (session.current) replaceSessionForAppState(session.current, state);
     });
     return () => subscription.remove();
   }, []);
@@ -52,23 +51,19 @@ export function AISettingsProvider({ children }: { children: ReactNode }) {
     if (!value) throw new SettingsError('请先在设置中配置 AI 服务和密钥。');
     return value;
   };
-  const replaceSession = () => {
-    session.current.abort();
-    session.current = new AbortController();
-    setRevision((value) => value + 1);
-  };
+  const replaceRevision = () => setRevision((value) => value + 1);
   return <Context.Provider value={{
-    ready, config, hasKey: config !== null, storageError, revision, getSessionSignal: () => session.current.signal, getCredentials,
+    ready, config, hasKey: config !== null, storageError, revision, getSessionSignal: () => session.current!.getSignal(), getCredentials,
     save: async (input) => {
-      const value = await store.save(input);
-      replaceSession(); setConfig(publicConfig(value)); setStorageError(null);
+      const value = await saveAndReplaceSession(store, input, session.current!);
+      replaceRevision(); setConfig(publicConfig(value)); setStorageError(null);
     },
     remove: async () => {
-      await store.remove();
-      replaceSession(); setConfig(null); setStorageError(null);
+      await removeAndReplaceSession(store, session.current!);
+      replaceRevision(); setConfig(null); setStorageError(null);
     },
     testConnection: async (signal) => {
-      const sessionSignal = session.current.signal;
+      const sessionSignal = session.current!.getSignal();
       const controller = new AbortController();
       const abort = () => controller.abort();
       signal.addEventListener('abort', abort, { once: true });

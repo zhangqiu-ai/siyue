@@ -1,40 +1,32 @@
-# 从这里开始：首个开发切片
+# 从这里开始
 
-当前开发版本：**0.0.1（未发布）**。功能归属见 [版本计划](planning/releases/0.0.1.md)，流程见 [版本规则](planning/releases/README.md)，实际发布变化见 [CHANGELOG](CHANGELOG.md)。
+本页是当前任务的导航，不指定新的开发排期。已有工程应继续演进；历史首次初始化任务与旧运行摘要已保留在 [入口历史快照](docs/evidence/rules-entry-history-2026-09-13.md)。
 
-**2026-09-07 设备约束：iPhone 与 iPad 必须同时适配。当前重视手机，iPad 是未来主力；新页面和布局修改同时纳入两类设备，不将平板适配后置。具体矩阵见 [UI 设计与验收](docs/design/ui-acceptance.md)。本条是要求，不代表已有 iPad 验收。**
+## 确定本轮工作
 
-开发流程入口：[OpenSpec 规格与变更规则](openspec/README.md)。新功能先写规格，简单修改可说明豁免；验收后同步现行规格。
+1. 读取 [AGENTS.md](AGENTS.md)，检查工作目录、分支与未提交改动，保留用户已有内容。
+2. 以维护者当前要求确定目标；在 [当前版本计划](planning/releases/0.0.1.md) 找到对应变更、工作包与证据。版本号以根 [package.json](package.json) 为准，版本登记按 [版本规则](planning/releases/README.md) 执行。未明确下一项时不要从历史启动提示自行恢复排期。
+3. 按 [OpenSpec 流程](openspec/README.md) 选择标准或简化路径，再读取与本轮相关的现行规格及活动变更。已有授权不重复询问，新的关键取舍交由维护者决定。
+4. 根据下表补读所需资料，实施范围内的最小改动，以对应路径的实际验证结果交付。
 
-当前已有本地 Mock 目标闭环、锁文件和共享业务测试；macOS Electron 真实闭环、iOS 模拟器闭环及 iOS/Android JavaScript 打包已验证。模拟器已覆盖草稿编辑保存、重启显式继续与确认、正式记录与任务完成的重启保留、拒绝不增记录和手动创建；另一条独立用例覆盖手动目标/任务改名 ID 不变、任务完成后归档、重启同 ID/状态/数量保留。两条 iOS UI 用例分别执行通过，每次 1 项、0 失败。iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 应用与Runner签名验证通过，iPhone故障/后台及Android真机仍待验收；Android SDK 与专用模拟器已就绪，独立 UI 宿主已构建、安装并核验插桩目标；主应用重试构建、APK 签名校验与安装已通过；Android 模拟器两条独立 UI 用例分别通过（各 1 项、0 失败，336.319 秒与 325.679 秒），覆盖草稿闭环及真实断网下手动改名、完成、归档与重启保留；不能将模拟器结果作为真机或全平台完成依据。先读 `docs/BOOTSTRAP.md` 与 `docs/evidence/m1-validation.md`，继续已有实现，不再重复初始化。
+## 按需读取
 
-iOS与Android独立QA应用均复用正常原生客户端工厂，真实SQLite提交后丢响应/回执暂不可读、终止进程后对账分别通过（iOS 43.191秒、Android 12.053秒，各1项0失败）；恢复execute=0，同commandId/issuedAt/对象ID/完整快照hash不变，pending只在原回执验证后清除。每个平台两条正常用户UI用例与一条QA用例分别执行，不是同次3/3；不代表正常用户UI错误交互、真机、物理断电、生成取消/后台中断或升级通过，也不自动恢复表单。
+| 本轮涉及 | 读取入口 |
+|---|---|
+| 产品范围或优先级 | [项目章程](PROJECT_CHARTER.md)、[产品定义](PRODUCT.md)、[决策登记](docs/decisions.md)、对应 [工作包](docs/backlog.md) |
+| 安装、构建、运行故障 | [BOOTSTRAP](docs/BOOTSTRAP.md)、根目录与受影响包的 `package.json` |
+| 页面、布局、交互 | [DESIGN](DESIGN.md)、[UI 验收分级与设备矩阵](docs/design/ui-acceptance.md) |
+| 领域、契约或跨包边界 | [架构](ARCHITECTURE.md)、[领域模型](docs/domain-model.md) |
+| AI、审批或外发 | [AI 基础](docs/ai-foundation.md)、[隐私安全](docs/privacy-security.md) |
+| 存储、同步或账号隔离 | [数据同步](docs/data-sync.md)、[隐私安全](docs/privacy-security.md) |
+| 验收与交付 | 对应变更的 tasks/evidence、[验收定义](docs/acceptance.md) |
 
-## 首次切片任务（历史启动范围）
+移动正式页面的当前结构与视觉方向见 [DESIGN](DESIGN.md)。中文、英文及 iPhone、iPad 均为必需交付约束；本页不重新声明已完成哪些页面或设备验收。旧目标示例的通过结果不能代替当前正式入口验证。
 
-```text
-请按当前 Siyue 仓库的 AGENTS.md 和立项文档开始 M1，不要实现全部路线图。
+## 复用已有证据
 
-先检查 git status、现有文件和本机可用工具。保留已有内容，不改动其他仓库，不公开代码，不部署服务。
+按本轮路径查阅 [M1 验证](docs/evidence/m1-validation.md)、[移动 AI 与设置](docs/evidence/mobile-ai-settings.md)、[设置改版](docs/evidence/settings-redesign.md) 或版本计划中的更新记录。核对记录对应的代码、设备和场景；详细运行数据保留在证据文件，不在入口重复维护。
 
-本轮处理 SY-001 与 SY-002；再在隔离验证目录中准备 SY-003。使用 React Native + Expo 建移动入口（iOS 优先、支持 Android），使用 Electron + React 建桌面入口。采用 TypeScript workspace，但不要创建大量空包。
+## 分支与远端
 
-先定义 PersonalSpace、Goal、Project、Task、ActionDraft、CommandReceipt 的最小模型、校验和确定性命令契约。通过 Mock Provider 验证草稿与确认的边界。移动和桌面使用同一领域测试，不在共享业务层导入平台 API。
-
-记录依赖版本和实际可执行命令。对本机无法执行的 iOS/Android/Windows 测试明确写未运行；不要说全部平台已支持。数据库驱动与生产同步须按 SY-003 的 PoC 结果定，不把未经测试的 PowerSync/SQLite 组合锁死到全部业务。
-
-提交前说明文件差异、真实测试结果、未决事项。达到本轮验收后停止，不自动做资产、支付、插件市场或生产部署。
-```
-
-## 后续切片顺序
-
-2026-09-06 维护者调整当前优先级：先完成 SY-021（移动基础对话、个人 OpenAI 兼容密钥、基础设置），再继续 SY-009 的剩余业务验收。SY-021 已完成基础代码和合成检查，真实供应商及真机验证仍待完成；见 [验证记录](docs/evidence/mobile-ai-settings.md)。
-
-通过 SY-003 选择存储适配；实现 SY-004 与 SY-005 的事务和安全边界；随后 SY-006/007/008/009 完成 AI 草稿到正式目标。每一阶段都保留手动编辑与取消路径。
-
-## 远端仓库
-
-远端仓库为 `zhangqiu-ai/siyue`，当前为公开仓库。初始化代码进入 `main`，后续日常开发从 `feature/dev` 分支开始。本次没有 GitHub Issue 编号；SY-xxx 是规划 ID。
-
-
-2026-09-06：维护者要求移除初始化示例。移动正式导航现为对话主页，设置从侧栏进入（无底部栏），目标与行动示例及原生组件预览入口已移除；旧目标 UI 仅保留为隔离 QA fixture，数据库与业务代码未删除。历史目标 UI 验收属于旧界面，不能证明当前正式移动入口可用。正式目标页面需后续重新设计。 详见 [设置改版验收](docs/evidence/settings-redesign.md)。
+日常开发起点沿用 `feature/dev` 约定；先核实分支是否存在和工作区状态，不自动切换带有用户改动的工作区，不直接向 `main` 发布。项目远端约定为 `zhangqiu-ai/siyue`，实际操作前核对 Git 配置。提交、推送、PR、合并和部署遵循当次授权；本地编辑不自动包含远端操作，也不授权改变可见性、购买服务或公开其他内容。`SY-xxx` 是规划 ID，不是 GitHub Issue 编号。

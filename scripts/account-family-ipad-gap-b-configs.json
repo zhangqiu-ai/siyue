@@ -1,0 +1,642 @@
+[
+  {
+    "key": "invite-copied",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "221:1777",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "221:1777",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "463:13532",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "463:13532",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "463:13496",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "463:13496",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "463:13568",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 0
+  },
+  {
+    "key": "invite-copied",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "463:13568",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 0
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "215:40",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "215:40",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "314:4518",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "314:4518",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "258:3340",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "258:3340",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "443:8495",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 1400
+  },
+  {
+    "key": "invite-invalid",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "443:8495",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 1400
+  },
+  {
+    "key": "revoked",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "215:29",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "215:29",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "314:3959",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "314:3959",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "258:2781",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "258:2781",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "443:7984",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 2800
+  },
+  {
+    "key": "revoked",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "443:7984",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 2800
+  },
+  {
+    "key": "expired",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "215:28",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "215:28",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "314:3908",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "314:3908",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "258:2730",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "258:2730",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "443:7968",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 4200
+  },
+  {
+    "key": "expired",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "443:7968",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 4200
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "403:4805",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "403:4805",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "463:12736",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "463:12736",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "463:12668",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "463:12668",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "463:12804",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 5600
+  },
+  {
+    "key": "sync-refreshed",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "463:12804",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 5600
+  },
+  {
+    "key": "home-empty",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "215:41",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "215:41",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "314:4552",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "314:4552",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "258:3374",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "258:3374",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "443:8511",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 7000
+  },
+  {
+    "key": "home-empty",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "443:8511",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 7000
+  },
+  {
+    "key": "delete",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "215:35",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "215:35",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "314:4298",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "314:4298",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "258:3120",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "258:3120",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "443:8410",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 8400
+  },
+  {
+    "key": "delete",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "443:8410",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 8400
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "442:6303",
+    "template": "443:10078",
+    "x": 39000,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "zh",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "442:6303",
+    "template": "443:10196",
+    "x": 40300,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "463:14231",
+    "template": "458:10587",
+    "x": 41600,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "zh",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "463:14231",
+    "template": "458:10703",
+    "x": 42900,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "en",
+    "theme": "light",
+    "mode": "landscape",
+    "source": "463:14204",
+    "template": "452:10047",
+    "x": 44200,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "en",
+    "theme": "light",
+    "mode": "portrait",
+    "source": "463:14204",
+    "template": "456:12153",
+    "x": 45500,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "landscape",
+    "source": "463:14258",
+    "template": "460:11249",
+    "x": 46800,
+    "y": 9800
+  },
+  {
+    "key": "edit-saved-task",
+    "lang": "en",
+    "theme": "dark",
+    "mode": "portrait",
+    "source": "463:14258",
+    "template": "460:11566",
+    "x": 48100,
+    "y": 9800
+  }
+]

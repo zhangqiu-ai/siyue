@@ -1,0 +1,13 @@
+{
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[{\"id\":\"500:28182\",\"instances\":1,\"texts\":0,\"issues\":[]},{\"id\":\"500:28315\",\"instances\":1,\"texts\":0,\"issues\":[]}]"
+      }
+    ],
+    "isError": false
+  },
+  "status": "incomplete",
+  "limitation": "Visible text count was zero; instance descendant/font coverage is unproven. Keep both pendingStaticAudit entries. Follow-up inspection was rejected by Full-seat MCP quota."
+}

@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-13",
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "pageId": "210:7",
+  "result": {
+    "backActionsVerified": 27,
+    "successRoutesVerified": 25,
+    "busyBackDisabled": true,
+    "aiSettingsButtonsIntentionallyUnwired": 15,
+    "failures": []
+  },
+  "rules": [
+    "Ordinary creation and recovery screens use the prototype BACK action so the originating context is preserved.",
+    "The generating screen does not expose a clickable back action.",
+    "AI and manual creation success navigate to the matching draft confirmation screen for language, theme, device, and orientation.",
+    "Successful reconciliation of an unknown manual result navigates to draft confirmation; unresolved outcomes remain on the recovery screen.",
+    "AI service buttons remain unwired until a dedicated AI provider settings screen exists; they are not linked to general Settings."
+  ],
+  "phoneDraftDestinations": {
+    "zhLight": "220:1196",
+    "enLight": "384:4425",
+    "zhDark": "314:4684",
+    "enDark": "443:8797"
+  },
+  "iPadDraftDestinations": {
+    "zhLightPortrait": "452:9666",
+    "zhLightLandscape": "450:9525",
+    "zhDarkPortrait": "458:12101",
+    "zhDarkLandscape": "458:11998",
+    "enLightPortrait": "456:13198",
+    "enLightLandscape": "452:10340",
+    "enDarkPortrait": "460:12613",
+    "enDarkLandscape": "460:11463"
+  }
+}

@@ -88,7 +88,11 @@ export function createDesktopClient(environment?: { bridge?: Bridge; storage: Pe
   }
   return {
     snapshot: () => invoke('snapshot', []) as ReturnType<LocalClient['snapshot']>,
-    propose: (goal, signal) => invoke('propose', [goal], signal) as ReturnType<LocalClient['propose']>,
+    propose: (goal, signal, proposer) => {
+      if (proposer) return Promise.reject(Object.assign(new Error('Request-scoped providers are unavailable over IPC'), {code: 'unsupported'}));
+      return invoke('propose', [goal], signal) as ReturnType<LocalClient['propose']>;
+    },
+    createManualDraft: (payload, request) => invoke('createManualDraft', [payload, request]) as ReturnType<LocalClient['createManualDraft']>,
     saveManual: (payload) => write('saveManual', [payload]) as ReturnType<LocalClient['saveManual']>,
     editDraft: (id, version, payload) => invoke('editDraft', [id, version, payload]) as ReturnType<LocalClient['editDraft']>,
     confirmDraft: (id, version) => invoke('confirmDraft', [id, version]) as ReturnType<LocalClient['confirmDraft']>,

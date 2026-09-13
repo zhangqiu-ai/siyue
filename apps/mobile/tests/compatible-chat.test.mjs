@@ -83,6 +83,22 @@ test('cancellation unblocks pending reader, keeps partial text and cancels sourc
   assert.equal(cancelled, true);
 });
 
+test('cancellation unblocks a fetcher that ignores AbortSignal', async () => {
+  const abort = new AbortController();
+  const stream = run(async () => new Promise(() => {}), abort.signal);
+  const pending = stream.next();
+  abort.abort();
+  let timer;
+  try {
+    assert.deepEqual(await Promise.race([
+      pending,
+      new Promise(resolve => { timer = setTimeout(() => resolve('still waiting'), 100); }),
+    ]), {value: undefined, done: true});
+  } finally {
+    clearTimeout(timer);
+  }
+});
+
 test('network exceptions never expose arbitrary error details', async () => {
   await assert.rejects(collect(run(async () => { throw new Error('secret-key'); })), (error) => error instanceof CompatibleChatError && !error.message.includes('secret'));
 });
@@ -107,6 +123,14 @@ test('90-second deadline aborts hanging response without exposing transport erro
   t.mock.timers.tick(90_000);
   await assert.rejects(pending, /超时/);
   assert.equal(requestSignal.aborted, true);
+});
+
+test('90-second deadline rejects even when fetcher ignores AbortSignal', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const stream = run(async () => new Promise(() => {}));
+  const pending = stream.next();
+  t.mock.timers.tick(90_000);
+  await assert.rejects(pending, /超时/);
 });
 
 test('successful DONE releases stream rather than waiting for server to close connection', async () => {

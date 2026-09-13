@@ -1,0 +1,47 @@
+{
+  "createdNodeIds": [
+    "568:76",
+    "568:80",
+    "I550:58;568:76;568:84",
+    "568:85",
+    "I550:69;568:76;568:89",
+    "568:90",
+    "I562:67;568:76;568:94"
+  ],
+  "mutatedNodeIds": [
+    "550:57",
+    "550:58",
+    "I550:58;568:76",
+    "550:69",
+    "I550:69;568:76",
+    "562:67",
+    "I562:67;568:76"
+  ],
+  "removedNodeIds": [
+    "550:48",
+    "550:49"
+  ],
+  "properties": {
+    "Eyebrow#562:0": {
+      "type": "TEXT",
+      "defaultValue": "继续你的目标"
+    },
+    "Title#562:1": {
+      "type": "TEXT",
+      "defaultValue": "提高工作交流能力"
+    },
+    "Progress label#562:2": {
+      "type": "TEXT",
+      "defaultValue": "2 / 5 已完成 · 下一项约 5 分钟"
+    },
+    "Action label#562:3": {
+      "type": "TEXT",
+      "defaultValue": "练习三分钟自我介绍"
+    },
+    "Progress#568:0": {
+      "type": "SLOT",
+      "description": null,
+      "preferredValues": []
+    }
+  }
+}

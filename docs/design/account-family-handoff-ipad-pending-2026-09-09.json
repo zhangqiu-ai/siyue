@@ -1,0 +1,51 @@
+{
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "root": "470:17083",
+  "status": "hydrated-entry-links-connected-screenshot-reviewed",
+  "create": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"root\":\"470:17083\",\"headings\":[\"493:34906\",\"493:34907\",\"493:34908\"],\"grids\":[\"493:34909\",\"493:34934\"],\"createdNodeIds\":[\"493:34906\",\"493:34907\",\"493:34908\",\"493:34909\",\"493:34910\",\"493:34911\",\"493:34912\",\"493:34913\",\"493:34914\",\"493:34915\",\"493:34916\",\"493:34917\",\"493:34918\",\"493:34919\",\"493:34920\",\"493:34921\",\"493:34922\",\"493:34923\",\"493:34924\",\"493:34925\",\"493:34926\",\"493:34927\",\"493:34928\",\"493:34929\",\"493:34930\",\"493:34931\",\"493:34932\",\"493:34933\",\"493:34934\",\"493:34935\",\"493:34936\",\"493:34937\",\"493:34938\",\"493:34939\",\"493:34940\",\"493:34941\",\"493:34942\",\"493:34943\",\"493:34944\",\"493:34945\",\"493:34946\",\"493:34947\",\"493:34948\",\"493:34949\",\"493:34950\",\"493:34951\",\"493:34952\",\"493:34953\",\"493:34954\",\"493:34955\",\"493:34956\",\"493:34957\",\"493:34958\"],\"mutatedNodeIds\":[\"470:17083\"]}"
+      }
+    ],
+    "isError": false
+  },
+  "hydrateAttempt": {
+    "content": [
+      {
+        "type": "text",
+        "text": "You've reached the Figma MCP tool call limit for your Full seat on the Professional plan. Upgrade your seat or plan for more tool calls. Learn more: https://developers.figma.com/docs/figma-mcp-server/rate-limits-access"
+      },
+      {
+        "type": "resource_link",
+        "uri": "file://figma/docs/rate-limits-access.md",
+        "name": "rate-limits-access.md",
+        "mimeType": "text/plain",
+        "size": 3928,
+        "_meta": {
+          "size": 3928
+        }
+      }
+    ],
+    "structuredContent": {
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "isError": true
+  },
+  "scripts": {
+    "create": "await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));const root=await figma.getNodeByIdAsync('470:17083'),grid=await figma.getNodeByIdAsync('470:17087'),label=await figma.getNodeByIdAsync('470:17085');if(root.children.some(n=>n.name==='iPad landscape entries'))throw Error('Already created');const h1=label.clone(),h2=label.clone(),h3=label.clone(),land=grid.clone(),portrait=grid.clone();h1.name='iPhone entries heading';h2.name='iPad landscape heading';h3.name='iPad portrait heading';land.name='iPad landscape entries';portrait.name='iPad portrait entries';root.insertChild(3,h1);root.insertChild(5,h2);root.insertChild(6,land);root.insertChild(7,h3);root.insertChild(8,portrait);root.primaryAxisSizingMode='AUTO';return {root:root.id,headings:[h1.id,h2.id,h3.id],grids:[land.id,portrait.id],createdNodeIds:[h1,h2,h3,land,portrait].flatMap(n=>[n.id,...('findAll' in n?n.findAll(()=>true).map(x=>x.id):[])]),mutatedNodeIds:[root.id]};",
+    "hydrate": "await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('210:7'));const fs=[{\"id\":\"466:14992\",\"key\":\"login\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"466:15059\",\"key\":\"login\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"466:15190\",\"key\":\"login\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"466:15257\",\"key\":\"login\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"466:15324\",\"key\":\"login\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"466:15391\",\"key\":\"login\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"466:15458\",\"key\":\"login\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"466:15525\",\"key\":\"login\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"466:17056\",\"key\":\"home\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"466:17160\",\"key\":\"home\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"470:14609\",\"key\":\"home\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"470:14713\",\"key\":\"home\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"470:14817\",\"key\":\"home\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"470:14921\",\"key\":\"home\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"470:15025\",\"key\":\"home\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"470:15129\",\"key\":\"home\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"470:15233\",\"key\":\"family\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"470:15330\",\"key\":\"family\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"470:15427\",\"key\":\"family\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"470:15524\",\"key\":\"family\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"470:15621\",\"key\":\"family\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"470:15718\",\"key\":\"family\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"470:15815\",\"key\":\"family\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"470:15912\",\"key\":\"family\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"473:23055\",\"key\":\"sync\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"473:23173\",\"key\":\"sync\",\"lang\":\"zh\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"473:23291\",\"key\":\"sync\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"473:23409\",\"key\":\"sync\",\"lang\":\"zh\",\"theme\":\"dark\",\"mode\":\"portrait\"},{\"id\":\"473:23527\",\"key\":\"sync\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"landscape\"},{\"id\":\"473:23645\",\"key\":\"sync\",\"lang\":\"en\",\"theme\":\"light\",\"mode\":\"portrait\"},{\"id\":\"473:23763\",\"key\":\"sync\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"landscape\"},{\"id\":\"473:23881\",\"key\":\"sync\",\"lang\":\"en\",\"theme\":\"dark\",\"mode\":\"portrait\"}],changed=[],created=[];for(const [id,label] of [['493:34906','iPhone'],['493:34907','iPad · 横屏 / Landscape'],['493:34908','iPad · 竖屏 / Portrait']]){const n=await figma.getNodeByIdAsync(id);for(const s of n.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);n.characters=label;n.fontSize=20;changed.push(id);}for(const [id,mode] of [['493:34909','landscape'],['493:34934','portrait']]){const grid=await figma.getNodeByIdAsync(id);created.push(grid.id,...grid.findAll(()=>true).map(n=>n.id));for(const col of grid.children){const [lang,theme]=col.name.split('-');const buttons=col.children.filter(n=>n.type==='INSTANCE');for(let i=0;i<buttons.length;i++){const key=['login','home','family','sync'][i],to=fs.find(f=>f.key===key&&f.lang===lang&&f.theme===theme&&f.mode===mode);if(!to)throw Error('Missing '+key);await buttons[i].setReactionsAsync([{trigger:{type:'ON_CLICK'},actions:[{type:'NODE',destinationId:to.id,navigation:'NAVIGATE',transition:null,resetVideoPosition:false,resetScrollPosition:true}]}]);changed.push(buttons[i].id);}}}return{mutatedNodeIds:changed,createdNodeIds:created,linkCount:32};"
+  },
+  "note": "Original 16 phone entries and 32 new iPad entries are rendered and linked. Full downstream iPad routing is still incomplete.",
+  "recovery": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"mutatedNodeIds\":[\"493:34906\",\"493:34907\",\"493:34908\",\"493:34912\",\"493:34913\",\"493:34914\",\"493:34915\",\"493:34918\",\"493:34919\",\"493:34920\",\"493:34921\",\"493:34924\",\"493:34925\",\"493:34926\",\"493:34927\",\"493:34930\",\"493:34931\",\"493:34932\",\"493:34933\",\"493:34937\",\"493:34938\",\"493:34939\",\"493:34940\",\"493:34943\",\"493:34944\",\"493:34945\",\"493:34946\",\"493:34949\",\"493:34950\",\"493:34951\",\"493:34952\",\"493:34955\",\"493:34956\",\"493:34957\",\"493:34958\"],\"createdNodeIds\":[\"493:34909\",\"493:34910\",\"493:34911\",\"493:34912\",\"I493:34912;5:108581\",\"493:34913\",\"I493:34913;5:108581\",\"493:34914\",\"I493:34914;5:108581\",\"493:34915\",\"I493:34915;5:108581\",\"493:34916\",\"493:34917\",\"493:34918\",\"I493:34918;5:108581\",\"493:34919\",\"I493:34919;5:108581\",\"493:34920\",\"I493:34920;5:108581\",\"493:34921\",\"I493:34921;5:108581\",\"493:34922\",\"493:34923\",\"493:34924\",\"I493:34924;5:108581\",\"493:34925\",\"I493:34925;5:108581\",\"493:34926\",\"I493:34926;5:108581\",\"493:34927\",\"I493:34927;5:108581\",\"493:34928\",\"493:34929\",\"493:34930\",\"I493:34930;5:108581\",\"493:34931\",\"I493:34931;5:108581\",\"493:34932\",\"I493:34932;5:108581\",\"493:34933\",\"I493:34933;5:108581\",\"493:34934\",\"493:34935\",\"493:34936\",\"493:34937\",\"I493:34937;5:108581\",\"493:34938\",\"I493:34938;5:108581\",\"493:34939\",\"I493:34939;5:108581\",\"493:34940\",\"I493:34940;5:108581\",\"493:34941\",\"493:34942\",\"493:34943\",\"I493:34943;5:108581\",\"493:34944\",\"I493:34944;5:108581\",\"493:34945\",\"I493:34945;5:108581\",\"493:34946\",\"I493:34946;5:108581\",\"493:34947\",\"493:34948\",\"493:34949\",\"I493:34949;5:108581\",\"493:34950\",\"I493:34950;5:108581\",\"493:34951\",\"I493:34951;5:108581\",\"493:34952\",\"I493:34952;5:108581\",\"493:34953\",\"493:34954\",\"493:34955\",\"I493:34955;5:108581\",\"493:34956\",\"I493:34956;5:108581\",\"493:34957\",\"I493:34957;5:108581\",\"493:34958\",\"I493:34958;5:108581\"],\"linkCount\":32}"
+      }
+    ],
+    "isError": false
+  },
+  "screenshot": "account-family-preview/evidence/figma/review-cover-phone-ipad.png"
+}

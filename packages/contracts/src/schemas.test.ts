@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { businessCommandSchema, goalDraftSchema, localDateSchema, taskSchema, commandReceiptSchema } from './index.js';
+import { agentRunSchema, runExecutionMetadataSchema, businessCommandSchema, goalDraftSchema, localDateSchema, taskSchema, commandReceiptSchema } from './index.js';
 
 test('dates retain calendar semantics separately from absolute instants', () => {
   assert.equal(localDateSchema.safeParse('2024-02-29').success, true);
@@ -44,4 +44,22 @@ test('standalone run events and replay envelopes require explicit scoped version
   assert.equal(runEventReplaySchema.safeParse({...replay, runId: 'run-b'}).success, false);
   assert.equal(runEventReplaySchema.safeParse({...replay, nextSeq: 2}).success, false);
   assert.equal(runEventReplaySchema.safeParse({...replay, events: [event, event], nextSeq: 2}).success, false);
+});
+
+test('historical mock run defaults remain readable without modifying original data', () => {
+  const old = {id: 'run', spaceId: 'space', actorId: 'owner', actorKind: 'user', executor: 'mock', policyVersion: '1', schemaVersion: 1, status: 'running', createdAt: '2026-09-05T00:00:00Z', updatedAt: '2026-09-05T00:00:00Z', seq: 1, events: [{seq: 1, state: 'running', time: '2026-09-05T00:00:00Z'}]};
+  const before = JSON.stringify(old);
+  const parsed = agentRunSchema.parse(old);
+  assert.equal(parsed.modelVersion, 'deterministic-mock-v1');
+  assert.equal(parsed.promptVersion, 'mock-plan-v1');
+  assert.equal(parsed.usage, null);
+  assert.equal(JSON.stringify(old), before);
+  for (const patch of [{executor: 'compatible'}, {executor: 'compatible', modelVersion: 'model'}, {executor: 'mock', modelVersion: 'real-model'}, {usage: 0}]) assert.equal(agentRunSchema.safeParse({...old, ...patch}).success, false);
+  assert.equal(agentRunSchema.safeParse({...old, executor: 'compatible', modelVersion: 'public-model', promptVersion: 'compatible-plan-v1'}).success, true);
+});
+
+test('run execution metadata rejects extra secrets, missing provenance and empty names', () => {
+  const valid = {executor: 'compatible', modelVersion: 'public-model', promptVersion: 'compatible-plan-v1'};
+  assert.deepEqual(runExecutionMetadataSchema.parse(valid), valid);
+  for (const patch of [{apiKey: 'not-allowed'}, {modelVersion: ' '}, {promptVersion: ''}, {executor: 'unknown'}]) assert.equal(runExecutionMetadataSchema.safeParse({...valid, ...patch}).success, false);
 });

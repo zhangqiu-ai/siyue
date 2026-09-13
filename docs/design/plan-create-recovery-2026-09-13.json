@@ -1,0 +1,302 @@
+{
+  "date": "2026-09-13",
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "status": "Chinese light phone recovery examples; other combinations pending",
+  "results": {
+    "createFailureZh": [
+      {
+        "rootId": "593:34686",
+        "errorId": "593:34713",
+        "createdNodeIds": [
+          "593:34686",
+          "593:34687",
+          "593:34688",
+          "I593:34688;5:108797",
+          "593:34689",
+          "593:34690",
+          "593:34691",
+          "593:34692",
+          "593:34693",
+          "593:34694",
+          "593:34695",
+          "593:34696",
+          "593:34697",
+          "I593:34697;5:108797",
+          "593:34698",
+          "I593:34698;5:108797",
+          "593:34699",
+          "593:34700",
+          "593:34701",
+          "I593:34701;5433:15632",
+          "I593:34701;5433:15633",
+          "593:34702",
+          "593:34713",
+          "593:34703",
+          "I593:34703;5:108581",
+          "593:34704",
+          "I593:34704;5:108797"
+        ],
+        "lastBottom": 698
+      }
+    ],
+    "createUnknownZh": [
+      {
+        "rootId": "593:34714",
+        "createdNodeIds": [
+          "593:34714",
+          "593:34715",
+          "593:34716",
+          "I593:34716;5:108797",
+          "593:34717",
+          "593:34718",
+          "593:34719",
+          "593:34720",
+          "593:34721",
+          "593:34722",
+          "593:34723",
+          "593:34724",
+          "593:34725",
+          "I593:34725;5:108797",
+          "593:34726",
+          "I593:34726;5:108797",
+          "593:34727",
+          "593:34728",
+          "593:34729",
+          "I593:34729;5433:15632",
+          "I593:34729;5433:15633",
+          "593:34730",
+          "593:34731",
+          "I593:34731;5433:15632",
+          "I593:34731;5433:15633",
+          "593:34732",
+          "593:34744",
+          "593:34733",
+          "I593:34733;5:108581"
+        ],
+        "lastBottom": 720
+      }
+    ],
+    "createGeneratingStopped": [
+      {
+        "busyId": "593:34768",
+        "cancelledId": "593:34745",
+        "stopId": "593:34791",
+        "createdNodeIds": [
+          "593:34768",
+          "593:34745",
+          "593:34769",
+          "593:34770",
+          "I593:34770;5:108797",
+          "593:34771",
+          "593:34772",
+          "593:34773",
+          "593:34774",
+          "593:34775",
+          "593:34776",
+          "593:34777",
+          "593:34778",
+          "593:34779",
+          "I593:34779;5:108797",
+          "593:34780",
+          "I593:34780;5:108797",
+          "593:34781",
+          "593:34782",
+          "593:34783",
+          "I593:34783;5433:15632",
+          "I593:34783;5433:15633",
+          "593:34784",
+          "593:34785",
+          "593:34791",
+          "I593:34791;5:108797",
+          "593:34787",
+          "I593:34787;5:108797",
+          "593:34746",
+          "593:34747",
+          "I593:34747;5:108797",
+          "593:34748",
+          "593:34749",
+          "593:34750",
+          "593:34751",
+          "593:34752",
+          "593:34753",
+          "593:34754",
+          "593:34755",
+          "593:34756",
+          "I593:34756;5:108797",
+          "593:34757",
+          "I593:34757;5:108797",
+          "593:34758",
+          "593:34759",
+          "593:34760",
+          "I593:34760;5433:15632",
+          "I593:34760;5433:15633",
+          "593:34761",
+          "593:34762",
+          "593:34763",
+          "I593:34763;5:108581",
+          "593:34764",
+          "I593:34764;5:108797"
+        ],
+        "stopReactions": [
+          {
+            "action": {
+              "type": "NODE",
+              "destinationId": "593:34745",
+              "navigation": "NAVIGATE",
+              "transition": null,
+              "resetVideoPosition": false,
+              "resetScrollPosition": true
+            },
+            "actions": [
+              {
+                "type": "NODE",
+                "destinationId": "593:34745",
+                "navigation": "NAVIGATE",
+                "transition": null,
+                "resetVideoPosition": false,
+                "resetScrollPosition": true
+              }
+            ],
+            "trigger": {
+              "type": "ON_CLICK"
+            }
+          }
+        ]
+      }
+    ],
+    "creationRecoveryRoutes": [
+      {
+        "routes": [
+          {
+            "root": "593:34686",
+            "buttons": [
+              {
+                "id": "593:34703",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "593:34768",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "593:34768",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "593:34698",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "586:34488",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "586:34488",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "root": "593:34745",
+            "buttons": [
+              {
+                "id": "593:34763",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "593:34768",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "593:34768",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "593:34757",
+                "reactions": [
+                  {
+                    "action": {
+                      "type": "NODE",
+                      "destinationId": "586:34488",
+                      "navigation": "NAVIGATE",
+                      "transition": null,
+                      "resetVideoPosition": false,
+                      "resetScrollPosition": true
+                    },
+                    "actions": [
+                      {
+                        "type": "NODE",
+                        "destinationId": "586:34488",
+                        "navigation": "NAVIGATE",
+                        "transition": null,
+                        "resetVideoPosition": false,
+                        "resetScrollPosition": true
+                      }
+                    ],
+                    "trigger": {
+                      "type": "ON_CLICK"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "mutatedNodeIds": [
+          "593:34703",
+          "593:34698",
+          "593:34763",
+          "593:34757"
+        ]
+      }
+    ]
+  }
+}

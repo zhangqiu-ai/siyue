@@ -1,0 +1,1015 @@
+{
+  "date": "2026-09-13",
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "pageId": "210:7",
+  "status": "partial; Chinese light phone entry states only",
+  "results": {
+    "createInspect": [
+      {
+        "root": {
+          "id": "220:1196",
+          "x": 670,
+          "y": 6320,
+          "width": 390,
+          "height": 844,
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.9686274528503418,
+                "g": 0.9725490212440491,
+                "b": 0.9490196108818054
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:547:63"
+                }
+              }
+            }
+          ],
+          "mode": {
+            "VariableCollectionId:547:44": "547:1"
+          },
+          "layout": "VERTICAL"
+        },
+        "children": [
+          {
+            "id": "220:1304",
+            "name": "status",
+            "type": "TEXT",
+            "width": 342,
+            "height": 24
+          },
+          {
+            "id": "220:1305",
+            "name": "返回",
+            "type": "INSTANCE",
+            "width": 64,
+            "height": 44
+          },
+          {
+            "id": "221:1459",
+            "name": "标题栏",
+            "type": "FRAME",
+            "width": 342,
+            "height": 44
+          },
+          {
+            "id": "220:1308",
+            "name": "subtitle",
+            "type": "TEXT",
+            "width": 342,
+            "height": 24
+          },
+          {
+            "id": "220:1309",
+            "name": "内容",
+            "type": "FRAME",
+            "width": 342,
+            "height": 394
+          },
+          {
+            "id": "220:1381",
+            "name": "确认保存计划",
+            "type": "INSTANCE",
+            "width": 342,
+            "height": 52
+          },
+          {
+            "id": "220:1383",
+            "name": "继续修改",
+            "type": "INSTANCE",
+            "width": 342,
+            "height": 52
+          }
+        ],
+        "instances": [
+          {
+            "id": "220:1305",
+            "name": "返回",
+            "master": "205:160",
+            "properties": {
+              "Symbol#5473:145": {
+                "type": "TEXT",
+                "value": "􀊄"
+              },
+              "Label#488:0": {
+                "type": "TEXT",
+                "value": "返回"
+              },
+              "Size": {
+                "value": "Large",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Style": {
+                "value": "Borderless",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Label Type": {
+                "value": "Text",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Enabled": {
+                "value": "True",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Destructive": {
+                "value": "False",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "220:1311",
+            "name": "目标名称",
+            "master": "205:19",
+            "properties": {
+              "Value#519:17": {
+                "type": "TEXT",
+                "value": "提高工作交流能力"
+              },
+              "State": {
+                "value": "Value Entered",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "I220:1311;5469:8035",
+            "name": "_Separator",
+            "master": "205:11",
+            "properties": {
+              "Mode": {
+                "value": "Light",
+                "type": "VARIANT",
+                "boundVariables": {
+                  "value": {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:01c109a4b3ec81d14bfea476446b310f4730e31f/5720:193"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "582:34435",
+            "name": "项目名称",
+            "master": "205:19",
+            "properties": {
+              "Value#519:17": {
+                "type": "TEXT",
+                "value": "工作交流练习"
+              },
+              "State": {
+                "value": "Value Entered",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "I582:34435;5469:8035",
+            "name": "_Separator",
+            "master": "205:11",
+            "properties": {
+              "Mode": {
+                "value": "Light",
+                "type": "VARIANT",
+                "boundVariables": {
+                  "value": {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:01c109a4b3ec81d14bfea476446b310f4730e31f/5720:193"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "220:1315",
+            "name": "练习三分钟自我介绍",
+            "master": "205:499",
+            "properties": {
+              "Show Subtitle#525:450": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Show Grabber#508:322": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Subtitle#519:149": {
+                "type": "TEXT",
+                "value": "每天约 5 分钟"
+              },
+              "Show Trailing#5534:8": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Title#519:116": {
+                "type": "TEXT",
+                "value": "练习三分钟自我介绍"
+              },
+              "Show Edit Button#508:289": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Show Image#508:256": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Height": {
+                "value": "Tall",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "I220:1315;5534:22504",
+            "name": "_Separator",
+            "master": "205:11",
+            "properties": {
+              "Mode": {
+                "value": "Light",
+                "type": "VARIANT",
+                "boundVariables": {
+                  "value": {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:01c109a4b3ec81d14bfea476446b310f4730e31f/5720:193"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "I220:1315;550:50526",
+            "name": "Contents - Trailing",
+            "master": "205:473",
+            "properties": {
+              "Detail Text#508:54": {
+                "type": "TEXT",
+                "value": "编辑"
+              },
+              "Show Info#212:7": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Show Drill-in#212:3": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Show Checkmark#212:4": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Button Label#212:66": {
+                "type": "TEXT",
+                "value": "Button"
+              },
+              "Show Symbol#212:5": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Type": {
+                "value": "Default",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "220:1337",
+            "name": "复述一次工作进展",
+            "master": "205:499",
+            "properties": {
+              "Show Subtitle#525:450": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Show Grabber#508:322": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Subtitle#519:149": {
+                "type": "TEXT",
+                "value": "练习清楚地表达进度"
+              },
+              "Show Trailing#5534:8": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Title#519:116": {
+                "type": "TEXT",
+                "value": "复述一次工作进展"
+              },
+              "Show Edit Button#508:289": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Show Image#508:256": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Height": {
+                "value": "Tall",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "I220:1337;5534:22504",
+            "name": "_Separator",
+            "master": "205:11",
+            "properties": {
+              "Mode": {
+                "value": "Light",
+                "type": "VARIANT",
+                "boundVariables": {
+                  "value": {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:01c109a4b3ec81d14bfea476446b310f4730e31f/5720:193"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "I220:1337;550:50526",
+            "name": "Contents - Trailing",
+            "master": "205:473",
+            "properties": {
+              "Detail Text#508:54": {
+                "type": "TEXT",
+                "value": "编辑"
+              },
+              "Show Info#212:7": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Show Drill-in#212:3": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Show Checkmark#212:4": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Button Label#212:66": {
+                "type": "TEXT",
+                "value": "Button"
+              },
+              "Show Symbol#212:5": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Type": {
+                "value": "Default",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "220:1359",
+            "name": "模拟一次英文会议",
+            "master": "205:499",
+            "properties": {
+              "Show Subtitle#525:450": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Show Grabber#508:322": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Subtitle#519:149": {
+                "type": "TEXT",
+                "value": "练习提问和回应"
+              },
+              "Show Trailing#5534:8": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Title#519:116": {
+                "type": "TEXT",
+                "value": "模拟一次英文会议"
+              },
+              "Show Edit Button#508:289": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Show Image#508:256": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Height": {
+                "value": "Tall",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "I220:1359;5534:22504",
+            "name": "_Separator",
+            "master": "205:11",
+            "properties": {
+              "Mode": {
+                "value": "Light",
+                "type": "VARIANT",
+                "boundVariables": {
+                  "value": {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:01c109a4b3ec81d14bfea476446b310f4730e31f/5720:193"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "I220:1359;550:50526",
+            "name": "Contents - Trailing",
+            "master": "205:473",
+            "properties": {
+              "Detail Text#508:54": {
+                "type": "TEXT",
+                "value": "编辑"
+              },
+              "Show Info#212:7": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Show Drill-in#212:3": {
+                "type": "BOOLEAN",
+                "value": true
+              },
+              "Show Checkmark#212:4": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Button Label#212:66": {
+                "type": "TEXT",
+                "value": "Button"
+              },
+              "Show Symbol#212:5": {
+                "type": "BOOLEAN",
+                "value": false
+              },
+              "Type": {
+                "value": "Default",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          },
+          {
+            "id": "220:1381",
+            "name": "确认保存计划",
+            "master": "548:33775",
+            "properties": {
+              "Label#548:0": {
+                "type": "TEXT",
+                "value": "确认保存计划"
+              }
+            }
+          },
+          {
+            "id": "220:1383",
+            "name": "继续修改",
+            "master": "205:160",
+            "properties": {
+              "Symbol#5473:145": {
+                "type": "TEXT",
+                "value": "􀊄"
+              },
+              "Label#488:0": {
+                "type": "TEXT",
+                "value": "继续修改"
+              },
+              "Size": {
+                "value": "Large",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Style": {
+                "value": "Borderless",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Label Type": {
+                "value": "Text",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Enabled": {
+                "value": "True",
+                "type": "VARIANT",
+                "boundVariables": {}
+              },
+              "Destructive": {
+                "value": "False",
+                "type": "VARIANT",
+                "boundVariables": {}
+              }
+            }
+          }
+        ],
+        "text": [
+          {
+            "id": "220:1304",
+            "text": "9:41",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1305;5:108797",
+            "text": "返回",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "220:1307",
+            "text": "确认你的练习计划",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Medium",
+              "variationSettings": {
+                "wght": 500
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "220:1308",
+            "text": "AI 草稿 · 尚未正式保存",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "220:1310",
+            "text": "  目标名称",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1311;5433:15633",
+            "text": "提高工作交流能力",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "582:34434",
+            "text": "  项目名称",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I582:34435;5433:15633",
+            "text": "工作交流练习",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1315;550:50523",
+            "text": "练习三分钟自我介绍",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1315;550:50524",
+            "text": "每天约 5 分钟",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1315;550:50526;212:117599",
+            "text": "编辑",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1315;550:50526;212:124674",
+            "text": "􀆊",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1337;550:50523",
+            "text": "复述一次工作进展",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1337;550:50524",
+            "text": "练习清楚地表达进度",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1337;550:50526;212:117599",
+            "text": "编辑",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1337;550:50526;212:124674",
+            "text": "􀆊",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1359;550:50523",
+            "text": "模拟一次英文会议",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1359;550:50524",
+            "text": "练习提问和回应",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1359;550:50526;212:117599",
+            "text": "编辑",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1359;550:50526;212:124674",
+            "text": "􀆊",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1381;5:108581",
+            "text": "确认保存计划",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          },
+          {
+            "id": "I220:1383;5:108797",
+            "text": "继续修改",
+            "font": {
+              "family": "Noto Sans SC",
+              "style": "Regular",
+              "variationSettings": {
+                "wght": 400
+              }
+            },
+            "style": ""
+          }
+        ],
+        "maxX": 130620,
+        "possibleControls": []
+      }
+    ],
+    "createRoot": [
+      {
+        "rootId": "585:34470",
+        "createdNodeIds": [
+          "585:34470",
+          "585:34471",
+          "585:34472",
+          "I585:34472;5:108797",
+          "585:34474",
+          "585:34475",
+          "585:34476",
+          "585:34477",
+          "585:34478",
+          "585:34479",
+          "585:34480"
+        ],
+        "children": [
+          {
+            "id": "585:34471",
+            "name": "status"
+          },
+          {
+            "id": "585:34472",
+            "name": "返回"
+          },
+          {
+            "id": "585:34474",
+            "name": "标题栏"
+          }
+        ],
+        "fonts": [
+          "Noto Sans SC"
+        ]
+      }
+    ],
+    "createBody": [
+      {
+        "rootId": "585:34470",
+        "modes": "586:34471",
+        "modeButtons": [
+          "586:34472",
+          "586:34474"
+        ],
+        "card": "586:34476",
+        "input": "586:34478",
+        "createdNodeIds": [
+          "586:34471",
+          "586:34476",
+          "586:34472",
+          "I586:34472;5:108797",
+          "586:34474",
+          "I586:34474;5:108797",
+          "586:34477",
+          "586:34478",
+          "I586:34478;5433:15632",
+          "I586:34478;5469:8035",
+          "I586:34478;5433:15633"
+        ]
+      }
+    ],
+    "createFooter": [
+      {
+        "rootId": "585:34470",
+        "note": "586:34482",
+        "primary": "586:34483",
+        "settings": "586:34486",
+        "createdNodeIds": [
+          "586:34482",
+          "586:34483",
+          "586:34486",
+          "I586:34483;5:108581",
+          "I586:34486;5:108797"
+        ],
+        "children": [
+          {
+            "id": "585:34471",
+            "name": "status",
+            "y": 24,
+            "height": 24
+          },
+          {
+            "id": "585:34472",
+            "name": "返回",
+            "y": 68,
+            "height": 44
+          },
+          {
+            "id": "585:34474",
+            "name": "标题栏",
+            "y": 132,
+            "height": 44
+          },
+          {
+            "id": "586:34471",
+            "name": "创建方式",
+            "y": 196,
+            "height": 56
+          },
+          {
+            "id": "586:34476",
+            "name": "目标输入",
+            "y": 272,
+            "height": 146
+          },
+          {
+            "id": "586:34482",
+            "name": "AI 外发说明",
+            "y": 438,
+            "height": 48
+          },
+          {
+            "id": "586:34483",
+            "name": "生成计划草稿",
+            "y": 506,
+            "height": 52
+          },
+          {
+            "id": "586:34486",
+            "name": "AI 服务设置",
+            "y": 578,
+            "height": 52
+          }
+        ],
+        "fontFamilies": [
+          "Noto Sans SC"
+        ]
+      }
+    ],
+    "createManual": [
+      {
+        "rootId": "586:34488",
+        "createdNodeIds": [
+          "586:34488",
+          "586:34489",
+          "586:34490",
+          "I586:34490;5:108797",
+          "586:34491",
+          "586:34492",
+          "586:34493",
+          "586:34494",
+          "586:34495",
+          "586:34496",
+          "586:34497",
+          "586:34498",
+          "586:34499",
+          "I586:34499;5:108797",
+          "586:34500",
+          "I586:34500;5:108797",
+          "586:34501",
+          "586:34502",
+          "586:34503",
+          "I586:34503;5433:15632",
+          "I586:34503;5469:8035",
+          "I586:34503;5433:15633",
+          "586:34512",
+          "586:34513",
+          "I586:34513;5433:15632",
+          "I586:34513;5469:8035",
+          "I586:34513;5433:15633",
+          "586:34504",
+          "586:34505",
+          "I586:34505;5:108581"
+        ],
+        "mutatedNodeIds": [
+          "586:34472",
+          "586:34474"
+        ],
+        "children": [
+          {
+            "id": "586:34489",
+            "name": "status",
+            "y": 24,
+            "height": 24
+          },
+          {
+            "id": "586:34490",
+            "name": "返回",
+            "y": 68,
+            "height": 44
+          },
+          {
+            "id": "586:34491",
+            "name": "标题栏",
+            "y": 132,
+            "height": 44
+          },
+          {
+            "id": "586:34498",
+            "name": "创建方式",
+            "y": 196,
+            "height": 56
+          },
+          {
+            "id": "586:34501",
+            "name": "目标输入",
+            "y": 272,
+            "height": 264
+          },
+          {
+            "id": "586:34504",
+            "name": "手工创建说明",
+            "y": 556,
+            "height": 24
+          },
+          {
+            "id": "586:34505",
+            "name": "创建可编辑草稿",
+            "y": 600,
+            "height": 52
+          }
+        ],
+        "fonts": [
+          "Noto Sans SC"
+        ]
+      }
+    ]
+  }
+}

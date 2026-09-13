@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "pass": true,
+    "requestedFrames": 3,
+    "issueCount": 0,
+    "byCode": {}
+  },
+  "frames": [
+    {
+      "id": "513:37951",
+      "key": "recovered",
+      "nodes": 50,
+      "hydratedNodes": 50,
+      "hydrationFailures": 0,
+      "visibleNodes": 48,
+      "textNodes": 13,
+      "visibleTextNodes": 13,
+      "fontsChecked": 13,
+      "instances": 5,
+      "componentReferencesChecked": 5,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 47,
+      "childCollectionsRead": 23,
+      "fonts": {
+        "Noto Sans SC": 13
+      },
+      "textSamples": [
+        {
+          "id": "513:37953",
+          "text": "思玥"
+        },
+        {
+          "id": "513:37954",
+          "text": "空间"
+        },
+        {
+          "id": "513:37959",
+          "text": "我的空间"
+        },
+        {
+          "id": "513:37966",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:37970",
+          "text": "对话"
+        },
+        {
+          "id": "513:37976",
+          "text": "目标"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:38088",
+      "key": "recovered",
+      "nodes": 50,
+      "hydratedNodes": 50,
+      "hydrationFailures": 0,
+      "visibleNodes": 48,
+      "textNodes": 13,
+      "visibleTextNodes": 13,
+      "fontsChecked": 13,
+      "instances": 5,
+      "componentReferencesChecked": 5,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 47,
+      "childCollectionsRead": 23,
+      "fonts": {
+        "Noto Sans SC": 13
+      },
+      "textSamples": [
+        {
+          "id": "513:38090",
+          "text": "思玥"
+        },
+        {
+          "id": "513:38091",
+          "text": "空间"
+        },
+        {
+          "id": "513:38096",
+          "text": "我的空间"
+        },
+        {
+          "id": "513:38103",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:38107",
+          "text": "对话"
+        },
+        {
+          "id": "513:38113",
+          "text": "目标"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    },
+    {
+      "id": "513:38225",
+      "key": "recovered",
+      "nodes": 50,
+      "hydratedNodes": 50,
+      "hydrationFailures": 0,
+      "visibleNodes": 48,
+      "textNodes": 13,
+      "visibleTextNodes": 13,
+      "fontsChecked": 13,
+      "instances": 5,
+      "componentReferencesChecked": 5,
+      "reactions": 0,
+      "destinationReferencesChecked": 0,
+      "rootBoundsChecked": 47,
+      "childCollectionsRead": 23,
+      "fonts": {
+        "Noto Sans SC": 13
+      },
+      "textSamples": [
+        {
+          "id": "513:38227",
+          "text": "Siyue"
+        },
+        {
+          "id": "513:38228",
+          "text": "Spaces"
+        },
+        {
+          "id": "513:38233",
+          "text": "My space"
+        },
+        {
+          "id": "513:38240",
+          "text": "周末家庭"
+        },
+        {
+          "id": "513:38244",
+          "text": "Conversations"
+        },
+        {
+          "id": "513:38250",
+          "text": "Goals"
+        }
+      ],
+      "textExpectedInstances": 0,
+      "emptyTextExpectedInstances": 0,
+      "issueCount": 0,
+      "pass": true
+    }
+  ],
+  "issueOffset": 0,
+  "returnedIssues": 0,
+  "nextIssueOffset": null,
+  "issues": []
+}

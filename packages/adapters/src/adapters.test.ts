@@ -11,6 +11,7 @@ import { openNodeConnection, openNodeStore } from './node.js';
 
 const now = () => '2026-09-05T12:00:00.000Z';
 const payload = {title: 'Synthetic goal', projectTitles: ['Project'], taskTitles: ['Task']};
+const compatibleExecution = {executor: 'compatible', modelVersion: 'test-model', promptVersion: 'compatible-plan-v1'} as const;
 function fixture(t: TestContext) {
   const directory = mkdtempSync(join(tmpdir(), 'siyue-adapters-test-'));
   const filename = join(directory, 'data.sqlite');
@@ -28,6 +29,41 @@ async function client(store: ReturnType<typeof openNodeStore>, owner = 'owner-a'
   const {spaceId, actorId} = await store.initialize(owner, randomUUID());
   return {spaceId, actorId, client: createLocalClient({service: service(store), spaceId, actor: {id: actorId, kind: 'user'}, now, newId: randomUUID, propose: async () => payload})};
 }
+
+test('request-scoped proposer creates only a draft and never replaces the default proposer', async (t) => {
+  const store = fixture(t).open();
+  const a = await client(store);
+  const generated = {...payload, title: 'Explicit provider draft'};
+  let received: string | undefined;
+  const draft = await a.client.propose('Explicit input', undefined, {execution: compatibleExecution, propose: async (goal) => {
+    received = goal;
+    return generated;
+  }});
+  assert.equal(received, 'Explicit input');
+  assert.equal(draft.command.kind, 'plan.create');
+  if (draft.command.kind !== 'plan.create') throw new Error('Unexpected command');
+  assert.deepEqual(draft.command.payload, generated);
+  const snapshot = await a.client.snapshot();
+  assert.equal(snapshot.goals.length, 0);
+  assert.equal(snapshot.tasks.length, 0);
+  const next = await a.client.propose('Default input');
+  if (next.command.kind !== 'plan.create') throw new Error('Unexpected command');
+  assert.deepEqual(next.command.payload, payload);
+});
+
+test('request-scoped provider failure or cancellation never falls back to the default', async (t) => {
+  const store = fixture(t).open();
+  const a = await client(store);
+  await assert.rejects(a.client.propose('Goal', undefined, {execution: compatibleExecution, propose: async () => { throw new Error('provider failed'); }}), /provider failed/);
+  const abort = new AbortController();
+  await assert.rejects(a.client.propose('Goal', abort.signal, {execution: compatibleExecution, propose: async () => {
+    abort.abort();
+    return payload;
+  }}), {code: 'cancelled'});
+  const snapshot = await a.client.snapshot();
+  assert.equal(snapshot.drafts.length, 0);
+  assert.equal(snapshot.goals.length, 0);
+});
 
 test('formal command writes survive reopen; initialization preserves original space ID', async (t) => {
   const f = fixture(t);
@@ -412,4 +448,132 @@ test('uncertain draft commit leaves awaiting run intact when reconciliation is t
   const draft = (await recovered.snapshot()).drafts[0]!;
   await recovered.confirmDraft(draft.id, draft.version);
   assert.equal((await recovered.snapshot()).runs[0]?.status, 'succeeded');
+});
+
+test('manual draft remains provisional, preserves identity, and confirms linked records', async (t) => {
+  const a = await client(fixture(t).open());
+  const request = {commandId: randomUUID(), issuedAt: now()};
+  const draft = await a.client.createManualDraft(payload, request);
+  assert.equal(draft.source, 'ui');
+  assert.equal(draft.command.commandId, request.commandId);
+  assert.equal(draft.command.issuedAt, request.issuedAt);
+  assert.equal(draft.expiresAt, '2026-09-05T12:30:00.000Z');
+  const retry = await a.client.createManualDraft(payload, request);
+  assert.equal(retry.id, draft.id);
+  const before = await a.client.snapshot();
+  assert.equal(before.drafts.length, 1);
+  assert.equal(before.goals.length + before.projects.length + before.tasks.length, 0);
+  await assert.rejects(a.client.createManualDraft({...payload, title: 'Changed'}, request), {code: 'command_conflict'});
+  await a.client.confirmDraft(draft.id, draft.version);
+  const after = await a.client.snapshot();
+  assert.equal(after.goals.length, 1);
+  assert.equal(after.projects[0]?.goalId, after.goals[0]?.id);
+  assert.equal(after.tasks[0]?.projectId, after.projects[0]?.id);
+});
+
+test('manual draft recovers lost create response using the original command only', async (t) => {
+  const store = fixture(t).open();
+  const a = await client(store);
+  const real = service(store);
+  let calls = 0;
+  const local = createLocalClient({service: {...real, async createDraft(...args) { calls += 1; await real.createDraft(...args); throw new Error('lost draft response'); }}, spaceId: a.spaceId, actor: {id: a.actorId, kind: 'user'}, now, newId: () => {throw new Error('Must not allocate another command ID');}, propose: async () => payload});
+  const request = {commandId: randomUUID(), issuedAt: now()};
+  const saved = await local.createManualDraft(payload, request);
+  assert.equal(saved.command.commandId, request.commandId);
+  assert.equal(calls, 1);
+  assert.equal((await local.snapshot()).drafts.length, 1);
+  assert.equal((await local.snapshot()).goals.length, 0);
+});
+
+test('manual draft rejects invalid projects, empty task titles and invalid stable identity', async (t) => {
+  const a = await client(fixture(t).open());
+  const request = {commandId: randomUUID(), issuedAt: now()};
+  for (const projectTitles of [[], ['One', 'Two']]) await assert.rejects(a.client.createManualDraft({...payload, projectTitles}, request), {code: 'invalid_input'});
+  await assert.rejects(a.client.createManualDraft({...payload, taskTitles: [' ']}, request), {code: 'invalid_input'});
+  await assert.rejects(a.client.createManualDraft(payload, {...request, commandId: 'bad'}), {code: 'invalid_input'});
+  assert.equal((await a.client.snapshot()).drafts.length, 0);
+});
+
+test('manual draft preserves caller input and refuses unknown outcomes without inventing a new identity', async (t) => {
+  const store = fixture(t).open();
+  const a = await client(store);
+  const real = service(store);
+  let received: unknown;
+  let release!: () => void;
+  const waiting = new Promise<void>(resolve => {release = resolve;});
+  const local = createLocalClient({service: {...real, async createDraft(command) {received = command; await waiting; throw new Error('unconfirmed write');}}, spaceId: a.spaceId, actor: {id: a.actorId, kind: 'user'}, now, newId: () => {throw new Error('Unexpected identity');}, propose: async () => payload});
+  const input = structuredClone(payload);
+  const request = {commandId: randomUUID(), issuedAt: now()};
+  const operation = local.createManualDraft(input, request);
+  input.taskTitles[0] = 'Changed during wait';
+  release();
+  await assert.rejects(operation, /unconfirmed write/);
+  assert.equal((received as {payload: typeof payload}).payload.taskTitles[0], 'Task');
+  assert.equal(input.taskTitles[0], 'Changed during wait');
+  assert.equal((await local.snapshot()).drafts.length, 0);
+});
+
+test('manual draft cannot adopt an existing AI draft with the same command and payload', async (t) => {
+  const a = await client(fixture(t).open());
+  const aiDraft = await a.client.propose('Goal');
+  await assert.rejects(a.client.createManualDraft(payload, {commandId: aiDraft.command.commandId, issuedAt: aiDraft.command.issuedAt}), {code: 'command_conflict'});
+  const snapshot = await a.client.snapshot();
+  assert.equal(snapshot.drafts.length, 1);
+  assert.equal(snapshot.drafts[0]?.source, 'ai');
+  assert.equal(snapshot.goals.length, 0);
+});
+
+test('manual draft with an unknown save recovers its original identity after expiry', async (t) => {
+  const store = fixture(t).open();
+  const a = await client(store);
+  let timestamp = now();
+  const real = createCommandService({store, now: () => timestamp, newId: randomUUID, hash: value => createHash('sha256').update(value).digest('hex')});
+  let unavailable = true;
+  const local = createLocalClient({service: {...real,
+    async createDraft(...args) {const result = await real.createDraft(...args); if (unavailable) throw new Error('lost draft response'); return result;},
+    async listPlan(...args) {if (unavailable) throw new Error('read unavailable'); return real.listPlan(...args);},
+  }, spaceId: a.spaceId, actor: {id: a.actorId, kind: 'user'}, now: () => timestamp, newId: () => {throw new Error('No replacement identity');}, propose: async () => payload});
+  const request = {commandId: randomUUID(), issuedAt: timestamp};
+  await assert.rejects(local.createManualDraft(payload, request), /read unavailable/);
+  const saved = (await a.client.snapshot()).drafts[0]!;
+  timestamp = '2026-09-05T12:31:00.000Z';
+  await assert.rejects(local.createManualDraft(payload, request), /read unavailable/);
+  unavailable = false;
+  const recovered = await local.createManualDraft(payload, request);
+  assert.equal(recovered.id, saved.id);
+  assert.equal(recovered.command.commandId, request.commandId);
+  assert.equal(recovered.expiresAt, '2026-09-05T12:30:00.000Z');
+  const snapshot = await local.snapshot();
+  assert.equal(snapshot.drafts.length, 1);
+  assert.equal(snapshot.goals.length, 0);
+  await assert.rejects(local.confirmDraft(recovered.id, recovered.version), {code: 'approval_expired'});
+  await assert.rejects(local.createManualDraft(payload, {...request, commandId: randomUUID()}), {code: 'approval_expired'});
+});
+
+test('compatible execution metadata survives draft confirmation and SQLite reopen with unknown usage', async (t) => {
+  const f = fixture(t), store = f.open(), a = await client(store);
+  const actor = {id: a.actorId, kind: 'user' as const};
+  const local = createLocalClient({service: service(store), runService: createRunService({store, now, newId: randomUUID}), spaceId: a.spaceId, actor, now, newId: randomUUID, propose: async () => payload});
+  const execution = {executor: 'compatible', modelVersion: 'configured/model-id', promptVersion: 'compatible-plan-v1'} as const;
+  const draft = await local.propose('Goal', undefined, {execution, propose: async () => payload});
+  await local.confirmDraft(draft.id, draft.version);
+  await store.close();
+  const runs = await createRunService({store: f.open(), now, newId: randomUUID}).list(a.spaceId, actor);
+  assert.equal(runs[0]?.executor, execution.executor);
+  assert.equal(runs[0]?.modelVersion, execution.modelVersion);
+  assert.equal(runs[0]?.promptVersion, execution.promptVersion);
+  assert.equal(runs[0]?.usage, null);
+  assert.equal(runs[0]?.status, 'succeeded');
+});
+
+test('request-scoped proposer without valid execution metadata is rejected before starting a run', async (t) => {
+  const store = fixture(t).open(), a = await client(store);
+  const actor = {id: a.actorId, kind: 'user' as const};
+  const local = createLocalClient({service: service(store), runService: createRunService({store, now, newId: randomUUID}), spaceId: a.spaceId, actor, now, newId: randomUUID, propose: async () => payload});
+  let called = false;
+  for (const request of [async () => {called = true; return payload;}, {propose: async () => {called = true; return payload;}}, {execution: {executor: 'compatible', modelVersion: 'model'}, propose: async () => {called = true; return payload;}}]) {
+    await assert.rejects(local.propose('Goal', undefined, request as never), {code: 'invalid_input'});
+  }
+  assert.equal(called, false);
+  assert.equal((await local.snapshot()).runs.length, 0);
 });

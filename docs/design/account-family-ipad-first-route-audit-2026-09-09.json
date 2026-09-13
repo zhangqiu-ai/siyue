@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"summary\":{\"requestedFrames\":8,\"checkedFrames\":8,\"visibleReactionNodes\":62,\"visibleActions\":62,\"visibleLinks\":62,\"explicitSwitches\":0,\"issueCount\":0,\"byCode\":{},\"pass\":true},\"issueOffset\":0,\"returnedIssues\":0,\"nextIssueOffset\":null,\"issues\":[]}"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,2448 @@
+{
+  "status": "partial-waiting-targets",
+  "batches": [
+    {
+      "offset": 0,
+      "applied": true,
+      "frames": 32,
+      "mutatedNodeIds": [
+        "443:10127",
+        "443:10082",
+        "443:10087",
+        "443:10098",
+        "443:10245",
+        "443:10200",
+        "443:10205",
+        "443:10216",
+        "443:10362",
+        "443:10317",
+        "443:10322",
+        "443:10333",
+        "443:10451",
+        "443:10406",
+        "443:10411",
+        "443:10422",
+        "443:10538",
+        "443:10495",
+        "443:10500",
+        "443:10511",
+        "443:10625",
+        "443:10582",
+        "443:10587",
+        "443:10598",
+        "443:10713",
+        "443:10714",
+        "443:10669",
+        "443:10674",
+        "443:10685",
+        "443:10814",
+        "443:10815",
+        "443:10770",
+        "443:10775",
+        "443:10786",
+        "443:10913",
+        "443:10914",
+        "443:10871",
+        "443:10876",
+        "443:10887",
+        "443:11012",
+        "443:11013",
+        "443:10970",
+        "443:10975",
+        "443:10986",
+        "443:11069",
+        "443:11074",
+        "443:11085",
+        "450:9473",
+        "450:9486",
+        "450:9487",
+        "450:9427",
+        "450:9432",
+        "450:9443",
+        "450:9575",
+        "450:9529",
+        "450:9534",
+        "450:9545",
+        "452:9716",
+        "452:9670",
+        "452:9675",
+        "452:9686",
+        "452:9791",
+        "452:9796",
+        "452:9807",
+        "452:9950",
+        "452:9955",
+        "452:9966",
+        "452:10097",
+        "452:10051",
+        "452:10056",
+        "452:10067",
+        "452:10285",
+        "452:10274",
+        "452:10228",
+        "452:10233",
+        "452:10244",
+        "452:10390",
+        "452:10344",
+        "452:10349",
+        "452:10360",
+        "456:12202",
+        "456:12157",
+        "456:12162",
+        "456:12173",
+        "456:12318",
+        "456:12273",
+        "456:12278",
+        "456:12289",
+        "456:12406",
+        "456:12361",
+        "456:12366",
+        "456:12377",
+        "456:12492",
+        "456:12449",
+        "456:12454",
+        "456:12465",
+        "456:12628",
+        "456:12585",
+        "456:12590",
+        "456:12601",
+        "456:12715",
+        "456:12716",
+        "456:12671",
+        "456:12676",
+        "456:12687",
+        "456:12815",
+        "456:12816",
+        "456:12771",
+        "456:12776",
+        "456:12787",
+        "456:12913",
+        "456:12914",
+        "456:12871",
+        "456:12876",
+        "456:12887",
+        "456:13024",
+        "456:13029",
+        "456:13040",
+        "456:13142",
+        "456:13155",
+        "456:13156",
+        "456:13113",
+        "456:13118",
+        "456:13129",
+        "456:13231",
+        "456:13202",
+        "456:13207",
+        "456:13218",
+        "456:13305",
+        "456:13310",
+        "456:13321",
+        "456:13465",
+        "456:13470",
+        "456:13481"
+      ],
+      "plannedMutationCount": 134,
+      "stats": [
+        {
+          "id": "443:10078",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10196",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10313",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10402",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10491",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10578",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10665",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10766",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10867",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:10966",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "443:11065",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "450:9423",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "450:9525",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "452:9666",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "452:9787",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        },
+        {
+          "id": "452:9946",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        },
+        {
+          "id": "452:10047",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "452:10224",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "452:10340",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12153",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12269",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12357",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12445",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12581",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12667",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12767",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:12867",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:13020",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:13109",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:13198",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "456:13301",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        },
+        {
+          "id": "456:13461",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        }
+      ],
+      "issues": []
+    },
+    {
+      "offset": 32,
+      "applied": true,
+      "frames": 32,
+      "mutatedNodeIds": [
+        "458:10636",
+        "458:10591",
+        "458:10596",
+        "458:10607",
+        "458:10752",
+        "458:10707",
+        "458:10712",
+        "458:10723",
+        "458:10868",
+        "458:10823",
+        "458:10828",
+        "458:10839",
+        "458:10956",
+        "458:10911",
+        "458:10916",
+        "458:10927",
+        "458:11299",
+        "458:11256",
+        "458:11261",
+        "458:11272",
+        "458:11385",
+        "458:11342",
+        "458:11347",
+        "458:11358",
+        "458:11472",
+        "458:11473",
+        "458:11428",
+        "458:11433",
+        "458:11444",
+        "458:11572",
+        "458:11573",
+        "458:11528",
+        "458:11533",
+        "458:11544",
+        "458:11670",
+        "458:11671",
+        "458:11628",
+        "458:11633",
+        "458:11644",
+        "458:11768",
+        "458:11769",
+        "458:11726",
+        "458:11731",
+        "458:11742",
+        "458:11824",
+        "458:11829",
+        "458:11840",
+        "458:11942",
+        "458:11955",
+        "458:11956",
+        "458:11913",
+        "458:11918",
+        "458:11929",
+        "458:12031",
+        "458:12002",
+        "458:12007",
+        "458:12018",
+        "458:12134",
+        "458:12105",
+        "458:12110",
+        "458:12121",
+        "458:12208",
+        "458:12213",
+        "458:12224",
+        "458:12292",
+        "458:12297",
+        "458:12308",
+        "460:11282",
+        "460:11253",
+        "460:11258",
+        "460:11269",
+        "460:11409",
+        "460:11398",
+        "460:11369",
+        "460:11374",
+        "460:11385",
+        "460:11496",
+        "460:11467",
+        "460:11472",
+        "460:11483",
+        "460:11615",
+        "460:11570",
+        "460:11575",
+        "460:11586",
+        "460:11731",
+        "460:11686",
+        "460:11691",
+        "460:11702",
+        "460:11819",
+        "460:11774",
+        "460:11779",
+        "460:11790",
+        "460:11905",
+        "460:11862",
+        "460:11867",
+        "460:11878",
+        "460:11991",
+        "460:11948",
+        "460:11953",
+        "460:11964",
+        "460:12078",
+        "460:12079",
+        "460:12034",
+        "460:12039",
+        "460:12050",
+        "460:12178",
+        "460:12179",
+        "460:12134",
+        "460:12139",
+        "460:12150",
+        "460:12276",
+        "460:12277",
+        "460:12234",
+        "460:12239",
+        "460:12250",
+        "460:12332",
+        "460:12337",
+        "460:12348",
+        "460:12557",
+        "460:12570",
+        "460:12571",
+        "460:12528",
+        "460:12533",
+        "460:12544",
+        "460:12646",
+        "460:12617",
+        "460:12622",
+        "460:12633",
+        "460:12720",
+        "460:12725",
+        "460:12736",
+        "460:12804",
+        "460:12809",
+        "460:12820"
+      ],
+      "plannedMutationCount": 134,
+      "stats": [
+        {
+          "id": "458:10587",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:10703",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:10819",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:10907",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11252",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11338",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11424",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11524",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11624",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11722",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11820",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11909",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:11998",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:12101",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "458:12204",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        },
+        {
+          "id": "458:12288",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        },
+        {
+          "id": "460:11249",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11365",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11463",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11566",
+          "key": "members",
+          "sourceReactions": 5,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11682",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11770",
+          "key": "invite",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11858",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:11944",
+          "key": "pair-guardian",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12030",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12130",
+          "key": "share",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12230",
+          "key": "conflict",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12328",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12524",
+          "key": "chat",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12613",
+          "key": "draft",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "460:12716",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        },
+        {
+          "id": "460:12800",
+          "key": "settings",
+          "sourceReactions": 7,
+          "skippedHidden": 0
+        }
+      ],
+      "issues": []
+    },
+    {
+      "offset": 64,
+      "applied": true,
+      "frames": 32,
+      "mutatedNodeIds": [
+        "466:15053",
+        "466:15120",
+        "466:15251",
+        "466:15318",
+        "466:15385",
+        "466:15452",
+        "466:15519",
+        "466:15586",
+        "466:16178",
+        "466:16164",
+        "466:16116",
+        "466:16121",
+        "466:16132",
+        "466:16296",
+        "466:16282",
+        "466:16234",
+        "466:16239",
+        "466:16250",
+        "466:16414",
+        "466:16400",
+        "466:16352",
+        "466:16357",
+        "466:16368",
+        "466:16532",
+        "466:16518",
+        "466:16470",
+        "466:16475",
+        "466:16486",
+        "466:16650",
+        "466:16636",
+        "466:16588",
+        "466:16593",
+        "466:16604",
+        "466:16768",
+        "466:16754",
+        "466:16706",
+        "466:16711",
+        "466:16722",
+        "466:16886",
+        "466:16872",
+        "466:16824",
+        "466:16829",
+        "466:16840",
+        "466:17004",
+        "466:16990",
+        "466:16942",
+        "466:16947",
+        "466:16958",
+        "466:17123",
+        "466:17065",
+        "466:17076",
+        "466:17227",
+        "466:17169",
+        "466:17180",
+        "470:14676",
+        "470:14618",
+        "470:14629",
+        "470:14780",
+        "470:14722",
+        "470:14733",
+        "470:14884",
+        "470:14826",
+        "470:14837",
+        "470:14988",
+        "470:14930",
+        "470:14941",
+        "470:15092",
+        "470:15034",
+        "470:15045",
+        "470:15196",
+        "470:15138",
+        "470:15149"
+      ],
+      "plannedMutationCount": 72,
+      "stats": [
+        {
+          "id": "466:14992",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15059",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15190",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15257",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15324",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15391",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15458",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15525",
+          "key": "login",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15592",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15657",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15722",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15787",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15852",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15917",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:15982",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:16047",
+          "key": "otp",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:16112",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16230",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16348",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16466",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16584",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16702",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16820",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:16938",
+          "key": "adopt",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "466:17056",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "466:17160",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:14609",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:14713",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:14817",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:14921",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15025",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15129",
+          "key": "home",
+          "sourceReactions": 5,
+          "skippedHidden": 0
+        }
+      ],
+      "issues": []
+    },
+    {
+      "offset": 96,
+      "applied": true,
+      "frames": 32,
+      "mutatedNodeIds": [
+        "470:15308",
+        "470:15324",
+        "470:15237",
+        "470:15253",
+        "470:15405",
+        "470:15421",
+        "470:15334",
+        "470:15350",
+        "470:15502",
+        "470:15518",
+        "470:15431",
+        "470:15447",
+        "470:15599",
+        "470:15615",
+        "470:15528",
+        "470:15544",
+        "470:15696",
+        "470:15712",
+        "470:15625",
+        "470:15641",
+        "470:15793",
+        "470:15809",
+        "470:15722",
+        "470:15738",
+        "470:15890",
+        "470:15906",
+        "470:15819",
+        "470:15835",
+        "470:15987",
+        "470:16003",
+        "470:15916",
+        "470:15932",
+        "470:16083",
+        "470:16061",
+        "470:16079",
+        "470:16080",
+        "470:16013",
+        "470:16018",
+        "470:16029",
+        "470:16198",
+        "470:16176",
+        "470:16194",
+        "470:16195",
+        "470:16128",
+        "470:16133",
+        "470:16144",
+        "470:16313",
+        "470:16291",
+        "470:16309",
+        "470:16310",
+        "470:16243",
+        "470:16248",
+        "470:16259",
+        "470:16428",
+        "470:16406",
+        "470:16424",
+        "470:16425",
+        "470:16358",
+        "470:16363",
+        "470:16374",
+        "470:16543",
+        "470:16521",
+        "470:16539",
+        "470:16540",
+        "470:16473",
+        "470:16478",
+        "470:16489",
+        "470:16658",
+        "470:16636",
+        "470:16654",
+        "470:16655",
+        "470:16588",
+        "470:16593",
+        "470:16604",
+        "470:16773",
+        "470:16751",
+        "470:16769",
+        "470:16770",
+        "470:16703",
+        "470:16708",
+        "470:16719",
+        "470:16888",
+        "470:16866",
+        "470:16884",
+        "470:16885",
+        "470:16818",
+        "470:16823",
+        "470:16834",
+        "470:16981",
+        "470:16933",
+        "470:16938",
+        "470:16949",
+        "470:17058",
+        "470:17010",
+        "470:17015",
+        "470:17026",
+        "470:17197",
+        "470:17149",
+        "470:17154",
+        "470:17165",
+        "470:17274",
+        "470:17226",
+        "470:17231",
+        "470:17242",
+        "470:17351",
+        "470:17303",
+        "470:17308",
+        "470:17319",
+        "470:17428",
+        "470:17380",
+        "470:17385",
+        "470:17396",
+        "470:17505",
+        "470:17457",
+        "470:17462",
+        "470:17473",
+        "470:17582",
+        "470:17534",
+        "470:17539",
+        "470:17550",
+        "470:17659",
+        "470:17611",
+        "470:17616",
+        "470:17627",
+        "470:17758",
+        "470:17710",
+        "470:17715",
+        "470:17726",
+        "470:17857",
+        "470:17809",
+        "470:17814",
+        "470:17825",
+        "470:17956",
+        "470:17908",
+        "470:17913",
+        "470:17924",
+        "470:18055",
+        "470:18007",
+        "470:18012",
+        "470:18023",
+        "470:18154",
+        "470:18106",
+        "470:18111",
+        "470:18122",
+        "470:18253",
+        "470:18205",
+        "470:18210",
+        "470:18221",
+        "470:18352",
+        "470:18304",
+        "470:18309",
+        "470:18320"
+      ],
+      "plannedMutationCount": 152,
+      "stats": [
+        {
+          "id": "470:15233",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15330",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15427",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15524",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15621",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15718",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15815",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:15912",
+          "key": "family",
+          "sourceReactions": 4,
+          "skippedHidden": 0
+        },
+        {
+          "id": "470:16009",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16124",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16239",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16354",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16469",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16584",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16699",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16814",
+          "key": "chat-input",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:16929",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17006",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17145",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17222",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17299",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17376",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17453",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17530",
+          "key": "edit-task",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17607",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17706",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17805",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:17904",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:18003",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:18102",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:18201",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        },
+        {
+          "id": "470:18300",
+          "key": "saved",
+          "sourceReactions": 2,
+          "skippedHidden": 1
+        }
+      ],
+      "issues": []
+    },
+    {
+      "offset": 128,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "470:20547",
+          "node": "470:20613",
+          "phoneTarget": "443:8495",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "470:20633",
+          "node": "470:20699",
+          "phoneTarget": "443:8495",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 160
+    },
+    {
+      "offset": 160,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23055",
+          "node": "473:23120",
+          "phoneTarget": "403:4805",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23173",
+          "node": "473:23238",
+          "phoneTarget": "403:4805",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23291",
+          "node": "473:23354",
+          "phoneTarget": "314:3908",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23291",
+          "node": "473:23356",
+          "phoneTarget": "463:12736",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23291",
+          "node": "473:23357",
+          "phoneTarget": "314:4552",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23409",
+          "node": "473:23472",
+          "phoneTarget": "314:3908",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23409",
+          "node": "473:23474",
+          "phoneTarget": "463:12736",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23409",
+          "node": "473:23475",
+          "phoneTarget": "314:4552",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23527",
+          "node": "473:23592",
+          "phoneTarget": "463:12668",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23645",
+          "node": "473:23710",
+          "phoneTarget": "463:12668",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23763",
+          "node": "473:23826",
+          "phoneTarget": "443:7968",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23763",
+          "node": "473:23828",
+          "phoneTarget": "463:12804",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23763",
+          "node": "473:23829",
+          "phoneTarget": "443:8511",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23881",
+          "node": "473:23944",
+          "phoneTarget": "443:7968",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23881",
+          "node": "473:23946",
+          "phoneTarget": "463:12804",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:23881",
+          "node": "473:23947",
+          "phoneTarget": "443:8511",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 136
+    },
+    {
+      "offset": 192,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:24229",
+          "node": "473:24292",
+          "phoneTarget": "314:4298",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:24344",
+          "node": "473:24407",
+          "phoneTarget": "314:4298",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:24689",
+          "node": "473:24752",
+          "phoneTarget": "443:8410",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:24804",
+          "node": "473:24867",
+          "phoneTarget": "443:8410",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 136
+    },
+    {
+      "offset": 224,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28271",
+          "node": "473:28347",
+          "phoneTarget": "442:6303",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28376",
+          "node": "473:28452",
+          "phoneTarget": "442:6303",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28481",
+          "node": "473:28557",
+          "phoneTarget": "463:14231",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28586",
+          "node": "473:28662",
+          "phoneTarget": "463:14231",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28691",
+          "node": "473:28767",
+          "phoneTarget": "463:14204",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28796",
+          "node": "473:28872",
+          "phoneTarget": "463:14204",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:28901",
+          "node": "473:28977",
+          "phoneTarget": "463:14258",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "473:29006",
+          "node": "473:29082",
+          "phoneTarget": "463:14258",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 112
+    },
+    {
+      "offset": 256,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:19946",
+          "node": "479:20022",
+          "phoneTarget": "442:6303",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20051",
+          "node": "479:20127",
+          "phoneTarget": "442:6303",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20156",
+          "node": "479:20232",
+          "phoneTarget": "463:14231",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20261",
+          "node": "479:20337",
+          "phoneTarget": "463:14231",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20984",
+          "node": "479:21060",
+          "phoneTarget": "463:14204",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:21089",
+          "node": "479:21165",
+          "phoneTarget": "463:14204",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:21194",
+          "node": "479:21270",
+          "phoneTarget": "463:14258",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:21299",
+          "node": "479:21375",
+          "phoneTarget": "463:14258",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 144
+    },
+    {
+      "offset": 288,
+      "applied": true,
+      "frames": 32,
+      "mutatedNodeIds": [
+        "479:21794",
+        "479:21732",
+        "479:21737",
+        "479:21744",
+        "479:21748",
+        "479:21754",
+        "479:21911",
+        "479:21849",
+        "479:21854",
+        "479:21861",
+        "479:21865",
+        "479:21871",
+        "479:22028",
+        "479:21966",
+        "479:21971",
+        "479:21978",
+        "479:21982",
+        "479:21988",
+        "479:22145",
+        "479:22083",
+        "479:22088",
+        "479:22095",
+        "479:22099",
+        "479:22105",
+        "479:22616",
+        "479:22554",
+        "479:22559",
+        "479:22566",
+        "479:22570",
+        "479:22576",
+        "479:22733",
+        "479:22671",
+        "479:22676",
+        "479:22683",
+        "479:22687",
+        "479:22693",
+        "479:22850",
+        "479:22788",
+        "479:22793",
+        "479:22800",
+        "479:22804",
+        "479:22810",
+        "479:22967",
+        "479:22905",
+        "479:22910",
+        "479:22917",
+        "479:22921",
+        "479:22927",
+        "479:23436",
+        "479:23438",
+        "479:23439",
+        "479:23376",
+        "479:23381",
+        "479:23388",
+        "479:23392",
+        "479:23398",
+        "479:23541",
+        "479:23543",
+        "479:23544",
+        "479:23481",
+        "479:23486",
+        "479:23493",
+        "479:23497",
+        "479:23503",
+        "479:23646",
+        "479:23648",
+        "479:23649",
+        "479:23586",
+        "479:23591",
+        "479:23598",
+        "479:23602",
+        "479:23608",
+        "479:23751",
+        "479:23753",
+        "479:23754",
+        "479:23691",
+        "479:23696",
+        "479:23703",
+        "479:23707",
+        "479:23713",
+        "479:24184",
+        "479:24186",
+        "479:24187",
+        "479:24124",
+        "479:24129",
+        "479:24136",
+        "479:24140",
+        "479:24146",
+        "479:24289",
+        "479:24291",
+        "479:24292",
+        "479:24229",
+        "479:24234",
+        "479:24241",
+        "479:24245",
+        "479:24251",
+        "479:24394",
+        "479:24396",
+        "479:24397",
+        "479:24334",
+        "479:24339",
+        "479:24346",
+        "479:24350",
+        "479:24356",
+        "479:24499",
+        "479:24501",
+        "479:24502",
+        "479:24439",
+        "479:24444",
+        "479:24451",
+        "479:24455",
+        "479:24461",
+        "479:24919",
+        "479:24921",
+        "479:24924",
+        "479:24859",
+        "479:24864",
+        "479:24871",
+        "479:24875",
+        "479:24881",
+        "479:25039",
+        "479:25041",
+        "479:25044",
+        "479:24979",
+        "479:24984",
+        "479:24991",
+        "479:24995",
+        "479:25001",
+        "479:25159",
+        "479:25161",
+        "479:25164",
+        "479:25099",
+        "479:25104",
+        "479:25111",
+        "479:25115",
+        "479:25121",
+        "479:25279",
+        "479:25281",
+        "479:25284",
+        "479:25219",
+        "479:25224",
+        "479:25231",
+        "479:25235",
+        "479:25241",
+        "479:25714",
+        "479:25716",
+        "479:25719",
+        "479:25654",
+        "479:25659",
+        "479:25666",
+        "479:25670",
+        "479:25676",
+        "479:25834",
+        "479:25836",
+        "479:25839",
+        "479:25774",
+        "479:25779",
+        "479:25786",
+        "479:25790",
+        "479:25796",
+        "479:25954",
+        "479:25956",
+        "479:25959",
+        "479:25894",
+        "479:25899",
+        "479:25906",
+        "479:25910",
+        "479:25916",
+        "479:26074",
+        "479:26076",
+        "479:26079",
+        "479:26014",
+        "479:26019",
+        "479:26026",
+        "479:26030",
+        "479:26036",
+        "I479:26502;5446:7598",
+        "I479:26502;5446:7604",
+        "I479:26569;5446:7598",
+        "I479:26569;5446:7604",
+        "I479:26636;5446:7598",
+        "I479:26636;5446:7604",
+        "I479:26703;5446:7598",
+        "I479:26703;5446:7604",
+        "I479:28043;5446:7598",
+        "I479:28043;5446:7604",
+        "I479:28110;5446:7598",
+        "I479:28110;5446:7604",
+        "I479:28177;5446:7598",
+        "I479:28177;5446:7604",
+        "I479:28244;5446:7598",
+        "I479:28244;5446:7604"
+      ],
+      "plannedMutationCount": 192,
+      "stats": [
+        {
+          "id": "479:21728",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:21845",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:21962",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:22079",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:22550",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:22667",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:22784",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:22901",
+          "key": "readonly",
+          "sourceReactions": 1,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:23372",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:23477",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:23582",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:23687",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:24120",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:24225",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:24330",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:24435",
+          "key": "chat-shared",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:24855",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:24975",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:25095",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:25215",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:25650",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:25770",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:25890",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:26010",
+          "key": "chat-sent",
+          "sourceReactions": 3,
+          "skippedHidden": 1
+        },
+        {
+          "id": "479:26451",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:26518",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:26585",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:26652",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:27992",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:28059",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:28126",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        },
+        {
+          "id": "479:28193",
+          "key": "confirm-remove",
+          "sourceReactions": 2,
+          "skippedHidden": 0
+        }
+      ],
+      "issues": []
+    },
+    {
+      "offset": 320,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:29044",
+          "node": "I479:29095;5446:7598",
+          "phoneTarget": "463:12271",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:29111",
+          "node": "I479:29162;5446:7598",
+          "phoneTarget": "463:12271",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:29178",
+          "node": "I479:29229;5446:7598",
+          "phoneTarget": "463:12373",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:29245",
+          "node": "I479:29296;5446:7598",
+          "phoneTarget": "463:12373",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20366",
+          "node": "479:20432",
+          "phoneTarget": "246:1734",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20469",
+          "node": "479:20535",
+          "phoneTarget": "246:1734",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20572",
+          "node": "479:20638",
+          "phoneTarget": "463:14484",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20675",
+          "node": "479:20741",
+          "phoneTarget": "463:14484",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20778",
+          "node": "479:20844",
+          "phoneTarget": "463:14467",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:20881",
+          "node": "479:20947",
+          "phoneTarget": "463:14467",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:21404",
+          "node": "479:21470",
+          "phoneTarget": "463:14501",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:21507",
+          "node": "479:21573",
+          "phoneTarget": "463:14501",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 100
+    },
+    {
+      "offset": 352,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:26130",
+          "node": "479:26185",
+          "phoneTarget": "442:6383",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:26237",
+          "node": "479:26292",
+          "phoneTarget": "442:6383",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:26344",
+          "node": "479:26399",
+          "phoneTarget": "463:14096",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:26719",
+          "node": "479:26774",
+          "phoneTarget": "463:14096",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:26826",
+          "node": "479:26881",
+          "phoneTarget": "463:14042",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:26933",
+          "node": "479:26988",
+          "phoneTarget": "463:14042",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30448",
+          "node": "479:30503",
+          "phoneTarget": "463:14150",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30555",
+          "node": "479:30610",
+          "phoneTarget": "463:14150",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30662",
+          "node": "479:30728",
+          "phoneTarget": "452:11746",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30765",
+          "node": "479:30831",
+          "phoneTarget": "452:11746",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30868",
+          "node": "479:30934",
+          "phoneTarget": "463:15582",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30971",
+          "node": "479:31037",
+          "phoneTarget": "463:15582",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:32010",
+          "node": "479:32076",
+          "phoneTarget": "463:15565",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:32113",
+          "node": "479:32179",
+          "phoneTarget": "463:15565",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:32216",
+          "node": "479:32282",
+          "phoneTarget": "463:15599",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:32519",
+          "node": "479:32585",
+          "phoneTarget": "463:15599",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:32622",
+          "node": "479:32690",
+          "phoneTarget": "452:9611",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:32733",
+          "node": "479:32801",
+          "phoneTarget": "452:9611",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:33868",
+          "node": "479:33936",
+          "phoneTarget": "463:15920",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:33979",
+          "node": "479:34047",
+          "phoneTarget": "463:15920",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:34090",
+          "node": "479:34158",
+          "phoneTarget": "463:15847",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:34201",
+          "node": "479:34269",
+          "phoneTarget": "463:15847",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:34312",
+          "node": "479:34380",
+          "phoneTarget": "463:15993",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:34423",
+          "node": "479:34491",
+          "phoneTarget": "463:15993",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 168
+    },
+    {
+      "offset": 384,
+      "applied": false,
+      "frames": 32,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27040",
+          "node": "479:27106",
+          "phoneTarget": "452:10778",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27159",
+          "node": "479:27225",
+          "phoneTarget": "452:10778",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27278",
+          "node": "479:27344",
+          "phoneTarget": "463:14518",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27397",
+          "node": "479:27463",
+          "phoneTarget": "463:14518",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27516",
+          "node": "479:27582",
+          "phoneTarget": "463:14565",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27516",
+          "node": "479:27583",
+          "phoneTarget": "314:4552",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27635",
+          "node": "479:27701",
+          "phoneTarget": "463:14565",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27635",
+          "node": "479:27702",
+          "phoneTarget": "314:4552",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27754",
+          "node": "479:27820",
+          "phoneTarget": "463:14612",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27754",
+          "node": "479:27821",
+          "phoneTarget": "443:8511",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27873",
+          "node": "479:27939",
+          "phoneTarget": "463:14612",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:27873",
+          "node": "479:27940",
+          "phoneTarget": "443:8511",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 212
+    },
+    {
+      "offset": 416,
+      "applied": false,
+      "frames": 20,
+      "issues": [
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:33256",
+          "node": "479:33322",
+          "phoneTarget": "314:4552",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:33359",
+          "node": "479:33425",
+          "phoneTarget": "314:4552",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:33462",
+          "node": "479:33528",
+          "phoneTarget": "443:8511",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:33565",
+          "node": "479:33631",
+          "phoneTarget": "443:8511",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30048",
+          "node": "479:30111",
+          "phoneTarget": "443:6595",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30148",
+          "node": "479:30211",
+          "phoneTarget": "443:6595",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30248",
+          "node": "479:30311",
+          "phoneTarget": "443:9691",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:30348",
+          "node": "479:30411",
+          "phoneTarget": "443:9691",
+          "mode": "portrait"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:29880",
+          "node": "479:29945",
+          "phoneTarget": "314:4552",
+          "mode": "landscape"
+        },
+        {
+          "kind": "missing-tablet-target",
+          "frame": "479:29964",
+          "node": "479:30029",
+          "phoneTarget": "314:4552",
+          "mode": "portrait"
+        }
+      ],
+      "plannedMutationCount": 126
+    }
+  ]
+}
