@@ -162,6 +162,65 @@ public final class NativeRecoveryTest {
         capture("storage-rollback-and-rejected-data-preserved");
     }
 
+    @Test public void nativeContinuousClockAcrossBackgroundAndProcessRestart() throws Exception {
+        String caseId = UUID.randomUUID().toString();
+        enterCase(caseId);
+        click("siyue-qa-clock");
+        JSONObject initial = clockResult(caseId, 1, "initial");
+        assertClockSample(initial, caseId);
+        assertFalse(initial.getBoolean("processChanged"));
+        assertEquals(initial.getString("processEpoch"), initial.getString("storedProcessEpoch"));
+        assertTrue(initial.isNull("backgroundInterval"));
+        assertTrue(initial.getJSONObject("decision").getBoolean("allowed"));
+        assertFalse(initial.getJSONObject("decision").has("reason"));
+
+        String initialPid = device.executeShellCommand("pidof " + APP).trim();
+        assertFalse("QA process must exist before backgrounding", initialPid.isEmpty());
+        device.pressHome();
+        assertNotEquals("Home must move the QA app out of the foreground", APP, device.getCurrentPackageName());
+        SystemClock.sleep(2_000);
+        assertEquals("Backgrounding must preserve the QA process", initialPid,
+                device.executeShellCommand("pidof " + APP).trim());
+        launchQa();
+        click("siyue-qa-clock");
+        JSONObject resumed = clockResult(caseId, 2, "resumed");
+        assertClockSample(resumed, caseId);
+        assertEquals(initial.getString("processSession"), resumed.getString("processSession"));
+        assertEquals(initial.getString("processEpoch"), resumed.getString("processEpoch"));
+        assertFalse(resumed.getBoolean("processChanged"));
+        assertTrue(resumed.getJSONObject("decision").getBoolean("allowed"));
+        JSONObject interval = resumed.getJSONObject("backgroundInterval");
+        assertEquals(initial.getString("processEpoch"), interval.getJSONObject("background").getString("bootId"));
+        assertEquals(initial.getString("processEpoch"), interval.getJSONObject("active").getString("bootId"));
+        assertTrue("Elapsed realtime must advance while the app is backgrounded",
+                interval.getJSONObject("active").getDouble("elapsedRealtimeMs")
+                        - interval.getJSONObject("background").getDouble("elapsedRealtimeMs") >= 1_500);
+
+        stopQa();
+        launchQa();
+        enterCase(caseId);
+        click("siyue-qa-clock");
+        JSONObject restarted = clockResult(caseId, 1, "restarted");
+        assertClockSample(restarted, caseId);
+        assertNotEquals(initial.getString("processSession"), restarted.getString("processSession"));
+        assertNotEquals(initial.getString("processEpoch"), restarted.getString("processEpoch"));
+        assertEquals(initial.getString("processEpoch"), restarted.getString("storedProcessEpoch"));
+        assertTrue(restarted.getBoolean("processChanged"));
+        assertFalse(restarted.getJSONObject("decision").getBoolean("allowed"));
+        assertEquals("untrusted_clock", restarted.getJSONObject("decision").getString("reason"));
+        capture("native-continuous-clock-process-restart-locks-old-lease");
+    }
+
+    private void assertClockSample(JSONObject result, String caseId) throws Exception {
+        assertEquals(1, result.getInt("schemaVersion"));
+        assertEquals(caseId, result.getString("caseId"));
+        assertEquals("clock", result.getString("phase"));
+        assertEquals(result.getString("processSession"), UUID.fromString(result.getString("processSession")).toString());
+        assertEquals(result.getString("processEpoch"), UUID.fromString(result.getString("processEpoch")).toString());
+        assertTrue(result.getDouble("firstElapsedRealtimeMs") >= 0);
+        assertTrue(result.getDouble("secondElapsedRealtimeMs") >= result.getDouble("firstElapsedRealtimeMs"));
+    }
+
     private void assertStorageCounts(JSONObject counts, int expected) throws Exception {
         assertEquals(5, counts.length());
         for (String kind : new String[]{"goals", "projects", "tasks", "events", "receipts"}) {
@@ -412,6 +471,32 @@ public final class NativeRecoveryTest {
             SystemClock.sleep(100);
         } while (SystemClock.uptimeMillis() < deadline);
         fail("Native SQL result JSON was not produced; a phase label alone is insufficient.");
+        return null;
+    }
+
+    private JSONObject clockResult(String caseId, int sequence, String label) throws Exception {
+        long deadline = SystemClock.uptimeMillis() + TIMEOUT;
+        do {
+            try {
+                UiObject2 error = unique("siyue-qa-error");
+                assertNull("Native clock QA failed: " + (error == null ? "" : error.getText()), error);
+                UiObject2 element = unique("siyue-qa-result");
+                if (element != null && element.getText() != null && !element.getText().isEmpty()) {
+                    JSONObject output = new JSONObject(element.getText());
+                    if ("clock".equals(output.optString("phase"))
+                            && caseId.equals(output.optString("caseId"))
+                            && sequence == output.optInt("sampleSequence", -1)) {
+                        try (FileOutputStream stream = new FileOutputStream(
+                                new File(evidence, "clock-" + label + ".json"))) {
+                            stream.write(output.toString(2).getBytes(StandardCharsets.UTF_8));
+                        }
+                        return output;
+                    }
+                }
+            } catch (StaleObjectException ignored) { /* Read newly rendered state on next poll. */ }
+            SystemClock.sleep(100);
+        } while (SystemClock.uptimeMillis() < deadline);
+        fail("The current native clock sample JSON was not produced.");
         return null;
     }
 

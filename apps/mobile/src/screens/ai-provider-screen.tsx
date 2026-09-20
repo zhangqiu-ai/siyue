@@ -185,7 +185,10 @@ export default function AIProviderScreen() {
     <Stack.Screen options={{ headerShown: true, title: t('settings.aiService'), headerBackTitle: t('common.back'), headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
     <ScrollView contentContainerStyle={styles.content} automaticallyAdjustKeyboardInsets keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
       <Pressable accessibilityRole="button" accessibilityLabel={t('ai.selectProviderLabel')} testID="ai-provider-picker" accessibilityState={{ disabled }} disabled={disabled} onPress={() => { setQuery(''); setPickerOpen(true); }} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
-        <Text style={[styles.rowTitle, styles.flex]}>{provider ? providerText(provider, 'name') : t('ai.selectProvider')}</Text>
+        <View style={styles.flex}>
+          <Text style={styles.rowTitle}>{provider ? providerText(provider, 'name') : t('ai.selectProvider')}</Text>
+          <Text style={styles.note}>{provider ? providerText(provider, 'subtitle') : t('ai.compatible')}</Text>
+        </View>
         <AppIcon name="chevronRight" size={20} color={theme.color.muted} />
       </Pressable>
       {provider ? <>
@@ -216,7 +219,18 @@ export default function AIProviderScreen() {
           </View> : null}
         </View>
         <Text style={styles.footnote}>{t('ai.privacy', { host: baseUrl ? (() => { try { return new URL(baseUrl).hostname; } catch { return t('ai.enteredAddress'); } })() : t('ai.enteredAddress') })}</Text>
-      </> : <Text style={styles.footnote}>{t('ai.compatible')}</Text>}
+      </> : <>
+        <View style={styles.guideCard}>
+          <Text style={styles.note}>{t('ai.startTitle')}</Text>
+          <Text style={styles.guideStep}>{t('ai.startChoose')}</Text>
+          <Text style={styles.guideStep}>{t('ai.startKey')}</Text>
+          <Text style={styles.guideStep}>{t('ai.startReturn')}</Text>
+        </View>
+        <View style={styles.unconfiguredNotes}>
+          <Text style={styles.footnote}>{t('ai.localKeyNote')}</Text>
+          <Text style={styles.footnote}>{t('ai.providerNoRequest')}</Text>
+        </View>
+      </>}
       {settings.storageError ? status(translateError(settings.storageError), 'error') : null}
       {!settings.ready ? <Text style={styles.note}>{t('ai.loading')}</Text> : null}
       {provider ? <View style={styles.actions}>
@@ -267,6 +281,9 @@ const makeStyles = (theme: Theme) => StyleSheet.create({
   flex: { flex: 1, gap: 4 },
   rowTitle: { color: theme.color.ink, fontSize: 16, lineHeight: 24, fontWeight: '500' },
   group: { marginTop: 24, backgroundColor: theme.color.surface, borderRadius: theme.radius.card, overflow: 'hidden' },
+  guideCard: { marginTop: 20, padding: 20, backgroundColor: theme.color.surface, borderRadius: theme.radius.card, gap: 8 },
+  guideStep: { color: theme.color.ink, fontSize: 14, lineHeight: 22 },
+  unconfiguredNotes: { marginTop: 12, gap: 10 },
   field: { padding: 16, gap: 8 },
   inline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   note: { color: theme.color.muted, fontSize: 13, lineHeight: 20, flexShrink: 1 },

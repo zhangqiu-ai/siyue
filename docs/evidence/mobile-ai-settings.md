@@ -80,3 +80,11 @@ xcrun simctl launch 7328BC59-6853-445B-A888-E99496AB2048 app.siyue.mobile
 - 官方协议依据（2026-09-07）：[DeepSeek List Models](https://api-docs.deepseek.com/api/list-models/)、[OpenAI List Models](https://developers.openai.com/api/reference/resources/models/methods/list)。真实成功证据仅覆盖上述 DeepSeek 地址与所选模型，不代表其他预设兼容。
 
 本轮未提交、推送或部署。
+
+## 2026-09-13 · 未配置页与 iPad 原生复核
+
+未配置状态补齐了与已确认 Figma 方向一致的开始引导：供应商入口说明支持 OpenAI 兼容接口，三步卡片说明选择服务、填写密钥并获取模型、保存后返回创建计划；卡片下明确密钥只保存在本机安全存储，选择供应商本身不会发起网络请求。中文与英文资源同步补齐。
+
+本机安装并注册 XcodeBuildMCP 2.7.0 后，使用其 `simulator list`、`snapshot-ui`、`tap` 与 `screenshot` 直接检查已启动的 `Siyue Plan QA iPad Isolated`（iOS 26.5，UUID `42C82E31-F592-4C74-99BF-3579F5DD674F`）。从侧栏进入设置，再进入“AI 服务”；语义树识别到独立返回按钮和“选择 AI 供应商”入口，页面实际显示上述引导卡及两条数据说明。校正工具返回的横屏方向元数据后，截图保存在 [AI 服务未配置 iPad 截图](screenshots/ai-service-unconfigured-ipad-2026-09-13.jpg)。这次没有填写密钥，也没有请求真实供应商。
+
+`corepack pnpm --filter @siyue/mobile typecheck` 通过；`corepack pnpm --filter @siyue/mobile test` 为 121 项通过、0 失败。React Native 原生页面不具备浏览器 DOM，当前交互不能由 Node.js Playwright 驱动，因此按测试规则使用原生语义 UI 自动化完成这条路径的验收。

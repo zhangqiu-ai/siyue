@@ -18,25 +18,58 @@
     "zhDark": "610:378",
     "enDark": "610:524"
   },
+  "iPadUnconfiguredBaselines": {
+    "zhLightLandscape": "616:35160",
+    "zhLightPortrait": "616:35272",
+    "enLightLandscape": "616:35384",
+    "enLightPortrait": "616:35496",
+    "zhDarkLandscape": "616:35608",
+    "zhDarkPortrait": "616:35720",
+    "enDarkLandscape": "616:35832",
+    "enDarkPortrait": "616:35944"
+  },
+  "representativeStates": {
+    "configuredZhLightPhone": "619:35304",
+    "fetchingModelsZhLightPhone": "620:35331",
+    "savedZhLightPhone": "620:35375",
+    "recoverableErrorZhLightPhone": "620:35417",
+    "modelPickerZhLightPhone": "620:35459",
+    "unsavedLeaveAlertZhLightPhone": "625:35496"
+  },
   "entryRoutes": {
     "baseZhLight": { "source": "586:34486", "destination": "605:34749" },
     "baseEnLight": { "source": "587:34506", "destination": "605:34788" },
     "baseZhDark": { "source": "587:34565", "destination": "605:34827" },
     "baseEnDark": { "source": "587:34622", "destination": "605:34866" },
     "failureZhLight": { "source": "593:34704", "destination": "605:34749" },
-    "stoppedZhLight": { "source": "593:34764", "destination": "605:34749" }
+    "stoppedZhLight": { "source": "593:34764", "destination": "605:34749" },
+    "iPadZhLightPortrait": { "source": "592:34842", "destination": "616:35272" },
+    "iPadZhLightLandscape": { "source": "592:34870", "destination": "616:35160" },
+    "iPadEnLightPortrait": { "source": "592:34736", "destination": "616:35496" },
+    "iPadEnLightLandscape": { "source": "592:34758", "destination": "616:35384" },
+    "iPadZhDarkPortrait": { "source": "592:34898", "destination": "616:35720" },
+    "iPadZhDarkLandscape": { "source": "592:34926", "destination": "616:35608" },
+    "iPadEnDarkPortrait": { "source": "592:34786", "destination": "616:35944" },
+    "iPadEnDarkLandscape": { "source": "592:34814", "destination": "616:35832" }
   },
   "verified": [
     "All four phone baselines reuse the existing back button and Tall Row component.",
     "Each provider row navigates to a matching language and theme provider picker.",
     "The provider picker contains search and five provider choices.",
+    "Eight iPad baselines reuse the existing iPad settings shells and use a centered content width of 632 in landscape and 520 in portrait.",
+    "All eight iPad creation entry routes preserve language, theme, and orientation.",
+    "Chinese light landscape and English dark portrait screenshots were visually inspected; the inherited Chinese family label in all four English baselines was corrected and rechecked.",
+    "The Chinese light configured phone screen reuses the approved baseline, input, primary button, and secondary button components; its rendered screenshot was visually inspected.",
+    "The recoverable error binds the existing error semantic color and was visually rechecked after the first screenshot exposed a neutral-color defect.",
+    "The model picker title, search field, and five model rows were visually checked; a remaining provider title was corrected and rechecked.",
+    "The unsaved-leave dialog reuses the approved buttons and card styling; underlying actions were hidden after visual review exposed a misleading green edge.",
+    "Representative state transitions were read back for model selection, cancellation, retry, return, continue editing, and discard.",
     "The section, selected frame, page list, and canvas were loaded in the signed-in Figma browser after the MCP edits.",
     "Representative screenshots of the repaired section, Chinese light baseline, and Chinese light picker were visually inspected."
   ],
   "remaining": [
-    "Eight iPad baselines across language, theme, and orientation.",
-    "Configured form, model loading and picker, save success, recoverable error, and unsaved-leave alert representative states.",
-    "Creation-page routes for iPad and the busy-state routing rule.",
+    "Provider picker presentation for iPad and the busy-state routing rule.",
+    "English and dark-mode stress coverage for configured and error states.",
     "Prototype click-through and native device acceptance."
   ],
   "failedAttempts": [
@@ -45,6 +78,12 @@
       "attempts": 2,
       "result": "atomic rollback; no configured frame was created",
       "reasons": ["invalid virtual child reference", "font was not loaded"]
+    },
+    {
+      "operation": "configured phone screen creation by cloning existing components",
+      "attempts": 1,
+      "result": "success",
+      "nodeId": "619:35304"
     }
   ]
 }

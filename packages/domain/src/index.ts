@@ -9,3 +9,4 @@ export * from './commands.js';
 export * from './runs.js';
 
 export * from './family-policy.js';
+export * from './offline-lease.js';

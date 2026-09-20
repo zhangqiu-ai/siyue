@@ -79,6 +79,33 @@ final class NativeRecoveryUITests: XCTestCase {
         let cases: Cases
     }
 
+    private struct ClockResult: Codable {
+        struct Decision: Codable {
+            let allowed: Bool
+            let reason: String?
+        }
+        struct Snapshot: Codable {
+            let bootId: String
+            let elapsedRealtimeMs: Double
+        }
+        struct BackgroundInterval: Codable {
+            let background: Snapshot
+            let active: Snapshot
+        }
+        let schemaVersion: Int
+        let caseId: String
+        let phase: String
+        let processSession: String
+        let sampleSequence: Int
+        let processEpoch: String
+        let firstElapsedRealtimeMs: Double
+        let secondElapsedRealtimeMs: Double
+        let storedProcessEpoch: String
+        let processChanged: Bool
+        let backgroundInterval: BackgroundInterval?
+        let decision: Decision
+    }
+
     private struct RunObservation: Decodable, Equatable {
         struct Event: Decodable, Equatable {
             let schemaVersion: Int
@@ -229,6 +256,53 @@ final class NativeRecoveryUITests: XCTestCase {
             XCTAssertEqual(storage.beforeDigest, storage.reopenDigest)
         }
         capture("Storage rollback and rejected database contents preserved")
+    }
+
+    func testNativeContinuousClockAcrossBackgroundAndProcessRestart() throws {
+        let caseID = UUID().uuidString.lowercased()
+        try enterCase(caseID)
+        try tapPhase("siyue-qa-clock")
+        let initial = try readClockResult(caseID: caseID, sequence: 1)
+        assertClockSample(initial, caseID: caseID)
+        XCTAssertFalse(initial.processChanged)
+        XCTAssertEqual(initial.processEpoch, initial.storedProcessEpoch)
+        XCTAssertNil(initial.backgroundInterval)
+        XCTAssertTrue(initial.decision.allowed)
+        XCTAssertNil(initial.decision.reason)
+
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: timeout))
+        let backgroundStart = Date()
+        let waited = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            Date().timeIntervalSince(backgroundStart) >= 2
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [waited], timeout: 5), .completed)
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: timeout))
+        try tapPhase("siyue-qa-clock")
+        let resumed = try readClockResult(caseID: caseID, sequence: 2)
+        assertClockSample(resumed, caseID: caseID)
+        XCTAssertEqual(resumed.processEpoch, initial.processEpoch)
+        XCTAssertFalse(resumed.processChanged)
+        XCTAssertTrue(resumed.decision.allowed)
+        let interval = try XCTUnwrap(resumed.backgroundInterval)
+        XCTAssertEqual(interval.background.bootId, initial.processEpoch)
+        XCTAssertEqual(interval.active.bootId, initial.processEpoch)
+        XCTAssertGreaterThanOrEqual(interval.active.elapsedRealtimeMs - interval.background.elapsedRealtimeMs, 1_500)
+
+        try terminateRunningQA()
+        try launchQA()
+        try enterCase(caseID)
+        try tapPhase("siyue-qa-clock")
+        let restarted = try readClockResult(caseID: caseID, sequence: 1)
+        assertClockSample(restarted, caseID: caseID)
+        XCTAssertNotEqual(restarted.processSession, initial.processSession)
+        XCTAssertNotEqual(restarted.processEpoch, initial.processEpoch)
+        XCTAssertEqual(restarted.storedProcessEpoch, initial.processEpoch)
+        XCTAssertTrue(restarted.processChanged)
+        XCTAssertFalse(restarted.decision.allowed)
+        XCTAssertEqual(restarted.decision.reason, "untrusted_clock")
+        capture("Native continuous clock process restart locks old lease")
     }
 
     func testNormalUiCancellationAndGenerationRestart() throws {
@@ -582,6 +656,40 @@ final class NativeRecoveryUITests: XCTestCase {
         XCTAssertEqual(envelope["phase"] as? String, phase)
         XCTAssertEqual(envelope["caseId"] as? String, caseID)
         return data
+    }
+
+    private func readClockResult(caseID: String, sequence: Int) throws -> ClockResult {
+        let error = app.descendants(matching: .any).matching(identifier: "siyue-qa-error").firstMatch
+        var decoded: ClockResult?
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate { [self] _, _ in
+            guard !error.exists else { return true }
+            for raw in resultTexts() {
+                if let value = try? JSONDecoder().decode(ClockResult.self, from: Data(raw.utf8)),
+                   value.caseId == caseID, value.phase == "clock", value.sampleSequence == sequence {
+                    decoded = value
+                    return true
+                }
+            }
+            return false
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: timeout), .completed)
+        guard !error.exists else {
+            XCTFail("Native clock QA failed: \(error.label)")
+            throw failure("Native clock QA reported failure")
+        }
+        let result = try XCTUnwrap(decoded, "Expected the current native clock sample JSON.")
+        attachJSON(try JSONEncoder().encode(result), name: "clock-\(sequence).json")
+        return result
+    }
+
+    private func assertClockSample(_ result: ClockResult, caseID: String) {
+        XCTAssertEqual(result.schemaVersion, 1)
+        XCTAssertEqual(result.caseId, caseID)
+        XCTAssertEqual(result.phase, "clock")
+        XCTAssertNotNil(UUID(uuidString: result.processSession))
+        XCTAssertNotNil(UUID(uuidString: result.processEpoch))
+        XCTAssertGreaterThanOrEqual(result.firstElapsedRealtimeMs, 0)
+        XCTAssertGreaterThanOrEqual(result.secondElapsedRealtimeMs, result.firstElapsedRealtimeMs)
     }
 
     private func attachJSON(_ data: Data, name: String) {

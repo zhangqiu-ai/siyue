@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { registerRootComponent } from 'expo';
 import * as Crypto from 'expo-crypto';
 import * as SQLite from 'expo-sqlite';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { AppState, Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { businessCommandSchema, commandReceiptSchema, spaceStateSchema, type BusinessCommand, type CommandReceipt, type GoalDraft } from '@siyue/contracts';
-import { canonicalize } from '@siyue/domain';
+import { anchoredOfflineLeaseSchema, businessCommandSchema, commandReceiptSchema, MAX_OFFLINE_LEASE_MS, spaceStateSchema, type BusinessCommand, type CommandReceipt, type GoalDraft } from '@siyue/contracts';
+import { anchorOfflineLease, canonicalize, evaluateOfflineLease } from '@siyue/domain';
 import { createNativeClient } from '../../src/native-client';
+import { getOfflineClockSnapshot } from '../../modules/siyue-offline-clock/src/SiyueOfflineClockModule';
 import { runStorageFaults } from './storage-faults';
 import { NativeRunScreen } from './run-screen';
 
@@ -16,6 +17,11 @@ type PendingRow = {key: string; value: string};
 type PendingIdentity = {schemaVersion: number; commandId: string; issuedAt: string};
 type Fixture = {caseId: string; phase: string; command: BusinessCommand; receipt: CommandReceipt; stateDigest: string};
 const processSession = Crypto.randomUUID();
+let clockSampleSequence = 0;
+type ClockSnapshot = ReturnType<typeof getOfflineClockSnapshot>;
+type BackgroundClockInterval = Readonly<{background: ClockSnapshot; active: ClockSnapshot}>;
+let pendingBackgroundClock: ClockSnapshot | undefined;
+let lastBackgroundClockInterval: BackgroundClockInterval | undefined;
 const digest = (value: string) => Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, value);
 function check(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -200,15 +206,72 @@ async function runCase(caseId: string, phase: Phase) {
   }
 }
 
+async function runClock(caseId: string) {
+  check(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(caseId), 'Case ID must be a fresh lowercase UUID v4');
+  const database = await SQLite.openDatabaseAsync(`siyue-native-clock-${caseId}.db`, {useNewConnection: true});
+  try {
+    await database.execAsync('CREATE TABLE IF NOT EXISTS clock_fixture (id TEXT PRIMARY KEY NOT NULL, lease TEXT NOT NULL);');
+    const first = getOfflineClockSnapshot();
+    const second = getOfflineClockSnapshot();
+    check(first.bootId === second.bootId && second.elapsedRealtimeMs >= first.elapsedRealtimeMs, 'Native clock is not monotonic within one process');
+    const prior = await database.getFirstAsync<{lease: string}>('SELECT lease FROM clock_fixture WHERE id = ?', [caseId]);
+    let anchored;
+    if (prior) {
+      anchored = anchoredOfflineLeaseSchema.parse(JSON.parse(prior.lease));
+    } else {
+      const serverNowMs = Date.now();
+      anchored = anchorOfflineLease({
+        subjectId: 'native-qa-adult', deviceId: 'native-qa-device', familyId: 'native-qa-family',
+        sourceSpaceId: 'native-qa-owner-space', recordId: `native-qa-record-${caseId}`,
+        membershipVersion: 1, grantVersion: 1, permission: 'edit',
+        serverNow: new Date(serverNowMs).toISOString(),
+        expiresAt: new Date(serverNowMs + MAX_OFFLINE_LEASE_MS).toISOString(),
+      }, first);
+      await database.runAsync('INSERT INTO clock_fixture (id, lease) VALUES (?, ?)', [caseId, JSON.stringify(anchored)]);
+    }
+    const decision = evaluateOfflineLease(anchored, {
+      subjectId: anchored.subjectId, deviceId: anchored.deviceId, familyId: anchored.familyId,
+      sourceSpaceId: anchored.sourceSpaceId, recordId: anchored.recordId,
+      membershipVersion: anchored.membershipVersion, grantVersion: anchored.grantVersion, action: 'edit',
+    }, second);
+    return {
+      schemaVersion: 1, caseId, phase: 'clock', processSession,
+      sampleSequence: ++clockSampleSequence,
+      processEpoch: second.bootId, firstElapsedRealtimeMs: first.elapsedRealtimeMs,
+      secondElapsedRealtimeMs: second.elapsedRealtimeMs, storedProcessEpoch: anchored.bootId,
+      processChanged: anchored.bootId !== second.bootId,
+      backgroundInterval: lastBackgroundClockInterval ?? null,
+      decision,
+    };
+  } finally {
+    await database.closeAsync();
+  }
+}
+
 function NativeRecoveryScreen() {
   const [runScreenCase, setRunScreenCase] = useState('');
   const [caseId, setCaseId] = useState('');
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
-  async function run(phase: Phase | 'storage') {
+  useEffect(() => {
+    let prior = AppState.currentState;
+    const subscription = AppState.addEventListener('change', (next) => {
+      if (next === 'background' && prior !== 'background') pendingBackgroundClock = getOfflineClockSnapshot();
+      if (next === 'active' && prior !== 'active' && pendingBackgroundClock) {
+        lastBackgroundClockInterval = Object.freeze({
+          background: pendingBackgroundClock,
+          active: getOfflineClockSnapshot(),
+        });
+        pendingBackgroundClock = undefined;
+      }
+      prior = next;
+    });
+    return () => subscription.remove();
+  }, []);
+  async function run(phase: Phase | 'storage' | 'clock') {
     setBusy(true); setError(''); setResult('');
-    try { setResult(JSON.stringify(await (phase === 'storage' ? runStorageFaults(caseId.trim()) : runCase(caseId.trim(), phase)))); }
+    try { setResult(JSON.stringify(await (phase === 'storage' ? runStorageFaults(caseId.trim()) : phase === 'clock' ? runClock(caseId.trim()) : runCase(caseId.trim(), phase)))); }
     catch (failure) { setError(failure instanceof Error ? failure.message : String(failure)); }
     finally { setBusy(false); }
   }
@@ -220,6 +283,7 @@ function NativeRecoveryScreen() {
     <View style={styles.buttons}><Button testID="siyue-qa-inject" title="注入丢回执" disabled={busy} onPress={() => void run('injected')} />
       <Button testID="siyue-qa-recover" title="恢复原命令" disabled={busy} onPress={() => void run('recovered')} />
       <Button testID="siyue-qa-storage" title="验证存储故障" disabled={busy} onPress={() => void run('storage')} />
+      <Button testID="siyue-qa-clock" title="验证原生连续时钟" disabled={busy} onPress={() => void run('clock')} />
       <Button testID="siyue-qa-run-ui" title="正常界面生成验收" disabled={busy} onPress={() => {
         if (/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(caseId.trim())) setRunScreenCase(caseId.trim());
         else setError('Case ID must be a lowercase UUID v4');

@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["SiyueOfflineClockModule"]
+  },
+  "android": {
+    "modules": ["app.siyue.offlineclock.SiyueOfflineClockModule"]
+  }
+}

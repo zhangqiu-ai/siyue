@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import { z } from 'zod';
+import { verifiedAccountSessionSchema } from '@siyue/contracts';
 
 export type SessionVerifier = (token: string, signal: AbortSignal) => Promise<unknown>;
 export interface SessionOptions {
@@ -7,14 +7,6 @@ export interface SessionOptions {
   sessionTimeoutMs?: number;
   maxConcurrentSessionVerifications?: number;
 }
-const identifier = z.string().min(1).max(200).refine(value => value === value.trim());
-const verifiedSessionSchema = z.object({
-  subjectId: identifier,
-  subjectKind: z.enum(['adult', 'child']),
-  sessionId: identifier,
-  expiresAt: z.string().datetime(),
-}).strict();
-
 /** Identity verification boundary only; it grants no family, space or object permissions. */
 export function registerSessionRoute(app: FastifyInstance, options: SessionOptions) {
   const timeoutMs = options.sessionTimeoutMs ?? 5_000;
@@ -71,7 +63,7 @@ export function registerSessionRoute(app: FastifyInstance, options: SessionOptio
         });
         if (controller.signal.aborted) cancel();
       });
-      const parsed = verifiedSessionSchema.safeParse(result);
+      const parsed = verifiedAccountSessionSchema.safeParse(result);
       if (controller.signal.aborted || Date.now() >= deadline || !parsed.success || Date.parse(parsed.data.expiresAt) <= Date.now()) return deny();
       return parsed.data;
     } catch {
