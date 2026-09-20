@@ -1,6 +1,12 @@
 # 从这里开始
 
-本页是当前任务的导航，不指定新的开发排期。已有工程应继续演进；历史首次初始化任务与旧运行摘要已保留在 [入口历史快照](docs/evidence/rules-entry-history-2026-09-13.md)。
+本页是当前任务的导航；当前优先级依据见下节。已有工程应继续演进；历史首次初始化任务与旧运行摘要已保留在 [入口历史快照](docs/evidence/rules-entry-history-2026-09-13.md)。
+
+## 当前首要目标（2026-09-20）
+
+维护者已将 **0.0.1 五设备家庭视频通话＋共享白板** 提升为当前 P0。独立变更：[add-family-video-whiteboard](openspec/changes/add-family-video-whiteboard/proposal.md)；已确认范围与授权见 proposal，待决设计见 [design](openspec/changes/add-family-video-whiteboard/design.md)，按 [tasks](openspec/changes/add-family-video-whiteboard/tasks.md) 推进。
+
+状态：规格与任务草案，尚非功能实现。先收敛关键取舍与开展独立技术验证；不恢复旧 M1 初始化排期，不等待所有非依赖功能完成。旧任务和未验收范围保留，具体服务、录像成品与存档接管未定；不自动购买、部署、迁移数据或发布。
 
 ## 确定本轮工作
 
