@@ -5,9 +5,9 @@
   "type": "module",
   "main": "src/main/index.mjs",
   "scripts": {
-    "dev:renderer": "vite --host 127.0.0.1 --port 5173",
+    "dev:renderer": "node ../../scripts/prepare-whiteboard-assets.mjs && vite --host 127.0.0.1 --port 5173",
     "dev:electron": "cross-env SIYUE_RENDERER_URL=http://127.0.0.1:5173 electron .",
-    "build": "vite build",
+    "build": "node ../../scripts/prepare-whiteboard-assets.mjs && vite build",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test src/main/*.test.mjs"
   },
@@ -17,7 +17,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "@siyue/adapters": "workspace:*",
-    "@siyue/ai": "workspace:*"
+    "@siyue/ai": "workspace:*",
+    "@siyue/whiteboard": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "19.2.18",

@@ -12,11 +12,15 @@
 - **THEN** 服务端分配结果不超过五台，重连绑定原授权会话且不重复占位；过期名额按经验证的规则释放。
 
 ### Requirement: VWC-02 Authorized participants and separate permissions
-系统 MUST 校验加入房间的身份与本次授权，将加入、编辑、录制和永久另存分开；家庭成员身份不自动授权全部操作。具体授权矩阵依 design O01/O03 确认后实施。
+系统 MUST 校验加入房间的身份与本次授权，将加入、编辑、录制和永久另存分开；家庭成员身份不自动授权全部操作。仅家长 SHALL 能发起房间并邀请已有家庭成员，儿童可接受邀请；系统 MUST NOT 提供公开房间码。逐人管理细则与另存授权仍依 design O01/O03。
 
 #### Scenario: Unauthorized join or stale permission
 - **WHEN** 未获邀设备加入或撤权后的旧请求到达
 - **THEN** 系统拒绝访问或写入，不暴露题图、白板或房间媒体。
+
+#### Scenario: Parent invites a child in the family
+- **WHEN** 家长发起房间并邀请已有家庭成员中的儿童
+- **THEN** 儿童可接受邀请加入；儿童主动发起和未获邀的加入均被拒绝。
 
 ### Requirement: VWC-03 Video and shared board coexist
 系统 SHALL 在拍题讲解和直接白板练习中保持可达的音视频交互及参与者状态，不能要求结束通话才能使用白板。
@@ -31,6 +35,14 @@
 #### Scenario: Participant connection interrupted
 - **WHEN** 某设备失联或应用进入后台
 - **THEN** 其状态对其他参与者可见，恢复时重新校验身份与房间状态，不承诺未经验证的后台摄像或录制。
+
+#### Scenario: Initiator leaves without ending the room
+- **WHEN** 发起者选择离开且尚有其他参与者
+- **THEN** 系统 SHALL 保持房间继续，区分个人离开与家长明确结束全场的动作，不将离开自动解释为结束。
+
+#### Scenario: Parent explicitly ends the room
+- **WHEN** 获有效房间授权的家长明确结束全场
+- **THEN** 系统 SHALL 结束该房间并拒绝旧邀请和旧连接重新加入；儿童不能结束全场。
 
 ### Requirement: VWC-05 Bilingual and cross-device delivery
 系统 SHALL 为房间与录制状态提供中文/英文、无障碍名称，并分别验收 iPhone/iPad 与 Android 的核心路径；Electron 按 O05 冻结的矩阵提供证据，不据未运行结果宣称支持。

@@ -46,6 +46,13 @@ export const test = base.extend({
     }
     const desktop = {
       get page() { return page; },
+      get dataDir() { return dataDir; },
+      async chooseImage(file) {
+        await application.evaluate(({ dialog }, chosen) => { dialog.showOpenDialog = async () => ({ canceled: !chosen, filePaths: chosen ? [chosen] : [] }); }, file);
+      },
+      async resize(width, height) {
+        await application.evaluate(({ BrowserWindow }, size) => { const win=BrowserWindow.getAllWindows()[0]; win.setMinimumSize(300,400); win.setContentSize(size.width,size.height); }, {width,height});
+      },
       async restart() { await close(); await start(); },
       async snapshot() {
         const reply = await page.evaluate(() => window.siyueDesktop.invoke({

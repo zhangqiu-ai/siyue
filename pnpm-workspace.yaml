@@ -5,6 +5,7 @@ allowBuilds:
   esbuild: true
 # Keep automatically resolved native peers on the Expo SDK 57 compatibility set.
 overrides:
+  '@excalidraw/excalidraw>@radix-ui/react-tabs': 1.1.21
   '@react-native/metro-config': 0.86.3
   react-native-worklets: 0.10.1
   react-native-reanimated: 4.5.1

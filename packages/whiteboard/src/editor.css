@@ -1,0 +1,40 @@
+.siyue-board { width:100%; height:100%; display:flex; flex-direction:column; overflow:hidden; background:#f6f7f0; color:#25352b; font:14px system-ui,sans-serif; }
+.siyue-board.dark { background:#202923; color:#edf3e9; }
+.siyue-board button,.siyue-board select { font:inherit; color:inherit; cursor:default; }
+.siyue-board .hostbar { display:flex; align-items:center; flex-wrap:wrap; gap:4px; padding:4px 8px; flex-shrink:0; }
+.siyue-board .hostbar button,.siyue-board .hostbar select { min-height:44px; min-width:44px; border:1px solid #889889; border-radius:10px; background:transparent; padding:6px 10px; }
+.siyue-board .hostbar select { max-width:120px; }
+.siyue-board .hostbar button:disabled { opacity:.45; }
+.siyue-board .save-state { font-size:12px; margin-inline-start:auto; }
+.siyue-board .error { padding:8px 12px; color:#ab3e32; }
+.siyue-board.dark .error { color:#ffb4a8; }
+.siyue-board .editor-area { position:relative; min-height:0; flex:1; }
+.siyue-board .blocking { position:absolute; inset:0; z-index:100; background:#8882; }
+.siyue-board .excalidraw { --color-primary:#476b53; --color-primary-darker:#35543e; --color-primary-darkest:#253d2d; --color-primary-light:#e0e8de; --color-brand-active:#476b53; --default-font:system-ui,sans-serif; }
+/* Unsupported online and embed tools have no public visibility prop in 0.18.1. No custom drawing controls. */
+.siyue-board .excalidraw .library-button, .siyue-board .excalidraw [data-testid="embeddable"], .siyue-board .excalidraw [data-testid="mermaid-to-excalidraw"] { display:none!important; }
+@media(max-width:480px){ .siyue-board .hostbar { padding:2px 4px; } .siyue-board .hostbar button{ padding:4px 7px; } .siyue-board .save-state { flex-basis:100%; text-align:end; } }
+.siyue-board .excalidraw .sidebar-trigger__label-element { display:none!important; }
+
+.siyue-board .board-dialog-backdrop { position:absolute;inset:0;z-index:200;background:#0005;display:flex;align-items:center;justify-content:center;padding:20px; }
+.siyue-board .board-dialog { background:#fffefa;color:#25352b;border-radius:16px;padding:20px;max-width:360px; }
+.siyue-board.dark .board-dialog { background:#202a23;color:#f0f3e9; }
+.siyue-board .board-dialog button { min-height:44px;min-width:70px;border:1px solid #889889;border-radius:10px;background:transparent;margin-inline-end:8px; }
+/* Map upstream public CSS theme variables to the existing Siyue Sage semantic roles. */
+.siyue-board.light .excalidraw {
+  --color-surface-high:#edf0e8; --color-surface-mid:#f7f8f2; --color-surface-low:#e7ede5; --color-surface-lowest:#fffefa;
+  --color-on-surface:#25352b; --island-bg-color:#fffefa; --color-on-primary-container:#25352b;
+  --color-surface-primary-container:#e0e8de; --color-brand-hover:#395a44; --color-primary-hover:#395a44;
+  --color-selection:#53755d; --color-border-outline:#7a8c7c; --color-border-outline-variant:#d4dcd0;
+}
+.siyue-board.dark .excalidraw {
+  --color-primary:#b7cdb8; --color-primary-darker:#a3bda6; --color-primary-darkest:#b7cdb8; --color-primary-light:#334738;
+  --color-surface-high:#2d3930; --color-surface-mid:#202a23; --color-surface-low:#28372d; --color-surface-lowest:#151c17;
+  --color-on-surface:#f0f3e9; --island-bg-color:#202a23; --color-on-primary-container:#f0f3e9;
+  --color-surface-primary-container:#334738; --color-brand-active:#b7cdb8; --color-brand-hover:#a3bda6; --color-primary-hover:#a3bda6;
+  --color-selection:#b7cdb8; --color-border-outline:#839887; --color-border-outline-variant:#435346;
+}
+
+.siyue-board .excalidraw .App-toolbar__extra-tools-trigger { display:none!important; }
+@media(pointer:coarse){ .siyue-board .hostbar button,.siyue-board .hostbar select { min-height:48px;min-width:48px; } }
+

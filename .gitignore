@@ -32,3 +32,9 @@ pnpm-debug.log*
 
 # Local execution evidence (synthetic QA data/screenshots)
 artifacts/
+
+# Reproducible upstream font copies (prepare-whiteboard-assets.mjs)
+apps/mobile/public/excalidraw/
+apps/desktop/public/excalidraw/
+
+packages/whiteboard/generated/

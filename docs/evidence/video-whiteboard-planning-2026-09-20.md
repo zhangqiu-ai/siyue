@@ -1,5 +1,7 @@
 # 视频白板规划检查（2026-09-20）
 
+历史规划环境记录，适用于 ae193af 初稿。后续本地已补齐严格检查、确认 C10/C11 并完成隔离存档验证；当前结果见 [本地交接证据](video-whiteboard-local-2026-09-20.md)。以下未运行状态保留为当时事实，不代表当前状态。
+
 关联 [提案](../../openspec/changes/add-family-video-whiteboard/proposal.md)、[任务](../../openspec/changes/add-family-video-whiteboard/tasks.md)及 [版本计划](../../planning/releases/0.0.1.md)。状态：仅规划文档检查，不是功能、设备、网络、供应商或发布验收。
 
 ## 来源与范围

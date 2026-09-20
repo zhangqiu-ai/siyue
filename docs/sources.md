@@ -108,3 +108,13 @@ C02：当前连接查询 `zhangqiu-ai/siyue` 返回 404，可见仓库列表也�
 来源：https://www.npmjs.com/package/ai
 
 用途：初始化时固定 AI SDK 7 稳定版本；API 仍需编码阶段验证。
+
+## S21 · Excalidraw 与 Expo DOM（2026-09-20）
+
+- https://docs.excalidraw.com/docs/@excalidraw/excalidraw/installation
+- https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/
+- https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/utils
+- https://docs.expo.dev/guides/dom-components/
+- https://docs.expo.dev/versions/latest/sdk/imagepicker/
+
+用途：0.18.1 公共图片/场景接口、API ref、组件菜单裁剪及 SDK 57 DOM 接入。实际类型以锁定包为准；本地 Metro 兼容修复见 Excalidraw 接入证据。上游 MIT 原文来自固定 v0.18.1 标签 LICENSE，保存在 `packages/whiteboard/notices/excalidraw-MIT.txt`；不据此变更思玥自身许可证。字体/传递依赖的完整分发通知仍属于发布门槛，本轮未发布。

@@ -16,7 +16,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "build:packages": "turbo run build --filter=./packages/*",
-    "bundle:mobile": "pnpm build:packages && pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist",
+    "bundle:mobile": "pnpm build:packages && node scripts/prepare-whiteboard-assets.mjs && pnpm --filter @siyue/mobile exec expo export --platform ios --platform android --output-dir dist",
     "test:storage-poc": "node --test experiments/storage/sqlite-poc.test.mjs",
     "test:desktop-smoke": "node scripts/desktop-smoke.mjs",
     "openspec": "node scripts/openspec.mjs",

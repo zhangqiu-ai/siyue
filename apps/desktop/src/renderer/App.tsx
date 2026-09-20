@@ -1,4 +1,5 @@
 import { useLocale, type MessageKey } from './i18n';
+import { Whiteboard } from './Whiteboard';
 import { Settings } from './Settings';
 import { useEffect, useRef, useState } from 'react';
 import type { LocalClient, LocalRequest, PlanSnapshot } from '@siyue/adapters';
@@ -168,14 +169,16 @@ function RecordRow({ kind, record, disabled, update }: {
 }
 
 export function App() {
-  const { t, number } = useLocale();
+  const { t, number, locale } = useLocale();
+  const [whiteboardOpen,setWhiteboardOpen]=useState(false);
   const plan = usePlan();
   const disabled = !!plan.busy || !plan.snapshot;
   const latestRun = plan.snapshot?.runs.reduce<AgentRun | undefined>((latest, run) => !latest || run.updatedAt > latest.updatedAt ? run : latest, undefined);
   const pending = plan.snapshot?.drafts.filter((item) => ['draft', 'approved'].includes(item.status) && item.command.kind === 'plan.create') ?? [];
+  if(whiteboardOpen)return <Whiteboard onExit={()=>setWhiteboardOpen(false)}/>;
   return <main className="shell">
     <header className="page-header"><h1>{t('pageTitle')}</h1>
-      <span className="local-badge">{t(plan.error ? plan.snapshot ? 'localCheck' : 'localUnavailable' : plan.snapshot ? 'localAvailable' : 'localConnecting')}</span><Settings /></header>
+      <span className="local-badge">{t(plan.error ? plan.snapshot ? 'localCheck' : 'localUnavailable' : plan.snapshot ? 'localAvailable' : 'localConnecting')}</span><button onClick={()=>setWhiteboardOpen(true)}>{locale==='en'?'Whiteboard':'白板'}</button><Settings /></header>
     <div className="feedback" aria-live="polite" aria-busy={!!plan.busy}>
       {plan.busy && <p>{t(plan.busy)}…</p>}{plan.notice && <p className="success">{t(plan.notice, { count: number(plan.savedCount) })}</p>}
       {plan.error && <div role="alert" className="error"><p>{t(plan.error)}</p><button disabled={!!plan.busy} onClick={() => void plan.refresh()}>{t('reload')}</button></div>}

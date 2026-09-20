@@ -70,3 +70,18 @@ iOS QA日志为 `ios-native-recovery-compile-fix.log`（43.191秒、1项0失败�
 iPhone 16 Pro Max（iOS26.6.1/23G83）两条核心UI路径分别有通过证据：首轮core142.692秒，最后改名/完成/归档重启125.001秒。首轮整个suite仍为1通过1失败；SelectAll未出现47.995秒及任务输入定位93.860秒两次失败保留，最后仅修测试helper后通过，不改业务或清库。应用/Runner签名验证通过。真机故障/后台与Android真机仍待验收。
 
 Android独立QA复用正常HomeScreen的生成/取消交互通过（47.61秒、1项0失败）：SQL验证running→cancelled且21秒后无迟到写；生成中force-stop恢复同runId为interrupted seq2，二次重启不增事件，正式记录/草稿/审批/pending均0。QA20秒Mock/30秒超时，默认工厂仍250毫秒/10秒；这不证明同进程后台或全部正常UI错误通过。iOS同QA也独立通过（269.349秒、1项0失败），六阶段JSON/PNG/真实辅助功能树TXT各6份；两平台分别运行，不是同次2/2。证据、准确命令与失败史见 [M1验证记录](evidence/m1-validation.md)，跨阶段AT与工作包状态不提升。
+
+
+## AT-025 · 视频白板可编辑本地存档与失败保旧
+
+工作包：SY-022；状态：partial。保存合成题图、独立笔迹和页面，跨进程重开编辑；写入中断、损坏或未来版本时保护原件，不完整写入不成为当前版本，不冒充保存成功。
+
+本轮仅 Node 隔离真实文件系统及 Playwright runner 跨进程集成，正式应用、主存档权限、真实媒体、原生存储及五设备验收未完成。命令、最终结果和限制统一记录于 [本地交接证据](evidence/video-whiteboard-local-2026-09-20.md)，对应 [验证计划 V08/V10](../openspec/changes/add-family-video-whiteboard/validation-plan.md)。原 24 项历史状态不变。
+
+## AT-026 · Excalidraw 本机编辑、完整存档与重开
+
+工作包：SY-023；状态：partial。不启动通话，绘制、擦除、撤销重做、多页与保存；退出重开继续编辑；读取/写入失败保护原件。
+
+实际结果与平台边界见 [独立白板试用证据](evidence/whiteboard-trial-2026-09-20.md)。本机试用不等于正式共享、原生故障/真机或完整双语多平台验收。
+
+AT-026 当前编辑器已由维护者确认替换为 Excalidraw，仍为 partial；本轮恢复、失败、离线安装包及平台证据见 [接入记录](evidence/excalidraw-integration-2026-09-20.md)，旧绘图页的结果不作为新编辑器的通过证明。

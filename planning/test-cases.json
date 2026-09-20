@@ -349,7 +349,32 @@
         "artifacts/m1/ios-device-current-signature.log"
       ],
       "coverage_note": "macOS Electron与iOS模拟器目标闭环通过；模拟器两条独立UI用例分别执行通过，覆盖草稿编辑保存、重启显式继续与确认、目标/项目/任务、任务完成与重启保留、拒绝及手动创建，以及目标/任务改名ID不变、任务完成后归档、重启同ID/状态/数量保留。完整目标—练习—复盘未完成；iPhone开发签名与两条核心真机UI路径分别通过，故障/后台未验收；Android环境与独立UI宿主已就绪，主应用构建、APK签名校验及安装通过；Android模拟器UI闭环1项通过、0失败（336.319秒），验证草稿编辑保存、重启显式继续与确认、目标/项目/任务、任务完成后force-stop重启同ID/状态/数量保留、拒绝不增记录及手动创建；Android真机、iPhone故障/后台与正常用户UI其余错误交互/升级故障仍未验收。Android第二条独立UI运行在关闭Wi-Fi/移动数据且无默认网络、探测Network unreachable时通过（1项0失败，325.679秒）：手动目标/任务改名同ID、旧名全页不存在、完成归档、force-stop重启同ID/名称/状态/数量保留且归档无编辑/切换按钮。网络设置已恢复；两条Android用例分别运行，不是同次2/2，该离线UI用例不代表生成取消或升级故障通过；iOS/Android独立QA丢回执恢复分别通过（43.191/12.053秒，各1项0失败），正常用户UI错误交互仍待验收。 iPhone 16 Pro Max（iOS 26.6.1 / 23G83）已恢复USB连接，两条核心UI路径分别有通过证据：草稿闭环142.692秒、改名/完成/归档重启125.001秒；首轮整套为1通过1失败，不能写同次2/2。 对应真机故障/后台、Android真机和跨阶段其余场景未验收。"
+    },
+    {
+      "id": "AT-025",
+      "title": "视频白板可编辑本地存档与失败保旧",
+      "work_package": "SY-022",
+      "scenario": "保存合成题图、独立笔迹和页面；跨进程重开编辑；写入中断、损坏或未来版本时保护原件",
+      "expected": "本机完整作品可重开编辑；不完整写入不成为当前版本；错误不得冒充保存成功",
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/video-whiteboard-local-2026-09-20.md"
+      ],
+      "coverage_note": "仅 Node 隔离真实文件系统与 Playwright runner 跨进程集成；正式应用、主存档权限、真实媒体、原生存储及五设备验收未完成。详见证据中的最终命令与结果。"
+    },
+    {
+      "id": "AT-026",
+      "title": "Excalidraw 本机编辑、完整存档与重开",
+      "work_package": "SY-023",
+      "scenario": "不启动通话，原生选图、书写、擦除、选择、多页与完整保存；冷启动恢复继续编辑；迟到保存、损坏、缺图与写入失败保护原件",
+      "expected": "工具和页面可操作，完成保存的笔迹可重开继续编辑，失败不冒充成功",
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/whiteboard-trial-2026-09-20.md",
+        "docs/evidence/excalidraw-integration-2026-09-20.md"
+      ],
+      "coverage_note": "Excalidraw 当前结果以本轮证据为准；旧自研试用证据不可替代新编辑器验收。真实手指/Pencil/相机/后台极限与五设备仍未验收。"
     }
   ],
-  "updated_on": "2026-09-06"
+  "updated_on": "2026-09-20"
 }

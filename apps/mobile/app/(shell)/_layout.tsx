@@ -17,6 +17,7 @@ function Sidebar(props: DrawerContentComponentProps) {
       <NewChatButton onSelect={() => { router.navigate('/'); close(); }} />
     </View>
     <Pressable accessibilityRole="button" onPress={() => { router.navigate('/space'); close(); }} style={({ pressed }) => ({ minHeight: 56, borderRadius: 12, padding: 16, marginBottom: 12, backgroundColor: pressed ? theme.color.subtle : theme.color.surface })}><Text style={{ color: theme.color.ink, fontSize: 17 }}>{t('space.title')}</Text></Pressable>
+    <Pressable accessibilityRole="button" accessibilityLabel={t('board.title')} testID="whiteboard-entry" onPress={() => { close(); router.push('/whiteboard'); }} style={({ pressed }) => ({ minHeight: 56, borderRadius: 12, padding: 16, marginBottom: 12, backgroundColor: pressed ? theme.color.subtle : theme.color.surface })}><Text style={{ color: theme.color.ink, fontSize: 17 }}>{t('board.title')}</Text></Pressable>
     <ConversationList onSelect={() => { router.navigate('/'); close(); }} />
     <View style={{ marginTop: 8, borderTopWidth: 1, borderTopColor: theme.color.border, paddingTop: 12 }}>
       <Pressable accessibilityRole="button" accessibilityLabel={t('settings.title')} onPress={() => { close(); router.navigate('/settings'); }} style={({ pressed }) => ({ width: 48, height: 48, borderRadius: 24, backgroundColor: pressed ? theme.color.subtle : 'transparent', alignItems: 'center', justifyContent: 'center' })}><AppIcon name="settings" /></Pressable>

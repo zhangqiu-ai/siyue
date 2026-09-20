@@ -474,7 +474,51 @@
         "docs/evidence/settings-redesign.md"
       ],
       "implementation_note": "维护者明确要求优先补齐基础框架，并选择通用 OpenAI 兼容接口。代码与单元验证已落地；真实供应商凭据未提供，不能将合成测试写为真实 AI 验收。 六家国内服务预设、自定义接口和分层设置已实现；iOS 模拟器明暗截图、搜索/选择、地址展开和空密钥校验通过；移动38项测试、类型检查及双平台JS导出通过，真实供应商和真机仍待验收。"
+    },
+    {
+      "id": "SY-022",
+      "title": "验证五设备视频白板的本地可编辑存档与服务边界",
+      "milestone": "0.0.1",
+      "priority": "P0",
+      "status": "in_progress",
+      "depends_on": [
+        "SY-001",
+        "SY-002"
+      ],
+      "acceptance_criteria": [
+        "在隔离合成数据上验证题图、可编辑笔迹与页面跨进程保存重开，不以截图代替作品。",
+        "原子写入中断、损坏、未来版本和附件缺失均保护最近完整原件，明确未验证的原生边界。",
+        "核对国内RTC/白板官方能力、临时留存、导出与费用口径；具体厂商和数据用途由维护者批准。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": [
+        "docs/evidence/video-whiteboard-local-2026-09-20.md",
+        "docs/evidence/video-whiteboard-provider-screening-2026-09-20.md"
+      ],
+      "implementation_note": "对应 add-family-video-whiteboard 2.1/2.4；隔离存档PoC完成，官方服务初筛仍有许可/删除/退出未知项。正式应用、权限、真实五设备和原生验收未完成。旧工作包整体完成不作为隔离验证前置条件。"
+    },
+    {
+      "id": "SY-023",
+      "title": "Excalidraw 白板本机编辑与恢复",
+      "milestone": "0.0.1",
+      "priority": "P0",
+      "status": "in_progress",
+      "depends_on": [
+        "SY-001",
+        "SY-002"
+      ],
+      "acceptance_criteria": [
+        "无需通话，从侧栏进入 Excalidraw 空白页，原生拍题/选图、书写、擦除、选择、撤销重做及页面操作可用。",
+        "完整保存可编辑元素、图片字节和页面；冷启动恢复不覆盖原件，失败保留当前内容；按 C13 不再转换旧开发白板。",
+        "双语明暗、iPhone/iPad 与 Android 原生验证分别记录；本机编辑不等于五设备同步、主存档权限或录像验收。"
+      ],
+      "github_issue_number": null,
+      "execution_evidence": [
+        "docs/evidence/whiteboard-trial-2026-09-20.md",
+        "docs/evidence/excalidraw-integration-2026-09-20.md"
+      ],
+      "implementation_note": "C12 已确认采用 Excalidraw 0.18.1 替换编辑层；对应 VWB-07/VWA-05/任务7.x。旧试用结果仍为历史。实际验证与真机缺口见本轮证据，状态保持 in_progress。"
     }
   ],
-  "updated_on": "2026-09-06"
+  "updated_on": "2026-09-20"
 }

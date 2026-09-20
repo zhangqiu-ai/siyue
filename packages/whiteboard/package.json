@@ -1,0 +1,7 @@
+{
+  "name": "@siyue/whiteboard", "version": "0.0.1", "private": true, "type": "module",
+  "exports": { ".": "./dist/protocol.js", "./editor": "./src/Editor.tsx", "./editor.css": "./src/editor.css" },
+  "scripts": { "build": "tsc -p tsconfig.json", "typecheck": "tsc --noEmit", "test": "node --experimental-strip-types --test tests/*.test.mjs" },
+  "dependencies": { "@excalidraw/excalidraw": "0.18.1", "react": "19.2.3", "react-dom": "19.2.3" },
+  "devDependencies": { "@types/react": "19.2.18", "@types/react-dom": "19.2.7", "typescript": "6.0.3" }
+}

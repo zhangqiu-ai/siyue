@@ -7,6 +7,8 @@ import { createCommandService, createRunService } from '@siyue/domain';
 import { createLocalClient } from '@siyue/adapters';
 import { openNodeStore } from '@siyue/adapters/node';
 import { MockAgentExecutor } from '@siyue/ai';
+import { openWhiteboard } from './whiteboard.mjs';
+import { whiteboardClose } from './whiteboard-close.mjs';
 import { createIpcDispatcher, publicError } from './ipc.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -28,10 +30,15 @@ const rendererUrl = (() => {
   }
   return pathToFileURL(path.join(here, '../../dist/renderer/index.html')).href;
 })();
+const closeBoard = whiteboardClose(ipcMain,rendererUrl);
+const allowedClose = new Set();
+let closing = false, checkingClose = false;
 const now = () => new Date().toISOString();
 let store;
 let localClient;
 let startupError;
+let whiteboard;
+ipcMain.handle('siyue:whiteboard', (event,message)=>whiteboard?.handle(event,message,BrowserWindow.fromWebContents(event.sender),rendererUrl) ?? JSON.stringify({version:1,requestId:'',ok:false,error:'storage_or_read_failed'}));
 
 ipcMain.handle('siyue:local-command', (event, message) => {
   const dispatcher = dispatchers.get(event.sender.id);
@@ -51,7 +58,12 @@ function createWindow() {
   const dispatcher = createIpcDispatcher({ client, webContents: win.webContents, rendererUrl });
   const windowId = win.webContents.id;
   dispatchers.set(windowId, dispatcher);
-  win.on('closed', () => { dispatcher.dispose(); dispatchers.delete(windowId); });
+  win.on('close', event=>{
+    if(closing||allowedClose.has(windowId))return;
+    event.preventDefault();
+    void closeBoard.request(win).then(ok=>{if(ok&&!win.isDestroyed()){allowedClose.add(windowId);win.close();}});
+  });
+  win.on('closed', () => { closeBoard.dispose(windowId);allowedClose.delete(windowId);dispatcher.dispose(); dispatchers.delete(windowId); whiteboard?.disposeWindow(windowId); });
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   win.webContents.on('will-navigate', (event) => event.preventDefault());
   win.webContents.on('will-redirect', (event) => event.preventDefault());
@@ -62,7 +74,7 @@ function createWindow() {
   session.setPermissionCheckHandler(() => false);
   const development = rendererUrl.startsWith('http:');
   const origin = development ? new URL(rendererUrl).origin : '';
-  const policy = `default-src 'self'; script-src 'self'${development ? " 'unsafe-inline'" : ''}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'${development ? ` ${origin.replace('http:', 'ws:')}` : ''}; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'`;
+  const policy = `default-src 'self'; script-src 'self'${development ? " 'unsafe-inline'" : ''}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; connect-src 'self'${development ? ` ${origin.replace('http:', 'ws:')}` : ''}; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'`;
   session.webRequest.onHeadersReceived((details, callback) => {
     callback({ responseHeaders: { ...details.responseHeaders, 'Content-Security-Policy': [policy] } });
   });
@@ -70,6 +82,7 @@ function createWindow() {
 }
 
 app.whenReady().then(async () => {
+  try {whiteboard = openWhiteboard(path.join(app.getPath('userData'), 'siyue-whiteboard.sqlite'));}catch{/* Board reports its own preserved-storage failure. */}
   try {
     // This dedicated development DB is separate from other products and legacy data.
     store = openNodeStore(path.join(app.getPath('userData'), 'siyue-m1-local.sqlite'));
@@ -90,11 +103,17 @@ app.whenReady().then(async () => {
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
-let closing = false;
 app.on('before-quit', (event) => {
   if (closing) return;
   event.preventDefault();
-  closing = true;
-  for (const dispatcher of dispatchers.values()) dispatcher.dispose();
-  Promise.resolve(store?.close()).catch(() => {}).finally(() => app.quit());
+  if(checkingClose)return;
+  checkingClose=true;
+  void Promise.all(BrowserWindow.getAllWindows().map(win=>closeBoard.request(win))).then(async results=>{
+    if(results.some(ok=>!ok))return;
+    closing=true;
+    whiteboard?.close();
+    for(const dispatcher of dispatchers.values())dispatcher.dispose();
+    await store?.close();
+    app.quit();
+  }).catch(()=>{closing=false;}).finally(()=>{checkingClose=false;});
 });

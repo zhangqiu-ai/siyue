@@ -3,7 +3,7 @@
     "name": "Siyue",
     "slug": "siyue",
     "version": "0.0.1",
-    "orientation": "portrait",
+    "orientation": "default",
     "scheme": "siyue",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -17,7 +17,16 @@
     "plugins": [
       "expo-router",
       "expo-sqlite",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "选择需要在白板中讲解的题图 / Select a photo for your whiteboard.",
+          "cameraPermission": "拍摄需要在白板中讲解的题目 / Take a photo for your whiteboard.",
+          "microphonePermission": false
+        }
+      ],
+      "./plugins/with-whiteboard-inputs.cjs"
     ],
     "experiments": {
       "typedRoutes": true

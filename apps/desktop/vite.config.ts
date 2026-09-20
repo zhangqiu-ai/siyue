@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ command }) => ({
   root: 'src/renderer',
+  publicDir: '../../public',
   base: './',
   plugins: [react(), ...(command === 'build' ? [{
     name: 'siyue-production-csp',
@@ -10,7 +11,7 @@ export default defineConfig(({ command }) => ({
       tag: 'meta',
       attrs: {
         'http-equiv': 'Content-Security-Policy',
-        content: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'",
+        content: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'",
       },
       injectTo: 'head-prepend' as const,
     }],
