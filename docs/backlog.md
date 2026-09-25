@@ -302,3 +302,25 @@ SY-022 本轮进展与实际验证见 [本地交接证据](evidence/video-whiteb
 实现和验证见 [独立白板试用证据](evidence/whiteboard-trial-2026-09-20.md)。这是待维护者评审的可操作原型；正式协作 UI 设计及发布门槛不变。未创建远端 Issue。
 
 SY-023 当前由 C12 / VWB-07 / VWA-05 / 任务 7.x 推进 Excalidraw 编辑层替换。以 [Excalidraw 接入证据](evidence/excalidraw-integration-2026-09-20.md) 为当前实现与验证入口；上面的旧自研试用步骤仅作历史。工作包仍为 in_progress，真机与正式协作门槛不变。
+
+## 2026-09-21 · SY-005 / SY-022 身份基础进展
+
+独立 PostgreSQL 与会话内核首批实现和本地验证见[证据](evidence/backend-auth-foundation-2026-09-21.md)。两个工作包保持 in_progress；邮件、Apple、客户端、家庭/五设备与生产仍未完成。
+
+2026-09-21 SA-04：邮箱服务本地实现和失败／并发验证见[证据](evidence/backend-auth-email-2026-09-21.md)。SY-005／SY-022 继续 in_progress；真实邮件、客户端、Apple、家庭及部署仍待完成。
+
+2026-09-22 SA-05：客户端会话协调、安全存储适配与受限 IPC 已接入，真实 HTTP 和 macOS Electron 验证见[证据](evidence/backend-auth-client-2026-09-22.md)。登录表单、账号空间映射及移动原生安全存储验收仍未完成；SY-005／SY-022 保持 in_progress。
+
+同日后续：设置 → 账号已接入登录和找回密码，桌面真实流程及 iPhone/iPad/Android 原生登录恢复通过；完整 UI 矩阵、注册与账号空间映射仍待完成，见[界面验证](evidence/backend-auth-account-ui-2026-09-22.md)。SY-005／SY-022 仍为 in_progress，不以本地通过代替真实邮件、Apple 或生产验收。
+
+2026-09-23～24 SA-07 增量：本人设备会话有界分页、单设备及全设备撤销 API 使用动作绑定 reauth grant，验证主体隔离、重复撤销和审计；桌面及移动账号页接入设备列表和撤销交互，桌面中英真实界面通过，iPhone 模拟器中英/明暗设备列表、本机撤销、英文其他/全部设备撤销与冷启动不恢复通过；Android API 36 中英其他/全部设备撤销及冷启动不恢复各 1/1 通过。后续审查修复异常 grant 误报 503、撤销全部响应丢失后的本机恢复记录收敛，并以追加迁移区分审计行为者/目标。证据见[设备会话管理](evidence/backend-auth-device-sessions-2026-09-23.md)。Apple-only 的服务端 `link-identity` 重新验证已接入本地合成验证，客户端/iPad/真机、注销与删除回执未完成；SA-07 和 SY-005 继续 in_progress。
+
+2026-09-24 SA-07 绑定增量：[Apple 重新验证与邮箱绑定](evidence/backend-auth-identity-link-2026-09-24.md)已完成服务端、严格共享 API client、认证控制器及本地合成联合旅程；从 Apple-only 主体取得动作绑定 grant、验证新邮箱并建立密码，到 Android 平台邮箱登录仍是同一主体。控制器的丢响应重试和换号取消已测；产品账号页未接入该流程，真实 Apple/邮件、解绑和注销仍未验收，SY-005 继续 in_progress。
+
+SA-05 6.4a：独立空间映射、会话驱动协调器和旧客户端生命周期已完成基础实现，真实服务＋SQLite双账号测试及回归通过，见[空间基础证据](evidence/backend-auth-account-space-2026-09-22.md)。正式宿主／UI、白板命名空间及原本机空间显式关联尚未接线，6.4整体与工作包状态不提升。
+
+2026-09-23 SA-05/邮箱客户端增量：已补改密的受限 IPC、移动共享控制器、中英账号界面与未知结果同幂等 key 恢复。当前切片的桌面验证及移动未验收边界见[改密客户端闭环证据](evidence/backend-auth-password-change-client-2026-09-23.md)；注册条款门控、原生改密验收和 SA-05 整体验收仍未完成。
+
+2026-09-25 SA-07 注销补全：已落实维护者授权的逐家庭处置、冻结运维复核、分类历史清理与已确认 iPhone/iPad 页面；独立账本配置完整时正式提交可用，桌面和移动共用受保护回执恢复。[本轮证据与限制](evidence/backend-auth-deletion-completion-2026-09-25.md)取代前述历史“路由关闭／页面未接线”结论。SA-07/SY-005 整体状态保持 in_progress，不以本地合成验证代替真实供应商与完整平台验收。
+
+2026-09-25 真实线上账号链路：[线上证据](evidence/online-account-lifecycle-2026-09-25.md)记录公网部署、真实收件注册、Electron 同主体重启恢复/再登录、正式注销完成及注销后登录拒绝。iPhone/iPad 中英文隔离原生注册、冷启动恢复和注销亦已通过；受控输入回写错位已修复，失败与最终连续复跑结果保留在同一证据中。该当前结果替代前述历史“真实邮件及注册未完成”；工作包与整体平台矩阵仍保持进行中，Apple、多人家庭和真机不据此升级。

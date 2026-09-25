@@ -1,6 +1,6 @@
 {
   "name": "siyue",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "Siyue — AI-first personal growth app / 思玥 — AI First 个人成长应用",
   "packageManager": "pnpm@11.25.0",

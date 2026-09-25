@@ -71,6 +71,7 @@ export function createIpcDispatcher({ client, webContents, rendererUrl }) {
           const result = message.method === 'propose'
             ? await client.propose(args[0], controller.signal)
             : await client[message.method](...args);
+          if(disposed||controller.signal.aborted||!isTrustedSender(event,webContents,rendererUrl))fail('cancelled');
           return { ok: true, value: result };
         } finally { pending.delete(message.requestId); }
       } catch (error) { return publicError(error); }

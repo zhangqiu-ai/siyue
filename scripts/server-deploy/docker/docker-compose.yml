@@ -1,0 +1,124 @@
+# Siyue API + mail worker for one Linux x86_64 host that already runs:
+#   * a host nginx (/usr/sbin/nginx, site /etc/nginx/sites-enabled/api.qiugeapp.com) terminating TLS
+#     for api.qiugeapp.com, with the qiuge API on 127.0.0.1:8081
+#   * container qiuge-postgres (PostgreSQL 17, POSTGRES_USER=qiuge_cloud, data at
+#     /srv/qiuge/data/postgres) reachable only on the docker network qiuge-private
+#
+# Boundaries this file keeps:
+#   * it creates only Siyue containers; the qiuge nginx, its configuration, the qiuge API and the
+#     PostgreSQL container are never recreated, restarted or reconfigured from here
+#   * the Siyue database, its roles and the deletion-ledger database live in the existing PostgreSQL
+#     cluster, so they share host, PostgreSQL instance, disk and cluster-level backup with qiuge.
+#     That is logical isolation, not an independent failure domain, and the deployment record must say
+#     so instead of claiming otherwise.
+#   * no secret appears in this file; the environment file and the secret files are supplied by the
+#     operator and are never baked into the image (DEPLOY.md covers modes and ownership)
+#
+# The two services spell out their settings instead of using YAML anchors so the file can be checked
+# by any plain YAML parser as well as by "docker compose config -q".
+#
+# Compose-level variables (export them before docker compose, e.g. by sourcing
+# /etc/siyue/compose.env - keep that file outside the release bundle):
+#   SIYUE_VERSION     image tag matching the release bundle (DEPLOY-MANIFEST.json -> release)
+#   SIYUE_PG_NETWORK  default qiuge-private (the network that already reaches qiuge-postgres)
+#   SIYUE_ENV_FILE    default /etc/siyue/siyue.env
+#   SIYUE_SECRETS_DIR default /etc/siyue/secrets
+#   SIYUE_API_BIND    default 127.0.0.1 (host loopback only; nginx stays the public entry)
+#   SIYUE_NODE_IMAGE  default docker.m.daocloud.io/library/node:22-bookworm-slim, the base image
+#                     already cached on the host, so the image build needs no registry pull
+
+services:
+  siyue-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_IMAGE: ${SIYUE_NODE_IMAGE:-docker.m.daocloud.io/library/node:22-bookworm-slim}
+        SIYUE_RELEASE: ${SIYUE_VERSION:?set SIYUE_VERSION to the release tag}
+    image: siyue-server:${SIYUE_VERSION:?set SIYUE_VERSION to the release tag}
+    container_name: siyue-api
+    command: ["node", "dist/index.js"]
+    user: "1000:1000"
+    env_file:
+      - ${SIYUE_ENV_FILE:-/etc/siyue/siyue.env}
+    environment:
+      SIYUE_SERVER_HOST: 0.0.0.0
+      SIYUE_SERVER_PORT: "8787"
+      NODE_OPTIONS: --max-old-space-size=320
+    ports:
+      - ${SIYUE_API_BIND:-127.0.0.1}:8787:8787
+    volumes:
+      - ${SIYUE_SECRETS_DIR:-/etc/siyue/secrets}:/run/siyue-secrets:ro
+    tmpfs:
+      - /tmp:size=64m
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+    stop_grace_period: 30s
+    networks:
+      - siyue-internal
+      - qiuge-postgres
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/health/live').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 448m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  siyue-mail-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_IMAGE: ${SIYUE_NODE_IMAGE:-docker.m.daocloud.io/library/node:22-bookworm-slim}
+        SIYUE_RELEASE: ${SIYUE_VERSION:?set SIYUE_VERSION to the release tag}
+    image: siyue-server:${SIYUE_VERSION:?set SIYUE_VERSION to the release tag}
+    container_name: siyue-mail-worker
+    command: ["node", "dist/mail-worker.js"]
+    user: "1000:1000"
+    env_file:
+      - ${SIYUE_ENV_FILE:-/etc/siyue/siyue.env}
+    environment:
+      NODE_OPTIONS: --max-old-space-size=160
+    volumes:
+      - ${SIYUE_SECRETS_DIR:-/etc/siyue/secrets}:/run/siyue-secrets:ro
+    tmpfs:
+      - /tmp:size=64m
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+    stop_grace_period: 30s
+    networks:
+      - siyue-internal
+      - qiuge-postgres
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  siyue-internal:
+    name: siyue-internal
+  qiuge-postgres:
+    external: true
+    name: ${SIYUE_PG_NETWORK:-qiuge-private}

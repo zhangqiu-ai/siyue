@@ -4,7 +4,7 @@ AI-first 个人成长应用 / An AI-first personal growth app.
 
 思玥帮助用户将目标转化为行动，并通过正式记录积累成长证据。语言学习、目标与项目管理、个人资产管理是长期核心域；当前交付范围以维护者已批准的版本计划为准。
 
-当前开发版本由 [package.json](package.json) 的 `version` 指定，对应 [0.0.1 计划](planning/releases/0.0.1.md)；发布状态与工件见该计划，已验收变化见 [CHANGELOG](CHANGELOG.md)。
+当前开发版本由 [package.json](package.json) 的 `version` 指定，对应 [0.0.2 计划](planning/releases/0.0.2.md)；发布状态与工件见该计划，已验收变化见 [CHANGELOG](CHANGELOG.md)。
 
 ## 开始使用与开发
 
@@ -17,7 +17,7 @@ AI-first 个人成长应用 / An AI-first personal growth app.
 | 需要了解 | 文档 |
 |---|---|
 | 产品范围与已确认约束 | [项目章程](PROJECT_CHARTER.md)、[产品定义](PRODUCT.md) |
-| 当前工作与版本归属 | [版本计划](planning/releases/0.0.1.md)、[工作包](docs/backlog.md) |
+| 当前工作与版本归属 | [版本计划](planning/releases/0.0.2.md)、[工作包](docs/backlog.md) |
 | 决策依据与待决事项 | [决策登记](docs/decisions.md) |
 | 功能规格与变更 | [OpenSpec](openspec/README.md) |
 | 界面方向与验收 | [设计规范](DESIGN.md)、[UI 验收](docs/design/ui-acceptance.md) |

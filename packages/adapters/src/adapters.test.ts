@@ -6,12 +6,49 @@ import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { test, type TestContext } from 'node:test';
 import { createCommandService, createRunService } from '@siyue/domain';
-import { createLocalClient, createSqliteStore } from './index.js';
+import { AuthClientError, createAuthController, createLocalClient, createSqliteStore, type AuthApiClient } from './index.js';
 import { openNodeConnection, openNodeStore } from './node.js';
 
 const now = () => '2026-09-05T12:00:00.000Z';
 const payload = {title: 'Synthetic goal', projectTitles: ['Project'], taskTitles: ['Task']};
 const compatibleExecution = {executor: 'compatible', modelVersion: 'test-model', promptVersion: 'compatible-plan-v1'} as const;
+
+test('workspace lifetime stops a non-cooperative provider before saving its late draft',async t=>{
+ const store=fixture(t).open(),{spaceId,actorId}=await store.initialize('local-owner',randomUUID());
+ const lifetime=new AbortController(),runs=createRunService({store,now,newId:randomUUID});
+ let entered!:()=>void,release!:(value:typeof payload)=>void;
+ const started=new Promise<void>(resolve=>{entered=resolve;});
+ const local=createLocalClient({service:service(store),runService:runs,spaceId,actor:{id:actorId,kind:'user'},now,newId:randomUUID,lifetimeSignal:lifetime.signal,
+  propose:async()=>{entered();return new Promise(resolve=>{release=resolve;});}});
+ const result=local.propose('old account').then(()=>({code:'unexpected'}),error=>({code:error.code}));
+ await started;lifetime.abort();release(payload);assert.deepEqual(await result,{code:'cancelled'});
+ const state=await store.read(spaceId,x=>x);assert.equal(state.drafts.length,0);assert.equal(state.runs[0]?.status,'cancelled');
+ await assert.rejects(local.snapshot(),{code:'cancelled'});
+});
+
+test('retired workspace cannot continue an approval or execute queued confirmations',async t=>{
+ const store=fixture(t).open(),{spaceId,actorId}=await store.initialize('local-owner',randomUUID()),real=service(store);
+ let entered!:()=>void,release!:()=>void;const started=new Promise<void>(resolve=>{entered=resolve;});
+ const lifetime=new AbortController();
+ const local=createLocalClient({service:{...real,approveDraft:async(...args)=>{const result=await real.approveDraft(...args);entered();await new Promise<void>(resolve=>{release=resolve;});return result;}},spaceId,actor:{id:actorId,kind:'user'},now,newId:randomUUID,lifetimeSignal:lifetime.signal,propose:async()=>payload});
+ const draft=await local.createManualDraft(payload,{commandId:randomUUID(),issuedAt:now()});
+ const first=local.confirmDraft(draft.id,draft.version).then(()=>false,error=>error.code);
+ const queued=local.confirmDraft(draft.id,draft.version).then(()=>false,error=>error.code);
+ await started;lifetime.abort();release();assert.equal(await first,'cancelled');assert.equal(await queued,'cancelled');
+ assert.equal((await store.read(spaceId,x=>x)).goals.length,0);
+});
+
+test('a committed old-space write keeps its receipt but its late result is not returned to a new context',async t=>{
+ const store=fixture(t).open(),{spaceId,actorId}=await store.initialize('local-owner',randomUUID()),real=service(store);
+ let entered!:()=>void,release!:()=>void;const started=new Promise<void>(resolve=>{entered=resolve;});
+ const lifetime=new AbortController();
+ const local=createLocalClient({service:{...real,execute:async(...args)=>{const receipt=await real.execute(...args);entered();await new Promise<void>(resolve=>{release=resolve;});return receipt;}},spaceId,actor:{id:actorId,kind:'user'},now,newId:randomUUID,lifetimeSignal:lifetime.signal,propose:async()=>payload});
+ const request={commandId:randomUUID(),issuedAt:now()};
+ const pending=local.saveManual(payload,request).then(()=>false,error=>error.code);
+ await started;lifetime.abort();release();assert.equal(await pending,'cancelled');
+ const state=await store.read(spaceId,x=>x);assert.equal(state.goals.length,1);assert.equal(state.receipts[0]?.commandId,request.commandId);
+ assert.throws(()=>local.saveManual(payload),{code:'cancelled'});
+});
 function fixture(t: TestContext) {
   const directory = mkdtempSync(join(tmpdir(), 'siyue-adapters-test-'));
   const filename = join(directory, 'data.sqlite');
@@ -576,4 +613,119 @@ test('request-scoped proposer without valid execution metadata is rejected befor
   }
   assert.equal(called, false);
   assert.equal((await local.snapshot()).runs.length, 0);
+});
+
+const unlinkBaseUrl = 'http://127.0.0.1:8787/v1';
+const unlinkPassword = '合成的当前密码 15+ 字符 🌙';
+/** Controller over one seeded recovery record; every route is a stand-in inside this process. */
+function unlinkFixture({authenticated = true}: {authenticated?: boolean} = {}) {
+  const subjectId = randomUUID(), sessionId = randomUUID(), installationId = randomUUID();
+  const opaque = () => `${randomUUID()}.${'s'.repeat(43)}`;
+  const at = () => new Date(Date.now() + 600_000).toISOString();
+  const refreshToken = opaque();
+  // One seeded deadline for the absolute expiry, so a rotation answers with the same instant the
+  // stored record already carries instead of a slightly later one.
+  const seededExpiry = at();
+  let raw: string | null = authenticated ? JSON.stringify({schemaVersion: 1, environment: 'test', apiBaseUrl: unlinkBaseUrl, installationId,
+    active: {subjectId, subjectKind: 'adult', sessionId, refreshToken, refreshExpiresAt: seededExpiry, absoluteExpiresAt: seededExpiry, pendingRotationId: null, pendingSince: null}, revocations: []}) : null;
+  const calls = {reauth: [] as {token: string; password: string; action: string}[], unlink: [] as {token: string; identityId: string; reauthGrant: string}[], refresh: 0, logout: 0};
+  const issued: string[] = [];
+  let committed = false, failUnlink = false, unlinkCode: 'network' | 'timeout' | 'unavailable' | 'last_method_required' | 'identity_not_found' = 'network';
+  let wait: {promise: Promise<void>; resolve: () => void} | null = null, notify: (() => void) | null = null;
+  const api = {endpoint: {environment: 'test' as const, apiBaseUrl: unlinkBaseUrl},
+    reauthPassword: async (token: string, password: string, _signal?: AbortSignal, action = 'change-password') => {
+      calls.reauth.push({token, password, action});
+      const reauthGrant = opaque(); issued.push(reauthGrant);
+      return {reauthGrant, expiresAt: at()};
+    },
+    unlinkIdentity: async (token: string, identityId: string, reauthGrant: string) => {
+      calls.unlink.push({token, identityId, reauthGrant}); notify?.();
+      if (wait) await wait.promise;
+      if (failUnlink) {failUnlink = false; throw new AuthClientError(unlinkCode);}
+      committed = true;
+    },
+    // The server revokes every credential of the subject when it removes the method, so a refresh
+    // only answers while the removal has not happened.
+    refresh: async () => {
+      calls.refresh++;
+      if (committed) throw new AuthClientError('reauth_required');
+      const expiry = at(), stored = JSON.parse(raw!).active as {refreshToken: string; absoluteExpiresAt: string};
+      return {tokenType: 'Bearer' as const, accessToken: 'synthetic-access-1', accessExpiresAt: expiry, refreshToken: stored.refreshToken, refreshExpiresAt: stored.absoluteExpiresAt, sessionAbsoluteExpiresAt: stored.absoluteExpiresAt,
+        session: {subjectId, subjectKind: 'adult' as const, sessionId, expiresAt: expiry}};
+    },
+    logout: async () => {calls.logout++;}};
+  const host = createAuthController({api: api as unknown as AuthApiClient, vault: {read: async () => raw, write: async value => {raw = value;}}, newId: randomUUID});
+  return {host, calls, subjectId, sessionId, raw: () => raw!,
+    lastGrant: () => issued[issued.length - 1]!,
+    fail(code: typeof unlinkCode) {failUnlink = true; unlinkCode = code;},
+    commitBeforeFailure() {committed = true;},
+    hold() {let resolve!: () => void; wait = {promise: new Promise<void>(r => {resolve = r;}), resolve};},
+    release() {wait?.resolve(); wait = null;},
+    next() {return new Promise<void>(resolve => {notify = resolve;});}};
+}
+
+test('unlinking a login method clears the local session only after the server confirms the removal', async () => {
+  const f = unlinkFixture(); await f.host.bootstrap();
+  const identityId = `email:${randomUUID()}`;
+  assert.equal(await f.host.unlinkIdentity(identityId, unlinkPassword), undefined);
+  assert.deepEqual(f.calls.reauth, [{token: 'synthetic-access-1', password: unlinkPassword, action: 'unlink-identity'}]);
+  assert.deepEqual(f.calls.unlink, [{token: 'synthetic-access-1', identityId, reauthGrant: f.lastGrant()}]);
+  // The server already revoked every session of the subject, so nothing is queued for it locally.
+  assert.equal(f.calls.logout, 0);
+  assert.equal(f.host.getState().status, 'anonymous'); assert.equal(f.host.getState().session, null); assert.equal(f.host.getState().account, null);
+  assert.equal(f.host.getState().pendingRevocations, 0); assert.equal(JSON.parse(f.raw()!).active, null);
+  // The one-time grant is spent inside the call: it is not persisted, queued or published.
+  assert.equal(f.raw()!.includes(f.lastGrant()), false); assert.equal(f.raw()!.includes('reauthGrant'), false);
+  assert.equal(JSON.stringify(f.host.getState()).includes(f.lastGrant()), false);
+});
+
+test('identity unlink requires an authenticated session and validates the handle and password first', async () => {
+  const anonymous = unlinkFixture({authenticated: false}); await anonymous.host.bootstrap();
+  await assert.rejects(anonymous.host.unlinkIdentity(`email:${randomUUID()}`, unlinkPassword), {code: 'reauth_required'});
+  assert.deepEqual(anonymous.calls.reauth, []); assert.deepEqual(anonymous.calls.unlink, []); assert.equal(anonymous.calls.refresh, 0);
+  const f = unlinkFixture(); await f.host.bootstrap();
+  for (const identityId of [randomUUID(), `apple:${randomUUID()}`, 'email:not-a-uuid', 'EMAIL:0F0D1F5E-1A2B-4C3D-8E4F-5A6B7C8D9E0F']) {
+    await assert.rejects(f.host.unlinkIdentity(identityId, unlinkPassword), {code: 'invalid_request'});
+  }
+  await assert.rejects(f.host.unlinkIdentity(`email:${randomUUID()}`, 'too short'), {code: 'invalid_request'});
+  assert.deepEqual(f.calls.reauth, []); assert.deepEqual(f.calls.unlink, []);
+  assert.equal(f.host.getState().status, 'authenticated'); assert.equal(JSON.parse(f.raw()!).active.sessionId, f.sessionId);
+});
+
+test('both unlink refusals keep their own code and are never probed or repeated', async () => {
+  const f = unlinkFixture(); await f.host.bootstrap();
+  const identityId = `email:${randomUUID()}`;
+  f.fail('last_method_required');
+  await assert.rejects(f.host.unlinkIdentity(identityId, unlinkPassword), {code: 'last_method_required'});
+  f.fail('identity_not_found');
+  await assert.rejects(f.host.unlinkIdentity(identityId, unlinkPassword), {code: 'identity_not_found'});
+  assert.equal(f.calls.unlink.length, 2);
+  // Only bootstrap refreshed: a refusal is surfaced as-is, with no probe and no second mutation.
+  assert.equal(f.calls.refresh, 1);
+  assert.notEqual(f.calls.unlink[0]!.reauthGrant, f.calls.unlink[1]!.reauthGrant);
+  assert.equal(f.host.getState().status, 'authenticated'); assert.equal(f.host.getState().session!.sessionId, f.sessionId);
+  assert.equal(JSON.parse(f.raw()!).active.sessionId, f.sessionId);
+});
+
+test('a lost DELETE is never repeated and the session probe decides the local outcome', async () => {
+  const retained = unlinkFixture(); await retained.host.bootstrap();
+  const identityId = `email:${randomUUID()}`;
+  retained.fail('network');
+  await assert.rejects(retained.host.unlinkIdentity(identityId, unlinkPassword), {code: 'network'});
+  assert.equal(retained.calls.unlink.length, 1); assert.equal(retained.calls.refresh, 2);
+  assert.equal(retained.host.getState().status, 'authenticated'); assert.equal(JSON.parse(retained.raw()!).active.sessionId, retained.sessionId);
+  // The same loss after the server committed is a dead session, not a success story.
+  const committed = unlinkFixture(); await committed.host.bootstrap(); committed.commitBeforeFailure(); committed.fail('network');
+  await assert.rejects(committed.host.unlinkIdentity(identityId, unlinkPassword), {code: 'reauth_required'});
+  assert.equal(committed.calls.unlink.length, 1); assert.equal(committed.calls.refresh, 2);
+  assert.equal(committed.host.getState().status, 'anonymous'); assert.equal(JSON.parse(committed.raw()!).active, null);
+});
+
+test('an unlink in flight is cancelled by a generation change without a second mutation', async () => {
+  const f = unlinkFixture(); await f.host.bootstrap(); f.hold();
+  const entered = f.next(), pending = f.host.unlinkIdentity(`email:${randomUUID()}`, unlinkPassword);
+  await entered; await f.host.logout(); f.release();
+  await assert.rejects(pending, {code: 'cancelled'});
+  assert.equal(f.calls.unlink.length, 1); assert.equal(f.calls.logout, 1);
+  assert.equal(f.host.getState().status, 'anonymous'); assert.equal(JSON.parse(f.raw()!).active, null);
 });

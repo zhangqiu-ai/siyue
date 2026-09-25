@@ -1,0 +1,11 @@
+# The image needs app/ only. Keep the build context free of operator data and noise.
+siyue.env
+*.env
+*.tar.gz
+*.sha256
+DEPLOY-MANIFEST.json
+DEPLOY.md
+nginx/
+source/
+Dockerfile
+.dockerignore

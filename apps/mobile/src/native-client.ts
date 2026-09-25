@@ -27,6 +27,8 @@ export function wrapNativeConnection(database: SQLite.SQLiteDatabase, insideTran
 
 export interface NativeClientOptions {
   databaseName?: string;
+  spaceId?: string;
+  lifetimeSignal?: AbortSignal;
   pendingDatabaseName?: string;
   decorateService?: (service: CommandService) => CommandService;
   decorateJournalStorage?: (storage: AsyncKeyValueStore) => AsyncKeyValueStore;
@@ -37,17 +39,29 @@ export interface NativeClientOptions {
 
 /** Shared native host construction. Normal callers use the original databases and no decorators. */
 export async function createNativeClient(options: NativeClientOptions = {}): Promise<LocalClient> {
+  return (await createNativeClientResource(options)).client;
+}
+
+/** One workspace owns both connections. Retirement aborts calls, drains them, then closes. */
+export async function createNativeClientResource(options: NativeClientOptions = {}): Promise<{client:LocalClient;close():Promise<void>}> {
   const databaseName = options.databaseName ?? 'siyue-m1.db';
   const pendingDatabaseName = options.pendingDatabaseName ?? 'siyue-m1-pending.db';
   if (![databaseName, pendingDatabaseName].every((name) => /^[a-zA-Z0-9._-]+\.db$/.test(name)) || databaseName === pendingDatabaseName) {
     throw new Error('Native storage requires distinct local database filenames');
   }
-  const database = await SQLite.openDatabaseAsync(databaseName);
+  if(options.spaceId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(options.spaceId))throw new Error('Invalid space identity');
+  const lifetime=new AbortController();
+  const abort=()=>lifetime.abort();
+  if(options.lifetimeSignal?.aborted)throw Object.assign(new Error('cancelled'),{code:'cancelled'});
+  options.lifetimeSignal?.addEventListener('abort',abort,{once:true});
+  let database:SQLite.SQLiteDatabase;
+  try{database=await SQLite.openDatabaseAsync(databaseName);}catch(error){options.lifetimeSignal?.removeEventListener('abort',abort);throw error;}
   const store = createSqliteStore(wrapNativeConnection(database));
   let requestStorage: ReturnType<typeof createSqliteRequestJournalStorage> | undefined;
   try {
     await database.execAsync('PRAGMA journal_mode = WAL;');
-    const { spaceId, actorId } = await store.initialize('local-owner', Crypto.randomUUID());
+    const { spaceId, actorId } = await store.initialize('local-owner', options.spaceId??Crypto.randomUUID());
+    if(options.spaceId&&spaceId!==options.spaceId)throw Object.assign(new Error('Workspace identity mismatch'),{code:'corrupt_data'});
     const now = () => new Date().toISOString();
     const service = createCommandService({
       store, now, newId: Crypto.randomUUID,
@@ -61,7 +75,8 @@ export async function createNativeClient(options: NativeClientOptions = {}): Pro
     const pendingDatabase = await SQLite.openDatabaseAsync(pendingDatabaseName);
     requestStorage = createSqliteRequestJournalStorage(wrapNativeConnection(pendingDatabase));
     const executor = options.enableMock ? new MockAgentExecutor({ delayMs: options.mockDelayMs ?? 250 }) : undefined;
-    return createLocalClient({
+    const local=createLocalClient({
+      lifetimeSignal:lifetime.signal,
       service: options.decorateService?.(service) ?? service, runService, spaceId, actor, now, newId: Crypto.randomUUID,
       requestJournal: {
         storage: options.decorateJournalStorage?.(requestStorage) ?? requestStorage,
@@ -75,7 +90,26 @@ export async function createNativeClient(options: NativeClientOptions = {}): Pro
         });
       },
     });
+    const pending=new Set<Promise<unknown>>();
+    const client=new Proxy(local,{get(target,key: keyof LocalClient){
+      const method=target[key];
+      if(typeof method!=='function')return method;
+      return (...args:unknown[])=>{
+        if(lifetime.signal.aborted)return Promise.reject(Object.assign(new Error('cancelled'),{code:'cancelled'}));
+        const operation=Promise.resolve().then(()=>(method as (...input:unknown[])=>unknown)(...args));
+        pending.add(operation);void operation.finally(()=>pending.delete(operation)).catch(()=>{});return operation;
+      };
+    }});
+    let closed=false,closing:Promise<void>|undefined;
+    return {client,close(){
+      if(closed)return Promise.resolve();
+      if(closing)return closing;
+      abort();options.lifetimeSignal?.removeEventListener('abort',abort);
+      closing=(async()=>{await Promise.allSettled([...pending]);await requestStorage!.close();await store.close();closed=true;})().finally(()=>{closing=undefined;});
+      return closing;
+    }};
   } catch (error) {
+    abort();options.lifetimeSignal?.removeEventListener('abort',abort);
     // Preserve the database for recovery. Never replace it with an empty or in-memory store.
     await Promise.allSettled([store.close(), requestStorage?.close()]);
     throw error;

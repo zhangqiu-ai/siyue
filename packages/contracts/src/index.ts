@@ -215,5 +215,16 @@ export type AgentRunEvent = z.infer<typeof agentRunEventSchema>;
 export type RunEventReplay = z.infer<typeof runEventReplaySchema>;
 
 export * from './family-policy.js';
+export * from './family-api.js';
+export * from './child-device.js';
 export * from './account-session.js';
 export * from './offline-lease.js';
+export * from './auth.js';
+export * from './auth-email.js';
+export * from './auth-client.js';
+export * from './account-space.js';
+
+export * from './auth-apple.js';
+export * from './auth-identities.js';
+export * from './auth-deletion.js';
+export * from './deletion-family-actions.js';

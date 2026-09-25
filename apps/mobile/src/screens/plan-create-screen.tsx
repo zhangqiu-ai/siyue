@@ -1,3 +1,4 @@
+import {useWorkspaceValue,useWorkspaceRef} from '../account/workspace-scratch';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Keyboard, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,18 +17,23 @@ import { planErrorKey } from '../space/plan-error';
 export default function PlanCreateScreen() {
   const {t} = useLocale(), theme = useTheme(), router = useRouter(), navigation = useNavigation();
   const generate = usePlanGeneration();
-  const [mode, setMode] = useState<'ai' | 'manual'>('ai');
-  const [goal, setGoal] = useState(''), [project, setProject] = useState('');
-  const [busy, setBusy] = useState(false), [unknown, setUnknown] = useState(false);
+  const [mode, setMode] = useWorkspaceValue<'ai' | 'manual'>('create.mode','ai');
+  const [goal, setGoal] = useWorkspaceValue('create.goal',''), [project, setProject] = useWorkspaceValue('create.project','');
+  const [busy, setBusy] = useState(false), [unknown, setUnknown] = useWorkspaceValue('create.unknown',false);
   const [error, setError] = useState<MessageKey | null>(null), [created, setCreated] = useState<string | null>(null);
   const controller = useRef<AbortController | null>(null), locked = useRef(false), mounted = useRef(true);
-  const manual = useRef<{payload: GoalDraft; request: LocalRequest} | null>(null);
+  const manual = useWorkspaceRef<{payload: GoalDraft; request: LocalRequest} | null>('create.manual',null);
   useEffect(() => { mounted.current = true; return () => {mounted.current = false; controller.current?.abort();}; }, []);
   usePreventRemove(!created && (busy || !!goal || !!project), ({data}) => {
     if (busy) return;
     Alert.alert(t('ai.discardTitle'), t(unknown ? 'plan.manualUnknown' : 'plan.leave'), [
       {text: t('ai.keepEditing'), style: 'cancel'},
-      {text: t('ai.discard'), style: 'destructive', onPress: () => navigation.dispatch(data.action)},
+      // Leaves this space's edit buffers untouched, so returning restores the input; not a discard.
+      {text: t('ai.keepAndReturn'), onPress: () => navigation.dispatch(data.action)},
+      {text: t('ai.discard'), style: 'destructive', onPress: () => {
+        setGoal(''); setProject(''); setUnknown(false); manual.current = null;
+        navigation.dispatch(data.action);
+      }},
     ]);
   });
   useEffect(() => { if (created && !busy) router.replace({pathname: '/plan-draft', params: {id: created}}); }, [created, busy, router]);
@@ -40,7 +46,7 @@ export default function PlanCreateScreen() {
         manual.current ??= {payload: {title: goal.trim(), projectTitles: [project.trim()], taskTitles: []}, request: {commandId: Crypto.randomUUID(), issuedAt: new Date().toISOString()}};
         return (await getClient()).createManualDraft(manual.current.payload, manual.current.request);
       })();
-      if (mounted.current) {setCreated(draft.id); setUnknown(false);}
+      if (mounted.current) {manual.current=null;setGoal('');setProject('');setCreated(draft.id);setUnknown(false);}
     } catch (failure) {
       if (mounted.current) {
         if (mode === 'ai') setError(planErrorKey(failure));

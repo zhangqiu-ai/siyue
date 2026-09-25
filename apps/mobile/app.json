@@ -2,16 +2,22 @@
   "expo": {
     "name": "Siyue",
     "slug": "siyue",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "orientation": "default",
     "scheme": "siyue",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "buildNumber": "2",
       "supportsTablet": true,
-      "bundleIdentifier": "app.siyue.mobile"
+      "bundleIdentifier": "app.siyue.mobile",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      }
     },
     "android": {
+      "versionCode": 2,
       "package": "app.siyue.mobile"
     },
     "plugins": [
@@ -26,7 +32,16 @@
           "microphonePermission": false
         }
       ],
-      "./plugins/with-whiteboard-inputs.cjs"
+      "./plugins/with-whiteboard-inputs.cjs",
+      "expo-apple-authentication",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "buildReactNativeFromSource": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

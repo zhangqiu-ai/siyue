@@ -1,0 +1,30 @@
+/* Account-deletion surface only. Everything is expressed with the Sage semantic variables the settings
+   dialog already defines, so light and dark themes come from that layer instead of a second palette. */
+.deletion { display:grid; gap:12px; margin-top:24px; }
+.deletion-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.deletion-head h3 { margin:0; }
+.deletion-head .text-button { margin:0; flex-shrink:0; }
+.deletion-step { margin:0; font-size:13px; }
+.deletion .hint { margin:0; }
+.deletion h4 { margin:8px 0 0; }
+.deletion-family { display:grid; gap:8px; padding:16px; border:1px solid var(--control-border); border-radius:16px; background:var(--surface); }
+.deletion-family-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.deletion-family-head h4 { margin:0; overflow-wrap:anywhere; }
+.deletion-role { font-size:13px; color:var(--muted); }
+.deletion-choices { display:grid; gap:12px; margin-top:4px; }
+.deletion-choice-block { display:grid; gap:6px; }
+.deletion-choice { width:100%; text-align:left; }
+.deletion-choice[aria-pressed="true"] { border-color:var(--selected-border); background:var(--subtle); box-shadow:inset 0 0 0 1px var(--selected-border); }
+.deletion-blocked { margin:0; font-size:13px; line-height:1.7; color:var(--error); }
+.deletion-summary { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.deletion-summary li { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px; }
+.deletion-summary li span:last-child { color:var(--muted); }
+.deletion-lock { display:grid; gap:8px; padding:12px 16px; border:1px solid var(--control-border); border-radius:12px; background:var(--subtle); }
+.deletion-lock p { margin:0; font-size:14px; line-height:1.7; color:var(--muted); }
+.deletion-check { display:flex; align-items:flex-start; gap:8px; margin:16px 0 0; font-weight:400; line-height:1.7; }
+.deletion-check input { width:auto; margin:3px 0 0; flex-shrink:0; }
+.deletion-check span { font-size:14px; }
+.deletion-progress { margin:0; display:grid; gap:8px; }
+.deletion-progress div { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:8px 0; border-bottom:1px solid var(--border); }
+.deletion-progress dt { font-size:14px; }
+.deletion-progress dd { margin:0; font-size:14px; color:var(--muted); }

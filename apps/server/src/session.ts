@@ -4,6 +4,8 @@ import { verifiedAccountSessionSchema } from '@siyue/contracts';
 export type SessionVerifier = (token: string, signal: AbortSignal) => Promise<unknown>;
 export interface SessionOptions {
   sessionVerifier?: SessionVerifier;
+  /** Production adapters distinguish transient infrastructure failures from invalid credentials. */
+  sessionErrorStatus?: (error: unknown) => 401 | 503;
   sessionTimeoutMs?: number;
   maxConcurrentSessionVerifications?: number;
 }
@@ -66,7 +68,8 @@ export function registerSessionRoute(app: FastifyInstance, options: SessionOptio
       const parsed = verifiedAccountSessionSchema.safeParse(result);
       if (controller.signal.aborted || Date.now() >= deadline || !parsed.success || Date.parse(parsed.data.expiresAt) <= Date.now()) return deny();
       return parsed.data;
-    } catch {
+    } catch (error) {
+      if (options.sessionErrorStatus?.(error) === 503) return reply.code(503).send({error: 'temporarily_unavailable'});
       return deny();
     } finally {
       clearTimeout(timer);

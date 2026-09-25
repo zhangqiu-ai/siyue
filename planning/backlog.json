@@ -140,9 +140,17 @@
       "github_issue_number": null,
       "execution_evidence": [
         "docs/evidence/m1-validation.md",
-        "docs/evidence/mobile-ai-settings.md"
+        "docs/evidence/mobile-ai-settings.md",
+        "docs/evidence/backend-auth-foundation-2026-09-21.md",
+        "docs/evidence/backend-auth-email-2026-09-21.md",
+        "docs/evidence/backend-auth-client-2026-09-22.md",
+        "docs/evidence/backend-auth-account-ui-2026-09-22.md",
+        "docs/evidence/backend-auth-account-space-2026-09-22.md",
+        "docs/evidence/backend-auth-password-change-client-2026-09-23.md",
+        "docs/evidence/backend-auth-device-sessions-2026-09-23.md",
+        "docs/evidence/online-account-lifecycle-2026-09-25.md"
       ],
-      "implementation_note": "早期 Mock 阶段：受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。 2026-09-06 基础框架补充：移动端增加个人 OpenAI 兼容 BYOK、SecureStore 安全配置、明暗主题设置与流式聊天。属于 SY-021；真实供应商、Android 原生和真机仍待验收。目标草稿仍采用原有 Mock，生产鉴权未实现。见 docs/evidence/mobile-ai-settings.md。"
+      "implementation_note": "早期 Mock 阶段：受限IPC、参数和空间权限、脱敏本地服务通过；平台秘密存储与生产服务鉴权尚未实现。 本轮默认本地Mock安全源码审查与73项指定测试通过（mobile4/desktop13/server7/adapters40/ai9，不含未重跑domain/contracts）。修复移动未知error.code回显、原型键命中和对象String副作用，未知错误改固定提示；RED1通过3失败、GREEN4通过0失败，typecheck通过。默认无BYOK/真实Provider，平台秘密存储与生产鉴权对当前分支不适用且未实现；pending hash非加密。移动双平台Hermes JS导出通过，脱敏改动尚无原生UI故障注入回归，先前原生通过属于修改前构建；其余正常UI错误恢复、完整包体/网络审计仍待验收。详见docs/evidence/m1-security-review.md。 2026-09-06 基础框架补充：移动端增加个人 OpenAI 兼容 BYOK、SecureStore 安全配置、明暗主题设置与流式聊天。属于 SY-021；真实供应商、Android 原生和真机仍待验收。目标草稿仍采用原有 Mock，生产鉴权未实现。见 docs/evidence/mobile-ai-settings.md。 2026-09-21：独立数据库与会话内核首批本地验证通过；邮件、Apple、客户端与家庭/五设备及生产仍未完成，见 backend-auth-foundation-2026-09-21 证据。 SA-04 邮箱服务与本地并发、失败路径验证通过，真实送达及后续客户端等仍未完成；见 docs/evidence/backend-auth-email-2026-09-21.md。 SA-05 会话基础、真实HTTP和macOS Electron安全存储/受限IPC验证通过；表单、账号空间映射及移动原生验收未完成，见 docs/evidence/backend-auth-client-2026-09-22.md。 后续登录和找回密码接入设置，桌面及iPhone/iPad/Android原生恢复通过；完整UI矩阵、注册、空间映射与真机仍未完成，见 docs/evidence/backend-auth-account-ui-2026-09-22.md。 SA-05空间映射和生命周期基础已通过真实服务与SQLite双账号测试；正式宿主/UI、白板及既有本机空间关联尚未接线，见 docs/evidence/backend-auth-account-space-2026-09-22.md。 2026-09-25：固定公网服务及Resend邮件已部署，实际Electron UI完成真实收件注册、同主体重启恢复、密码登录、正式注销完成与注销后登录拒绝；详见线上账号证据。该结果不替代真实Apple、多人家庭、五设备或真机完整矩阵。"
     },
     {
       "id": "SY-006",
@@ -493,9 +501,15 @@
       "github_issue_number": null,
       "execution_evidence": [
         "docs/evidence/video-whiteboard-local-2026-09-20.md",
-        "docs/evidence/video-whiteboard-provider-screening-2026-09-20.md"
+        "docs/evidence/video-whiteboard-provider-screening-2026-09-20.md",
+        "docs/evidence/backend-auth-foundation-2026-09-21.md",
+        "docs/evidence/backend-auth-email-2026-09-21.md",
+        "docs/evidence/backend-auth-client-2026-09-22.md",
+        "docs/evidence/backend-auth-account-ui-2026-09-22.md",
+        "docs/evidence/backend-auth-account-space-2026-09-22.md",
+        "docs/evidence/online-account-lifecycle-2026-09-25.md"
       ],
-      "implementation_note": "对应 add-family-video-whiteboard 2.1/2.4；隔离存档PoC完成，官方服务初筛仍有许可/删除/退出未知项。正式应用、权限、真实五设备和原生验收未完成。旧工作包整体完成不作为隔离验证前置条件。"
+      "implementation_note": "对应 add-family-video-whiteboard 2.1/2.4；隔离存档PoC完成，官方服务初筛仍有许可/删除/退出未知项。正式应用、权限、真实五设备和原生验收未完成。旧工作包整体完成不作为隔离验证前置条件。 2026-09-21：独立数据库与会话内核首批本地验证通过；邮件、Apple、客户端与家庭/五设备及生产仍未完成，见 backend-auth-foundation-2026-09-21 证据。 SA-04 邮箱服务与本地并发、失败路径验证通过，真实送达及后续客户端等仍未完成；见 docs/evidence/backend-auth-email-2026-09-21.md。 SA-05 会话基础、真实HTTP和macOS Electron安全存储/受限IPC验证通过；表单、账号空间映射及移动原生验收未完成，见 docs/evidence/backend-auth-client-2026-09-22.md。 后续登录和找回密码接入设置，桌面及iPhone/iPad/Android原生恢复通过；完整UI矩阵、注册、空间映射与真机仍未完成，见 docs/evidence/backend-auth-account-ui-2026-09-22.md。 SA-05空间映射和生命周期基础已通过真实服务与SQLite双账号测试；正式宿主/UI、白板及既有本机空间关联尚未接线，见 docs/evidence/backend-auth-account-space-2026-09-22.md。 2026-09-25：固定公网服务及Resend邮件已部署，实际Electron UI完成真实收件注册、同主体重启恢复、密码登录、正式注销完成与注销后登录拒绝；详见线上账号证据。该结果不替代真实Apple、多人家庭、五设备或真机完整矩阵。"
     },
     {
       "id": "SY-023",
@@ -520,5 +534,5 @@
       "implementation_note": "C12 已确认采用 Excalidraw 0.18.1 替换编辑层；对应 VWB-07/VWA-05/任务7.x。旧试用结果仍为历史。实际验证与真机缺口见本轮证据，状态保持 in_progress。"
     }
   ],
-  "updated_on": "2026-09-20"
+  "updated_on": "2026-09-25"
 }

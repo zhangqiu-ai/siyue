@@ -1,0 +1,42 @@
+{
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "status": "draft-awaiting-review",
+  "frames": [
+    {
+      "id": "639:35943",
+      "name": "交互演示 · impact · 注销账号前",
+      "parent": "210:7"
+    },
+    {
+      "id": "639:35990",
+      "name": "交互演示 · families · 逐个处理家庭",
+      "parent": "210:7"
+    },
+    {
+      "id": "639:36037",
+      "name": "交互演示 · recipient · 选择接收人",
+      "parent": "210:7"
+    },
+    {
+      "id": "639:36084",
+      "name": "交互演示 · accept · 接受家庭管理",
+      "parent": "210:7"
+    },
+    {
+      "id": "639:36131",
+      "name": "交互演示 · confirm · 确认注销账号",
+      "parent": "210:7"
+    },
+    {
+      "id": "639:36178",
+      "name": "交互演示 · progress · 注销处理进度",
+      "parent": "210:7"
+    },
+    {
+      "id": "639:36225",
+      "name": "交互演示 · frozen · 家庭已冻结",
+      "parent": "210:7"
+    }
+  ],
+  "links": 14
+}

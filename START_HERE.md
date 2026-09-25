@@ -2,16 +2,16 @@
 
 本页是当前任务的导航；当前优先级依据见下节。已有工程应继续演进；历史首次初始化任务与旧运行摘要已保留在 [入口历史快照](docs/evidence/rules-entry-history-2026-09-13.md)。
 
-## 当前首要目标（2026-09-20）
+## 当前发布目标（2026-09-25）
 
-维护者已将 **0.0.1 五设备家庭视频通话＋共享白板** 提升为当前 P0。独立变更：[add-family-video-whiteboard](openspec/changes/add-family-video-whiteboard/proposal.md)；已确认范围与授权见 proposal，待决设计见 [design](openspec/changes/add-family-video-whiteboard/design.md)，按 [tasks](openspec/changes/add-family-video-whiteboard/tasks.md) 推进。
+维护者已授权将真实线上注册、登录、会话恢复和账号注销闭环收口为 **0.0.2** 小版本。独立变更：[add-shared-api-independent-auth](openspec/changes/add-shared-api-independent-auth/proposal.md)；交付范围、验证结果和未纳入事项见 [0.0.2 版本计划](planning/releases/0.0.2.md)。
 
-状态：本地技术验证开发中，正式功能尚未接通。先收敛关键取舍与开展独立技术验证；不恢复旧 M1 初始化排期，不等待所有非依赖功能完成。旧任务和未验收范围保留，录像成品已确认；具体服务、录制同意与存档接管未定；不自动购买、部署、迁移数据或发布。
+0.0.1 保留为未发布的历史开发流，其中五设备家庭视频通话与共享白板仍未完成，不进入本次发布。后续继续该功能时读取 [0.0.1 计划](planning/releases/0.0.1.md)及对应 OpenSpec，不以 0.0.2 的账号验收替代视频、白板或 Android 验收。
 
 ## 确定本轮工作
 
 1. 读取 [AGENTS.md](AGENTS.md)，检查工作目录、分支与未提交改动，保留用户已有内容。
-2. 以维护者当前要求确定目标；在 [当前版本计划](planning/releases/0.0.1.md) 找到对应变更、工作包与证据。版本号以根 [package.json](package.json) 为准，版本登记按 [版本规则](planning/releases/README.md) 执行。未明确下一项时不要从历史启动提示自行恢复排期。
+2. 以维护者当前要求确定目标；在 [当前版本计划](planning/releases/0.0.2.md) 找到对应变更、工作包与证据。版本号以根 [package.json](package.json) 为准，版本登记按 [版本规则](planning/releases/README.md) 执行。未明确下一项时不要从历史启动提示自行恢复排期。
 3. 按 [OpenSpec 流程](openspec/README.md) 选择标准或简化路径，再读取与本轮相关的现行规格及活动变更。已有授权不重复询问，新的关键取舍交由维护者决定。
 4. 根据下表补读所需资料，实施范围内的最小改动，以对应路径的实际验证结果交付。
 

@@ -1,3 +1,4 @@
+import {useWorkspaceValue} from '../account/workspace-scratch';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Keyboard, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,15 +11,17 @@ import { useTheme } from '../ui/theme';
 import { AppIcon } from '../ui/icon';
 import { editableDraftPayload, reconcileDraftReceipt, validateDraftInput } from '../space/draft-state';
 
-export default function PlanDraftScreen() {
+export default function PlanDraftScreen(){const {id}=useLocalSearchParams<{id:string}>();return <PlanDraftEditor key={id}/>;}
+function PlanDraftEditor() {
   const { id } = useLocalSearchParams<{id: string}>();
   const { t, locale } = useLocale();
   const theme = useTheme(), router = useRouter(), navigation = useNavigation();
-  const [draft, setDraft] = useState<ActionDraft | null>(null);
+  const [draft, setDraft] = useWorkspaceValue<ActionDraft | null>(`draft.${id}.original`,null);
   const [latest, setLatest] = useState<ActionDraft | null>(null);
-  const [input, setInput] = useState<GoalDraft | null>(null);
-  const [taskKeys, setTaskKeys] = useState<number[]>([]);
-  const nextTaskKey = useRef(0);
+  const [input, setInput] = useWorkspaceValue<GoalDraft | null>(`draft.${id}.input`,null);
+  const [taskKeys, setTaskKeys] = useWorkspaceValue<number[]>(`draft.${id}.keys`,[]);
+  const nextTaskKey = useRef(Math.max(-1,...taskKeys)+1);
+  const restoredInput=useRef(!!input);
   const replaceInput = (payload: GoalDraft) => {
     setInput(payload);
     setTaskKeys(payload.taskTitles.map(() => nextTaskKey.current++));
@@ -57,7 +60,7 @@ export default function PlanDraftScreen() {
       const applied = current.status === 'applied' || current.status === 'approved'
         ? await reconcileDraftReceipt(client, current) : false;
       if (mounted.current) {
-        setDraft(current); replaceInput(current.command.payload); setSaved(applied); setLatest(null);
+        if(restoredInput.current&&draft){if(current.version!==draft.version)setLatest(current);else setLatest(null);}else{setDraft(current);replaceInput(current.command.payload);setLatest(null);}restoredInput.current=false;setSaved(applied);
         setUnknown(!applied && current.status === 'applied');
       }
     } catch { if (mounted.current) setError(true); }

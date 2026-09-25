@@ -1,0 +1,101 @@
+{
+  "fileKey": "5OKY7OMJ2jQy2XAaGbNDGC",
+  "pageId": "210:7",
+  "status": "draft-awaiting-review",
+  "date": "2026-09-24",
+  "phone": [
+    {
+      "key": "impact",
+      "id": "638:35522",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "key": "families",
+      "id": "638:35608",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "key": "recipient",
+      "id": "638:35691",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "key": "accept",
+      "id": "638:35774",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "key": "confirm",
+      "id": "638:35857",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "key": "progress",
+      "id": "638:35940",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "key": "frozen",
+      "id": "638:36023",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "tablet": [
+    {
+      "id": "638:36106",
+      "name": "Draft iPad · impact · 注销账号前",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "638:36153",
+      "name": "Draft iPad · families · 逐个处理家庭",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "638:36200",
+      "name": "Draft iPad · recipient · 选择接收人",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "638:36247",
+      "name": "Draft iPad · accept · 接受家庭管理",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "638:36294",
+      "name": "Draft iPad · confirm · 确认注销账号",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "638:36341",
+      "name": "Draft iPad · progress · 注销处理进度",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "638:36388",
+      "name": "Draft iPad · frozen · 家庭已冻结",
+      "width": 834,
+      "height": 1194
+    }
+  ],
+  "components": {
+    "source": "215:35",
+    "row": "205:499",
+    "primary": "548:33775",
+    "secondary": "205:160"
+  },
+  "rulesDraft": "account-deletion-completion-draft-2026-09-24.md"
+}

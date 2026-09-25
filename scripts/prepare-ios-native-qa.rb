@@ -4,10 +4,23 @@ require 'pathname'
 require 'xcodeproj'
 
 root = Pathname.new(__dir__).parent
+abort 'Only --account is supported as an optional argument' unless ARGV.empty? || ARGV == ['--account']
+account = ARGV == ['--account']
+qa_name = account ? 'SiyueAccountQA' : 'SiyueNativeQA'
+test_name = account ? 'AccountAuthUITests' : 'NativeRecoveryUITests'
+bundle_id = account ? 'app.siyue.mobile.accountqa' : 'app.siyue.mobile.qa'
+entry_relative = account ? 'account-auth/entry.tsx' : 'native-recovery/entry.tsx'
+qa_entitlements = account ? '../e2e/account-auth/simulator.entitlements' : nil
+test_entitlements = account ? '../e2e/account-auth/test-runner.entitlements' : nil
 project_path = root.join('apps/mobile/ios/Siyue.xcodeproj')
-source = root.join('apps/mobile/e2e/NativeRecoveryUITests.swift')
-entry = root.join('apps/mobile/e2e/native-recovery/entry.tsx')
-abort 'Prebuilt iOS project or QA sources missing' unless project_path.directory? && source.file? && entry.file?
+# The account suite compiles its session cases and the screen-driven registration cases into one test
+# bundle, so a single build and scheme cover both `-only-testing` filters. The recovery suite keeps its
+# single source file.
+suite_names = account ? ['AccountAuthUITests.swift', 'RegistrationUITests.swift'] : ["#{test_name}.swift"]
+suite_sources = suite_names.map { |name| root.join("apps/mobile/e2e/#{name}") }
+source = suite_sources.first
+entry = root.join("apps/mobile/e2e/#{entry_relative}")
+abort 'Prebuilt iOS project or QA sources missing' unless project_path.directory? && suite_sources.all?(&:file?) && entry.file?
 project = Xcodeproj::Project.open(project_path)
 app = project.targets.find { |target| target.name == 'Siyue' && target.product_type == 'com.apple.product-type.application' }
 abort 'Expected normal application target missing' unless app
@@ -17,7 +30,6 @@ normal_before = Marshal.dump([app.to_hash, app.build_configurations.map(&:to_has
 copy = ->(value) { Marshal.load(Marshal.dump(value)) }
 deployment = release.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] || '16.4'
 
-qa_name = 'SiyueNativeQA'
 qa = project.targets.find { |target| target.name == qa_name }
 if qa && (qa.product_type != 'com.apple.product-type.application' || qa.build_configurations.any? { |c| c.build_settings['SIYUE_NATIVE_QA'] != 'YES' })
   abort 'Existing QA target is not owned by this preparation script; no changes saved'
@@ -42,14 +54,14 @@ config.base_configuration_reference = release.base_configuration_reference
 config.build_settings = copy.call(release.build_settings).merge(
   'SIYUE_NATIVE_QA' => 'YES',
   'PRODUCT_NAME' => qa_name,
-  'PRODUCT_BUNDLE_IDENTIFIER' => 'app.siyue.mobile.qa',
-  'ENTRY_FILE' => '$(SRCROOT)/../e2e/native-recovery/entry.tsx',
-  'INFOPLIST_FILE' => 'SiyueNativeQA-Info.plist'
+  'PRODUCT_BUNDLE_IDENTIFIER' => bundle_id,
+  'ENTRY_FILE' => "$(SRCROOT)/../e2e/#{entry_relative}",
+  'INFOPLIST_FILE' => "#{qa_name}-Info.plist"
 )
+config.build_settings['CODE_SIGN_ENTITLEMENTS'] = qa_entitlements if qa_entitlements
 qa.build_configuration_list.default_configuration_name = 'Release'
 qa.product_reference.path = "#{qa_name}.app"
 
-test_name = 'NativeRecoveryUITests'
 test = project.targets.find { |target| target.name == test_name }
 if test && (test.product_type != 'com.apple.product-type.bundle.ui-testing' || test.build_configurations.any? { |c| c.build_settings['SIYUE_NATIVE_QA'] != 'YES' })
   abort 'Existing QA test target is not owned by this script; no changes saved'
@@ -59,26 +71,30 @@ test.add_dependency(qa) unless test.dependencies.any? { |dependency| dependency.
 test.build_configurations.to_a.reject { |item| item.name == 'Release' }.each(&:remove_from_project)
 test_config = test.build_configurations.find { |item| item.name == 'Release' } || test.add_build_configuration('Release', :release)
 test_config.build_settings.merge!(
-  'SIYUE_NATIVE_QA' => 'YES', 'PRODUCT_BUNDLE_IDENTIFIER' => 'app.siyue.mobile.qa.uitests',
+  'SIYUE_NATIVE_QA' => 'YES', 'PRODUCT_BUNDLE_IDENTIFIER' => "#{bundle_id}.uitests",
   'PRODUCT_NAME' => '$(TARGET_NAME)', 'SWIFT_VERSION' => '5.0', 'GENERATE_INFOPLIST_FILE' => 'YES',
   'IPHONEOS_DEPLOYMENT_TARGET' => deployment, 'TARGETED_DEVICE_FAMILY' => '1,2',
   'TEST_TARGET_NAME' => qa_name, 'CODE_SIGN_STYLE' => 'Automatic'
 )
+test_config.build_settings['CODE_SIGN_ENTITLEMENTS'] = test_entitlements if test_entitlements
 test.build_configuration_list.default_configuration_name = 'Release'
 attributes = project.root_object.attributes['TargetAttributes'] ||= {}
 attributes[test.uuid] ||= {}
 attributes[test.uuid]['TestTargetID'] = qa.uuid
 group = project.main_group.children.find { |item| item.isa == 'PBXGroup' && item.name == test_name }
 group ||= project.main_group.new_group(test_name, '../e2e')
-reference = group.files.find { |file| file.path == source.basename.to_s } || group.new_file(source.basename.to_s)
-test.source_build_phase.add_file_reference(reference) unless test.source_build_phase.files.any? { |file| file.file_ref == reference }
+suite_sources.each do |suite_source|
+  name = suite_source.basename.to_s
+  reference = group.files.find { |file| file.path == name } || group.new_file(name)
+  test.source_build_phase.add_file_reference(reference) unless test.source_build_phase.files.any? { |file| file.file_ref == reference }
+end
 
 normal_after = Marshal.dump([app.to_hash, app.build_configurations.map(&:to_hash), app.build_phases.map(&:to_hash)])
 abort 'Normal target changed unexpectedly; no changes saved' unless normal_before == normal_after
 info = Xcodeproj::Plist.read_from_path(root.join('apps/mobile/ios/Siyue/Info.plist'))
-info['CFBundleDisplayName'] = 'Siyue Native QA'
+info['CFBundleDisplayName'] = qa_name
 info.delete('CFBundleURLTypes')
-Xcodeproj::Plist.write_to_path(info, root.join('apps/mobile/ios/SiyueNativeQA-Info.plist'))
+Xcodeproj::Plist.write_to_path(info, root.join("apps/mobile/ios/#{qa_name}-Info.plist"))
 project.save
 scheme = Xcodeproj::XCScheme.new
 scheme.configure_with_targets(qa, test, launch_target: true)

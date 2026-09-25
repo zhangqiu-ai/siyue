@@ -5,7 +5,13 @@ export function whiteboardClose(ipcMain, rendererUrl) {
   const trusted=event=>event.senderFrame===event.sender.mainFrame&&event.senderFrame.url===rendererUrl;
   ipcMain.on('siyue:whiteboard-active',(event,value)=>{
     if(!trusted(event)||typeof value!=='boolean')return;
-    if(value)active.add(event.sender.id);else active.delete(event.sender.id);
+    if(value)active.add(event.sender.id);
+    else {
+      active.delete(event.sender.id);
+      // Normal editor exit flushes before unmount. A concurrent quit must not
+      // wait for an acknowledgement from a listener that has just been removed.
+      pending.get(event.sender.id)?.finish(true);
+    }
   });
   ipcMain.on('siyue:whiteboard-close-result',(event,result)=>{
     if(!trusted(event)||!result||typeof result.id!=='string'||typeof result.ok!=='boolean')return;

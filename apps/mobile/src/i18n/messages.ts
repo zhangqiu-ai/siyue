@@ -103,6 +103,8 @@ export const zh = {
   "space.refresh": "重新读取",
   "space.error": "未能完成操作。请重新读取最新状态后重试；尚未保存的输入已保留。",
   "space.saved": "已保存到本机。",
+  "workspace.inputRetained": "已切换空间。上一个空间的未提交输入仍保留在本机，切回该空间可继续编辑。",
+  "workspace.dismiss": "知道了",
 
   "settings.title": "设置",
   "common.back": "返回",
@@ -140,6 +142,7 @@ export const zh = {
   "ai.discardTitle": "舍弃未保存的修改？",
   "ai.discardBody": "已填内容将丢失，已保存的配置不受影响。",
   "ai.keepEditing": "继续编辑",
+  "ai.keepAndReturn": "保留输入并返回",
   "ai.discard": "舍弃修改",
   "ai.selectProviderLabel": "选择 AI 供应商",
   "ai.selectProvider": "选择供应商",
@@ -336,6 +339,8 @@ export const en: Record<keyof typeof zh, string> = {
   "space.refresh": "Reload",
   "space.error": "The operation could not be completed. Reload the latest state before retrying; unsaved input has been kept.",
   "space.saved": "Saved on this device.",
+  "workspace.inputRetained": "Space switched. Your unsubmitted input is still kept on this device; switch back to continue editing.",
+  "workspace.dismiss": "Got it",
 
   "settings.title": "Settings",
   "common.back": "Back",
@@ -373,6 +378,7 @@ export const en: Record<keyof typeof zh, string> = {
   "ai.discardTitle": "Discard unsaved changes?",
   "ai.discardBody": "Your edits will be lost. Saved settings will stay unchanged.",
   "ai.keepEditing": "Keep editing",
+  "ai.keepAndReturn": "Keep input and go back",
   "ai.discard": "Discard changes",
   "ai.selectProviderLabel": "Select AI provider",
   "ai.selectProvider": "Select provider",

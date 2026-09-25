@@ -1,0 +1,56 @@
+import {test,expect} from 'playwright/test';
+import {request} from 'playwright';
+import {randomUUID} from 'node:crypto';
+import {startPostgresFixture} from '../../apps/server/tests/integration/postgres-fixture.mjs';
+import {createAuthFixture} from '../../apps/server/tests/integration/auth-fixture.mjs';
+import {createRuntimeApp} from '../../apps/server/dist/runtime-app.js';
+import {transaction} from '../../apps/server/dist/adapters/postgres/database.js';
+
+test('device sessions are private, paginated, and revocation requires the correct fresh action grant',async()=>{
+ const db=await startPostgresFixture(),auth=await createAuthFixture(db),owner=await auth.issue(),foreign=await auth.issue();
+ const own=[];
+ for(let i=0;i<27;i++)own.push(await transaction(db.app,client=>auth.service.issue(client,owner.session.subjectId,randomUUID(),'email')));
+ const current=await transaction(db.app,client=>auth.service.issue(client,owner.session.subjectId,randomUUID(),'email'));
+ await db.app.query("UPDATE siyue.auth_sessions SET platform='desktop',device_label='Synthetic Mac' WHERE id=$1",[current.session.sessionId]);
+ let app,http;
+ try{
+  app=createRuntimeApp(db.app,db.identity,{sessions:auth.service});const origin=await app.listen({host:'127.0.0.1',port:0});http=await request.newContext({baseURL:origin});
+  const call=(path,token,method='GET',data)=>http.fetch(path,{method,headers:{Authorization:`Bearer ${token}`},...(data===undefined?{}:{data})});
+  const first=await call('/v1/me/sessions?limit=25',current.accessToken);expect(first.status()).toBe(200);
+  const page=(await first.json()).data;expect(page.items).toHaveLength(25);expect(page.nextCursor).toBeTruthy();
+  expect(JSON.stringify(page)).not.toMatch(/accessToken|refreshToken|reauthGrant|127\.0\.0\.1/);
+  const next=await call(`/v1/me/sessions?limit=25&cursor=${page.nextCursor}`,current.accessToken);
+  const nextPage=(await next.json()).data;expect(nextPage.items.length).toBe(4);
+  const ownItems=[...page.items,...nextPage.items];expect(ownItems.find(item=>item.sessionId===current.session.sessionId)).toMatchObject({current:true,platform:'desktop',deviceLabel:'Synthetic Mac'});
+  expect((await call(`/v1/me/sessions?limit=26`,current.accessToken)).status()).toBe(400);
+  expect((await call(`/v1/me/sessions?cursor=${foreign.session.sessionId}`,current.accessToken)).status()).toBe(400);
+  const otherOwner=await call('/v1/me/sessions',foreign.accessToken);expect((await otherOwner.json()).data.items.every(item=>item.sessionId!==owner.session.sessionId)).toBe(true);
+  const target=own[0];
+  const denied=await call(`/v1/me/sessions/${target.session.sessionId}`,current.accessToken,'DELETE');
+  expect(denied.status()).toBe(401);expect((await denied.json()).error.code).toBe('AUTH_REAUTH_REQUIRED');
+  const malformedGrant=`${'-'.repeat(36)}.${'A'.repeat(43)}`;
+  const malformedSingle=await call(`/v1/me/sessions/${target.session.sessionId}`,current.accessToken,'DELETE',{reauthGrant:malformedGrant});
+  expect(malformedSingle.status()).toBe(400);expect((await malformedSingle.json()).error.code).toBe('AUTH_INVALID_REQUEST');
+  const malformedAll=await call('/v1/me/sessions/revoke-all',current.accessToken,'POST',{reauthGrant:malformedGrant});
+  expect(malformedAll.status()).toBe(400);expect((await malformedAll.json()).error.code).toBe('AUTH_INVALID_REQUEST');
+  const wrongGrant=await transaction(db.app,client=>auth.service.issueReauth(client,current.session.sessionId,'change-password'));
+  const wrong=await call(`/v1/me/sessions/${target.session.sessionId}`,current.accessToken,'DELETE',{reauthGrant:wrongGrant.reauthGrant});
+  expect(wrong.status()).toBe(401);expect((await wrong.json()).error.code).toBe('AUTH_REAUTH_REQUIRED');
+  const revokeGrant=await transaction(db.app,client=>auth.service.issueReauth(client,current.session.sessionId,'revoke-session'));
+  expect((await call(`/v1/me/sessions/${target.session.sessionId}`,current.accessToken,'DELETE',{reauthGrant:revokeGrant.reauthGrant})).status()).toBe(204);
+  const audit=(await db.app.query("SELECT session_id,redacted_metadata FROM siyue.security_events WHERE event_type='session.revoke' AND subject_id=$1 ORDER BY occurred_at DESC LIMIT 1",[owner.session.subjectId])).rows[0];
+  expect(audit.session_id).toBe(current.session.sessionId);expect(audit.redacted_metadata).toEqual({targetSessionId:target.session.sessionId});
+  expect((await call(`/v1/me/sessions/${target.session.sessionId}`,current.accessToken,'DELETE')).status()).toBe(204);
+  const foreignTarget=await call(`/v1/me/sessions/${foreign.session.sessionId}`,current.accessToken,'DELETE');expect(foreignTarget.status()).toBe(401);
+  expect((await call(`/v1/me/sessions/${own[1].session.sessionId}`,own[1].accessToken,'DELETE')).status()).toBe(204);
+  await expect(auth.service.verify(own[1].accessToken)).rejects.toThrow();
+  const remaining=await call('/v1/me/sessions?limit=25',current.accessToken);expect((await remaining.json()).data.items.some(item=>item.sessionId===target.session.sessionId)).toBe(false);
+  const allWrong=await transaction(db.app,client=>auth.service.issueReauth(client,current.session.sessionId,'revoke-session'));
+  const deniedAll=await call('/v1/me/sessions/revoke-all',current.accessToken,'POST',{reauthGrant:allWrong.reauthGrant});expect(deniedAll.status()).toBe(401);
+  const allGrant=await transaction(db.app,client=>auth.service.issueReauth(client,current.session.sessionId,'revoke-all-sessions'));
+  expect((await call('/v1/me/sessions/revoke-all',current.accessToken,'POST',{reauthGrant:allGrant.reauthGrant})).status()).toBe(204);
+  await expect(auth.service.verify(current.accessToken)).rejects.toThrow();
+  expect((await auth.service.verify(foreign.accessToken)).subjectId).toBe(foreign.session.subjectId);
+  expect((await db.app.query("SELECT count(*)::int AS n FROM siyue.security_events WHERE event_type IN ('session.revoke','session.revoke_all') AND subject_id=$1",[owner.session.subjectId])).rows[0].n).toBe(3);
+ }finally{await http?.dispose();await app?.close();await db.stop();}
+});

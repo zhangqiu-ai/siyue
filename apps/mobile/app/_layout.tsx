@@ -1,3 +1,4 @@
+import {WorkspaceProvider} from '../src/account/workspace-provider';
 import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -7,6 +8,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-naviga
 import { AppThemeProvider, useTheme } from '../src/ui/theme';
 import { AISettingsProvider } from '../src/settings/ai-settings';
 import { LocaleProvider } from '../src/i18n';
+import { AccountAuthProvider } from '../src/account/auth-provider';
 
 function ThemedLayout() {
   const theme = useTheme();
@@ -17,6 +19,7 @@ function ThemedLayout() {
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: theme.color.background } }}>
         <Stack.Screen name="(shell)" />
         <Stack.Screen name="settings" />
+        <Stack.Screen name="account" />
         <Stack.Screen name="ai-provider" />
       </Stack>
     </ChatProvider></ThemeProvider>
@@ -24,5 +27,5 @@ function ThemedLayout() {
 }
 
 export default function RootLayout() {
-  return <LocaleProvider><AppThemeProvider><AISettingsProvider><ThemedLayout /></AISettingsProvider></AppThemeProvider></LocaleProvider>;
+  return <LocaleProvider><AppThemeProvider><AccountAuthProvider><AISettingsProvider><WorkspaceProvider><ThemedLayout /></WorkspaceProvider></AISettingsProvider></AccountAuthProvider></AppThemeProvider></LocaleProvider>;
 }
