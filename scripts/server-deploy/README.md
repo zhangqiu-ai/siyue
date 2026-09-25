@@ -92,6 +92,7 @@ scripts/server-deploy/verify-artifact.sh artifacts/server-deploy/<release>.tar.g
    校验工件完整性、内存/磁盘余量、8787 占用、env 名与取值（非秘密项）、秘密文件权限与属主、
    `registration-policy.json` 内容与法律 URL、`legal/` 是否随发布、`qiuge-private` 存在与 `qiuge-postgres:5432` 可 TCP 连通、
    缓存基础镜像、`sudo -n` 可用性、`docker compose config -q`、以及宿主 nginx 的站点文件/`nginx -t`。
+   若宿主没有 Node，工件 manifest 校验会使用已缓存的 Node 镜像，并以 `--network none` 运行；不会因此安装宿主依赖或访问网络。
    它不写状态、不重载 nginx、不碰数据库。
 4. **建库与角色**（一次性；失败即退出，绝不覆盖已有角色/库；**现有线上环境已于 2026-09-25 完成建库、账本库与角色，不再重跑**），在 `qiuge-postgres` 内以现有管理员 `qiuge_cloud` 执行：
    ```sh

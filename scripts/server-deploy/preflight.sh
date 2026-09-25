@@ -82,10 +82,24 @@ if [ -z "$bundle" ]; then
   fail "--bundle is required (pass the release bundle directory or .tar.gz)"
 elif [ ! -e "$bundle" ]; then
   fail "bundle not found: $bundle"
-elif "$script_dir/verify-artifact.sh" "$bundle" --no-probe >/dev/null 2>&1; then
-  ok "bundle passes manifest verification (entrypoint probes: run verify-artifact.sh separately)"
 else
-  fail "bundle failed verification; run: $script_dir/verify-artifact.sh $bundle"
+  verify_status=1
+  if command -v node >/dev/null 2>&1; then
+    if "$script_dir/verify-artifact.sh" "$bundle" --no-probe >/dev/null 2>&1; then verify_status=0; fi
+  elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1 && docker image inspect "$node_image" >/dev/null 2>&1; then
+    bundle_parent=$(cd "$(dirname "$bundle")" && pwd)
+    bundle_name=$(basename "$bundle")
+    if docker run --rm --network none \
+      -v "$script_dir:/verify:ro" -v "$bundle_parent:/input:ro" \
+      "$node_image" bash /verify/verify-artifact.sh "/input/$bundle_name" --no-probe >/dev/null 2>&1; then
+      verify_status=0
+    fi
+  fi
+  if [ "$verify_status" -eq 0 ]; then
+    ok "bundle passes manifest verification (entrypoint probes: run verify-artifact.sh separately)"
+  else
+    fail "bundle failed verification; run verify-artifact.sh on a Node host or in the cached Node image"
+  fi
 fi
 
 echo "== capacity (host has 1.6 GB total and qiuge keeps running)"

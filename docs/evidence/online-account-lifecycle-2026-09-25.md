@@ -37,11 +37,19 @@ SIYUE_ONLINE_ACCEPTANCE_DIR=<本机私有测试输入目录> \
 
 公网 `/health/ready`、协议接口、协议页面返回 200；秋哥 `/api/cloud/health` 部署前后及注销后均为 200。观察时 API/worker 分别约 64/44 MiB，无 OOM 或重启。
 
+### 0.0.2 精确部署复核
+
+服务端提交 `95565e1` 构建为 `0.0.2-95565e1`，tarball SHA-256 为 `c277394d1d52b7e40a3291eae358f5836bc86371dce0d364d552a4c94a64d48f`，并部署为镜像 `siyue-server:0.0.2-95565e1`。部署后再次执行同一个显式联网 Playwright 用例，结果为 **1 passed，1.0 分钟**。
+
+本次使用新的 Gmail 专用别名和实际收到的六位验证码，从空白本地 Electron 数据目录依次完成注册、关闭并重启恢复、退出、密码登录、注销、再次重启及旧密码拒绝登录。测试主体 `919a997d-db6a-4b54-8a05-1ed07c5a2dfe` 已完成注销；测试未设置 API override，未读取数据库验证码，未保留密码或验证码文件，也未在凭据输入期间生成 trace 或截图。
+
+复核时生产 live/ready 为 200，API 与 worker 使用同一精确镜像且 restart count 为 0，秋哥 cloud health 仍为 200。未发布的设备配对、儿童创建与家庭邀请接受路由分别验证为 404。
+
 ## 实现与定向回归
 
 注册使用共享 `createEmailRegistration` 状态机与公开政策 schema；服务端缺配置关闭注册、版本不一致拒绝、已成功的同键请求仍可恢复。Resend 固定 HTTPS 端点、稳定作业幂等键、响应体不记日志，不确定结果不盲目重发。提供者说明见 [Resend send API](https://resend.com/docs/api-reference/emails/send-email) 与 [idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys)。
 
-定向回归与原生矩阵结果在本轮完成后追加于此，不以设计图或编译成功替代运行验收。
+定向回归与原生矩阵结果见下文，不以设计图或编译成功替代运行验收。
 
 ## 边界
 
