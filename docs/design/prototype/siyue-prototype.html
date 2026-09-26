@@ -273,6 +273,34 @@ button.row:active{background:var(--subtle)}
 .pc-head em{margin-left:auto;font-style:normal;color:var(--muted);font-weight:500}
 .pc-title{font-size:18px;font-weight:600;margin:6px 0 2px;line-height:24px}
 .pc-meta{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:18px}
+.plancard .metarow{margin:8px 0 2px}
+.plancard.ok{border-color:var(--accent)}.plancard.ok .pc-head{color:var(--accent)}
+.plancard.slim{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:14px;line-height:20px;color:var(--muted);border-style:dashed}
+.plancard.slim svg{flex:none}
+.pc-warn{display:flex;gap:8px;align-items:flex-start;background:var(--warnSurface);border-radius:12px;padding:10px 12px;font-size:14px;line-height:20px;margin:10px 0 4px}
+.pc-warn svg{flex:none;color:var(--warn);margin-top:2px}
+.pc-why{margin:10px 0 0;border-radius:12px;background:var(--background);padding:8px 12px}
+.pc-why summary{cursor:pointer;font-size:14px;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:28px}
+.pc-why summary::-webkit-details-marker{display:none}
+.pc-why p{font-size:14px;line-height:21px;color:var(--muted);margin:4px 0 4px}
+.pc-sec{font-size:13px;line-height:18px;color:var(--muted);font-weight:500;margin:14px 0 4px}
+.pc-tasks{list-style:none;margin:0;padding:0}
+.pc-tasks li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:22px;padding:5px 0;margin:0}
+.pc-tasks li::before{content:"";flex:none;width:16px;height:16px;border-radius:8px;border:1.5px solid var(--controlBorder);margin-top:3px}
+.pc-edit{background:var(--background);border-radius:14px}
+.pc-edit .projrow{padding:0 12px;min-height:46px}.pc-edit .plainin{font-size:15px;padding:11px 0}
+.pc-edit .dtask{min-height:46px}.pc-edit .addrow{min-height:46px;font-size:15px}
+.plancard .pc-titlein{font-size:18px;line-height:24px;font-weight:600;margin-top:6px;background:var(--background);border-radius:12px;padding:8px 12px;border:1.5px solid transparent}
+.plancard .pc-titlein:focus{border-color:var(--accent)}
+.pc-whyin{display:block;width:100%;margin-top:10px;border:0;background:var(--background);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;line-height:21px;color:var(--ink);resize:none;min-height:84px;outline:none}
+.pc-actions{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.pc-actions .btn{min-height:46px;font-size:16px}
+.pc-sub{display:flex;gap:8px}.pc-sub .btn{flex:1;min-height:42px;font-size:15px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 4px}
+.quick button{border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:99px;padding:6px 14px;min-height:36px;font:inherit;font-size:14px;line-height:20px;text-align:left;cursor:pointer}
+.quick button:active{background:var(--subtle)}
+.msg-ai ol{margin:0 0 10px;padding-left:22px}
+.msg-ai .msg-hint{font-size:14px;line-height:21px;color:var(--muted)}
 .space-title{display:flex;align-items:center;gap:6px;border:0;background:none;color:var(--ink);padding:0;cursor:pointer;font:inherit;text-align:left}
 .space-title h1{margin:4px 0}
 .syncline{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);margin:0 0 18px}
@@ -310,19 +338,6 @@ details.why textarea{width:100%;margin-top:8px;border:0;background:var(--subtle)
 .metarow{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
 .metachip{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:0 12px;min-height:34px;background:var(--surface);color:var(--ink);border:1px solid var(--border);cursor:pointer;font:inherit;font-size:13px}
 .metachip svg{color:var(--muted)}
-.mode{display:flex;background:var(--subtle);border-radius:14px;padding:4px;margin:0 0 16px}
-.mode button{flex:1;min-height:40px;border:0;border-radius:10px;background:transparent;color:var(--muted);font:inherit;font-size:15px;font-weight:500;cursor:pointer}
-.mode button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.mode button[disabled]{opacity:.45;cursor:not-allowed}
-.bigtext{width:100%;min-height:150px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--ink);font:inherit;font-size:19px;line-height:28px;padding:16px;resize:none;outline:none;display:block}
-.bigtext:focus{border-color:var(--accent)}
-.examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.examples button{border:0;background:var(--subtle);color:var(--ink);border-radius:99px;padding:0 12px;min-height:32px;font:inherit;font-size:13px;cursor:pointer}
-.quote{font-size:16px;line-height:24px;padding:12px 16px;background:var(--surface);border-radius:16px;margin:0 0 20px}
-.skel{background:var(--subtle);border-radius:10px;height:18px;margin:12px 0;position:relative;overflow:hidden}
-.skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:shimmer 1.3s infinite}
-.t-dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
-@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 .titleinput{resize:none;display:block;width:100%;border:0;background:transparent;font:inherit;font-size:26px;line-height:34px;font-weight:650;color:var(--ink);padding:2px 0 4px;outline:none;border-bottom:1.5px solid transparent}
 .titleinput:focus{border-bottom-color:var(--accent)}
 .plainin{width:100%;border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);outline:none;padding:12px 0;min-width:0}
@@ -697,7 +712,7 @@ Object.assign(P,{
  archive:'<rect x="3.5" y="4.5" width="17" height="4.5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 13h4"/>',
  edit:'<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/>'
 });
-Object.assign(S,{space:'personal',drawer:false,chat:{msgs:[],streaming:false},conv:null,done:{},added:{},goal:'g1',planMode:'ai',dtIds:[],created:false,
+Object.assign(S,{space:'personal',drawer:false,chat:{msgs:[],streaming:false},conv:null,done:{},added:{},goal:'g1',pl:null,dtIds:[],created:false,
   wb:{tool:'pen',color:0,page:2,pages:3,rec:false,mic:true,cam:true},inv:{r1:true,r2:true,r3:false},conflictDone:false});
 
 /* ---------- synthetic data ---------- */
@@ -734,25 +749,91 @@ const MEMBERS=()=>[
  {id:'m2',name:L('李敏','Li Min'),role:L('管理员','Admin'),sub:L('iPhone、MacBook','iPhone, MacBook')},
  {id:'m3',name:L('小满','Xiaoman'),role:L('儿童','Child'),sub:L('2 台儿童设备 · 由你和李敏监护','2 child devices · guarded by you and Li Min')},
  {id:'m4',name:L('外婆','Grandma'),role:L('成员 · 只读','Member · read-only'),sub:L('iPhone','iPhone')}];
-const CONVS=()=>S.space==='family'?[
+const CONVS=()=>[...(S.pl&&S.pl.msgs?[{id:'cPlan',title:S.pl.goal||L('新计划','New plan'),time:L('刚刚','Now')}]:[]),...CONVS0()];
+const CONVS0=()=>S.space==='family'?[
  {id:'c3',title:L('科学展选题','Science fair topic'),time:L('昨天','Yesterday')},{id:'c5',title:L('徒步路线怎么选','Choosing a hiking route'),time:L('周一','Mon')}]:
  S.space==='local'?[{id:'c6',title:L('整理照片的顺序','Photo sorting order'),time:L('9月20日','Sep 20')}]:[
  {id:'c1',title:L('10 公里跑步计划','10K running plan'),time:L('刚刚','Now')},{id:'c2',title:L('点餐场景练习','Ordering role-play'),time:'09:12'},{id:'c4',title:L('第 2 章读书笔记','Notes on chapter 2'),time:L('昨天','Yesterday')}];
 
 /* ---------- chat content ---------- */
-function planCard(){return anno(L('需能力：对话内生成计划草稿','Needs: plan drafts from chat'),'<div class="plancard"><div class="pc-head">'+I('target',16,2)+'<span>'+L('计划草稿','Plan draft')+'</span><em>'+L('等你确认','Needs your OK')+'</em></div><div class="pc-title">'+L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November')+'</div><div class="pc-meta">'+L('1 个项目 · 6 项任务 · 加入「'+curSpace().name+'」前可以修改','1 project · 6 tasks · editable before it joins “'+curSpace().name+'”')+'</div><button class="btn tonal sm" data-act="openDraft">'+L('查看并确认','Review')+I('arrowR',16,2)+'</button></div>');}
+function dtaskRows(){return S.dtIds.map(i=>'<div class="dtask"><span class="grip" aria-hidden="true">'+I('grip',18)+'</span><input class="plainin" data-name="dt_'+i+'" aria-label="'+L('任务','Task')+'" placeholder="'+L('任务名称','Task name')+'" value="'+esc(S.f['dt_'+i]||'')+'"><button class="x" data-act="dtDel:'+i+'" aria-label="'+L('删除任务','Remove task')+'">'+I('close',16,2.2)+'</button></div>').join('')+
+ '<button class="addrow" data-act="dtAdd" style="width:100%;border:0;background:transparent;font:inherit;cursor:pointer">'+I('plus',20,2.2)+L('添加任务','Add a task')+'</button>';}
+const draftTasks=()=>S.dtIds.map(i=>S.f['dt_'+i]||'').filter(t=>t.trim());
+/* The plan draft lives inside the conversation: review, edit and confirm all happen in this card. */
+function draftCard(m){
+ const P=S.pl||{ver:1,state:'pending'},ver=(m&&m.ver)||1,sp=curSpace().name,ts=draftTasks();
+ if(ver<P.ver)return '<div class="plancard slim">'+I('target',16,2)+'<span>'+L('草稿第 '+ver+' 版 · 已被下面的新版本替代','Draft v'+ver+' · replaced by the newer version below')+'</span></div>';
+ if(P.state==='discarded')return '<div class="plancard slim">'+I('close',16,2.2)+'<span>'+L('草稿已放弃，空间没有变化','Draft discarded; your space is unchanged')+'</span></div>';
+ if(P.state==='added')return '<div class="plancard ok"><div class="pc-head">'+I('check',16,2.6)+'<span>'+L('已加入「'+sp+'」','Added to “'+sp+'”')+'</span></div><div class="pc-title">'+esc(S.f.dTitle||'')+'</div><div class="pc-meta">'+L('1 个目标 · 1 个项目 · '+ts.length+' 项任务','1 goal · 1 project · '+ts.length+' tasks')+'</div><button class="btn tonal sm" data-act="viewGoal">'+L('查看目标','View goal')+I('arrowR',16,2)+'</button></div>';
+ const exp=S.scenario==='expired',unk=S.scenario==='unknown',ed=!!P.edit&&!exp&&!unk,ok=(S.f.dTitle||'').trim()&&ts.length>0;
+ return anno(L('需能力：对话内生成、修改与确认计划草稿','Needs: plan drafts created, edited and confirmed in chat'),'<div class="plancard">'+
+  '<div class="pc-head">'+I('target',16,2)+'<span>'+L('计划草稿','Plan draft')+(ver>1?L(' · 第 '+ver+' 版',' · v'+ver):'')+'</span><em>'+(exp?L('已过期','Expired'):unk?L('结果未确认','Unconfirmed'):ed?L('编辑中 · 自动保存','Editing · autosaved'):L('28 分钟内有效','Valid for 28 min'))+'</em></div>'+
+  (exp?'<div class="pc-warn">'+I('warn',16)+'<span>'+L('草稿已过期，内容还在。重新创建后再确认加入。','This draft expired; the content is kept. Recreate it, then confirm.')+'</span></div>':'')+
+  (unk?'<div class="pc-warn">'+I('warn',16)+'<span>'+L('上次确认的结果还不确定。先核对，避免重复加入。','The last confirmation is unconfirmed. Check first so nothing is added twice.')+'</span></div>':'')+
+  (ed?'<textarea class="titleinput pc-titlein" rows="2" data-name="dTitle" aria-label="'+L('目标名称','Goal name')+'" placeholder="'+L('目标名称','Goal name')+'">'+esc(S.f.dTitle||'')+'</textarea>':'<div class="pc-title">'+esc(S.f.dTitle||'')+'</div>')+
+  '<div class="metarow">'+anno(L('需契约：草稿日期字段','Needs contract: draft date'),'<button class="metachip" data-act="toast:'+L('选择目标日期','Pick a target date')+'"'+(unk?' disabled':'')+'>'+I('calendar',15)+L('目标日期（可选）','Target date (optional)')+'</button>')+
+   '<button class="metachip" data-act="sheet:spaceSwitch"'+(unk?' disabled':'')+'>'+I('target',15)+sp+I('chevD',14,2)+'</button></div>'+
+  (ed?'<textarea class="pc-whyin" data-name="dWhy" aria-label="'+L('理由','Rationale')+'" placeholder="'+L('为什么这样安排（可选）','Why this plan (optional)')+'">'+esc(S.f.dWhy||'')+'</textarea>':
+   (S.f.dWhy?'<details class="pc-why"><summary>'+L('为什么这样安排','Why this plan')+I('chevD',16,2)+'</summary><p>'+esc(S.f.dWhy)+'</p></details>':''))+
+  (ed?'<div class="pc-sec">'+L('项目','Project')+'</div><div class="pc-edit"><div class="projrow">'+I('box',18)+'<input class="plainin" data-name="dProject" aria-label="'+L('项目名称','Project name')+'" placeholder="'+L('项目名称','Project name')+'" value="'+esc(S.f.dProject||'')+'"></div></div>'+
+    '<div class="pc-sec">'+L('任务 · '+ts.length,'Tasks · '+ts.length)+'</div><div class="pc-edit">'+dtaskRows()+'</div>':
+   '<div class="pc-sec">'+L('项目 · ','Project · ')+esc(S.f.dProject||'')+L(' · '+ts.length+' 项任务',' · '+ts.length+' tasks')+'</div><ul class="pc-tasks">'+ts.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>')+
+  '<div class="pc-actions">'+(unk?btn(L('核对保存结果','Check the result'),'toast:'+L('已核对：这份计划还没有加入空间','Checked: the plan hasn’t been added yet'),'primary',{icon:I('refresh',18)}):
+   exp?btn(L('用这些内容重新创建','Recreate from this content'),'toast:'+L('已重新创建草稿','Draft recreated'),'primary'):
+   btn(L('加入「','Add to “')+sp+L('」','”'),'planConfirm','primary',{disabled:!ok})+
+   '<div class="pc-sub">'+btn(ed?L('完成修改','Done editing'):L('修改','Edit'),ed?'planEditDone':'planEdit','tonal')+btn(L('放弃','Discard'),'sheet:discardDraft','text')+'</div>')+'</div></div>');
+}
+/* Quick replies only on the latest finished AI message; tapping one sends it as the user's reply. */
+function quick(list,m,last){if(!last||!m||!m.done)return '';S.pl.quick=list;return '<div class="quick">'+list.map((q,i)=>'<button data-act="reply:'+i+'">'+q+'</button>').join('')+'</div>';}
+const PLAN_ANSWERS=()=>[L('能跑 3 公里，一三六有空','I can run 3K; Mon, Wed, Sat work'),L('刚开始跑，只有周末有空','Just starting; weekends only'),L('跳过，按常见安排','Skip, use a typical plan')];
 const REPLIES={
- plan:()=>['<p>'+L('可以。你现在能跑 3 公里，离 11 月还有 6 周，每周总量增加不超过一成比较稳：','Sure. You can run 3K now and have 6 weeks until November. Growing weekly volume by no more than 10% is safe:')+'</p>',
+ plan:m=>['<p>'+L('可以。你现在能跑 3 公里，离 11 月还有 6 周，每周总量增加不超过一成比较稳：','Sure. You can run 3K now and have 6 weeks until November. Growing weekly volume by no more than 10% is safe:')+'</p>',
   '<ul><li>'+L('<b>周一</b> 慢跑 4–5 公里，能边跑边说话的速度','<b>Mon</b> easy 4–5K, conversational pace')+'</li><li>'+L('<b>周三</b> 间歇跑：快 400 米、慢 400 米，做 6 组','<b>Wed</b> intervals: 6 × 400m fast / 400m easy')+'</li><li>'+L('<b>周六</b> 长距离，从 6 公里开始每周加 0.5 公里','<b>Sat</b> long run, start at 6K and add 0.5K weekly')+'</li></ul>',
-  '<p>'+L('我整理成了一份计划草稿。你可以先改，再决定要不要加入空间。','I turned it into a plan draft. Edit it first, then decide whether to add it to your space.')+'</p>',planCard()],
+  '<p>'+L('我整理成了一份计划草稿，可以直接在卡片里改，也可以告诉我怎么调整。','I turned it into a plan draft. Edit the card directly, or tell me what to change.')+'</p>',draftCard(m)],
+ planAsk:(m,last)=>['<p>'+L('好，我们一起定个计划。你想实现什么？','Let’s make a plan together. What do you want to achieve?')+'</p><p>'+L('说说目标、期限和现在的情况就行，不用填表。','Just tell me the goal, the deadline and where you are now. No forms.')+'</p>',quick(EXAMPLES(),m,last)],
+ planClarify:(m,last)=>['<p>'+L('好目标。再确认两件事，我好排得更合适：','Good goal. Two quick questions so the plan fits you:')+'</p><ol><li>'+L('你现在一次能跑多远？','How far can you run now?')+'</li><li>'+L('一周哪几天方便？','Which days of the week work?')+'</li></ol>',quick(PLAN_ANSWERS(),m,last)],
+ planDraft:m=>['<p>'+L('按你现在 3 公里的基础，离 11 月还有 6 周，每周总量增加不超过一成比较稳。我拆成了 1 个项目和 '+draftTasks().length+' 项任务：','From your current 3K with 6 weeks to go, growing no more than 10% a week is safe. Here’s 1 project with '+draftTasks().length+' tasks:')+'</p>',draftCard(m),
+  (S.pl&&S.pl.state==='pending'&&m&&m.ver===S.pl.ver?'<p class="msg-hint">'+L('可以直接在卡片里改，也可以告诉我怎么调整，比如“把周三换成周四”。','Edit the card directly, or tell me what to change, e.g. “move Wednesday to Thursday”.')+'</p>':'')],
+ planRevise:m=>['<p>'+L('好，已把间歇跑改到周四，其他不变。这是第 '+m.ver+' 版：','Done: intervals move to Thursday, everything else stays. Here’s version '+m.ver+':')+'</p>',draftCard(m)],
+ planDone:()=>{const t=draftTasks()[0]||'';return ['<p>'+L('已加入「'+curSpace().name+'」。今天先做第一项：<b>'+esc(t)+'</b>。跑完回来告诉我感觉如何，我再帮你调整。','Added to “'+curSpace().name+'”. Start today with <b>'+esc(t)+'</b>. Tell me how it felt and I’ll adjust.')+'</p>'];},
+ planFollow:()=>['<p>'+L('记下了。计划已经在空间里，之后在目标页也可以直接修改。','Noted. The plan is in your space, and you can edit it on the goal page any time.')+'</p>'],
  generic:()=>['<p>'+L('好的，我们用点餐场景练习。我是服务员，你是顾客，准备好了就说第一句。','Great, let’s practise ordering. I’m the waiter and you’re the customer. Say the first line when you’re ready.')+'</p>',
   '<blockquote>Waiter: Hi there! Are you ready to order, or do you need a few more minutes?</blockquote>',
   '<p>'+L('说完我会指出一处可以更自然的表达。','Afterwards I’ll point out one phrase that could sound more natural.')+'</p>']};
-function sampleThread(){return [{role:'user',text:L('我想 11 月能跑完 10 公里，帮我排一下每周的训练','I want to run 10K by November. Can you plan my weekly training?')},{role:'ai',reply:'plan',shown:4,done:true}];}
+function sampleThread(){initDraft('ai');S.pl={ver:1,state:'pending',edit:false};return [{role:'user',text:L('我想 11 月能跑完 10 公里，帮我排一下每周的训练','I want to run 10K by November. Can you plan my weekly training?')},{role:'ai',reply:'plan',ver:1,shown:99,done:true}];}
+/* "New plan" opens a fresh conversation in the existing chat view; step screens only switch the notes panel. */
+const planScr=()=>{const P=S.pl;if(S.conv!=='cPlan'||!P)return 'chat.thread';return P.state==='added'?'plan.done':!P.ver?(P.goal?'plan.clarify':'plan.start'):P.edit?'plan.edit':'plan.draft';};
+function planView(){
+ const sp=curSpace().name;
+ if(S.scenario==='unconfigured'&&S.screen==='plan.start')return {right:iconBtn('compose','newchat',L('新对话','New chat')),
+  body:'<div class="chat-empty"><h1 class="lt">'+L('新建计划','New plan')+'</h1><p class="lead">'+L('连接 AI 服务后，直接在对话里说出目标，AI 会帮你拆成任务。','Once an AI service is connected, just say your goal in chat and AI breaks it down.')+'</p></div>',
+  footer:composer()+btn(L('先自己填写','Fill it in myself for now'),'toManual','text')};
+ return {right:iconBtn('compose','newchat',L('新对话','New chat')),
+  body:'<div class="thread">'+S.chat.msgs.map(msgHTML).join('')+'</div>',
+  footer:composer()+(S.scenario==='unconfigured'?'':'<div class="composer-meta">'+(S.pl&&S.pl.state==='pending'?L('新建计划 · 只发送本对话的文字 · 确认前不会写入「'+sp+'」','New plan · only this chat’s text is sent · nothing joins “'+sp+'” until you confirm'):L('DeepSeek · 只发送本对话的文字','DeepSeek · only this chat’s text is sent'))+'</div>')};
+}
+function presetPlan(step){
+ clearInterval(S._st);S.drawer=false;S.sheet=null;S.stack=[];S.conv='cPlan';S.dtIds=[];S.f.compose='';S._toBottom=true;
+ S.pl={ver:0,state:'pending',edit:false,goal:''};const ms=[{role:'ai',reply:'planAsk',shown:99,done:true}];
+ if(step!=='start'){S.pl.goal=EXAMPLES()[0];ms.push({role:'user',text:S.pl.goal},{role:'ai',reply:'planClarify',shown:99,done:true});}
+ if(['draft','edit','done'].includes(step)){initDraft('ai');S.pl.ver=1;ms.push({role:'user',text:PLAN_ANSWERS()[0]},{role:'ai',reply:'planDraft',ver:1,shown:99,done:true});}
+ if(step==='edit')S.pl.edit=true;
+ if(step==='done'){S.pl.state='added';S.created=true;S.createdIn=S.space;ms.push({role:'ai',reply:'planDone',shown:99,done:true});}
+ S.chat={msgs:ms,streaming:false};S.pl.msgs=ms;
+}
+function pushAI(m,user){Object.assign(m,{role:'ai',shown:0,done:false});S.chat.msgs=[...S.chat.msgs,...(user?[{role:'user',text:user}]:[]),m];if(S.conv==='cPlan')S.pl.msgs=S.chat.msgs;S._toBottom=true;startStream(m);}
+function planSend(v){
+ const P=S.pl;
+ if(!P.ver&&!P.goal){P.goal=v;pushAI({reply:'planClarify'},v);}
+ else if(!P.ver){initDraft('ai');P.ver=1;pushAI({reply:'planDraft',ver:1},v);}
+ else if(P.state==='pending'){P.ver++;P.edit=false;S.dtIds.forEach(i=>{S.f['dt_'+i]=(S.f['dt_'+i]||'').replace('周三','周四').replace('Wed:','Thu:');});pushAI({reply:'planRevise',ver:P.ver},v);}
+ else pushAI({reply:'planFollow'},v);
+ S.f.compose='';S.screen=planScr();render('compose');
+}
 function msgHTML(m,i,all){
  if(m.role==='user')return '<div class="msg-user">'+esc(m.text)+'</div>';
- const blocks=REPLIES[m.reply]();const vis=blocks.slice(0,m.shown).join('');
  const last=i===all.length-1;
+ const blocks=REPLIES[m.reply](m,last);const vis=blocks.slice(0,m.shown).join('');
  return '<div class="msg-ai">'+vis+(!m.done?'<span class="cursor"></span>':'')+(m.stopped?'<div class="msg-note">'+L('已停止生成','Stopped')+'</div>':'')+'</div>'+
   (m.done?'<div class="msg-actions"><button data-act="toast:'+L('已复制','Copied')+'" aria-label="'+L('复制','Copy')+'">'+I('copy',18)+'</button>'+(last?'<button data-act="regen" aria-label="'+L('重新生成','Regenerate')+'">'+I('refresh',18)+'</button>':'')+'</div>':'');
 }
@@ -766,13 +847,13 @@ const suggestions=()=>S.space==='family'?[L('帮小满想 3 个适合科学展�
  [L('帮我把「读完《非暴力沟通》」排进这周','Fit “Nonviolent Communication” into this week'),L('用英语和我练一段点餐对话','Practise an ordering conversation in English'),L('回顾今天完成了什么','Review what I finished today')];
 function startStream(m){
  S.chat.streaming=true;clearInterval(S._st);
- const n=REPLIES[m.reply]().length;
+ const n=REPLIES[m.reply](m,false).length;
  S._st=setInterval(()=>{m.shown++;if(m.shown>=n){m.done=true;S.chat.streaming=false;clearInterval(S._st);}render();},420);
 }
 function iconBtn(icon,act,label){return '<button class="navbtn" data-act="'+act+'" aria-label="'+label+'">'+I(icon,20)+'</button>';}
-function activeNav(id){id=id||S.screen;return id.startsWith('chat.')||id==='shell.sidebar'?'chat':id.startsWith('space.')?'space':id.startsWith('whiteboard.')?'board':null;}
+function activeNav(id){id=id||S.screen;return id.startsWith('chat.')||id.startsWith('plan.')||id==='shell.sidebar'?'chat':id.startsWith('space.')?'space':id.startsWith('whiteboard.')?'board':null;}
 function sidebarHTML(){
- const sp=curSpace(),a=activeNav(S.screen.startsWith('plan.')?S.modalBase||'space.home':S.screen);
+ const sp=curSpace(),a=activeNav(S.screen);
  const nav=(key,target,icon,label)=>'<button class="sb-nav'+(a===key?' on':'')+'" data-act="nav:'+target+'">'+I(icon,20)+'<span>'+label+'</span></button>';
  return '<div class="sb"><div class="sb-top"><span class="sb-brand">'+L('思玥','Siyue')+'</span><button class="iconbtn" data-act="newchat" aria-label="'+L('新对话','New chat')+'">'+I('compose',21)+'</button></div>'+
   '<button class="sb-space" data-act="sheet:spaceSwitch">'+spaceBadge(sp)+'<span class="rmain"><div class="rtitle">'+sp.name+'</div><div class="rsub">'+sp.sub+'</div></span>'+I('chevD',16,2)+'</button>'+
@@ -800,7 +881,7 @@ function findTask(id){for(const g of Object.values(goalData())){for(const t of t
 /* ---------- plan helpers ---------- */
 const draftWhy=()=>L('你现在能跑 3 公里，距离 11 月还有 6 周。每周三次、总量每周增加不超过一成，能稳定提升又不容易受伤。','You can run 3K now with 6 weeks to go. Three runs a week and no more than 10% weekly growth builds up steadily with low injury risk.');
 function initDraft(kind){
- S.f.dTitle=kind==='manual'?(S.f.planGoal||''):L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November');
+ S.f.dTitle=kind==='manual'?'':L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November');
  S.f.dWhy=kind==='manual'?'':draftWhy();S.f.dProject=kind==='manual'?'':L('跑步训练','Running');
  const tasks=kind==='manual'?['']:[L('周一慢跑 4–5 公里','Mon: easy run 4–5K'),L('周三间歇跑 6 组','Wed: 6 interval sets'),L('周六长距离 6 公里起','Sat: long run from 6K'),L('买一双合适的跑鞋','Buy proper running shoes'),L('每次跑后拉伸 10 分钟','Stretch 10 min after each run'),L('周日记录本周配速','Sun: log this week’s pace')];
  S.dtIds=tasks.map((_,i)=>i);tasks.forEach((v,i)=>S.f['dt_'+i]=v);S.draftKind=kind;
@@ -870,7 +951,7 @@ Object.assign(SCREENS,{
   ['生成时发送键变成停止键，回复逐段出现并带光标','While generating, Send becomes Stop and text streams with a cursor'],
   ['复制常驻；重新生成只出现在最后一条回复','Copy is always there; Regenerate only on the last reply'],
   ['AI 给出计划草稿卡，加入空间必须经你确认','AI offers a plan-draft card; adding it needs your OK']],
- jump(){S.stack=[];S.drawer=false;S.conv='c1';S.chat.msgs=sampleThread();},
+ jump(){S.stack=[];S.drawer=false;S.conv='c1';S.chat={msgs:sampleThread(),streaming:false};},
  render(){const ms=S.chat.msgs.length?S.chat.msgs:(S.chat.msgs=sampleThread());
   const net=S.scenario==='network';
   return {right:iconBtn('compose','newchat',L('新对话','New chat')),
@@ -890,13 +971,13 @@ Object.assign(SCREENS,{
    body:'<button class="space-title" data-act="sheet:spaceSwitch"><h1 class="lt">'+sp.name+'</h1>'+I('chevD',20,2.4)+'</button>'+syncLine()+
     (ro?'<div class="banner info">'+I('info',20)+'<div class="bmain">'+L('你在这个空间是只读成员，可以查看，不能修改。','You’re a read-only member here: view only.')+'</div></div>':'')+
     (conflict?banner('warn',L('「录一段 1 分钟自我介绍」在另一台设备也改过','“Record a 1-minute self-introduction” changed on another device too'),L('这台：已完成 · 另一台：改到周四','Here: done · Other device: moved to Thu'),'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn tonal sm" data-act="resolve:here">'+L('保留这台的','Keep this one')+'</button><button class="btn tonal sm" data-act="resolve:other">'+L('用另一台的','Use the other')+'</button></div>'):'')+
-    (empty?'<div class="result" style="padding-top:40px"><div class="ring">'+I('target',38,2)+'</div><h1 style="font-size:22px">'+L('还没有目标','No goals yet')+'</h1><p>'+L('写下一个想实现的事，AI 可以帮你拆成任务，也可以自己填写。','Write down something you want to achieve. AI can break it down, or you can fill it in yourself.')+'</p></div>':
-     (S.space==='personal'&&!S.created&&S.scenario!=='empty'?'<button class="card" data-act="openDraft" style="width:100%;border:0;display:flex;gap:12px;align-items:center;text-align:left;font:inherit;color:var(--onFocus);background:var(--focus);cursor:pointer"><span class="tile" style="background:var(--surface)">'+I('target',18)+'</span><span class="rmain"><div class="rtitle">'+L('1 份计划草稿等你确认','1 plan draft needs your OK')+'</div><div class="rsub" style="color:var(--focusMuted)">'+L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November')+'</div></span>'+I('chevR',16,2)+'</button>':'')+
+    (empty?'<div class="result" style="padding-top:40px"><div class="ring">'+I('target',38,2)+'</div><h1 style="font-size:22px">'+L('还没有目标','No goals yet')+'</h1><p>'+L('在对话里说说你想实现什么，AI 会帮你拆成任务，确认后才加入空间。','Tell AI in chat what you want to achieve. It breaks it into tasks, and nothing is added until you confirm.')+'</p></div>':
+     (S.space==='personal'&&!S.created&&!(S.pl&&S.pl.state==='discarded')&&S.scenario!=='empty'?'<button class="card" data-act="openDraft" style="width:100%;border:0;display:flex;gap:12px;align-items:center;text-align:left;font:inherit;color:var(--onFocus);background:var(--focus);cursor:pointer"><span class="tile" style="background:var(--surface)">'+I('target',18)+'</span><span class="rmain"><div class="rtitle">'+L('1 份计划草稿等你确认','1 plan draft needs your OK')+'</div><div class="rsub" style="color:var(--focusMuted)">'+L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November')+'</div></span>'+I('chevR',16,2)+'</button>':'')+
      (today.length?'<div class="section-label">'+L('今天','Today')+'</div><div class="group">'+today.map(x=>taskRow(x[0],x[1])).join('')+'</div>':'')+
      '<div class="section-label">'+L('目标','Goals')+'</div>'+gs.map(g=>{const ts=tasksOf(g),dn=ts.filter(isDone).length,next=ts.find(t=>!isDone(t));
       return '<button class="goalcard" data-act="goal:'+g.id+'">'+ring(dn,ts.length)+'<span class="rmain"><div class="rtitle" style="font-weight:600">'+esc(g.title)+'</div><div class="rsub">'+(next?L('下一步：','Next: ')+esc(next.title):L('全部完成','All done'))+'</div></span><span class="gmeta">'+dn+'/'+ts.length+(g.target?'<em>'+g.target+'</em>':'')+'</span></button>';}).join('')),
    overlay:ro?'':'<button class="fab" data-act="newplan" aria-label="'+L('新建计划','New plan')+'">'+I('plus',28,2.2)+'</button>',
-   footer:empty?btn(L('新建计划','New plan'),'newplan','primary')+btn(L('在对话里聊聊','Talk it through in chat'),'nav:chat.home','text'):''};}},
+   footer:empty?btn(L('新建计划','New plan'),'newplan','primary'):''};}},
 'space.goal':{flow:'app',nav:'back',label:['目标详情','Goal'],notes:[
   ['一页看全：日期、进度、为什么这样安排、所有任务','One page: date, progress, rationale and every task'],
   ['任务可以直接打勾；点任务改名称和日期','Check tasks in place; tap one to edit name and date'],
@@ -923,50 +1004,46 @@ Object.assign(SCREENS,{
    '<div class="note">'+I('info',16)+'<span>'+L('离线时家庭内容最多可用 24 小时，之后需要联网确认权限。','Family content works offline for up to 24 hours, then needs a connection to confirm access.')+'</span></div>',
    footer:own?anno(L('待决：邀请方式与有效期','Pending: invite method and expiry'),btn(L('邀请成员','Invite a member'),'toast:'+L('邀请流程待设计','Invite flow to be designed'),'tonal',{icon:I('plus',18,2.2)})):''};}},
 
-'plan.new':{flow:'modal',nav:'close',closeAct:'closeModal',label:['写下目标','Describe the goal'],notes:[
-  ['一个输入框写目标；AI 拆解和自己填写用分段切换，两条路进入同一个草稿页','One box for the goal; AI or manual lead to the same draft page'],
-  ['示例一点就填入，降低开头难度','Tap an example to fill it in'],
-  ['说明发送范围：只发送这段目标文字','States exactly what is sent'],
-  ['场景“未连接 AI”：AI 选项不可用并说明原因，默认自己填写','“Not connected” disables AI with a reason and defaults to manual']],
- jump(){S.stack=[['space.home']];S.modalBase='space.home';},
- render(){const un=S.scenario==='unconfigured',mode=un?'manual':S.planMode,v=S.f.planGoal||'';
-  return {body:'<h1 class="lt">'+L('新建计划','New plan')+'</h1>'+
-   '<div class="mode" role="radiogroup"><button role="radio" aria-pressed="'+(mode==='ai')+'" data-act="planMode:ai"'+(un?' disabled':'')+'>'+L('AI 帮我拆解','Let AI break it down')+'</button><button role="radio" aria-pressed="'+(mode==='manual')+'" data-act="planMode:manual">'+L('自己填写','Fill it in myself')+'</button></div>'+
-   '<textarea class="bigtext" data-name="planGoal" aria-label="'+L('目标','Goal')+'" placeholder="'+L('你想实现什么？','What do you want to achieve?')+'">'+esc(v)+'</textarea>'+
-   '<div class="examples">'+EXAMPLES().map((e,i)=>'<button data-act="example:'+i+'">'+e+'</button>').join('')+'</div>'+
-   '<div class="note">'+I(un?'info':'lock',16)+'<span>'+(un?L('还没有连接 AI 服务，可以先自己填写。','No AI service yet; fill it in yourself for now.'):mode==='ai'?L('只发送这段目标文字。生成的是草稿，确认前不会写入空间。','Only this goal text is sent. You get a draft; nothing joins your space until you confirm.'):L('直接进入草稿，自己写任务。','Go straight to a draft and write the tasks yourself.'))+'</span></div>'+
-   '<div class="metarow" style="margin-top:4px"><button class="metachip" data-act="sheet:spaceSwitch">'+I('target',15)+L('加入：','Add to: ')+curSpace().name+I('chevD',14,2)+'</button></div>',
-   footer:btn(mode==='ai'?L('生成草稿','Create draft'):L('开始填写','Start writing'),'planGo','primary',{disabled:!v.trim()})};}},
-'plan.generating':{flow:'modal',nav:'back',label:['生成中','Generating'],notes:[['骨架屏预告草稿的样子，而不是一个转圈','A skeleton previews the draft instead of a spinner'],['随时可以停止，停止后不留下任何草稿','Stop any time; nothing is left behind']],
- jump(){S.stack=[['space.home'],['plan.new']];S.modalBase='space.home';S.f.planGoal=S.f.planGoal||EXAMPLES()[0];},
- render(){if(!S._gen){S._gen=setTimeout(()=>{S._gen=null;if(S.screen==='plan.generating'){initDraft('ai');S.screen='plan.draft';S.dir='push';S.animate=true;render();}},2000);}
-  return {body:'<h1 class="lt">'+L('正在拆解…','Breaking it down…')+'</h1><div class="quote">'+esc(S.f.planGoal||'')+'</div><div class="skel" style="width:70%;height:26px"></div><div class="skel" style="width:40%"></div><div style="height:18px"></div>'+[88,72,80,64,76].map(w=>'<div class="skel" style="width:'+w+'%"></div>').join(''),
-   footer:btn(L('停止','Stop'),'stopPlan','tonal')};}},
-'plan.draft':{flow:'modal',nav:'close',closeAct:'closeModal',label:['计划草稿','Plan draft'],notes:[
-  ['只有一页：标题、日期、为什么、项目、任务，全部可以直接改','One page; every field is editable in place'],
-  ['修改自动保存到草稿，“加入空间”按钮一直可用','Edits autosave to the draft; “Add” is always available'],
-  ['任务可以拖动排序、删除，最后一行添加','Drag to reorder, remove, or add at the end'],
-  ['场景“已过期”“结果未确认”在顶部说明，并给出唯一的下一步','“Expired” and “Unconfirmed” each get one clear next step']],
- jump(){S.stack=[['space.home']];S.modalBase='space.home';if(!S.dtIds.length)initDraft('ai');},
- render(){if(!S.dtIds.length)initDraft('ai');const exp=S.scenario==='expired',unk=S.scenario==='unknown';
-  const filled=S.dtIds.filter(i=>(S.f['dt_'+i]||'').trim()).length,ok=(S.f.dTitle||'').trim()&&filled>0;
-  return {body:(exp?banner('warn',L('草稿已过期','This draft expired'),L('内容还在。重新创建后，再确认加入空间。','Your content is kept. Recreate it, then confirm.')):unk?banner('warn',L('上次确认的结果还不确定','Last confirmation is unconfirmed'),L('先核对，避免重复加入。','Check first so nothing is added twice.')):
-    '<div class="statusline"><span class="pill on">'+I('check',12,2.6)+' '+L('草稿 · 自动保存','Draft · autosaved')+'</span><span>'+L('28 分钟内有效','Valid for 28 min')+'</span></div>')+
-   '<textarea class="titleinput" rows="'+([...(S.f.dTitle||'')].length>(S.lang==='en'?22:12)?2:1)+'" data-name="dTitle" aria-label="'+L('目标名称','Goal name')+'" placeholder="'+L('目标名称','Goal name')+'"'+(unk?' readonly':'')+'>'+esc(S.f.dTitle||'')+'</textarea>'+
-   '<div class="metarow">'+anno(L('需契约：草稿日期字段','Needs contract: draft date'),'<button class="metachip" data-act="toast:'+L('选择目标日期','Pick a target date')+'">'+I('calendar',15)+L('目标日期（可选）','Target date (optional)')+'</button>')+'<button class="metachip" data-act="sheet:spaceSwitch">'+I('target',15)+curSpace().name+'</button></div>'+
-   '<details class="why"'+(S.draftKind==='manual'?'':' open')+'><summary>'+L('为什么这样拆','Why this breakdown')+I('chevD',16,2)+'</summary><textarea data-name="dWhy" aria-label="'+L('理由','Rationale')+'" placeholder="'+L('写下你的考虑（可选）','Your reasoning (optional)')+'">'+esc(S.f.dWhy||'')+'</textarea></details>'+
+'plan.start':{flow:'app',nav:'menu',label:['说出目标','Say the goal'],notes:[
+  ['“新建计划”直接打开一段新对话，复用现有对话页，没有单独的表单','“New plan” opens a new chat in the existing chat view; no form'],
+  ['AI 先开口问你想实现什么；示例是一点就发送的快捷回复','AI asks first; examples are one-tap quick replies'],
+  ['输入框下一行写明：确认前不会写入空间','A line under the composer: nothing joins the space until you confirm'],
+  ['场景“未连接 AI”：说明原因，并给出“先自己填写”','“Not connected” explains why and offers manual entry']],
+ jump(){presetPlan('start');},render(){return planView();}},
+'plan.clarify':{flow:'app',nav:'menu',label:['补充信息','Clarify'],notes:[
+  ['AI 只追问排计划必需的一两个问题','AI asks only the one or two questions it needs'],
+  ['可以点快捷回复，也可以直接打字','Tap a quick reply or type your own'],
+  ['不想回答就选“跳过，按常见安排”','“Skip, use a typical plan” is always an option']],
+ jump(){presetPlan('clarify');},render(){return planView();}},
+'plan.draft':{flow:'app',nav:'menu',label:['确认草稿','Review draft'],notes:[
+  ['草稿作为卡片出现在 AI 回复里：目标、日期、空间、理由、项目、任务一眼看全','The draft arrives as a card in the reply, everything at a glance'],
+  ['“加入「空间」”就在卡片里，确认在对话中完成','“Add to space” sits in the card; confirming happens in chat'],
+  ['想调整就直接说：AI 给出新版本，旧卡片折叠为“已被替代”，只能确认最新版','Ask for changes: a new version appears, the old card collapses, only the latest can be confirmed'],
+  ['场景“已过期”“结果未确认”在卡片内说明，只给唯一的下一步','“Expired” and “Unconfirmed” show inside the card with one next step']],
+ jump(){presetPlan('draft');},render(){return planView();}},
+'plan.edit':{flow:'app',nav:'menu',label:['直接修改','Edit in place'],notes:[
+  ['点“修改”，卡片原地变成可编辑：标题、理由、项目、任务','“Edit” turns the card editable in place'],
+  ['任务可删除、在末行添加；修改自动保存到草稿','Remove tasks or add one at the end; edits autosave to the draft'],
+  ['“加入”按钮始终可用，确认的就是当前看到的这一版','“Add” stays available and confirms exactly what you see']],
+ jump(){presetPlan('edit');},render(){return planView();}},
+'plan.done':{flow:'app',nav:'menu',label:['已加入','Added'],notes:[
+  ['卡片变为“已加入”回执：写明加入了什么，可直接查看目标','The card becomes an “Added” receipt with View goal'],
+  ['AI 接着说今天先做哪一项','AI follows up with today’s first step'],
+  ['这段对话留在最近对话里，之后可以回来继续聊','The chat stays in Recent chats to pick up later']],
+ jump(){presetPlan('done');},render(){return planView();}},
+'plan.manual':{flow:'modal',nav:'close',closeAct:'closeModal',label:['自己填写','Fill in myself'],notes:[
+  ['只在未连接 AI 时出现，保证没有 AI 也能建计划','Only when no AI is connected, so plans still work without AI'],
+  ['一页填写：标题、日期、理由、项目、任务','One page: title, date, rationale, project, tasks'],
+  ['不发送任何内容；加入后直接打开目标','Nothing is sent; adding opens the goal']],
+ jump(){presetPlan('start');S.stack=[['plan.start']];S.modalBase='plan.start';initDraft('manual');},
+ render(){const filled=draftTasks().length,ok=(S.f.dTitle||'').trim()&&filled>0;
+  return {body:'<h1 class="lt">'+L('自己填写计划','Write your plan')+'</h1><p class="lead">'+L('没有连接 AI 时也能建计划，内容只保存在所选空间。','Plans work without AI; content is saved only in the chosen space.')+'</p>'+
+   '<textarea class="titleinput" rows="1" data-name="dTitle" aria-label="'+L('目标名称','Goal name')+'" placeholder="'+L('目标名称','Goal name')+'">'+esc(S.f.dTitle||'')+'</textarea>'+
+   '<div class="metarow">'+anno(L('需契约：草稿日期字段','Needs contract: draft date'),'<button class="metachip" data-act="toast:'+L('选择目标日期','Pick a target date')+'">'+I('calendar',15)+L('目标日期（可选）','Target date (optional)')+'</button>')+'<button class="metachip" data-act="sheet:spaceSwitch">'+I('target',15)+curSpace().name+I('chevD',14,2)+'</button></div>'+
+   '<details class="why"><summary>'+L('为什么这样安排','Why this plan')+I('chevD',16,2)+'</summary><textarea data-name="dWhy" aria-label="'+L('理由','Rationale')+'" placeholder="'+L('写下你的考虑（可选）','Your reasoning (optional)')+'">'+esc(S.f.dWhy||'')+'</textarea></details>'+
    '<div class="section-label">'+L('项目','Project')+'</div><div class="group"><div class="projrow">'+I('box',18)+'<input class="plainin" data-name="dProject" aria-label="'+L('项目名称','Project name')+'" placeholder="'+L('项目名称','Project name')+'" value="'+esc(S.f.dProject||'')+'"></div></div>'+
-   '<div class="section-label">'+L('任务 · '+filled,'Tasks · '+filled)+'</div><div class="group">'+
-    S.dtIds.map(i=>'<div class="dtask"><span class="grip" aria-hidden="true">'+I('grip',18)+'</span><input class="plainin" data-name="dt_'+i+'" aria-label="'+L('任务','Task')+'" placeholder="'+L('任务名称','Task name')+'" value="'+esc(S.f['dt_'+i]||'')+'"><button class="x" data-act="dtDel:'+i+'" aria-label="'+L('删除任务','Remove task')+'">'+I('close',16,2.2)+'</button></div>').join('')+
-    '<button class="addrow" data-act="dtAdd" style="width:100%;border:0;background:transparent;font:inherit;font-size:16px;cursor:pointer">'+I('plus',20,2.2)+L('添加任务','Add a task')+'</button></div>',
-   footer:unk?btn(L('核对保存结果','Check the result'),'toast:'+L('已核对：这份计划还没有加入空间','Checked: the plan hasn’t been added yet'),'primary',{icon:I('refresh',18)}):
-    exp?btn(L('用这些内容重新创建','Recreate from this content'),'toast:'+L('已重新创建草稿','Draft recreated'),'primary'):
-    btn(L('加入「','Add to “')+curSpace().name+L('」','”'),'planConfirm','primary',{disabled:!ok})+btn(L('放弃草稿','Discard draft'),'sheet:discardDraft','text')};}},
-'plan.done':{flow:'modal',nav:'none',label:['已加入','Added'],notes:[['结果页说清加入了什么，并给出两个去处','The result says what was added and offers two next steps']],
- jump(){S.stack=[['space.home']];S.modalBase='space.home';S.created=true;S.createdIn=S.space;},
- render(){const n=S.dtIds.filter(i=>(S.f['dt_'+i]||'').trim()).length||6;
-  return {body:'<div class="result"><div class="ring">'+I('check',40,2.2)+'</div><h1>'+L('已加入「','Added to “')+curSpace().name+L('」','”')+'</h1><p>'+L('1 个目标 · 1 个项目 · '+n+' 项任务。今天的任务已经出现在空间首页。','1 goal · 1 project · '+n+' tasks. Today’s task is already on your space home.')+'</p></div>',
-   footer:btn(L('查看目标','View goal'),'viewGoal','primary')+btn(L('完成','Done'),'closeModal','text')};}},
+   '<div class="section-label">'+L('任务 · '+filled,'Tasks · '+filled)+'</div><div class="group">'+dtaskRows()+'</div>',
+   footer:btn(L('加入「','Add to “')+curSpace().name+L('」','”'),'planManualConfirm','primary',{disabled:!ok})+btn(L('放弃','Discard'),'sheet:discardDraft','text')};}},
 
 'whiteboard.library':{flow:'app',nav:'menu',label:['白板库','Library'],notes:[
   ['白板不再只有一张：按最近编辑排列，有名称和缩略图','Many boards, sorted by last edit, with names and thumbnails'],
@@ -1041,27 +1118,30 @@ function navTo(id,stack){S.drawer=false;S.sheet=null;S.stack=stack||[];S.screen=
 function extAct(k,p1,p2,a){
  switch(k){
  case 'drawer':S.drawer=!S.drawer;render();return true;
- case 'nav':if(p1==='chat.home'&&S.chat.msgs.length)return navTo('chat.thread'),true;navTo(p1);return true;
+ case 'nav':if(p1==='chat.home'&&S.chat.msgs.length)return navTo(planScr()),true;navTo(p1);return true;
  case 'acct':navTo('account.home',[['chat.home']]);return true;
  case 'newchat':clearInterval(S._st);S.chat={msgs:[],streaming:false};S.conv=null;S.f.compose='';navTo('chat.home');return true;
- case 'conv':clearInterval(S._st);S.conv=p1;S.chat={msgs:sampleThread(),streaming:false};navTo('chat.thread');return true;
+ case 'conv':clearInterval(S._st);S.conv=p1;S._toBottom=true;if(p1==='cPlan'){S.chat={msgs:S.pl.msgs,streaming:false};navTo(planScr());return true;}S.chat={msgs:sampleThread(),streaming:false};navTo('chat.thread');return true;
  case 'suggest':S.f.compose=suggestions()[+p1];render('compose');return true;
  case 'send':{const v=(S.f.compose||'').trim();if(!v||S.chat.streaming)return true;
-  const m={role:'ai',reply:/计划|排|拆|plan|train|schedule/i.test(v)?'plan':'generic',shown:0,done:false};
-  S.chat.msgs=[...S.chat.msgs,{role:'user',text:v},m];S.f.compose='';if(S.screen!=='chat.thread'){S.screen='chat.thread';S.dir='push';S.animate=true;}
-  S.conv=S.conv||'c1';startStream(m);render('compose');return true;}
- case 'stopgen':{clearInterval(S._st);const m=S.chat.msgs[S.chat.msgs.length-1];m.done=true;m.stopped=true;S.chat.streaming=false;render();return true;}
+  if(S.conv==='cPlan'&&S.pl){planSend(v);return true;}
+  const isPlan=/计划|排|拆|plan|train|schedule/i.test(v);if(isPlan){initDraft('ai');S.pl={ver:1,state:'pending',edit:false};}
+  if(S.screen!=='chat.thread'){S.screen='chat.thread';S.dir='push';S.animate=true;}
+  S.conv=S.conv&&S.conv!=='cPlan'?S.conv:'c1';S.f.compose='';pushAI({reply:isPlan?'plan':'generic',ver:isPlan?1:undefined},v);render('compose');return true;}
+ case 'reply':if(S.chat.streaming||!S.pl||!S.pl.quick)return true;planSend(S.pl.quick[+p1]);return true;
+ case 'stopgen':{clearInterval(S._st);const m=S.chat.msgs[S.chat.msgs.length-1];m.done=true;m.stopped=true;S.chat.streaming=false;
+  if(m.reply==='planDraft'&&m.shown<2&&S.pl){S.pl.ver=0;m.ver=0;S.screen=planScr();}render();return true;}
  case 'regen':{const m=S.chat.msgs[S.chat.msgs.length-1];m.shown=0;m.done=false;m.stopped=false;startStream(m);render();return true;}
- case 'openDraft':initDraft('ai');S.modalBase=S.screen;go('plan.draft');return true;
- case 'newplan':S.f.planGoal='';S.planMode=S.scenario==='unconfigured'?'manual':'ai';S.modalBase=SCREENS[S.screen].flow==='app'?S.screen:'space.home';go('plan.new');return true;
- case 'planMode':S.planMode=p1;render();return true;
- case 'example':S.f.planGoal=EXAMPLES()[+p1];render('planGoal');return true;
- case 'planGo':if(S.planMode==='ai'&&S.scenario!=='unconfigured')go('plan.generating');else{initDraft('manual');go('plan.draft');}return true;
- case 'stopPlan':clearTimeout(S._gen);S._gen=null;back();toast(L('已停止，没有生成草稿','Stopped; no draft was created'));return true;
+ case 'openDraft':presetPlan('draft');navTo('plan.draft');return true;
+ case 'newplan':presetPlan('start');navTo('plan.start');return true;
+ case 'toManual':initDraft('manual');S.modalBase=S.screen;go('plan.manual');return true;
+ case 'planEdit':S.pl.edit=true;S.screen=planScr();render();return true;
+ case 'planEditDone':S.pl.edit=false;S.screen=planScr();toast(L('草稿已保存','Draft saved'));return true;
  case 'dtAdd':{const id=Math.max(-1,...S.dtIds)+1;S.dtIds.push(id);S.f['dt_'+id]='';render('dt_'+id);return true;}
  case 'dtDel':S.dtIds=S.dtIds.filter(i=>i!==+p1);render();return true;
- case 'planConfirm':work('planConfirm',()=>{S.created=true;S.createdIn=S.space;S.screen='plan.done';S.dir='push';S.animate=true;render();},900);return true;
- case 'planDiscard':S.sheet=null;S.dtIds=[];closeModal();toast(L('草稿已放弃','Draft discarded'));return true;
+ case 'planConfirm':work('planConfirm',()=>{S.pl.state='added';S.pl.edit=false;S.created=true;S.createdIn=S.space;pushAI({reply:'planDone'});S.screen=planScr();render();},900);return true;
+ case 'planManualConfirm':work(k,()=>{S.created=true;S.createdIn=S.space;S.goal='gNew';navTo('space.goal',[['space.home']]);toast(L('已加入「','Added to “')+curSpace().name+L('」','”'));},900);return true;
+ case 'planDiscard':S.sheet=null;if(S.screen==='plan.manual'){S.dtIds=[];closeModal();}else{S.pl.state='discarded';S.pl.edit=false;render();}toast(L('草稿已放弃','Draft discarded'));return true;
  case 'closeModal':closeModal();return true;
  case 'viewGoal':S.space=S.createdIn||S.space;S.goal='gNew';navTo('space.goal',[['space.home']]);return true;
  case 'goal':S.goal=p1;go('space.goal');return true;
@@ -1108,7 +1188,7 @@ const FEATURES=[
  {id:'shell',name:['导航','Navigation'],doc:'shell.md',principles:[['先选空间，再选功能；对话、目标、白板都跟随当前空间','Pick the space first; every feature follows it']],scenarios:[],groups:[[['侧栏','Sidebar'],['shell.sidebar']]]},
  {id:'chat',name:['对话','Chat'],doc:'chat.md',principles:[['注意力留给对话内容和输入框','Attention stays on the conversation and the composer'],['AI 只给建议和草稿，写入空间要你确认','AI suggests and drafts; you confirm every write']],scenarios:[['unconfigured',['未连接 AI','AI not connected']],['network',['网络失败','Network error']]],groups:[[['对话','Chat'],['chat.home','chat.thread']]]},
  {id:'space',name:['空间','Space'],doc:'space.md',principles:[['先看今天要做的事，再看目标','Today first, then goals'],['同步状态始终可见，冲突就地解决','Sync state is always visible; conflicts resolve in place']],scenarios:[['offline',['离线','Offline']],['pending',['待同步','Pending sync']],['conflict',['同步冲突','Sync conflict']],['readonly',['只读成员（家庭空间）','Read-only member (family)']],['empty',['空空间','Empty space']]],groups:[[['空间','Space'],['space.home','space.goal','space.members']]]},
- {id:'plan',name:['计划创建','New plan'],doc:'plan.md',principles:[['一页草稿，编辑自动保存，确认按钮始终可见','One draft page, autosaved, with the confirm button always visible']],scenarios:[['unconfigured',['未连接 AI','AI not connected']],['expired',['草稿过期','Draft expired']],['unknown',['结果未确认','Unconfirmed result']]],groups:[[['新建计划','New plan'],['plan.new','plan.generating','plan.draft','plan.done']]]},
+ {id:'plan',name:['计划创建','New plan'],doc:'plan.md',principles:[['计划在对话里完成：AI 追问、给出草稿、你在对话中确认','Plans happen in chat: AI asks, drafts, and you confirm there'],['草稿可以直接改，也可以让 AI 改；确认的永远是你看到的那一版','Edit the draft yourself or ask AI; you always confirm the version you see']],scenarios:[['unconfigured',['未连接 AI','AI not connected']],['expired',['草稿过期','Draft expired']],['unknown',['结果未确认','Unconfirmed result']]],groups:[[['在对话中创建','In chat'],['plan.start','plan.clarify','plan.draft','plan.edit','plan.done']],[['没有 AI 时','Without AI'],['plan.manual']]]},
  {id:'whiteboard',name:['白板','Whiteboard'],doc:'whiteboard.md',principles:[['画布最大化，操作浮在边缘','Maximise the canvas; controls float at the edges'],['只有自动保存，状态一直可见','Autosave only, with visible status'],['通话和录制状态所有人可见','Call and recording state is visible to everyone']],scenarios:[['saveFailed',['保存失败','Save failed']],['child',['儿童设备','Child device']]],groups:[[['白板','Boards'],['whiteboard.library','whiteboard.editor']],[['家庭通话','Family call'],['whiteboard.invite','whiteboard.call']]]},
  {id:'account',name:['账号','Account'],doc:'account.md',
   principles:[['先身份后操作：账号首页先说明“你是谁”','Identity before actions']],
@@ -1191,7 +1271,9 @@ function render(focus){
   const active=document.activeElement,fname=focus||(active&&active.dataset&&active.dataset.name),pos=active&&active.selectionStart;
   document.body.classList.toggle('page-dark',S.theme==='dark');
   document.documentElement.lang=S.lang==='en'?'en':'zh-CN';
+  const tb=document.querySelector('#app .thread'),top0=tb?tb.closest('.body').scrollTop:0;
   document.getElementById('app').innerHTML=app();
+  const ta=document.querySelector('#app .thread');if(ta){const b=ta.closest('.body');b.scrollTop=S._toBottom?b.scrollHeight:top0;if(!S.chat.streaming&&!S.busy)S._toBottom=false;}
   document.getElementById('notes').innerHTML=notes();
   document.getElementById('tweaks').innerHTML=tweaks();
   if(fname){const el=document.querySelector('[data-name="'+fname+'"]');if(el){el.focus();try{if(pos!=null)el.setSelectionRange(pos,pos);}catch(e){}}}
