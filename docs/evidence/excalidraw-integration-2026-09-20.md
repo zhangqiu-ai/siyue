@@ -116,3 +116,60 @@ xcrun simctl openurl 1E1F92B8-B29F-49E0-B137-22A997493073 'siyue:///whiteboard'
 - 三包类型检查通过：`/tmp/siyue-no-legacy-types.log`；spec:check 5/5、release:check 和 diff 检查通过。
 - C13 已记入 decisions/proposal，活动规格与任务取消旧转换要求；前文兼容和转换截图为历史证据。
 - iOS Release 更新成功（`/tmp/siyue-no-legacy-ios-build.log`），已安装到原专用 QA iPhone/iPad。iPad XCTest 1/1 通过（40.698 秒，`/tmp/siyue-no-legacy-ipad-test.log`）：残留旧记录时无转换入口、书写保存、终止冷启及实际横屏。当前截图：[去掉转换栏的 iPad](../../artifacts/excalidraw-native/ipad-without-legacy.png)。Android 源码已同步，本轮未重打 Android APK；本轮未提交或推送。
+
+
+## 2026-09-24 原生选图/拍题复测（当前工作树）
+
+7.2 的原生部分在当前脏工作树的 Release 构建上重跑。构建命令：
+
+```sh
+node scripts/prepare-whiteboard-assets.mjs
+corepack pnpm build:packages
+EXPO_NO_BUNDLE_SPLITTING=1 xcodebuild -workspace apps/mobile/ios/Siyue.xcworkspace -scheme Siyue -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,id=1E1F92B8-B29F-49E0-B137-22A997493073' -derivedDataPath /tmp/siyue-wb-photo-ios ONLY_ACTIVE_ARCH=YES CODE_SIGNING_ALLOWED=NO
+```
+
+该包是 arm64 模拟器 Release 内嵌资源包，JS 打包时间晚于并行主线同日对 `apps/mobile/src/whiteboard/native-service.ts` 的相机原件失败清理，因此该修复已在被测包内；本轮未改任何产品代码。
+
+```sh
+SIYUE_QA_IPHONE=9285E00A-C506-45B6-A73E-EF94BFCE5469 SIYUE_QA_IPAD=1E1F92B8-B29F-49E0-B137-22A997493073 SIYUE_IOS_APP=/tmp/siyue-wb-photo-ios/Build/Products/Release-iphonesimulator/Siyue.app SIYUE_QA_OUTPUT=artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified node apps/mobile/e2e/excalidraw/ios-photo-picker.mjs
+```
+
+结果：两台设备各 5 项 XCTest 通过，脚本逐设备核对存档后 `passed=true`（[result.json](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/result.json)）。
+
+| 用例 | iPhone（iOS 26.5） | iPad（iOS 26.5） | 存档核对 |
+|---|---|---|---|
+| testSaveBoardRevisionForBaseline | 1/1 | 1/1 | 保存当前白板得到基线修订 iPhone 50 / iPad 97；两轮都是已有作品，不是空白安装 |
+| testLibraryPickerCancelKeepsBoardUsable | 1/1 | 1/1 | 连续取消两次系统选图后图片元素数与基线相同、自由笔迹 +1（画布仍可书写）并回到“已保存到本机” |
+| testLibraryPickerImportPersistsEditableImage | 1/1 | 1/1 | 新增恰好 1 个 image 元素，`dataURL` 为完整 `data:image/jpeg;base64,`（约 62k 字符）；导入后继续书写保存，终止冷启仍“已保存到本机” |
+| testMoveImportedImage | 1/1 | 1/1 | 同一 image 元素坐标变化（iPhone 722.5,-546.3 → 943.3,-779.6；iPad -144.1,81.5 → 108.2,-95.2），图片数量不变，说明拖动的是已导入对象而非再次导入 |
+| testCameraEntryOpensAndDismisses | 1/1 | 1/1 | 图片元素数与拖动后相同（未新增或重复导入）；`opened=true dismiss=true prompt=false` |
+
+轮次记录：取消 52/99 → 导入 55/103 → 拖动 56/104 修订（iPhone/iPad），相机步骤不写修订（56/104 不变）。
+
+两台 QA 白板是历史累积作品（本轮 iPhone 活动页 8 个图片元素、iPad 5 个），全部断言按相对变化比较，不做绝对值假设。
+
+截图（本轮 xcresult 附件）：[iPhone 导入合成题图](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/screenshots/iphone-import/049CBC57-9D83-4BDA-99FD-731C094F18DA.png)、[iPad 导入合成题图](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/screenshots/ipad-import/3BCDABA2-F121-4C16-85D8-D1B3E2356866.png)、[iPhone 系统拍摄界面](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/screenshots/iphone-camera/3C34209A-514D-486B-A00F-9CBDB844781D.png)。
+
+相机原件失败清理的单元测试本轮复跑为 2/2（`node --experimental-strip-types --test tests/native-whiteboard-camera.test.mjs`，见并行主线的 `apps/mobile/tests/native-whiteboard-camera.test.mjs`）；它只证明复制失败时清理新私有原件，不证明相机实拍或导入。
+
+未覆盖与发现：
+
+- 模拟器没有摄像头硬件，`simctl privacy` 也没有 camera 服务，不能预置授权。本轮相机用例只证明“拍题”能打开系统拍摄界面、可关闭并回到可用宿主，`prompt=false` 说明两台 QA 的相机权限已确定，**首次授权提示与真实拍照、EXIF 方向、极端大图、拒绝后重试都未验证**。
+- 首次授权提示分支曾 **2/2 复现产品缺口**：在 `simctl privacy <QA udid> reset all app.siyue.mobile` 后点“Allow”，拍摄界面能打开也能关闭，但宿主随后停在“无法打开当前空间，已保存的内容仍保留。”且“选图”长期 disabled（[gap-1](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/camera-permission-prompt-gap-1.log)、[gap-2](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/camera-permission-prompt-gap-2.log)、[截图](../../artifacts/excalidraw-native/photo-picker-2026-09-24-final-verified/camera-permission-prompt-gap-workspace-retry.png)）。下节记录同日修复与复测；原始失败证据保留。7.2 因真机实拍等缺口仍不勾选。
+
+### 首次相机授权后的本地空间恢复修复
+
+首次权限弹窗会使应用经历前后台状态变化。代码路径显示：认证在前台恢复时若重试 bootstrap，generation 变化会使旧空间协调器重建未变化的本地空间；此时关闭仍在处理图片的编辑器可能因保存握手失败而将空间标记为 unavailable。QA 容器未见认证 vault 状态库，支持认证曾在读取阶段失败这一推断；本轮没有应用侧认证状态日志，故不确认当时的具体 fault 状态。当前工作树的 `packages/adapters/src/account-workspace.ts` 已收窄重建条件：已就绪的本地空间在没有可用账号主体、也没有受阻账号时继续使用原资源；冷启动、成人账号空间切换和受阻账号仍按原规则处理。
+
+适配器回归 `packages/adapters/src/account-workspace.test.ts` 覆盖故障认证重试期间 `close()` 会失败的场景，验证本地资源与 revision 不变、`canCreate` 更新，随后成人账号绑定仍可切换；定向 4/4、适配器包 172/172、适配器和 mobile 类型检查通过。`corepack pnpm build:packages` 5/5 后，按上节 Release 构建命令重建 iOS 包，内嵌 `main.jsbundle` 时间为 2026-09-24 18:15 本地时间，构建日志 `/tmp/siyue-wb-photo-ios-rebuild-2026-09-24.log` 以 `BUILD SUCCEEDED` 结束。
+
+仅在两台专用 QA 模拟器上安装这个新包并重置该应用权限，再用原有 `ExcalidrawPhotoPickUITests/testCameraEntryOpensAndDismisses` 单项重跑。结果：[iPhone 日志](../../artifacts/excalidraw-native/camera-permission-retest-2026-09-24/iphone.log)与 [iPad 日志](../../artifacts/excalidraw-native/camera-permission-retest-2026-09-24/ipad.log)均记录 `CAMERA_ENTRY_OPENED=true PROMPT=true DISMISS=true`、1/1 XCTest 通过；关闭系统拍摄界面后“选图”恢复可用且白板显示已保存，没有出现空间不可用页。各自的 `iphone.xcresult`、`ipad.xcresult` 保存在同一证据目录。该结果只覆盖模拟器系统相机入口与授权后的宿主恢复，不代表真实摄像头拍摄、拒绝授权后重试或通话中摄像头争用已通过。
+- 过程修正如实记录：同一次输出目录重跑曾覆盖上一轮 `result.json`，且失败时仍写 `passed=true`；脚本已改为失败写 `passed=false`、已有输出目录自动改用新目录。被覆盖的 `photo-picker-2026-09-24-verified/result.json` 已订正为 `passed=false`，其 XCTest 日志与快照仅作历史，本次结论只取 `...-final-verified`。
+
+## 2026-09-24 拍题中断清理
+
+合成 Expo 模块复现：没有外部 `lifetimeSignal` 的白板服务在光栅化期间 `dispose()`，协议最终返回 `stale_session`，但刚复制到私有目录的相机原件仍遗留。原生适配器现在拥有自己的取消状态，`dispose()` 同时关闭协议服务；图片处理在每次异步返回后直接核对服务信号与可选的账号空间信号，失效时进入原有清理分支。外部信号不注册事件监听，正常成功的拍摄仍保留一份原件。
+
+仓库回归 `apps/mobile/tests/native-whiteboard-camera.test.mjs` 扩展为 **24/24**：覆盖权限拒绝、相机／相册取消、32 MiB 原图与 8000 万像素边界、输出大小、横竖缩放、返回尺寸、处理中退出、系统选择器未返回时退出、外部失效、重复关闭及成功保存。主代理执行 `node --experimental-strip-types --test tests/native-whiteboard-camera.test.mjs`、工作区相关 `native-workspace.test.mjs` 与 `workspace-editors.test.mjs` **4/4**、`corepack pnpm --filter @siyue/mobile typecheck` 均通过。上述命令在 `apps/mobile` 执行测试，类型检查在仓库根执行。
+
+这是原生适配器的合成模块与生命周期验证；浏览器 Playwright 无法调用 Expo 原生相机和私有文件系统。本次没有重建安装原生应用，也没有真实相机、HEIC／EXIF 方向或真机大图结果，7.2 继续未完成。

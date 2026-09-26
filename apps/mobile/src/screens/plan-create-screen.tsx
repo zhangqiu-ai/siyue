@@ -1,83 +1,102 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Keyboard, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useNavigation, usePreventRemove } from 'expo-router/react-navigation';
 import * as Crypto from 'expo-crypto';
 import type { GoalDraft } from '@siyue/contracts';
 import type { LocalRequest } from '@siyue/adapters';
 import { getClient } from '../client';
-import { useLocale, type MessageKey } from '../i18n';
-import { AppIcon } from '../ui/icon';
+import { useLocale } from '../i18n';
 import { useTheme } from '../ui/theme';
+import { Button, Screen } from '../ui';
+import { useWorkspaceRef, useWorkspaceValue } from '../account/workspace-scratch';
+import { useCurrentSpace, useSpaceSwitcher } from '../shell/space-switcher';
+import { useAISettings } from '../settings/ai-settings';
+import { ModeSwitch, ExampleChips, Quote, Skeleton } from '../space/components/plan-blocks';
 import { usePlanGeneration } from '../space/use-plan-generation';
+import { useSpaceText } from '../space/use-space-text';
 import { planErrorKey } from '../space/plan-error';
 
 export default function PlanCreateScreen() {
-  const {t} = useLocale(), theme = useTheme(), router = useRouter(), navigation = useNavigation();
-  const generate = usePlanGeneration();
-  const [mode, setMode] = useState<'ai' | 'manual'>('ai');
-  const [goal, setGoal] = useState(''), [project, setProject] = useState('');
-  const [busy, setBusy] = useState(false), [unknown, setUnknown] = useState(false);
-  const [error, setError] = useState<MessageKey | null>(null), [created, setCreated] = useState<string | null>(null);
-  const controller = useRef<AbortController | null>(null), locked = useRef(false), mounted = useRef(true);
-  const manual = useRef<{payload: GoalDraft; request: LocalRequest} | null>(null);
-  useEffect(() => { mounted.current = true; return () => {mounted.current = false; controller.current?.abort();}; }, []);
-  usePreventRemove(!created && (busy || !!goal || !!project), ({data}) => {
+  const router = useRouter(), navigation = useNavigation(), theme = useTheme(), t = useSpaceText();
+  const { t: shared } = useLocale();
+  const space = useCurrentSpace(), switcher = useSpaceSwitcher(), ai = useAISettings(), generate = usePlanGeneration();
+  const [mode, setMode] = useWorkspaceValue<'ai' | 'manual'>('create.mode', 'ai');
+  const [goal, setGoal] = useWorkspaceValue('create.goal', '');
+  const [busy, setBusy] = useState(false), [stopped, setStopped] = useState(false), [permitExit, setPermitExit] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [unknown, setUnknown] = useWorkspaceValue('create.unknown', false);
+  const manual = useWorkspaceRef<{ payload: GoalDraft; request: LocalRequest } | null>('create.manual', null);
+  const active = useRef(true), lock = useRef(false), controller = useRef<AbortController | null>(null);
+  const canAI = ai.ready && ai.hasKey && !ai.storageError;
+  const selectedMode = canAI ? mode : 'manual';
+  useEffect(() => { active.current = true; return () => { active.current = false; controller.current?.abort(); }; }, []);
+  usePreventRemove((busy || !!goal) && !permitExit, ({ data }) => {
     if (busy) return;
-    Alert.alert(t('ai.discardTitle'), t(unknown ? 'plan.manualUnknown' : 'plan.leave'), [
-      {text: t('ai.keepEditing'), style: 'cancel'},
-      {text: t('ai.discard'), style: 'destructive', onPress: () => navigation.dispatch(data.action)},
+    Alert.alert(shared('ai.discardTitle'), shared('plan.leave'), [
+      { text: shared('ai.keepEditing'), style: 'cancel' },
+      { text: shared('ai.keepAndReturn'), onPress: () => navigation.dispatch(data.action) },
+      { text: shared('ai.discard'), style: 'destructive', onPress: () => { setPermitExit(true); setGoal(''); manual.current = null; setUnknown(false); setTimeout(() => navigation.dispatch(data.action), 0); } },
     ]);
   });
-  useEffect(() => { if (created && !busy) router.replace({pathname: '/plan-draft', params: {id: created}}); }, [created, busy, router]);
   const submit = async () => {
-    if (locked.current || !goal.trim() || mode === 'manual' && !project.trim()) return;
-    locked.current = true; setBusy(true); setError(null); Keyboard.dismiss();
+    const title = goal.trim();
+    if (lock.current || !title || title.length > 160) { setError(t('plan.invalidGoal')); return; }
+    lock.current = true; setBusy(true); setStopped(false); setError(null);
     const abort = new AbortController(); controller.current = abort;
     try {
-      const draft = mode === 'ai' ? await generate(goal, abort.signal) : await (async () => {
-        manual.current ??= {payload: {title: goal.trim(), projectTitles: [project.trim()], taskTitles: []}, request: {commandId: Crypto.randomUUID(), issuedAt: new Date().toISOString()}};
+      const draft = selectedMode === 'ai' ? await generate(title, abort.signal) : await (async () => {
+        // Keep the command identity stable across a network/receipt-unknown retry.
+        manual.current ??= { payload: { title, projectTitles: [title], taskTitles: [] }, request: { commandId: Crypto.randomUUID(), issuedAt: new Date().toISOString() } };
         return (await getClient()).createManualDraft(manual.current.payload, manual.current.request);
       })();
-      if (mounted.current) {setCreated(draft.id); setUnknown(false);}
-    } catch (failure) {
-      if (mounted.current) {
-        if (mode === 'ai') setError(planErrorKey(failure));
-        else {
-          const code = failure && typeof failure === 'object' && 'code' in failure ? failure.code : undefined;
-          const definite = ['invalid_input', 'approval_expired', 'command_conflict', 'forbidden'].includes(String(code));
-          if (definite) manual.current = null;
-          setUnknown(!definite); setError(definite ? 'draft.error' : 'plan.manualUnknown');
-        }
+      if (active.current && !abort.signal.aborted) {
+        setPermitExit(true); manual.current = null; setUnknown(false); setGoal('');
+        setTimeout(() => router.replace({ pathname: '/plan/draft', params: { id: draft.id } }), 0);
       }
-    } finally { locked.current = false; controller.current = null; if (mounted.current) setBusy(false); }
+    } catch (failure) {
+      if (active.current) {
+        const code = failure && typeof failure === 'object' && 'code' in failure ? String(failure.code) : '';
+        if (abort.signal.aborted || code === 'cancelled') { setStopped(true); setError(t('plan.stopped')); }
+        else if (selectedMode === 'ai') setError(shared(planErrorKey(failure)));
+        else { const definite = ['invalid_input', 'approval_expired', 'command_conflict', 'forbidden'].includes(code); if (definite) manual.current = null; setUnknown(!definite); setError(shared(definite ? 'draft.error' : 'plan.manualUnknown')); }
+      }
+    } finally { lock.current = false; controller.current = null; if (active.current) setBusy(false); }
   };
-  const button = (label: string, action: () => void, disabled = false, primary = false) => <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={action}
-    style={({pressed}) => [styles.button, {backgroundColor: primary ? theme.color.accent : pressed ? theme.color.subtle : 'transparent', opacity: disabled ? 0.4 : 1}]}><Text style={[styles.buttonText, {color: primary ? theme.color.onAccent : theme.color.accent}]}>{label}</Text></Pressable>;
-  return <SafeAreaView style={{flex: 1, backgroundColor: theme.color.background}}>
-    <View style={styles.nav}><Pressable accessibilityRole="button" accessibilityLabel={t('common.back')} disabled={busy} style={styles.back} onPress={() => router.back()}><AppIcon name="back" /></Pressable></View>
-    <ScrollView automaticallyAdjustKeyboardInsets keyboardDismissMode="interactive" keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
-      <Text accessibilityRole="header" style={[styles.heading, {color: theme.color.ink}]}>{t('plan.create')}</Text>
-      <View style={[styles.modes, {backgroundColor: theme.color.subtle}]}>{(['ai', 'manual'] as const).map(value => <Pressable key={value} accessibilityRole="button" accessibilityState={{selected: mode === value, disabled: busy || unknown}} disabled={busy || unknown} onPress={() => {setMode(value); setError(null);}}
-        style={[styles.mode, {backgroundColor: mode === value ? theme.color.surface : 'transparent'}]}><Text style={[styles.buttonText, {color: theme.color.ink}]}>{t(value === 'ai' ? 'plan.ai' : 'plan.manual')}</Text></Pressable>)}</View>
-      <View style={[styles.card, {backgroundColor: theme.color.surface}]}>
-        <Text style={[styles.body, {color: theme.color.muted}]}>{t('plan.prompt')}</Text>
-        <TextInput accessibilityLabel={t('draft.goal')} multiline maxLength={160} value={goal} onChangeText={setGoal} editable={!busy && !unknown} selectionColor={theme.color.accent} style={[styles.input, {color: theme.color.ink, borderColor: theme.color.controlBorder}]} />
-        {mode === 'manual' && <><Text style={[styles.body, {color: theme.color.muted}]}>{t('draft.project')}</Text><TextInput accessibilityLabel={t('draft.project')} multiline maxLength={160} value={project} onChangeText={setProject} editable={!busy && !unknown} selectionColor={theme.color.accent} style={[styles.input, {color: theme.color.ink, borderColor: theme.color.controlBorder}]} /></>}
-      </View>
-      <Text style={[styles.body, {color: theme.color.muted}]}>{t(mode === 'ai' ? 'plan.disclosure' : 'plan.manualNote')}</Text>
-      {error && <Text accessibilityRole="alert" style={[styles.body, {color: error === 'plan.cancelled' || error === 'plan.manualUnknown' || error === 'plan.configRequired' ? theme.color.ink : theme.color.error}]}>{t(error)}</Text>}
-      {busy && <View style={{gap: 12}}><ActivityIndicator color={theme.color.accent} /><Text accessibilityLiveRegion="polite" style={[styles.body, {color: theme.color.muted}]}>{t(mode === 'ai' ? 'plan.generating' : 'space.loading')}</Text></View>}
-      {busy && mode === 'ai' ? button(t('plan.stop'), () => controller.current?.abort()) : button(t(unknown ? 'plan.retryManual' : mode === 'ai' ? 'plan.generate' : 'plan.manualDraft'), () => void submit(), busy || !goal.trim() || mode === 'manual' && !project.trim(), true)}
-      {mode === 'ai' && button(t('settings.aiService'), () => router.push('/ai-provider'), busy)}
-    </ScrollView>
-  </SafeAreaView>;
+  return <Screen maxWidth={560} testID="plan-create" footer={!busy && <Button label={t(selectedMode === 'ai' ? 'plan.submitAi' : 'plan.submitManual')} disabled={!goal.trim() || unknown} onPress={() => void submit()} />}>
+    <Pressable accessibilityRole="button" accessibilityLabel={shared('common.back')} onPress={() => router.back()} style={styles.close}><Text style={{ color: theme.color.ink, fontSize: 24 }}>×</Text></Pressable>
+    {busy && selectedMode === 'ai' ? <>
+      <Text accessibilityRole="header" style={[styles.heading, { color: theme.color.ink }]}>{t('generating.title')}</Text>
+      <Quote>{goal}</Quote>
+      <Skeleton width="70%" height={26} /><Skeleton width="40%" />
+      <View style={styles.skeletonTasks}>{[88, 72, 80, 64, 76].map(width => <Skeleton key={width} width={`${width}%`} />)}</View>
+      <Button label={t('generating.stop')} variant="tonal" onPress={() => controller.current?.abort()} />
+    </> : <>
+      <Text accessibilityRole="header" style={[styles.heading, { color: theme.color.ink }]}>{t('plan.title')}</Text>
+      <ModeSwitch value={selectedMode} groupLabel={t('plan.modeGroup')} disabled={busy || unknown} onChange={setMode} options={[
+        { value: 'ai', label: t('plan.modeAi'), disabled: !canAI },
+        { value: 'manual', label: t('plan.modeManual') },
+      ]} />
+      {!canAI && <Text style={[styles.note, { color: theme.color.muted }]}>{t('plan.noteUnconfigured')}</Text>}
+      <TextInput accessibilityLabel={t('plan.goalLabel')} placeholder={t('plan.goalPlaceholder')}
+        placeholderTextColor={theme.color.muted} multiline maxLength={160} value={goal} onChangeText={text => { setGoal(text); setError(null); manual.current = null; setUnknown(false); }}
+        editable={!busy && !unknown} style={[styles.input, { color: theme.color.ink, borderColor: theme.color.border, backgroundColor: theme.color.surface }]} />
+      <Text style={[styles.note, { color: theme.color.muted }]}>{t('plan.examples')}</Text>
+      <ExampleChips examples={[t('plan.example1'), t('plan.example2'), t('plan.example3')]} onPick={text => { setGoal(text); setError(null); manual.current = null; setUnknown(false); }} />
+      <Text style={[styles.note, { color: theme.color.muted }]}>{t(selectedMode === 'ai' ? 'plan.noteAi' : 'plan.noteManual')}</Text>
+      <Pressable accessibilityRole="button" onPress={() => switcher.open()} style={styles.spaceChoice}><Text style={{ color: theme.color.accent }}>{t('plan.spaceChip', { space: space.name })} ⌄</Text></Pressable>
+      {error && <Text accessibilityRole="alert" style={[styles.note, { color: stopped ? theme.color.muted : theme.color.error }]}>{error}</Text>}
+      {unknown && <Button label={shared('plan.retryManual')} variant="tonal" onPress={() => void submit()} />}
+      {!canAI && <Button label={t('plan.connect')} variant="text" onPress={() => router.push('/ai-provider')} />}
+    </>}
+  </Screen>;
 }
+
 const styles = StyleSheet.create({
-  nav: {paddingHorizontal: 8, alignItems: 'flex-start'}, back: {width: 48, height: 48, alignItems: 'center', justifyContent: 'center'},
-  content: {width: '100%', maxWidth: 680, alignSelf: 'center', padding: 24, gap: 20, paddingBottom: 40}, heading: {fontSize: 28, fontWeight: '600'},
-  modes: {flexDirection: 'row', flexWrap: 'wrap', padding: 4, borderRadius: 20}, mode: {flexGrow: 1, padding: 14, borderRadius: 16},
-  card: {padding: 20, borderRadius: 24, gap: 12}, input: {minHeight: 70, fontSize: 18, paddingVertical: 12, paddingHorizontal: 16, borderWidth: 1, borderRadius: 12},
-  body: {fontSize: 15, lineHeight: 24}, button: {minHeight: 52, padding: 14, borderRadius: 28, alignItems: 'center', justifyContent: 'center'}, buttonText: {fontSize: 17, fontWeight: '600', textAlign: 'center'},
+  close: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  heading: { fontSize: 30, lineHeight: 38, fontWeight: '600', marginBottom: 22 },
+  input: { minHeight: 142, borderWidth: 1, borderRadius: 18, padding: 16, fontSize: 20, lineHeight: 28, textAlignVertical: 'top' },
+  note: { fontSize: 14, lineHeight: 21, marginTop: 20 },
+  spaceChoice: { alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center', paddingHorizontal: 12, marginTop: 18, borderRadius: 99 },
+  skeletonTasks: { paddingTop: 16, paddingBottom: 30 },
 });

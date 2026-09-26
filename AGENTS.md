@@ -23,7 +23,7 @@
 | 新功能、行为、数据、权限、AI 外发、契约或跨端交互变化 | [OpenSpec 流程](openspec/README.md)、相关现行规格与活动变更 |
 | 实现、依赖、跨包边界或验证 | [按需工程规则](docs/development-guide.md)中适用章节；跨包再读 [ARCHITECTURE.md](ARCHITECTURE.md) |
 | 安装、运行或构建环境问题 | 根及相关包 package.json、[BOOTSTRAP.md](docs/BOOTSTRAP.md)相关入口与证据 |
-| UI 设计、实施或审查 | [DESIGN.md](DESIGN.md)、[S/M/L 验收及适用矩阵](docs/design/ui-acceptance.md)；设计工具选择仅依 DESIGN |
+| UI 设计、实施或审查 | [DESIGN.md](DESIGN.md)、[统一原型](docs/design/prototype/README.md)、[S/M/L 验收及适用矩阵](docs/design/ui-acceptance.md) |
 | 领域对象、命令、关联、金额或时间语义 | [领域模型](docs/domain-model.md)、工程规则第 6–7 节 |
 | AI、审批、记忆、语音、执行状态 | [AI 底座](docs/ai-foundation.md)、工程规则第 7–8 节 |
 | 存储、同步、冲突、账号切换 | [数据同步](docs/data-sync.md)、工程规则第 7–8 节 |
@@ -40,6 +40,7 @@
 - 产品 AI 未经有效批准只能提出或保存草稿；审批绑定身份、空间、动作、参数、版本与有效期，拒绝/过期/撤权不执行。命令幂等，正式数据、事件与回执原子提交，未知结果先对账。完整要求见工程规则第 7 节。
 - 账号/空间及不同数据用途隔离；不默认整库外发。平台密钥不进入客户端，个人密钥不进入 Git、日志或快照。外部输入在边界校验，Electron 保持隔离、沙箱及受限 IPC。数据与恢复原件受保护，完整要求见工程规则第 8 节。
 - 双语资源、手动编辑、拒绝、取消及适用失败恢复路径属于交付；模拟器、原型或构建不替代真实平台验收。
+- 新功能或新流程的界面先在唯一原型文件 [siyue-prototype.html](docs/design/prototype/siyue-prototype.html) 中设计，维护者确认后再写正式代码；不另建分散原型，不使用 Figma。已有方向内的 S 级小改可直接实施。
 
 ## 4. 自主执行与停止边界
 
@@ -64,5 +65,4 @@
 
 ## 6. 工具专用规则
 
-- 调用 Figma 前加载适用技能及用户账号级限流策略，遵守共享锁、账本和冷却；不把项目账本当新额度，不并行调用或绕过限额。普通任务无需读取 Figma 运行记录。
 - 安装用户请求的 Codex skill 时，以 /Users/feature/GitHub/skills 为源目录，在 /Users/feature/.codex/skills 创建逐技能符号链接并跳过已有目标；不替换整个目录。其他任务不加载安装流程。

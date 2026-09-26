@@ -9,7 +9,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.siyue.mobile"
+      "bundleIdentifier": "app.siyue.mobile",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      }
     },
     "android": {
       "package": "app.siyue.mobile"
@@ -26,7 +30,16 @@
           "microphonePermission": false
         }
       ],
-      "./plugins/with-whiteboard-inputs.cjs"
+      "./plugins/with-whiteboard-inputs.cjs",
+      "expo-apple-authentication",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "buildReactNativeFromSource": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

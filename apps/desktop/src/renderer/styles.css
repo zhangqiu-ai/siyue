@@ -82,6 +82,29 @@ input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
 .settings-trigger { flex-shrink: 0; margin-left: auto; }
 .settings-dialog { width: min(440px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow: auto; border: 1px solid var(--control-border); border-radius: 24px; padding: 24px; color: var(--ink); background: var(--surface); }
 .settings-dialog::backdrop { background: var(--backdrop); }
+.account-entry { margin-top:24px; width:100%; text-align:left; }
+.account-form form { margin-top:24px; }
+.account-form button { cursor:default; }
+.account-form form > button { width:100%; margin-top:16px; }
+.account-form .actions > button { flex:1 1 auto; }
+.account-form .device-sessions { margin-top:24px; display:grid; gap:12px; }
+.account-form .device-sessions h3,.account-form .device-sessions .hint { margin:0; }
+.account-form .device-list { list-style:none; padding:0; margin:0; display:grid; gap:8px; }
+.account-form .device-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding:12px; border:1px solid var(--control-border); border-radius:12px; }
+.account-form .device-row div { display:grid; gap:4px; min-width:0; }
+.account-form .device-row span { color:var(--muted); font-size:13px; }
+.account-form .consent { display:flex; align-items:flex-start; gap:8px; margin-top:16px; }
+.account-form .consent input { flex:0 0 auto; width:20px; height:20px; min-width:0; margin:2px 0 0; padding:0; }
+.account-form .consent label { display:inline; margin:0; font-size:14px; font-weight:400; }
+.account-form a { color:var(--accent); text-underline-offset:2px; }
+@media (prefers-color-scheme: dark) {
+  .settings-dialog {
+    color-scheme:dark;
+    --background:#151C17; --surface:#202A23; --ink:#F0F3E9; --muted:#B3C0B2;
+    --accent:#B7CDB8; --accent-pressed:#A3BDA6; --on-accent:#203326;
+    --subtle:#2D3930; --border:#435346; --control-border:#839887; --selected-border:#B7CDB8; --error:#F1A99D;
+  }
+}
 .settings-dialog fieldset { margin: 24px 0 0; padding: 0; border: 0; min-width: 0; }
 .settings-dialog legend { margin-bottom: 12px; font-weight: 600; }
 .language-options { display: flex; flex-wrap: wrap; gap: 8px; }

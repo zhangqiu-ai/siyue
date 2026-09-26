@@ -1,0 +1,22 @@
+// Explicit isolated QA build; normal Gradle invocations do not load this file.
+gradle.beforeProject { project ->
+    if (project.path == ':app') {
+        project.afterEvaluate {
+            def android = project.extensions.getByName('android')
+            if (android.defaultConfig.applicationId != 'app.siyue.mobile') throw new GradleException('Unexpected application; refuse QA override')
+            android.defaultConfig.applicationId = 'app.siyue.mobile.accountqa'
+            android.defaultConfig.versionNameSuffix = '-account-qa'
+            android.sourceSets.release.manifest.srcFile(new File(project.rootDir, '../e2e/account-auth/AndroidManifest.xml'))
+            android.sourceSets.release.res.srcDir(new File(project.rootDir, '../e2e/account-auth/android-res'))
+            project.tasks.matching { it.name == 'createBundleReleaseJsAndAssets' }.configureEach { task ->
+                ['adapters', 'contracts', 'domain', 'ai', 'whiteboard'].each { name ->
+                    ['src', 'dist'].each { kind ->
+                        def input = new File(project.rootDir, '../../../packages/' + name + '/' + kind)
+                        if (input.exists()) task.inputs.dir(input).withPropertyName('siyue_' + name + '_' + kind)
+                    }
+                }
+            }
+            project.extensions.getByName('react').entryFile = new File(project.rootDir, '../e2e/account-auth/entry.tsx')
+        }
+    }
+}

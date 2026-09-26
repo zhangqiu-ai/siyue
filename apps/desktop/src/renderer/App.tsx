@@ -1,3 +1,4 @@
+import {workspaceKey} from './workspace';
 import { useLocale, type MessageKey } from './i18n';
 import { Whiteboard } from './Whiteboard';
 import { Settings } from './Settings';
@@ -37,7 +38,11 @@ function describeError(error: unknown) {
   if (error instanceof Error && error.name === 'AbortError') return 'errorCancelled';
   return messages[code] ?? 'errorUnknown';
 }
-function usePlan() {
+type EditorScratch={goal:string;draft:ActionDraft|null;editing:boolean;value:GoalDraft;projects:string;tasks:string;manualUnknown:boolean;request:{payload:GoalDraft;request:LocalRequest}|null};
+const editorScratch=new Map<string,EditorScratch>();
+function usePlan(workspaceRevision:number) {
+  const [scopeKey]=useState(()=>workspaceKey());
+  const saved=editorScratch.get(scopeKey);
   const client = useRef<LocalClient | null>(null);
   const lock = useRef(false);
   const controller = useRef<AbortController | null>(null);
@@ -46,14 +51,17 @@ function usePlan() {
   const [error, setError] = useState<MessageKey | ''>('');
   const [notice, setNotice] = useState<MessageKey | ''>('');
   const [savedCount, setSavedCount] = useState(0);
-  const [goal, setGoal] = useState('');
-  const [draft, setDraft] = useState<ActionDraft | null>(null);
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState<GoalDraft>(blank);
-  const [projects, setProjects] = useState('');
-  const [tasks, setTasks] = useState('');
-  const manualRequest = useRef<{ payload: GoalDraft; request: LocalRequest } | null>(null);
-  const [manualUnknown, setManualUnknown] = useState(false);
+  const [goal, setGoal] = useState(saved?.goal??'');
+  const [draft, setDraft] = useState<ActionDraft | null>(saved?.draft??null);
+  const [editing, setEditing] = useState(saved?.editing??false);
+  const [value, setValue] = useState<GoalDraft>(saved?.value??blank);
+  const [projects, setProjects] = useState(saved?.projects??'');
+  const [tasks, setTasks] = useState(saved?.tasks??'');
+  const manualRequest = useRef<{ payload: GoalDraft; request: LocalRequest } | null>(saved?.request??null);
+  const [manualUnknown, setManualUnknown] = useState(saved?.manualUnknown??false);
+  const scratch=useRef<EditorScratch>(null!);
+  scratch.current={goal,draft,editing,value,projects,tasks,manualUnknown,request:manualRequest.current};
+  useEffect(()=>{editorScratch.set(scopeKey,scratch.current);});
   const payload: GoalDraft = { ...value, title: value.title.trim(), projectTitles: lines(projects), taskTitles: lines(tasks) };
   const validProject = payload.projectTitles.length === 1;
   const legacyProjects = !!draft && draft.command.kind === 'plan.create' && draft.command.payload.projectTitles.length > 1;
@@ -63,7 +71,7 @@ function usePlan() {
     if (lock.current) return false;
     lock.current = true; setBusy(label); setError(''); setNotice('');
     try {
-      const api = client.current ?? await getClient();
+      const api = await getClient();
       client.current = api;
       await operation(api);
       setSnapshot(await api.snapshot());
@@ -77,7 +85,17 @@ function usePlan() {
     } finally { lock.current = false; setBusy(''); }
   }
   const refresh = () => perform('loading', async () => {});
-  useEffect(() => { void refresh(); return () => controller.current?.abort(); }, []);
+  useEffect(() => {
+    let active=true;
+    client.current=null;
+    const reload=async()=>{
+      await new Promise(resolve=>setTimeout(resolve,100));
+      while(active&&lock.current)await new Promise(resolve=>setTimeout(resolve,10));
+      if(active)void refresh();
+    };
+    void reload();
+    return()=>{active=false;controller.current?.abort();};
+  }, [workspaceRevision]);
   function loadEditor(next: GoalDraft, source: ActionDraft | null) {
     setValue({ ...next, rationale: next.rationale ?? '' }); setProjects(next.projectTitles.join('\n'));
     setTasks(next.taskTitles.join('\n')); setDraft(source); setEditing(true); setNotice('');
@@ -168,14 +186,14 @@ function RecordRow({ kind, record, disabled, update }: {
   </div>;
 }
 
-export function App() {
+export function App({workspaceRevision}:{workspaceRevision:number}) {
   const { t, number, locale } = useLocale();
   const [whiteboardOpen,setWhiteboardOpen]=useState(false);
-  const plan = usePlan();
+  const plan = usePlan(workspaceRevision);
   const disabled = !!plan.busy || !plan.snapshot;
   const latestRun = plan.snapshot?.runs.reduce<AgentRun | undefined>((latest, run) => !latest || run.updatedAt > latest.updatedAt ? run : latest, undefined);
   const pending = plan.snapshot?.drafts.filter((item) => ['draft', 'approved'].includes(item.status) && item.command.kind === 'plan.create') ?? [];
-  if(whiteboardOpen)return <Whiteboard onExit={()=>setWhiteboardOpen(false)}/>;
+  if(whiteboardOpen)return <Whiteboard key={workspaceRevision} onExit={()=>setWhiteboardOpen(false)}/>;
   return <main className="shell">
     <header className="page-header"><h1>{t('pageTitle')}</h1>
       <span className="local-badge">{t(plan.error ? plan.snapshot ? 'localCheck' : 'localUnavailable' : plan.snapshot ? 'localAvailable' : 'localConnecting')}</span><button onClick={()=>setWhiteboardOpen(true)}>{locale==='en'?'Whiteboard':'白板'}</button><Settings /></header>

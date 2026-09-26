@@ -248,3 +248,39 @@ test('edited rationale is saved as formal goal data and remains directly editabl
   assert.equal((await service.listPlan('space-a', actor)).goals[0]?.rationale, undefined);
   spaceStateSchema.parse(store.state);
 });
+/** A plan draft with an optional target date; drafts persisted before the field existed simply omit it. */
+const datedPlan = (commandId: string, payload: {title?: string; targetDate?: string} = {}) => ({schemaVersion: 1 as const, commandId, spaceId: 'space-a', issuedAt: '2026-09-05T00:00:00.000Z', kind: 'plan.create' as const,
+  payload: {title: 'Learn English', projectTitles: ['Practice'], taskTitles: ['Speak for five minutes'], ...payload}});
+test('a plan draft target date stays optional and lands on the created goal', async () => {
+  const f = setup();
+  // A draft without the field must still be readable, approvable and applicable.
+  const legacy = await f.service.createDraft(plan('command-legacy'), actor, {source: 'ai', expiresAt: '2026-09-05T01:00:00.000Z'});
+  const legacyApproval = await f.service.approveDraft('space-a', actor, legacy.id, legacy.version);
+  await f.service.applyApproved('space-a', actor, legacy.id, legacyApproval.id);
+  const dated = await f.service.createDraft(datedPlan('command-dated', {title: 'Dated goal', targetDate: '2026-12-31'}), actor, {source: 'ui', expiresAt: '2026-09-05T01:00:00.000Z'});
+  const datedApproval = await f.service.approveDraft('space-a', actor, dated.id, dated.version);
+  await f.service.applyApproved('space-a', actor, dated.id, datedApproval.id);
+  const goals = (await f.service.listPlan('space-a', actor)).goals;
+  const legacyGoal = goals.find((goal) => goal.title === 'Learn English');
+  assert.equal(goals.find((goal) => goal.title === 'Dated goal')?.targetDate, '2026-12-31');
+  assert.equal(legacyGoal?.targetDate, undefined);
+  assert.equal(!!legacyGoal && 'targetDate' in legacyGoal, false);
+  spaceStateSchema.parse(f.store.state);
+  // An impossible calendar date is refused before anything becomes a draft.
+  await assert.rejects(f.service.createDraft(datedPlan('command-invalid', {targetDate: '2026-02-30'}), actor, {source: 'ui', expiresAt: '2026-09-05T01:00:00.000Z'}), code('invalid_input'));
+  assert.equal((await f.service.listPlan('space-a', actor)).drafts.length, 2);
+});
+test('adding a target date through editDraft revokes the old approval and applies the new date', async () => {
+  const f = setup();
+  const draft = await f.service.createDraft(datedPlan('command-date-edit'), actor, {source: 'ui', expiresAt: '2026-09-05T01:00:00.000Z'});
+  const approval = await f.service.approveDraft('space-a', actor, draft.id, draft.version);
+  const edited = await f.service.editDraft('space-a', actor, draft.id, draft.version, datedPlan('command-date-edit', {targetDate: '2026-12-31'}));
+  assert.equal(edited.version, draft.version + 1);
+  assert.notEqual(edited.payloadHash, draft.payloadHash);
+  assert.equal(f.store.state.approvals.find((item) => item.id === approval.id)?.status, 'revoked');
+  await assert.rejects(f.service.applyApproved('space-a', actor, draft.id, approval.id), code('approval_invalid'));
+  const fresh = await f.service.approveDraft('space-a', actor, draft.id, edited.version);
+  await f.service.applyApproved('space-a', actor, draft.id, fresh.id);
+  assert.equal((await f.service.listPlan('space-a', actor)).goals[0]?.targetDate, '2026-12-31');
+  spaceStateSchema.parse(f.store.state);
+});

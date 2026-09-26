@@ -37,4 +37,11 @@ for (const [mode, { color }] of Object.entries(themes)) {
     check(color, 'onAccent', 'accent', 3);
     check(color, 'accent', 'surface', 3);
   });
+  test(`${mode}: banners, warnings and the Apple button keep their paired text readable`, () => {
+    check(color, 'warn', 'warnSurface', 4.5);
+    check(color, 'ink', 'errorSurface', 4.5);
+    check(color, 'ink', 'warnSurface', 4.5);
+    check(color, 'error', 'errorSurface', 4.5);
+    check(color, 'onApple', 'apple', 4.5);
+  });
 }

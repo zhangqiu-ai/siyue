@@ -1,4 +1,5 @@
 import { zh } from '../i18n/messages';
+import { authText } from '../account/auth-messages';
 import { useLocale } from '../i18n';
 import { AppIcon } from '../ui/icon';
 import Constants from 'expo-constants';
@@ -22,6 +23,7 @@ export default function SettingsScreen() {
   return <SafeAreaView style={styles.page} edges={['bottom']}>
     <Stack.Screen options={{ headerShown: true, title: t('settings.title'), headerBackTitle: t('common.back'), headerBackButtonDisplayMode: 'minimal', headerShadowVisible: false, headerTintColor: theme.color.ink, headerStyle: { backgroundColor: theme.color.background } }} />
     <ScrollView contentContainerStyle={styles.content}>
+      <Pressable accessibilityRole="button" accessibilityLabel={authText(locale).account} onPress={()=>router.push('/account')} style={({pressed})=>[styles.row,pressed&&styles.pressed]}><Text style={styles.label}>{authText(locale).account}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted}/></Pressable>
       <Pressable accessibilityRole="button" accessibilityLabel={t('settings.aiLabel', { name: providerName })} testID="settings-ai-service" onPress={() => router.push('/ai-provider')} style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
         <Text style={styles.label}>{t('settings.aiService')}</Text>
         <View style={styles.trailing}><Text numberOfLines={fontScale > 1.4 ? undefined : 1} style={[styles.value, styles.serviceValue]}>{!settings.ready ? t('settings.reading') : settings.storageError ? t('settings.check') : providerName}</Text><AppIcon name="chevronRight" size={20} color={theme.color.muted} /></View>

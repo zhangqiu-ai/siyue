@@ -1,25 +1,69 @@
-.siyue-board { width:100%; height:100%; display:flex; flex-direction:column; overflow:hidden; background:#f6f7f0; color:#25352b; font:14px system-ui,sans-serif; }
-.siyue-board.dark { background:#202923; color:#edf3e9; }
-.siyue-board button,.siyue-board select { font:inherit; color:inherit; cursor:default; }
-.siyue-board .hostbar { display:flex; align-items:center; flex-wrap:wrap; gap:4px; padding:4px 8px; flex-shrink:0; }
-.siyue-board .hostbar button,.siyue-board .hostbar select { min-height:44px; min-width:44px; border:1px solid #889889; border-radius:10px; background:transparent; padding:6px 10px; }
-.siyue-board .hostbar select { max-width:120px; }
-.siyue-board .hostbar button:disabled { opacity:.45; }
-.siyue-board .save-state { font-size:12px; margin-inline-start:auto; }
-.siyue-board .error { padding:8px 12px; color:#ab3e32; }
-.siyue-board.dark .error { color:#ffb4a8; }
-.siyue-board .editor-area { position:relative; min-height:0; flex:1; }
-.siyue-board .blocking { position:absolute; inset:0; z-index:100; background:#8882; }
-.siyue-board .excalidraw { --color-primary:#476b53; --color-primary-darker:#35543e; --color-primary-darkest:#253d2d; --color-primary-light:#e0e8de; --color-brand-active:#476b53; --default-font:system-ui,sans-serif; }
-/* Unsupported online and embed tools have no public visibility prop in 0.18.1. No custom drawing controls. */
-.siyue-board .excalidraw .library-button, .siyue-board .excalidraw [data-testid="embeddable"], .siyue-board .excalidraw [data-testid="mermaid-to-excalidraw"] { display:none!important; }
-@media(max-width:480px){ .siyue-board .hostbar { padding:2px 4px; } .siyue-board .hostbar button{ padding:4px 7px; } .siyue-board .save-state { flex-basis:100%; text-align:end; } }
-.siyue-board .excalidraw .sidebar-trigger__label-element { display:none!important; }
+/* Full-bleed canvas with floating chrome. No blocking overlay is ever drawn over the board. */
+.siyue-board { position:relative; width:100%; height:100%; overflow:hidden; background:var(--wb-background); color:var(--wb-ink); font:14px system-ui,sans-serif; }
+.siyue-board.light {
+  --wb-background:#F7F8F2; --wb-surface:#FFFEFA; --wb-ink:#25352B; --wb-muted:#5D695F; --wb-accent:#476B53; --wb-onAccent:#FFFFFF;
+  --wb-subtle:#EDF0E8; --wb-border:#D4DCD0; --wb-controlBorder:#7A8C7C; --wb-error:#A33E32; --wb-errorSurface:#F7E9E5;
+  --wb-scrim:rgba(24,32,26,.34); --wb-float:0 2px 10px -4px rgba(0,0,0,.18),0 0 0 1px #D4DCD0;
+}
+.siyue-board.dark {
+  --wb-background:#151C17; --wb-surface:#202A23; --wb-ink:#F0F3E9; --wb-muted:#B3C0B2; --wb-accent:#B7CDB8; --wb-onAccent:#203326;
+  --wb-subtle:#2D3930; --wb-border:#435346; --wb-controlBorder:#839887; --wb-error:#F1A99D; --wb-errorSurface:#3A2724;
+  --wb-scrim:rgba(0,0,0,.5); --wb-float:0 2px 10px -4px rgba(0,0,0,.5),0 0 0 1px #435346;
+}
+.siyue-board button,.siyue-board select,.siyue-board input { font:inherit; color:inherit; cursor:default; }
+.siyue-board button:focus-visible,.siyue-board input:focus-visible { outline:2px solid var(--wb-accent); outline-offset:2px; }
+/* One Excalidraw instance is kept mounted per visited page so switching pages never clears history. */
+.siyue-board .canvas { position:absolute; inset:0; }
+.siyue-board .page-shell { position:absolute; inset:0; transform:translateX(-200vw); pointer-events:none; }
+.siyue-board .page-shell.on { transform:none; pointer-events:auto; }
 
-.siyue-board .board-dialog-backdrop { position:absolute;inset:0;z-index:200;background:#0005;display:flex;align-items:center;justify-content:center;padding:20px; }
-.siyue-board .board-dialog { background:#fffefa;color:#25352b;border-radius:16px;padding:20px;max-width:360px; }
-.siyue-board.dark .board-dialog { background:#202a23;color:#f0f3e9; }
-.siyue-board .board-dialog button { min-height:44px;min-width:70px;border:1px solid #889889;border-radius:10px;background:transparent;margin-inline-end:8px; }
+.siyue-board .wb-top { position:absolute; top:calc(var(--wb-safe-top, 0px) + 10px); left:12px; right:12px; display:flex; align-items:center; gap:8px; z-index:10; }
+.siyue-board .wb-icon,.siyue-board .wb-title,.siyue-board .wb-pill { background:var(--wb-surface); box-shadow:var(--wb-float); }
+.siyue-board .wb-icon { flex:0 0 auto; width:44px; height:44px; border:0; border-radius:22px; color:var(--wb-ink); display:grid; place-items:center; }
+.siyue-board .wb-title { flex:1; min-width:0; border:0; border-radius:22px; padding:4px 16px; min-height:44px; display:flex; flex-direction:column; justify-content:center; color:var(--wb-ink); text-align:left; }
+.siyue-board .wb-title div { font-size:15px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.siyue-board .wb-title small { font-size:11px; color:var(--wb-muted); display:flex; gap:4px; align-items:center; }
+.siyue-board .wb-title small.bad { color:var(--wb-error); }
+.siyue-board .wb-pill { flex:0 0 auto; height:44px; border:0; border-radius:22px; color:var(--wb-ink); display:flex; align-items:center; gap:6px; padding:0 14px; font-size:14px; font-weight:600; font-variant-numeric:tabular-nums; }
+.siyue-board .wb-icon:disabled,.siyue-board .wb-pill:disabled { opacity:.45; }
+
+.siyue-board .wb-banners { position:absolute; top:62px; left:12px; right:12px; z-index:9; display:flex; flex-direction:column; gap:8px; }
+.siyue-board .wb-banner { display:flex; align-items:center; gap:10px; background:var(--wb-surface); border:1px solid var(--wb-border); border-radius:16px; padding:8px 10px; box-shadow:var(--wb-float); font-size:13px; }
+.siyue-board .wb-banner span { flex:1; min-width:0; }
+.siyue-board .wb-banner.bad { border-color:var(--wb-error); background:var(--wb-errorSurface); color:var(--wb-error); }
+.siyue-board .wb-banner button { flex:0 0 auto; min-width:34px; min-height:34px; border:0; border-radius:12px; background:transparent; color:inherit; display:grid; place-items:center; }
+.siyue-board .wb-banner button.wb-inline { width:auto; padding:0 12px; font-weight:600; display:inline-flex; color:var(--wb-accent); }
+
+.siyue-board .wb-sheet-backdrop { position:absolute; inset:0; z-index:20; background:var(--wb-scrim); display:flex; align-items:flex-end; justify-content:center; padding:12px 12px calc(var(--wb-safe-bottom, 0px) + 12px); }
+.siyue-board .wb-sheet { width:100%; max-width:560px; max-height:82%; overflow:auto; background:var(--wb-surface); color:var(--wb-ink); border:1px solid var(--wb-border); border-radius:24px; padding:16px; box-shadow:0 24px 60px -24px rgba(0,0,0,.5); }
+.siyue-board .wb-sheet h2 { margin:2px 0 12px; font-size:17px; }
+.siyue-board .wb-sheet p { margin:0 0 14px; font-size:15px; color:var(--wb-muted); }
+.siyue-board .wb-btns { display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
+.siyue-board .wb-btns button { min-height:44px; padding:0 16px; border-radius:22px; border:1px solid var(--wb-controlBorder); background:transparent; }
+.siyue-board .wb-btns button.wb-primary { background:var(--wb-accent); border-color:var(--wb-accent); color:var(--wb-onAccent); font-weight:600; }
+.siyue-board .wb-btns button.wb-danger { background:var(--wb-error); border-color:var(--wb-error); color:var(--wb-errorSurface); font-weight:600; }
+.siyue-board .wb-btns button.wb-text { border-color:transparent; color:var(--wb-accent); font-weight:600; }
+.siyue-board .wb-btns button.wb-text.danger { color:var(--wb-error); }
+.siyue-board .wb-btns button:disabled { opacity:.45; }
+.siyue-board .wb-row { display:flex; align-items:center; gap:12px; width:100%; min-height:56px; padding:8px 12px; border:0; border-radius:16px; background:transparent; font-size:16px; text-align:left; }
+.siyue-board .wb-row:hover { background:var(--wb-subtle); }
+.siyue-board .wb-field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.siyue-board .wb-field span { font-size:13px; color:var(--wb-muted); }
+.siyue-board .wb-field input { min-height:44px; border:1px solid var(--wb-controlBorder); border-radius:12px; background:var(--wb-background); color:var(--wb-ink); padding:0 12px; }
+.siyue-board .wb-pages { display:flex; gap:10px; overflow-x:auto; padding:2px 2px 8px; }
+.siyue-board .wb-pthumb { position:relative; flex:0 0 auto; width:104px; height:136px; border:1px solid var(--wb-border); border-radius:16px; background:var(--wb-background); overflow:hidden; display:grid; place-items:center; }
+.siyue-board .wb-pthumb.on { border-color:var(--wb-accent); box-shadow:0 0 0 2px var(--wb-accent); }
+.siyue-board .wb-pthumb img { width:100%; height:100%; object-fit:contain; background:#FFFEFA; }
+.siyue-board .wb-pthumb .wb-pempty { display:block; width:100%; height:100%; }
+.siyue-board .wb-pthumb em { position:absolute; bottom:6px; left:8px; font-size:11px; font-style:normal; color:var(--wb-muted); background:var(--wb-surface); border-radius:8px; padding:0 5px; }
+.siyue-board .wb-pthumb.add { border-style:dashed; color:var(--wb-muted); }
+
+.siyue-board .excalidraw { --color-primary:#476b53; --color-primary-darker:#35543e; --color-primary-darkest:#253d2d; --color-primary-light:#e0e8de; --color-brand-active:#476b53; --default-font:system-ui,sans-serif; }
+/* Unsupported online, embed and generation tools have no public visibility prop in 0.18.1. No custom drawing controls. */
+.siyue-board .excalidraw .library-button, .siyue-board .excalidraw [data-testid="embeddable"], .siyue-board .excalidraw [data-testid="mermaid-to-excalidraw"], .siyue-board .excalidraw .App-toolbar__extra-tools-trigger, .siyue-board .excalidraw .main-menu-trigger { display:none!important; }
+.siyue-board .excalidraw .sidebar-trigger__label-element { display:none!important; }
+/* Keep Excalidraw's real tools and history controls below the floating document bar. */
+.siyue-board .excalidraw .App-menu_top .shapes-section { position:fixed; left:50%; bottom:calc(var(--wb-safe-bottom, 0px) + 16px); transform:translateX(-50%); z-index:8; }
 /* Map upstream public CSS theme variables to the existing Siyue Sage semantic roles. */
 .siyue-board.light .excalidraw {
   --color-surface-high:#edf0e8; --color-surface-mid:#f7f8f2; --color-surface-low:#e7ede5; --color-surface-lowest:#fffefa;
@@ -34,7 +78,5 @@
   --color-surface-primary-container:#334738; --color-brand-active:#b7cdb8; --color-brand-hover:#a3bda6; --color-primary-hover:#a3bda6;
   --color-selection:#b7cdb8; --color-border-outline:#839887; --color-border-outline-variant:#435346;
 }
-
-.siyue-board .excalidraw .App-toolbar__extra-tools-trigger { display:none!important; }
-@media(pointer:coarse){ .siyue-board .hostbar button,.siyue-board .hostbar select { min-height:48px;min-width:48px; } }
-
+@media(pointer:coarse){ .siyue-board .wb-icon { width:48px; height:48px; border-radius:24px; } .siyue-board .wb-pill { height:48px; } .siyue-board .wb-title { min-height:48px; } }
+@media(max-width:420px){ .siyue-board .wb-top { left:8px; right:8px; } .siyue-board .wb-title div { font-size:14px; } }

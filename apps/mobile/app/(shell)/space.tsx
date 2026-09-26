@@ -1,1 +1,1 @@
-export { default } from '../../src/screens/personal-space-screen';
+export { default } from '../../src/space/screens/space-home-screen';

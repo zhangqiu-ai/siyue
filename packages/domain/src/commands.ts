@@ -23,7 +23,9 @@ export interface CommandDependencies {
   hash: (canonicalPayload: string) => string | Promise<string>;
 }
 export type CommandErrorCode = 'invalid_input' | 'forbidden' | 'not_found' | 'version_conflict' |
-  'command_conflict' | 'approval_required' | 'approval_invalid' | 'approval_expired' | 'invalid_state' | 'id_collision';
+  'command_conflict' | 'approval_required' | 'approval_invalid' | 'approval_expired' | 'invalid_state' | 'id_collision' |
+  /** The saved draft no longer matches the content the user last saw, so nothing may be approved. */
+  'draft_changed';
 export class CommandError extends Error {
   constructor(public readonly code: CommandErrorCode, message: string) { super(message); this.name = 'CommandError'; }
 }
@@ -129,7 +131,10 @@ export function createCommandService(deps: CommandDependencies) {
     const refs: EntityRef[] = [];
     const base = () => ({id: allocateId(state), spaceId: command.spaceId, version: 1, createdAt: timestamp, updatedAt: timestamp});
     if (command.kind === 'plan.create') {
-      const goal = {...base(), title: command.payload.title, ...(command.payload.rationale !== undefined ? {rationale: command.payload.rationale} : {}), status: 'active' as const};
+      const goal = {...base(), title: command.payload.title,
+        ...(command.payload.rationale !== undefined ? {rationale: command.payload.rationale} : {}),
+        ...(command.payload.targetDate !== undefined ? {targetDate: command.payload.targetDate} : {}),
+        status: 'active' as const};
       state.goals.push(goal); refs.push({kind: 'goal', id: goal.id, version: 1});
       const projectIds: string[] = [];
       for (const title of command.payload.projectTitles) {

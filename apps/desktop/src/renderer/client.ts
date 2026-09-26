@@ -1,9 +1,10 @@
+import {workspaceState,workspaceKey,workspaceReady} from './workspace.ts';
 import type { LocalClient } from '@siyue/adapters';
 import { canonicalize } from '@siyue/domain';
 import { businessCommandSchema, commandEnvelopeSchema, commandReceiptSchema } from '@siyue/contracts';
 
 type Reply = { ok: true; value: unknown } | { ok: false; error: { code: string } };
-type Bridge = { invoke: (message: { requestId: string; method: string; args: unknown[] }) => Promise<Reply>; cancel: (requestId: string) => void };
+type Bridge = { invoke: (message: { requestId: string; method: string; args: unknown[]; workspaceRevision?:number }) => Promise<Reply>; cancel: (requestId: string) => void };
 type PendingOperation = { commandId: string; issuedAt: string };
 type PendingStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 const failure = (code: string) => Object.assign(new Error(code), { code });
@@ -17,14 +18,19 @@ async function hash(value: unknown) {
 export function createDesktopClient(environment?: { bridge?: Bridge; storage: PendingStorage }): LocalClient {
   const bridge = environment ? environment.bridge : (window as unknown as { siyueDesktop?: Bridge }).siyueDesktop;
   const storage = environment ? environment.storage : window.localStorage;
+  const context=environment?undefined:workspaceState();
+  const prefix=context&&context.scope?.kind==='account'?pendingPrefix+workspaceKey(context)+'.':pendingPrefix;
+  const check=()=>{if(context&&(workspaceState().revision!==context.revision||workspaceState().status!=='ready'))throw failure('cancelled');};
   async function invoke(method: string, args: unknown[], signal?: AbortSignal): Promise<unknown> {
+    check();
     if (!bridge) throw failure('unsupported');
     if (signal?.aborted) throw failure('cancelled');
     const requestId = crypto.randomUUID();
     const cancel = () => bridge.cancel(requestId);
     signal?.addEventListener('abort', cancel, { once: true });
     try {
-      const response = await bridge.invoke({ requestId, method, args });
+      const response = await bridge.invoke({ requestId, method, args, ...(context?{workspaceRevision:context.revision}:{}) });
+      check();
       if (!response.ok) throw failure(response.error.code);
       return response.value;
     } finally { signal?.removeEventListener('abort', cancel); }
@@ -33,7 +39,8 @@ export function createDesktopClient(environment?: { bridge?: Bridge; storage: Pe
     // Keep the existing key format, but freeze caller-owned inputs before hashing.
     const input = JSON.parse(JSON.stringify(args)) as unknown[];
     const fingerprint = await hash([method, input]);
-    const key = pendingPrefix + fingerprint;
+    check();
+    const key = prefix + fingerprint;
     const saved = storage.getItem(key);
     let operation: PendingOperation;
     if (saved !== null) {
@@ -48,7 +55,7 @@ export function createDesktopClient(environment?: { bridge?: Bridge; storage: Pe
       storage.setItem(key, JSON.stringify(operation));
     }
     const persisted = saved ?? JSON.stringify(operation);
-    const clear = () => { if (storage.getItem(key) === persisted) storage.removeItem(key); };
+    const clear = () => { check(); if (storage.getItem(key) === persisted) storage.removeItem(key); };
     const verifiedReceipt = async (value: unknown) => {
       const receipt = commandReceiptSchema.safeParse(value);
       if (!receipt.success || receipt.data.commandId !== operation.commandId) throw failure('failed');
@@ -101,4 +108,4 @@ export function createDesktopClient(environment?: { bridge?: Bridge; storage: Pe
     receipt: (commandId) => invoke('receipt', [commandId]) as ReturnType<LocalClient['receipt']>,
   };
 }
-export async function getClient(): Promise<LocalClient> { return createDesktopClient(); }
+export async function getClient(): Promise<LocalClient> { await workspaceReady; return createDesktopClient(); }

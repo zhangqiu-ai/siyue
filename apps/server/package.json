@@ -8,17 +8,26 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test src/*.test.ts"
+    "test": "tsx --test src/*.test.ts src/account-deletion-ledger/*.test.ts src/modules/auth/*.test.ts",
+    "db:migrate": "node dist/database-migrate.js",
+    "test:integration": "pnpm build && node --test tests/integration/*.test.mjs",
+    "worker:mail": "node dist/mail-worker.js"
   },
   "dependencies": {
     "@siyue/ai": "workspace:*",
     "@siyue/contracts": "workspace:*",
     "@siyue/domain": "workspace:*",
     "ai": "7.0.92",
+    "argon2": "0.45.1",
     "fastify": "5.12.3",
+    "jose": "6.2.12",
+    "nodemailer": "10.0.10",
+    "pg": "8.23.0",
     "zod": "4.5.4"
   },
   "devDependencies": {
+    "@types/nodemailer": "8.0.2",
+    "@types/pg": "8.23.1",
     "tsx": "4.23.13",
     "typescript": "6.0.3"
   }

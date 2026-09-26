@@ -23,6 +23,14 @@ xcodebuild test-without-building -project /tmp/siyue-excalidraw-ui-tests/Whitebo
 
 英文暗色用例为 `WhiteboardTrialUITests/ExcalidrawEnglishUITests`，单独运行。先仅在隔离 QA 应用的已有 `storage` 偏好表设置 `siyue.locale=en`、`siyue.appearance=dark`；不要更改真实用户数据。结束恢复原偏好。图片导入测试须等待宿主按钮重新 enabled 及保存确认，不能只读取上一修订的 saved 文案。系统相册 AX 图片的 hit-test 在 iOS 26.5 可返回不可点击，用已定位图片自身的中心坐标点击，保留真实系统选择流程。
 
+拍题/选图用例为 `WhiteboardTrialUITests/ExcalidrawPhotoPickUITests`：系统选图取消后仍可书写、导入后保留完整图片字节、已导入对象可被拖动，以及相机入口能打开系统拍摄界面并返回可用宿主。可重复入口为脚本，它补一次合成相册图片、逐用例运行、只读复制 kv-store 核对存档并输出结果：
+
+```sh
+SIYUE_QA_IPHONE=<iPhone QA UDID> SIYUE_QA_IPAD=<iPad QA UDID> SIYUE_IOS_APP=/tmp/siyue-excalidraw-ios/Build/Products/Release-iphonesimulator/Siyue.app node apps/mobile/e2e/excalidraw/ios-photo-picker.mjs
+```
+
+脚本只操作名称含 QA 的模拟器，相册只补一次合成题图（`SIYUE_IOS_RESEED_PHOTOS=1` 可重放），不改动用户数据；记录在 `artifacts/excalidraw-native/photo-picker-<时间>/`。第一步基线用例保存当前白板，空白安装与已有作品都可核对，用例名不宣称安装状态。模拟器没有摄像头：相机用例只验证系统拍摄界面能打开、可关闭并回到可用宿主，授权弹窗与实拍需另行覆盖（`SIYUE_IOS_RESET_CAMERA_PERMISSION=1` 可复现首次授权提示分支）；真实拍照、授权拒绝、EXIF 方向与极端大图仍需真机。
+
 Android 使用 `:app:assembleRelease` 的内嵌资源 APK。`with-whiteboard-inputs.cjs` 为 Gradle 声明 workspace 编辑器构建输入，防止 JS/CSS 修改被错误判为 UP-TO-DATE。只使用专用可 root 的 Android 模拟器，安装升级保留数据：
 
 ```sh

@@ -10,6 +10,8 @@
 
 ## 确定本轮工作
 
+2026-09-21 后端与账号开发依据：[完整方案、交接与验收清单](docs/architecture/backend-auth-v1.md)。首批为 SA-01～03，保留现有白板与家庭权限实现；账号、家庭与五设备视频白板分别验收。
+
 1. 读取 [AGENTS.md](AGENTS.md)，检查工作目录、分支与未提交改动，保留用户已有内容。
 2. 以维护者当前要求确定目标；在 [当前版本计划](planning/releases/0.0.1.md) 找到对应变更、工作包与证据。版本号以根 [package.json](package.json) 为准，版本登记按 [版本规则](planning/releases/README.md) 执行。未明确下一项时不要从历史启动提示自行恢复排期。
 3. 按 [OpenSpec 流程](openspec/README.md) 选择标准或简化路径，再读取与本轮相关的现行规格及活动变更。已有授权不重复询问，新的关键取舍交由维护者决定。
@@ -21,7 +23,7 @@
 |---|---|
 | 产品范围或优先级 | [项目章程](PROJECT_CHARTER.md)、[产品定义](PRODUCT.md)、[决策登记](docs/decisions.md)、对应 [工作包](docs/backlog.md) |
 | 安装、构建、运行故障 | [BOOTSTRAP](docs/BOOTSTRAP.md)、根目录与受影响包的 `package.json` |
-| 页面、布局、交互 | [DESIGN](DESIGN.md)、[UI 验收分级与设备矩阵](docs/design/ui-acceptance.md) |
+| 页面、布局、交互 | [DESIGN](DESIGN.md)、[统一原型](docs/design/prototype/README.md)（新功能先在原型中确认再写代码）、[UI 验收分级与设备矩阵](docs/design/ui-acceptance.md) |
 | 领域、契约或跨包边界 | [架构](ARCHITECTURE.md)、[领域模型](docs/domain-model.md) |
 | AI、审批或外发 | [AI 基础](docs/ai-foundation.md)、[隐私安全](docs/privacy-security.md) |
 | 存储、同步或账号隔离 | [数据同步](docs/data-sync.md)、[隐私安全](docs/privacy-security.md) |
@@ -36,3 +38,5 @@
 ## 分支与远端
 
 日常开发起点沿用 `feature/dev` 约定；先核实分支是否存在和工作区状态，不自动切换带有用户改动的工作区，不直接向 `main` 发布。项目远端约定为 `zhangqiu-ai/siyue`，实际操作前核对 Git 配置。提交、推送、PR、合并和部署遵循当次授权；本地编辑不自动包含远端操作，也不授权改变可见性、购买服务或公开其他内容。`SY-xxx` 是规划 ID，不是 GitHub Issue 编号。
+
+后端本地运行、隔离验收及部署连接变量位置见 [server 开发说明](apps/server/README.md)；根 `.env` 是本机私有部署配置，不提交或打包。

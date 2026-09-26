@@ -26,7 +26,15 @@ export const test = base.extend({
         await current.context().tracing.stop({ path: trace });
         traces.push(trace);
       } finally {
-        await current.close();
+        let timer;
+        try {
+          await Promise.race([current.close(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Isolated Electron did not close within 15 seconds')),15000);})]);
+        } catch(error) {
+          const diagnostic=await current.evaluate(()=>globalThis.__siyueCloseTrace??[]).catch(()=>[]);
+          await testInfo.attach('close-events',{body:JSON.stringify(diagnostic),contentType:'application/json'});
+          current.process().kill('SIGKILL'); // Only this fixture's disposable Electron process.
+          throw error;
+        } finally {clearTimeout(timer);}
       }
     }
     async function start() {
@@ -39,6 +47,13 @@ export const test = base.extend({
       });
       await application.context().route(/^https?:\/\//, (route) => route.abort());
       await application.context().tracing.start({ screenshots: true, snapshots: true });
+      await application.evaluate(({app,ipcMain})=>{
+        const events=globalThis.__siyueCloseTrace=[];
+        const record=(kind,value)=>{events.push({kind,value});if(events.length>30)events.shift();};
+        app.on('before-quit',()=>record('before-quit',null));
+        ipcMain.on('siyue:whiteboard-active',(_event,value)=>record('active',value));
+        ipcMain.on('siyue:whiteboard-close-result',(_event,result)=>record('close-result',result?.ok));
+      });
       page = await application.firstWindow();
       page.on('pageerror', (error) => errors.push(error.message));
       await expect(page.locator('.local-badge')).toHaveText(/离线可用|Available offline/);

@@ -1,3 +1,4 @@
+import {useWorkspaceValue} from '../account/workspace-scratch';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, BackHandler, Keyboard, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,8 +20,8 @@ export default function PersonalSpaceScreen() {
   const { width, fontScale } = useWindowDimensions();
   const wide = width >= 820 && fontScale <= 1.4;
   const [snapshot, setSnapshot] = useState<PlanSnapshot | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [editing, setEditing] = useState<{ id: string; version: number; title: string; originalTitle: string } | null>(null);
+  const [selected, setSelected] = useWorkspaceValue<string | null>('space.selected',null);
+  const [editing, setEditing] = useWorkspaceValue<{ id: string; version: number; title: string; originalTitle: string } | null>('space.editing',null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
   const [notice, setNotice] = useState(false);

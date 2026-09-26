@@ -1,0 +1,27 @@
+-- Persisted authorization retry window for the Apple revocation outbox (migration 0016, design 13.3
+-- and 13.4). The queue behind the independent anti-revival ledger leases a row before it can ask the
+-- ledger whether that deletion was accepted, so a refused attempt leaves a leased row behind. Nothing
+-- moves such a row out of the queue head: it keeps its place as the oldest candidate and is claimed
+-- first again every lease period, which is how a single permanently unauthorized identity starves the
+-- rest of the queue. Ending that needs a durable fact the queue can read before leasing a row -- "this
+-- job may not be attempted again before this instant, because the authorization it needs was not there
+-- yet" -- and a durable fact needs a column.
+--
+-- Why its own column instead of pushing available_at forward: available_at is the queue's own ordering
+-- and retry key, written by enqueue and by a provider retry, and a deferral must leave it untouched so
+-- the record still shows that no attempt was made and no window moved. This column is also deliberately
+-- not bounded by expires_at. The window is the bounded period in which the app may keep trying Apple;
+-- the authorization may only arrive afterwards (fresh user consent, a repaired ledger marker), and a row
+-- waiting past its window must stay readable so a refusal can never destroy the sealed credential that
+-- nothing has been authorized to send yet. NULL is the ordinary state -- the row is due whenever its
+-- availability says so -- and it is the only value an existing row can take, so this upgrade is additive:
+-- no row is rewritten, no table is rebuilt, no constraint is replaced, and every already-applied
+-- migration keeps its recorded checksum byte-identical.
+--
+-- No CHECK ties this column to status, available_at or expires_at, and none could: the value is only ever
+-- written by the two statements that are fenced on the claimed lease (a claim clears it while leasing a
+-- row, a deferral sets it while returning that row to `pending`), and a deferral later than expires_at is
+-- a normal outcome rather than an impossible interval. No index is added either: the claim still scans
+-- apple_revocation_outbox_claimable / _abandoned by availability and applies this column to the rows
+-- those indexes return, so the scan stays bounded without a second queue index to keep coherent.
+ALTER TABLE siyue.apple_revocation_outbox ADD COLUMN authorization_retry_at timestamptz;

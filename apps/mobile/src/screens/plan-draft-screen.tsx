@@ -1,183 +1,269 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Keyboard, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useNavigation, usePreventRemove } from 'expo-router/react-navigation';
+import * as Crypto from 'expo-crypto';
 import type { ActionDraft, GoalDraft } from '@siyue/contracts';
 import { getClient } from '../client';
 import { useLocale } from '../i18n';
-import { useTheme } from '../ui/theme';
-import { AppIcon } from '../ui/icon';
+import { Banner, Button, ListGroup, Screen, SectionLabel, useTheme } from '../ui';
+import { useWorkspaceValue } from '../account/workspace-scratch';
+import { useCurrentSpace } from '../shell/space-switcher';
+import { DatePickerSheet } from '../space/components/date-picker-sheet';
+import { MetaChip, MetaRow } from '../space/components/space-chrome';
+import { AddRow, DraftTaskRow, TitleInput } from '../space/components/plan-blocks';
+import { confirmVisibleDraft, errorCode, receiptCounts, recheckDraft, recreateDraft, type DraftReceiptCounts } from '../space/draft-actions';
+import { createDraftAutosave, type DraftAutosave, type DraftAutosaveState } from '../space/draft-autosave';
 import { editableDraftPayload, reconcileDraftReceipt, validateDraftInput } from '../space/draft-state';
+import { draftMinutesLeft, formatLocalDate, localDateOf } from '../space/dates';
+import { useSpaceText } from '../space/use-space-text';
 
 export default function PlanDraftScreen() {
-  const { id } = useLocalSearchParams<{id: string}>();
-  const { t, locale } = useLocale();
-  const theme = useTheme(), router = useRouter(), navigation = useNavigation();
-  const [draft, setDraft] = useState<ActionDraft | null>(null);
+  const { id } = useLocalSearchParams<{ id: string }>();
+  return <PlanDraftEditor key={id} id={id} />;
+}
+
+function PlanDraftEditor({ id }: { id: string }) {
+  const router = useRouter(), navigation = useNavigation(), theme = useTheme(), t = useSpaceText(), { locale } = useLocale(), space = useCurrentSpace();
+  const [draft, setDraft] = useWorkspaceValue<ActionDraft | null>(`draft.${id}.original`, null);
+  const [input, setInput] = useWorkspaceValue<GoalDraft | null>(`draft.${id}.input`, null);
+  const [keys, setKeys] = useState<number[]>([]), nextKey = useRef(0);
   const [latest, setLatest] = useState<ActionDraft | null>(null);
-  const [input, setInput] = useState<GoalDraft | null>(null);
-  const [taskKeys, setTaskKeys] = useState<number[]>([]);
-  const nextTaskKey = useRef(0);
-  const replaceInput = (payload: GoalDraft) => {
-    setInput(payload);
-    setTaskKeys(payload.taskTitles.map(() => nextTaskKey.current++));
-  };
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(false);
-  const [unknown, setUnknown] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [clock, setClock] = useState(Date.now());
-  const lock = useRef(false), mounted = useRef(true);
-  const original = draft?.command.kind === 'plan.create' ? draft.command.payload : null;
-  const dirty = !!input && !!original && JSON.stringify(input) !== JSON.stringify(original);
-  const editable = !!editableDraftPayload(draft, clock) && !unknown && !saved;
+  const [state, setState] = useState<DraftAutosaveState<GoalDraft> | null>(null);
+  const [busy, setBusy] = useState(false), [permitExit, setPermitExit] = useState(false), [error, setError] = useState<string | null>(null);
+  const [unknown, setUnknown] = useState(false), [result, setResult] = useState<DraftReceiptCounts | null>(null);
+  const [dateOpen, setDateOpen] = useState(false), [clock, setClock] = useState(Date.now());
+  const mounted = useRef(true), lock = useRef(false);
+  const draftRef = useRef(draft), inputRef = useRef(input), autosave = useRef<DraftAutosave<GoalDraft> | null>(null);
+  const currentPayload = draft?.command.kind === 'plan.create' ? draft.command.payload : null;
+  const dirty = !!input && !!currentPayload && JSON.stringify(input) !== JSON.stringify(currentPayload);
   const valid = input ? validateDraftInput(input) : null;
-  const resumable = draft?.status === 'approved' && Date.parse(draft.expiresAt) > clock && !unknown && !saved && !dirty;
-  const titleKey = saved ? 'draft.saved' : draft?.status === 'rejected' ? 'draft.rejected' : draft?.status === 'cancelled' ? 'draft.cancelled' : draft && draft.status !== 'applied' && Date.parse(draft.expiresAt) <= clock ? 'draft.expired' : 'draft.title';
-  useEffect(() => {
-    mounted.current = true;
-    const timer = setInterval(() => setClock(Date.now()), 1000);
-    return () => { mounted.current = false; clearInterval(timer); };
+  const expired = !!draft && Date.parse(draft.expiresAt) <= clock && !result;
+  const closed = draft?.status === 'rejected' || draft?.status === 'cancelled';
+  const editable = !!editableDraftPayload(draft, clock) && !unknown && !result && !latest;
+  const canJoin = !!valid && valid.taskTitles.length > 0 && !unknown && !result && !expired && !latest && (draft?.status === 'draft' || draft?.status === 'approved');
+  const minutes = draft ? draftMinutesLeft(draft.expiresAt, clock) : 0;
+  const install = useCallback((record: ActionDraft) => {
+    autosave.current?.dispose();
+    draftRef.current = record; setDraft(record);
+    const controller = createDraftAutosave<GoalDraft>({
+      delayMs: 600,
+      save: async payload => {
+        const current = draftRef.current;
+        if (!current || current.command.kind !== 'plan.create') throw new Error('draft_unavailable');
+        const client = await getClient();
+        let saved: ActionDraft;
+        try { saved = await client.editDraft(current.id, current.version, payload); }
+        catch (failure) {
+          if (errorCode(failure) === 'version_conflict' && mounted.current) {
+            const newest = (await client.snapshot()).drafts.find(item => item.id === current.id);
+            if (newest?.command.kind === 'plan.create') setLatest(newest);
+          }
+          throw failure;
+        }
+        draftRef.current = saved;
+        if (mounted.current) setDraft(saved);
+        return { version: saved.version };
+      },
+    });
+    autosave.current = controller;
+    setState(controller.getState());
+    controller.subscribe(value => { if (mounted.current) setState(value); });
   }, []);
-  usePreventRemove(dirty || busy, ({data}) => {
-    if (busy) return;
-    Alert.alert(t('ai.discardTitle'), t('draft.leave'), [
-      {text: t('ai.keepEditing'), style: 'cancel'},
-      {text: t('ai.discard'), style: 'destructive', onPress: () => navigation.dispatch(data.action)},
-    ]);
-  });
+  const replaceInput = useCallback((payload: GoalDraft) => {
+    inputRef.current = payload; setInput(payload);
+    setKeys(payload.taskTitles.map(() => nextKey.current++));
+  }, []);
   const load = useCallback(async () => {
     if (lock.current) return;
-    lock.current = true; setBusy(true); setError(false);
+    lock.current = true; setBusy(true); setError(null);
     try {
       const client = await getClient();
-      const current = (await client.snapshot()).drafts.find(value => value.id === id);
-      if (!current || current.command.kind !== 'plan.create') throw new Error('unavailable');
-      const applied = current.status === 'applied' || current.status === 'approved'
-        ? await reconcileDraftReceipt(client, current) : false;
-      if (mounted.current) {
-        setDraft(current); replaceInput(current.command.payload); setSaved(applied); setLatest(null);
-        setUnknown(!applied && current.status === 'applied');
+      const current = (await client.snapshot()).drafts.find(item => item.id === id);
+      if (!current || current.command.kind !== 'plan.create') throw new Error('draft_unavailable');
+      const applied = current.status === 'applied' && await reconcileDraftReceipt(client, current);
+      if (!mounted.current) return;
+      if (applied) {
+        const receipt = await client.receipt(current.command.commandId);
+        setResult(receipt ? receiptCounts(receipt) : null);
       }
-    } catch { if (mounted.current) setError(true); }
+      if (inputRef.current && draftRef.current && draftRef.current.version !== current.version &&
+          JSON.stringify(inputRef.current) !== JSON.stringify(draftRef.current.command.kind === 'plan.create' ? draftRef.current.command.payload : null)) {
+        setLatest(current);
+      } else {
+        const restored = inputRef.current && draftRef.current?.version === current.version ? inputRef.current : current.command.payload;
+        install(current); replaceInput(restored);
+        if (JSON.stringify(restored) !== JSON.stringify(current.command.payload) && validateDraftInput(restored)) autosave.current?.update(restored);
+      }
+      setUnknown(current.status === 'applied' && !applied);
+    } catch { if (mounted.current) setError(t('home.error')); }
     finally { lock.current = false; if (mounted.current) setBusy(false); }
-  }, [id]);
-  useEffect(() => { void load(); }, [load]);
-  const inspectLatest = async () => {
-    if (lock.current) return;
-    lock.current = true; setBusy(true);
+  }, [id, install, replaceInput]);
+  useEffect(() => {
+    mounted.current = true;
+    void load();
+    const timer = setInterval(() => setClock(Date.now()), 15_000);
+    return () => { mounted.current = false; clearInterval(timer); autosave.current?.dispose(); };
+  }, [load]);
+  usePreventRemove((dirty || busy) && !result && !permitExit, ({ data }) => {
+    if (busy) return;
+    Alert.alert(t('draft.leaveTitle'), t('draft.leaveBody'), [
+      { text: t('draft.leaveKeep'), style: 'cancel' },
+      { text: t('draft.leaveDiscard'), style: 'destructive', onPress: () => { setPermitExit(true); setTimeout(() => navigation.dispatch(data.action), 0); } },
+    ]);
+  });
+  const change = (payload: GoalDraft) => {
+    inputRef.current = payload; setInput(payload); setError(null);
+    const parsed = validateDraftInput(payload);
+    if (parsed && editable) autosave.current?.update(parsed);
+  };
+  const join = async () => {
+    if (lock.current || !canJoin || !draft) return;
+    const visible = inputRef.current && validateDraftInput(inputRef.current);
+    if (!visible || visible.taskTitles.length === 0) { setError(t('draft.joinNeedsTitle')); return; }
+    lock.current = true; setBusy(true); setError(null);
     try {
-      const current = (await (await getClient()).snapshot()).drafts.find(value => value.id === id);
-      if (!current || current.command.kind !== 'plan.create') throw new Error('unavailable');
-      if (mounted.current) setLatest(current);
-    } catch { if (mounted.current) setError(true); }
+      const client = await getClient();
+      // React state can trail the final keystroke; force the exact visible payload into the save queue.
+      if (JSON.stringify(visible) !== JSON.stringify(draftRef.current?.command.kind === 'plan.create' ? draftRef.current.command.payload : null)) autosave.current?.update(visible);
+      const outcome = await confirmVisibleDraft({
+        flush: () => autosave.current!.flush(),
+        visible: () => draftRef.current ? { payloadHash: draftRef.current.payloadHash, version: draftRef.current.version } : null,
+        confirm: (hash, version) => client.confirmLatestDraft(id, hash, version),
+        latest: async () => (await client.snapshot()).drafts.find(item => item.id === id) ?? null,
+        reconcile: current => reconcileDraftReceipt(client, current),
+      });
+      if (!mounted.current) return;
+      if (outcome.kind === 'applied') {
+        const receipt = outcome.receipt ?? await client.receipt(draftRef.current!.command.commandId);
+        if (receipt) setResult(receiptCounts(receipt));
+        else { setUnknown(true); setError(t('draft.unknownBody')); }
+      } else if (outcome.kind === 'changed') {
+        const current = (await client.snapshot()).drafts.find(item => item.id === id);
+        if (current) setLatest(current);
+        setError(t('draft.changedBody'));
+      } else if (outcome.kind === 'save_failed') setError(t('draft.saveFailed'));
+      else { setUnknown(true); setError(t('draft.unknownBody')); }
+    } catch { if (mounted.current) { setUnknown(true); setError(t('draft.unknownBody')); } }
     finally { lock.current = false; if (mounted.current) setBusy(false); }
   };
-  const act = async (kind: 'edit' | 'confirm' | 'recheck' | 'reject') => {
-    if (lock.current || !draft) return;
-    if (kind === 'edit' && (!editable || !valid)) return;
-    if (kind === 'confirm' && ((!editable && !resumable) || !valid || dirty)) return;
-    if (kind === 'reject' && !editable && !resumable) return;
-    lock.current = true; setBusy(true); setError(false); Keyboard.dismiss();
+  const recheck = async () => {
+    if (lock.current) return;
+    lock.current = true; setBusy(true); setError(null);
     try {
       const client = await getClient();
-      if (kind === 'reject') {
-        await client.discardDraft(draft.id, draft.version);
-        const current = (await client.snapshot()).drafts.find(value => value.id === draft.id);
-        if (mounted.current && current?.command.kind === 'plan.create') { setDraft(current); replaceInput(current.command.payload); setLatest(null); }
-      } else if (kind === 'edit') {
-        const updated = await client.editDraft(draft.id, draft.version, valid!);
-        if (mounted.current && updated.command.kind === 'plan.create') {
-          setDraft(updated); replaceInput(updated.command.payload); setLatest(null);
-        }
-      } else {
-        if (kind === 'confirm') {
-          try { await client.confirmDraft(draft.id, draft.version); }
-          catch { /* A missing response may follow a successful write; reconcile the same command. */ }
-        }
-        const applied = await reconcileDraftReceipt(client, draft);
-        const current = applied ? null : (await client.snapshot()).drafts.find(value => value.id === draft.id);
-        if (mounted.current) {
-          setSaved(applied);
-          // A successful query resolves uncertainty; preserve local input on version changes.
-          setUnknown(!applied && (!current || current.status === 'applied'));
-          if (applied) setLatest(null);
-          if (current && current.version === draft.version) { setDraft(current); setLatest(null); }
-          else if (current) setLatest(current);
-          if (!applied) setError(true);
-        }
+      const status = await recheckDraft({ latest: async () => (await client.snapshot()).drafts.find(item => item.id === id) ?? null, reconcile: current => reconcileDraftReceipt(client, current) });
+      if (!mounted.current) return;
+      if (status === 'applied') {
+        const receipt = draftRef.current ? await client.receipt(draftRef.current.command.commandId) : null;
+        if (receipt) { setResult(receiptCounts(receipt)); setUnknown(false); }
+        else setError(t('draft.unknownBody'));
+      } else if (status === 'not_applied') {
+        const current = (await client.snapshot()).drafts.find(item => item.id === id);
+        if (current?.command.kind === 'plan.create') { install(current); replaceInput(current.command.payload); }
+        setUnknown(false); setError(t('draft.rechecked'));
       }
-    } catch {
-      if (mounted.current) { setError(true); if (kind === 'confirm' || kind === 'recheck') setUnknown(true); }
+      else setError(t('draft.unknownBody'));
     } finally { lock.current = false; if (mounted.current) setBusy(false); }
   };
-  const button = (label: string, onPress: () => void, disabled = false, primary = false) =>
-    <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress}
-      style={({pressed}) => [styles.button, {backgroundColor: primary ? theme.color.accent : pressed ? theme.color.subtle : 'transparent', opacity: disabled ? 0.4 : 1}]}>
-      <Text style={[styles.buttonText, {color: primary ? theme.color.onAccent : theme.color.accent}]}>{label}</Text>
-    </Pressable>;
-  const field = (label: string, value: string, change: (text: string) => void, maxLength: number) =>
-    <View style={styles.field}><Text style={[styles.label, {color: theme.color.muted}]}>{label}</Text>
-      <TextInput accessibilityLabel={label} multiline value={value} onChangeText={change} maxLength={maxLength}
-        editable={editable && !busy} selectionColor={theme.color.accent}
-        style={[styles.input, {color: theme.color.ink, borderBottomColor: theme.color.border}]} />
-    </View>;
-  return <SafeAreaView style={{flex: 1, backgroundColor: theme.color.background}}>
-    <View style={styles.nav}><Pressable accessibilityRole="button" accessibilityLabel={t('common.back')} disabled={busy}
-      onPress={() => router.back()} style={styles.iconButton}><AppIcon name="back" /></Pressable></View>
-    <ScrollView keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets keyboardDismissMode="interactive" contentContainerStyle={styles.content}>
-      <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}><View style={{width: 40, height: 40, borderRadius: 14, backgroundColor: theme.color.subtle, alignItems: 'center', justifyContent: 'center'}}><AppIcon name="target" color={theme.color.accent} /></View><Text accessibilityRole="header" style={[styles.heading, {color: theme.color.ink, flex: 1}]}>{t(titleKey)}</Text></View>
-      <Text style={[styles.body, {color: theme.color.muted}]}>{t(saved ? 'space.local' : 'draft.note')}</Text>
-      {busy && <ActivityIndicator accessibilityLabel={t('space.loading')} color={theme.color.accent} />}
-      {error && <Text accessibilityRole="alert" style={[styles.body, {color: theme.color.ink}]}>{t('draft.error')}</Text>}
-      {unknown && <Text accessibilityRole="alert" style={[styles.body, {color: theme.color.ink}]}>{t('draft.unknown')}</Text>}
-      {resumable && <Text style={[styles.body, {color: theme.color.muted}]}>{t('draft.resume')}</Text>}
-      {latest?.command.kind === 'plan.create' && <View style={[styles.card, {backgroundColor: theme.color.subtle}]}>
-        <Text accessibilityRole="alert" style={[styles.body, {color: theme.color.ink}]}>{t('draft.changed')}</Text>
-        <Text selectable style={[styles.body, {color: theme.color.ink}]}>{[latest.command.payload.title, ...latest.command.payload.projectTitles, ...latest.command.payload.taskTitles].join('\n')}</Text>
-        {button(t('draft.useLatest'), () => { if (latest.command.kind === 'plan.create') {setDraft(latest); replaceInput(latest.command.payload); setLatest(null); setUnknown(latest.status === 'applied'); setError(false);} }, busy)}
-        {!!editableDraftPayload(latest, clock) && button(t('draft.applyLatest'), () => {setDraft(latest); setLatest(null); setUnknown(false); setError(false);}, busy)}
-      </View>}
-      {input && !saved && <>
-        {!editable && !resumable && !unknown && <Text style={[styles.body, {color: theme.color.muted}]}>{t('draft.closed')}</Text>}
-        <View style={[styles.card, {backgroundColor: theme.color.surface}]}>
-          {field(t('draft.goal'), input.title, title => setInput({...input, title}), 160)}
-          {input.projectTitles.length > 1
-            ? input.projectTitles.map((title, index) => <View key={index}>{field(t('draft.project'), title, () => {}, 160)}</View>)
-            : field(t('draft.project'), input.projectTitles[0] ?? '', title => setInput({...input, projectTitles: [title]}), 160)}
-          {!!input.rationale && <Text selectable style={[styles.body, {color: theme.color.muted}]}>{input.rationale}</Text>}
-        </View>
-        <View style={[styles.card, {backgroundColor: theme.color.surface}]}>
-          <Text accessibilityRole="header" style={[styles.section, {color: theme.color.ink}]}>{t('draft.tasks')}</Text>
-          {input.taskTitles.map((value, index) => {
-            const number = new Intl.NumberFormat(locale).format(index + 1);
-            return <View key={taskKeys[index]} style={styles.task}>
-              <View style={{flex: 1}}>{field(t('draft.task', {number}), value, title => setInput({...input, taskTitles: input.taskTitles.map((item, i) => i === index ? title : item)}), 240)}</View>
-              {editable && <Pressable accessibilityRole="button" accessibilityLabel={t('draft.remove', {number})} disabled={busy}
-                style={styles.iconButton} onPress={() => {setTaskKeys(keys => keys.filter((_, i) => i !== index)); setInput({...input, taskTitles: input.taskTitles.filter((_, i) => i !== index)});}}><AppIcon name="close" /></Pressable>}
-            </View>;
-          })}
-          {editable && button(t('draft.add'), () => {const key = nextTaskKey.current++; setTaskKeys(keys => [...keys, key]); setInput({...input, taskTitles: [...input.taskTitles, '']});}, busy || input.taskTitles.length >= 24)}
-        </View>
-        {dirty && <Text style={[styles.body, {color: theme.color.muted}]}>{t('draft.dirty')}</Text>}
-        {editable && dirty && button(t('draft.save'), () => void act('edit'), busy || !valid, true)}
-        {(editable || resumable) && !dirty && button(t('draft.confirm'), () => void act('confirm'), busy || !valid || !!latest, true)}
-        {(editable || resumable) && button(t('draft.reject'), () => Alert.alert(t('draft.reject'), t('draft.rejectBody'), [{text: t('space.cancel'), style: 'cancel'}, {text: t('draft.reject'), style: 'destructive', onPress: () => void act('reject')}]), busy || !!latest)}
+  const discard = () => Alert.alert(t('draft.discardTitle'), t('draft.discardBody'), [
+    { text: t('draft.keepEditing'), style: 'cancel' },
+    { text: t('draft.discardConfirm'), style: 'destructive', onPress: () => { void (async () => {
+      if (lock.current || !draftRef.current) return;
+      lock.current = true; setBusy(true); setError(null);
+      try {
+        await autosave.current?.flush().catch(() => undefined);
+        const client = await getClient();
+        const current = (await client.snapshot()).drafts.find(item => item.id === draftRef.current!.id);
+        if (!current || current.command.kind !== 'plan.create') throw new Error('draft_unavailable');
+        await client.discardDraft(current.id, current.version);
+        autosave.current?.dispose();
+        setPermitExit(true); setInput(null); setTimeout(() => router.replace('/space'), 0);
+      } catch { if (mounted.current) setError(t('home.error')); }
+      finally { lock.current = false; if (mounted.current) setBusy(false); }
+    })(); } },
+  ]);
+  const recreate = async () => {
+    if (!input || lock.current) return;
+    lock.current = true; setBusy(true); setError(null);
+    try {
+      const created = await recreateDraft({ payload: input, create: payload => (async () => {
+        const request = { commandId: Crypto.randomUUID(), issuedAt: new Date().toISOString() };
+        return (await getClient()).createManualDraft(payload, request);
+      })() });
+      router.replace({ pathname: '/plan/draft', params: { id: created.id } });
+    } catch { setError(t('home.error')); }
+    finally { lock.current = false; if (mounted.current) setBusy(false); }
+  };
+  const applyLatest = () => {
+    if (!latest || latest.command.kind !== 'plan.create') return;
+    install(latest); replaceInput(latest.command.payload); setLatest(null); setError(null); setUnknown(false);
+  };
+  const statusKey = state?.status === 'saving' ? 'draft.stateSaving' : state?.status === 'error' ? 'draft.stateError' : dirty ? 'draft.stateIdle' : 'draft.stateSaved';
+  const footer = result ? <>
+    {result.goalId && <Button label={t('done.viewGoal')} onPress={() => router.replace({ pathname: '/space/goal/[id]', params: { id: result.goalId! } })} />}
+    <Button label={t('done.finish')} variant="text" onPress={() => router.replace('/space')} />
+  </> : closed ? <Button label={t('done.finish')} onPress={() => router.replace('/space')} />
+    : unknown ? <Button label={t('draft.recheck')} loading={busy} onPress={() => void recheck()} />
+    : expired ? <Button label={t('draft.recreate')} loading={busy} onPress={() => void recreate()} />
+    : <>
+      <Button label={t('draft.join', { space: space.name })} disabled={!canJoin} loading={busy} onPress={() => void join()} />
+      <Button label={t('draft.discard')} variant="text" disabled={busy} onPress={discard} />
+    </>;
+  return <>
+    <Screen maxWidth={680} testID="plan-draft" footer={footer}>
+      {!result && <Pressable accessibilityRole="button" accessibilityLabel={t('goal.close')} onPress={() => router.back()} style={styles.close}><Text style={{ color: theme.color.ink, fontSize: 24 }}>×</Text></Pressable>}
+      {result ? <View style={styles.result}>
+        <Text accessibilityRole="header" style={[styles.heading, { color: theme.color.ink }]}>{t('done.title', { space: space.name })}</Text>
+        <Text style={[styles.body, { color: theme.color.muted }]}>{t('done.body', { goals: result.goals, projects: result.projects, tasks: result.tasks })}</Text>
+      </View> : <>
+        {closed ? <Banner kind="info" title={t('draft.closed')} />
+          : expired ? <Banner kind="warn" title={t('draft.expired')} body={t('draft.expiredBody')} />
+          : unknown ? <Banner kind="warn" title={t('draft.unknown')} body={t('draft.unknownBody')} />
+          : <View style={styles.status}><Text style={{ color: theme.color.accent }}>{t(statusKey)}</Text><Text style={{ color: theme.color.muted }}>{t('draft.validFor', { minutes })}</Text></View>}
+        {error && <Banner kind="warn" title={error} action={state?.status === 'error' && !unknown ? <Button label={t('draft.retrySave')} size="sm" onPress={() => autosave.current?.retry()} /> : undefined} />}
+        {latest && <Banner kind="warn" title={t('draft.changed')} body={t('draft.changedBody')} action={<Button label={t('home.retry')} size="sm" onPress={applyLatest} />} />}
+        {input && <>
+          <TitleInput value={input.title} onChangeText={title => change({ ...input, title })} accessibilityLabel={t('draft.titleLabel')} placeholder={t('draft.namePlaceholder')} editable={editable} />
+          <MetaRow>
+            <MetaChip icon="calendar" label={input.targetDate ? formatLocalDate(locale, input.targetDate, localDateOf()) ?? input.targetDate : t('draft.dateChip')} onPress={editable ? () => setDateOpen(true) : undefined} />
+            <MetaChip icon="target" label={space.name} />
+          </MetaRow>
+          <SectionLabel>{t('draft.why')}</SectionLabel>
+          <TextInput accessibilityLabel={t('draft.why')} placeholder={t('draft.whyPlaceholder')} placeholderTextColor={theme.color.muted}
+            multiline maxLength={1000} editable={editable} value={input.rationale ?? ''} onChangeText={rationale => change({ ...input, rationale })}
+            style={[styles.textArea, { color: theme.color.ink, backgroundColor: theme.color.surface }]} />
+          <SectionLabel>{t('draft.projectLabel')}</SectionLabel>
+          <TextInput accessibilityLabel={t('draft.projectName')} maxLength={160} editable={editable} value={input.projectTitles[0] ?? ''}
+            onChangeText={title => change({ ...input, projectTitles: [title] })} style={[styles.project, { color: theme.color.ink, backgroundColor: theme.color.surface }]} />
+          <SectionLabel>{t('draft.tasks', { count: input.taskTitles.length })}</SectionLabel>
+          <ListGroup>
+            {input.taskTitles.map((value, index) => <DraftTaskRow key={keys[index] ?? index} value={value} total={input.taskTitles.length} editable={editable}
+              labels={{ task: t('draft.taskLabel', { number: index + 1 }), reorder: t('draft.moveDown', { number: index + 1 }), remove: t('draft.remove', { number: index + 1 }) }}
+              onChangeText={title => change({ ...input, taskTitles: input.taskTitles.map((item, at) => at === index ? title : item) })}
+              onRemove={() => { setKeys(current => current.filter((_, at) => at !== index)); change({ ...input, taskTitles: input.taskTitles.filter((_, at) => at !== index) }); }}
+              onReorder={() => { if (index >= input.taskTitles.length - 1) return; const titles = [...input.taskTitles]; [titles[index], titles[index + 1]] = [titles[index + 1]!, titles[index]!]; setKeys(current => { const copy = [...current]; [copy[index], copy[index + 1]] = [copy[index + 1]!, copy[index]!]; return copy; }); change({ ...input, taskTitles: titles }); }} />)}
+            <AddRow label={t('draft.add')} disabled={!editable || input.taskTitles.length >= 24} onPress={() => { setKeys(current => [...current, nextKey.current++]); change({ ...input, taskTitles: [...input.taskTitles, ''] }); }} />
+          </ListGroup>
+          {!valid && <Text accessibilityRole="alert" style={[styles.note, { color: theme.color.error }]}>{t('draft.joinNeedsTitle')}</Text>}
+          {state?.status === 'error' && <Button label={t('draft.retrySave')} variant="tonal" onPress={() => autosave.current?.retry()} />}
+        </>}
       </>}
-      {unknown && button(t('draft.recheck'), () => void act('recheck'), busy, true)}
-      {error && !!input && !unknown && button(t('draft.latest'), () => void inspectLatest(), busy)}
-      {error && !dirty && !unknown && button(t('space.refresh'), () => void load(), busy)}
-      {saved && button(t('draft.return'), () => router.navigate('/space'), busy, true)}
-    </ScrollView>
-  </SafeAreaView>;
+    </Screen>
+    <DatePickerSheet visible={dateOpen} onClose={() => setDateOpen(false)} locale={locale} value={input?.targetDate}
+      labels={{ title: t('goal.date'), today: t('goal.dueToday'), tomorrow: t('goal.dueTomorrow'), saturday: t('goal.dueSaturday'), clear: t('goal.dueClear'), pick: t('goal.duePick') }}
+      onSelect={date => { if (input) change({ ...input, targetDate: date }); setDateOpen(false); }}
+      onClear={() => { if (input) { const { targetDate: _date, ...rest } = input; change(rest); } setDateOpen(false); }} />
+  </>;
 }
+
 const styles = StyleSheet.create({
-  nav: {paddingHorizontal: 8, alignItems: 'flex-start'}, iconButton: {minWidth: 48, minHeight: 48, justifyContent: 'center', alignItems: 'center'},
-  content: {width: '100%', maxWidth: 680, alignSelf: 'center', padding: 24, paddingBottom: 40, gap: 20},
-  heading: {fontSize: 28, fontWeight: '600'}, body: {fontSize: 15, lineHeight: 24}, section: {fontSize: 20, fontWeight: '600'},
-  card: {borderRadius: 24, padding: 20, gap: 12}, field: {gap: 8}, label: {fontSize: 14},
-  input: {fontSize: 17, minHeight: 52, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth},
-  task: {flexDirection: 'row', alignItems: 'center', gap: 8}, button: {minHeight: 52, padding: 14, borderRadius: 28, alignItems: 'center', justifyContent: 'center'},
-  buttonText: {fontSize: 17, fontWeight: '600', textAlign: 'center'},
+  close: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  heading: { fontSize: 28, lineHeight: 36, fontWeight: '600' },
+  body: { fontSize: 16, lineHeight: 24 },
+  result: { alignItems: 'center', paddingTop: 64, gap: 18 },
+  status: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, marginBottom: 18, fontSize: 13 },
+  textArea: { minHeight: 92, borderRadius: 16, padding: 14, fontSize: 16, lineHeight: 23 },
+  project: { minHeight: 54, borderRadius: 16, paddingHorizontal: 14, fontSize: 16 },
+  note: { fontSize: 13, lineHeight: 19, marginTop: 10 },
 });

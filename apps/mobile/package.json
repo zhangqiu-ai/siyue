@@ -18,8 +18,12 @@
     "@siyue/ai": "workspace:*",
     "@siyue/contracts": "workspace:*",
     "@siyue/domain": "workspace:*",
+    "@siyue/whiteboard": "workspace:*",
     "assistant-cloud": "0.1.43",
     "expo": "57.0.20",
+    "expo-apple-authentication": "57.0.2",
+    "expo-build-properties": "57.0.21",
+    "expo-clipboard": "~57.0.2",
     "expo-constants": "~57.0.17",
     "expo-crypto": "~57.0.2",
     "expo-file-system": "~57.0.7",
@@ -39,8 +43,7 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.2",
     "react-native-web": "^0.21.2",
-    "react-native-worklets": "0.10.1",
-    "@siyue/whiteboard": "workspace:*"
+    "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
     "@react-native/metro-config": "0.86.3",

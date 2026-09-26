@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>思玥 · 统一产品原型</title>
+<style>
+:root{--font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif}
+/* Sage tokens mirrored from apps/mobile/src/ui/theme.ts; errorSurface / warn / warnSurface / apple are proposed additions */
+.t-light{--focus:#E7EDE5;--focusPressed:#DDE6D9;--onFocus:#25352B;--focusMuted:#506254;--background:#F7F8F2;--surface:#FFFEFA;--ink:#25352B;--muted:#5D695F;--accent:#476B53;--accentPressed:#395A44;--onAccent:#FFFFFF;--subtle:#EDF0E8;--border:#D4DCD0;--controlBorder:#7A8C7C;--error:#A33E32;--errorSurface:#F7E9E5;--warnSurface:#F4EEDC;--warn:#7A5B12;--apple:#000;--onApple:#fff;--scrim:rgba(24,32,26,.34)}
+.t-dark{--focus:#28372D;--focusPressed:#334738;--onFocus:#F0F3E9;--focusMuted:#BCCBBB;--background:#151C17;--surface:#202A23;--ink:#F0F3E9;--muted:#B3C0B2;--accent:#B7CDB8;--accentPressed:#A3BDA6;--onAccent:#203326;--subtle:#2D3930;--border:#435346;--controlBorder:#839887;--error:#F1A99D;--errorSurface:#3A2724;--warnSurface:#38321F;--warn:#E8CF8E;--apple:#fff;--onApple:#000;--scrim:rgba(0,0,0,.5)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--font);background:#E9EBE4;color:#25352B;-webkit-font-smoothing:antialiased}
+body.page-dark{background:#0E1310;color:#E6EBE1}
+.stage{display:grid;grid-template-columns:300px minmax(0,1fr) 260px;gap:28px;min-height:100vh;padding:28px}
+@media (max-width:1100px){.stage{grid-template-columns:1fr}.notes,.tweaks{order:2}}
+.notes,.tweaks{font-size:13px;line-height:1.6}
+.panel{background:rgba(255,255,255,.72);border-radius:18px;padding:18px 18px 16px;margin-bottom:14px}
+.page-dark .panel{background:rgba(255,255,255,.05)}
+.panel h2{font-size:12px;letter-spacing:.06em;margin:0 0 10px;color:#5D695F;font-weight:600}
+.page-dark .panel h2{color:#9AA99B}
+.panel h3{font-size:17px;margin:0 0 8px;line-height:1.35}
+.panel ul{margin:0;padding-left:18px}.panel li{margin:4px 0}
+.ctl{margin-bottom:12px}.ctl label{display:block;font-size:12px;color:#5D695F;margin-bottom:5px}
+.page-dark .ctl label{color:#9AA99B}
+.seg{display:flex;background:rgba(0,0,0,.06);border-radius:10px;padding:3px;gap:2px}
+.page-dark .seg{background:rgba(255,255,255,.08)}
+.seg button{flex:1;border:0;background:transparent;border-radius:8px;padding:7px 4px;font:inherit;font-size:12px;color:inherit;cursor:pointer}
+.seg button[aria-pressed=true]{background:#476B53;color:#fff}
+select{width:100%;padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,.15);font:inherit;font-size:13px;background:transparent;color:inherit}
+.page-dark select{border-color:rgba(255,255,255,.2)}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.feature + .feature{margin-top:14px}.fname{font-size:15px;font-weight:600;margin-bottom:4px}.gname{font-size:12px;opacity:.65;margin:10px 0 6px}
+.jump button{border:1px solid rgba(0,0,0,.14);background:transparent;color:inherit;border-radius:99px;padding:4px 9px;font:inherit;font-size:12px;cursor:pointer}
+.page-dark .jump button{border-color:rgba(255,255,255,.18)}
+.jump button[aria-current=true]{background:#476B53;color:#fff;border-color:#476B53}
+main.center{display:flex;align-items:flex-start;justify-content:center;min-width:0;position:sticky;top:28px;align-self:start}
+.scaler{transform-origin:top center}
+
+/* ---------- Device ---------- */
+.device{position:relative;background:#111;padding:12px;border-radius:62px;box-shadow:0 30px 60px -20px rgba(20,30,22,.35),0 0 0 1px rgba(0,0,0,.4)}
+.device.pad{border-radius:40px;padding:16px}
+.screen{position:relative;width:390px;height:844px;border-radius:50px;overflow:hidden;background:var(--background);color:var(--ink);font-family:var(--font)}
+.pad .screen{width:1180px;height:820px;border-radius:26px}
+.status{position:absolute;inset:0 0 auto 0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 34px 0;font-size:16px;font-weight:600;z-index:30;pointer-events:none}
+.pad .status{height:30px;padding:0 24px;font-size:13px}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:36px;background:#000;border-radius:20px;z-index:31}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:136px;height:5px;border-radius:3px;background:var(--ink);opacity:.9;z-index:40}
+.view{position:absolute;inset:0;display:flex;flex-direction:column}
+.nav{height:52px;margin-top:54px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;flex:none}
+.pad .nav{margin-top:30px}
+.navbtn{width:44px;height:44px;border-radius:22px;border:0;background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 1px 0 var(--border)}
+.navbtn:active{background:var(--subtle)}
+.body{flex:1;overflow:auto;padding:4px 20px 24px;scrollbar-width:none}
+.body::-webkit-scrollbar{display:none}
+.footer{flex:none;padding:12px 20px 34px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(to top,var(--background) 80%,transparent)}
+.pad .footer{padding-bottom:24px}
+h1.lt{font-size:30px;line-height:38px;font-weight:650;letter-spacing:-.01em;margin:4px 0 8px}
+.lead{font-size:16px;line-height:24px;color:var(--muted);margin:0 0 24px}
+.section-label{font-size:13px;line-height:18px;color:var(--muted);margin:24px 4px 8px;font-weight:500}
+.fine{font-size:13px;line-height:19px;color:var(--muted);margin:8px 4px 0}
+
+/* groups & rows */
+.group{background:var(--surface);border-radius:20px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 16px;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer;position:relative}
+div.row{cursor:default}
+button.row:active{background:var(--subtle)}
+.row + .row::before{content:"";position:absolute;top:0;left:60px;right:0;height:1px;background:var(--border);transform:scaleY(.5)}
+.row.noicon + .row.noicon::before{left:16px}
+.tile{width:32px;height:32px;border-radius:9px;background:var(--subtle);display:grid;place-items:center;flex:none;color:var(--accent)}
+.rmain{flex:1;min-width:0}
+.rtitle{font-size:16px;line-height:22px}
+.rsub{font-size:13px;line-height:18px;color:var(--muted);margin-top:2px}
+.rval{font-size:15px;color:var(--muted);white-space:nowrap}
+.chev{color:var(--muted);opacity:.7;flex:none}
+.row.danger .rtitle{color:var(--error)}
+.row.center{justify-content:center}.row.center .rmain{flex:none;text-align:center}.row.center .rtitle{font-weight:500}
+.row[disabled]{cursor:default}.row[disabled] .rtitle{color:var(--muted)}
+.row[data-sel="1"]{background:var(--focus)}
+.badge{font-size:12px;line-height:20px;padding:0 8px;border-radius:99px;background:var(--accent);color:var(--onAccent);font-weight:600;white-space:nowrap}
+.pill{font-size:12px;line-height:20px;padding:0 8px;border-radius:99px;background:var(--subtle);color:var(--muted);white-space:nowrap}
+.pill.on{background:var(--focus);color:var(--onFocus)}
+
+/* identity */
+.idcard{background:var(--focus);color:var(--onFocus);border-radius:24px;padding:20px;display:flex;gap:16px;align-items:center;margin:4px 0 8px}
+.avatar{width:60px;height:60px;border-radius:30px;background:var(--accent);color:var(--onAccent);display:grid;place-items:center;font-size:24px;font-weight:600;flex:none}
+.idname{font-size:20px;line-height:26px;font-weight:600;word-break:break-all}
+.idmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.idmeta .pill{background:rgba(255,255,255,.6);color:var(--onFocus)}
+.t-dark .idmeta .pill{background:rgba(255,255,255,.08)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:4px;background:var(--accent);margin-right:6px;vertical-align:1px}
+.dot.off{background:var(--muted)}
+
+/* buttons */
+.btn{min-height:52px;border-radius:16px;border:0;font:inherit;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;cursor:pointer;width:100%;transition:background .15s,transform .12s}
+.btn:active:not([disabled]){transform:scale(.985)}
+.btn.primary{background:var(--accent);color:var(--onAccent)}.btn.primary:active{background:var(--accentPressed)}
+.btn.tonal{background:var(--subtle);color:var(--ink)}
+.btn.apple{background:var(--apple);color:var(--onApple)}
+.btn.dangerfill{background:var(--error);color:var(--surface)}
+.btn.text{background:transparent;color:var(--accent);min-height:44px;font-weight:500;font-size:16px}
+.btn[disabled]{background:var(--subtle);color:var(--muted);cursor:not-allowed}
+.btn.text[disabled]{background:transparent}
+.btn.sm{min-height:36px;width:auto;font-size:14px;border-radius:12px;padding:0 14px;font-weight:600}
+.spin{width:18px;height:18px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.linkbtn{border:0;background:none;color:var(--accent);font:inherit;font-size:14px;font-weight:500;padding:10px 4px;margin:-10px -4px;cursor:pointer}
+.inline-links{display:flex;justify-content:center;gap:4px;font-size:15px;color:var(--muted);align-items:center}
+
+/* fields */
+.field{margin-bottom:16px}
+.flabel{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;line-height:20px;color:var(--muted);margin:0 4px 8px;font-weight:500}
+.inputwrap{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;min-height:54px;transition:border-color .15s,box-shadow .15s}
+.inputwrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in oklab,var(--accent) 18%,transparent)}
+.inputwrap.invalid{border-color:var(--error)}
+.inputwrap input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:14px 16px;outline:none}
+.inputwrap input::placeholder{color:var(--muted);opacity:.7}
+.inputwrap input[readonly]{color:var(--muted)}
+.eye{width:48px;height:48px;border:0;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;flex:none}
+.ferr{display:flex;gap:6px;align-items:flex-start;color:var(--error);font-size:14px;line-height:20px;margin:8px 4px 0}
+.rules{list-style:none;margin:10px 4px 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.rules li{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.rules .mark{width:18px;height:18px;border-radius:9px;border:1.5px solid var(--controlBorder);display:grid;place-items:center;flex:none;transition:all .2s}
+.rules li.ok{color:var(--ink)}.rules li.ok .mark{background:var(--accent);border-color:var(--accent);color:var(--onAccent)}
+.meter{height:4px;border-radius:2px;background:var(--subtle);margin:10px 4px 0;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:2px;transition:width .25s}
+
+/* otp */
+.otp{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.otp .box{height:60px;border-radius:14px;background:var(--surface);border:1.5px solid var(--border);display:grid;place-items:center;font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.otp .box.cur{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in oklab,var(--accent) 18%,transparent)}
+.otp input{position:absolute;inset:0;opacity:0;font-size:16px;cursor:text;width:100%}
+.resend{display:flex;justify-content:space-between;align-items:center;margin:14px 4px 0;font-size:14px;color:var(--muted)}
+
+/* banners */
+.banner{display:flex;gap:10px;align-items:flex-start;border-radius:16px;padding:12px 14px;font-size:14px;line-height:20px;margin-bottom:16px}
+.banner.info{background:var(--focus);color:var(--onFocus)}
+.banner.warn{background:var(--warnSurface);color:var(--ink)}.banner.warn svg{color:var(--warn)}
+.banner.error{background:var(--errorSurface);color:var(--ink)}.banner.error svg{color:var(--error)}
+.banner > svg{flex:none;margin-top:0}
+.banner .bmain{flex:1}.banner b{font-weight:600;display:block;margin-bottom:2px}
+.banner .btn.sm{margin-top:10px}
+.note{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:19px;color:var(--muted);margin:12px 4px}
+.note svg{flex:none;margin-top:1px}
+
+/* steps */
+.steps{display:flex;gap:6px;margin:0 0 18px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--subtle)}
+.steps i.on{background:var(--accent)}
+.stepcap{font-size:13px;color:var(--muted);margin:0 0 6px;font-weight:500}
+
+/* cards & choices */
+.card{background:var(--surface);border-radius:20px;padding:16px;margin-bottom:12px}
+.card h4{margin:0;font-size:17px;line-height:24px;font-weight:600}
+.card .csub{font-size:13px;color:var(--muted);margin-top:2px;line-height:18px}
+.choice{display:flex;gap:12px;align-items:flex-start;width:100%;border:1.5px solid var(--border);background:transparent;border-radius:16px;padding:12px 14px;margin-top:10px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.choice .radio{width:22px;height:22px;border-radius:11px;border:1.5px solid var(--controlBorder);flex:none;margin-top:1px;display:grid;place-items:center}
+.choice[aria-checked=true]{border-color:var(--accent);background:var(--focus)}
+.choice[aria-checked=true] .radio{border-color:var(--accent)}
+.choice[aria-checked=true] .radio::after{content:"";width:12px;height:12px;border-radius:6px;background:var(--accent)}
+.choice .ct{font-size:16px;font-weight:500;line-height:22px}.choice .cd{font-size:13px;color:var(--muted);line-height:18px;margin-top:2px}
+.sub-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding:12px;border-radius:12px;background:var(--subtle);cursor:pointer;border:0;width:100%;color:var(--ink);font:inherit;font-size:15px;text-align:left}
+.check{display:flex;gap:12px;align-items:flex-start;width:100%;border:0;background:transparent;padding:12px 4px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;font-size:16px;line-height:22px}
+.check .box{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--controlBorder);flex:none;display:grid;place-items:center;background:var(--surface);transition:all .15s}
+.check[aria-checked=true] .box{background:var(--accent);border-color:var(--accent);color:var(--onAccent)}
+.stat{font-size:32px;font-weight:650;line-height:40px;font-variant-numeric:tabular-nums}
+
+/* timeline */
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:flex;gap:14px;position:relative;padding-bottom:22px}
+.tl li:not(:last-child)::before{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--border)}
+.tl .tdot{width:28px;height:28px;border-radius:14px;display:grid;place-items:center;flex:none;background:var(--subtle);color:var(--muted)}
+.tl .done .tdot{background:var(--accent);color:var(--onAccent)}
+.tl .wait .tdot{background:var(--warnSurface);color:var(--warn)}
+.tl .tt{font-size:16px;font-weight:500;line-height:22px}.tl .td{font-size:13px;color:var(--muted);line-height:18px;margin-top:2px}
+
+/* sheet & toast */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:50;animation:fade .2s ease}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--background);border-radius:28px 28px 0 0;z-index:51;padding:10px 20px 34px;animation:up .32s cubic-bezier(.2,.9,.25,1)}
+.pad .sheet{left:50%;right:auto;bottom:auto;top:50%;width:460px;transform:translate(-50%,-50%);border-radius:24px;padding:24px;animation:pop .25s cubic-bezier(.2,.9,.25,1)}
+.grab{width:36px;height:5px;border-radius:3px;background:var(--border);margin:0 auto 16px}
+.pad .grab{display:none}
+.sheet h2{font-size:22px;line-height:28px;margin:4px 0 6px;font-weight:650}
+.sheet p{font-size:15px;line-height:22px;color:var(--muted);margin:0 0 18px}
+.sheet .btns{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.toast{position:absolute;top:62px;left:50%;transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--background);font-size:14px;font-weight:500;padding:10px 16px;border-radius:99px;display:flex;gap:8px;align-items:center;white-space:nowrap;animation:drop .3s cubic-bezier(.2,.9,.25,1)}
+.pad .toast{top:40px}
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(100%)}}
+@keyframes pop{from{opacity:0;transform:translate(-50%,-46%)}}
+@keyframes drop{from{opacity:0;transform:translate(-50%,-12px)}}
+.enter{animation:push .34s cubic-bezier(.2,.85,.25,1)}
+.enter-back{animation:pushb .3s cubic-bezier(.2,.85,.25,1)}
+.enter-modal{animation:up .38s cubic-bezier(.2,.9,.25,1)}
+@keyframes push{from{transform:translateX(28%);opacity:.4}}
+@keyframes pushb{from{transform:translateX(-18%);opacity:.5}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* result */
+.result{display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:80px}
+.result .ring{width:84px;height:84px;border-radius:42px;background:var(--focus);color:var(--accent);display:grid;place-items:center;margin-bottom:22px}
+.result h1{font-size:26px;margin:0 0 10px}
+.result p{font-size:16px;line-height:24px;color:var(--muted);margin:0;max-width:300px}
+
+/* iPad split */
+.split{position:absolute;inset:0;display:grid;grid-template-columns:380px 1fr}
+.split .side{border-right:1px solid var(--border);position:relative;background:var(--background)}
+.split .detail{position:relative;background:var(--background)}
+.split .detail .body,.split .detail .footer{padding-left:max(32px,calc((100% - 560px)/2));padding-right:max(32px,calc((100% - 560px)/2))}
+.split .side .body{padding:4px 16px 24px}
+.solo .body,.solo .footer{padding-left:calc((100% - 440px)/2);padding-right:calc((100% - 440px)/2)}
+.empty-detail{display:grid;place-items:center;height:100%;color:var(--muted);font-size:15px}
+.modalwrap{position:absolute;inset:0;z-index:45;background:var(--scrim);display:grid;place-items:center;animation:fade .2s}
+.modalwrap .formsheet{position:relative;width:560px;height:740px;border-radius:24px;overflow:hidden;background:var(--background);animation:pop2 .3s cubic-bezier(.2,.9,.25,1)}
+.formsheet .nav{margin-top:10px}
+@keyframes pop2{from{opacity:0;transform:translateY(24px)}}
+.anno{outline:2px dashed #C9812B;outline-offset:3px;position:relative;border-radius:24px}
+.anno-tag{position:absolute;right:-6px;top:-12px;background:#C9812B;color:#fff;font-size:10px;line-height:16px;padding:0 6px;border-radius:6px;white-space:nowrap;z-index:5;font-weight:600}
+/* ---------- app shell, chat, space, plan, whiteboard ---------- */
+.iconbtn{width:44px;height:44px;border-radius:22px;border:0;background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.iconbtn:active{background:var(--subtle)}
+.navright{display:flex;gap:8px;align-items:center;min-width:44px;justify-content:flex-end}
+.sb{display:flex;flex-direction:column;min-height:100%;gap:4px}
+.sb-top{display:flex;align-items:center;justify-content:space-between;padding:0 2px 8px 6px}
+.sb-brand{font-size:24px;font-weight:650;letter-spacing:-.01em}
+.sb-space{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--surface);color:var(--ink);border-radius:18px;padding:12px;font:inherit;text-align:left;cursor:pointer;margin-bottom:10px}
+.spbadge{width:40px;height:40px;border-radius:12px;background:var(--focus);color:var(--onFocus);display:grid;place-items:center;font-weight:650;font-size:17px;flex:none}
+.sb-nav{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;border:0;background:transparent;color:var(--ink);border-radius:14px;padding:0 12px;font:inherit;font-size:16px;cursor:pointer;text-align:left}
+.sb-nav svg{color:var(--muted)}
+.sb-nav.on{background:var(--focus);color:var(--onFocus);font-weight:600}.sb-nav.on svg{color:var(--accent)}
+.sb-label{font-size:13px;color:var(--muted);margin:18px 12px 6px;font-weight:500}
+.sb-conv{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;min-height:44px;border:0;background:transparent;color:var(--ink);border-radius:12px;padding:0 12px;font:inherit;font-size:15px;cursor:pointer;text-align:left}
+.sb-conv span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sb-conv em{font-style:normal;font-size:12px;color:var(--muted);flex:none}
+.sb-conv.on{background:var(--subtle)}
+.sb-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border)}
+.sb-me{display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:15px;cursor:pointer;padding:6px;border-radius:12px}
+.avatar.sm{width:32px;height:32px;border-radius:16px;font-size:14px}
+.drawer{position:absolute;top:0;bottom:0;left:0;width:312px;background:var(--background);z-index:52;padding:60px 14px 30px;overflow:auto;animation:slide .3s cubic-bezier(.2,.9,.25,1);box-shadow:0 0 40px rgba(0,0,0,.18)}
+@keyframes slide{from{transform:translateX(-100%)}}
+.appsplit{position:absolute;inset:0;display:grid;grid-template-columns:300px 1fr}
+.appsplit>aside{border-right:1px solid var(--border);overflow:auto;padding:40px 14px 20px;background:var(--background)}
+.appsplit>main{position:relative;min-width:0}
+.appsplit main .body,.appsplit main .footer{padding-left:max(32px,calc((100% - 720px)/2));padding-right:max(32px,calc((100% - 720px)/2))}
+.chat-empty{padding-top:36px}
+.chips{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.chip{border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:16px;padding:12px 14px;font:inherit;font-size:15px;line-height:21px;text-align:left;cursor:pointer}
+.chip:active{background:var(--subtle)}
+.composer{display:flex;align-items:flex-end;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:26px;padding:6px 6px 6px 18px;transition:border-color .15s}
+.composer:focus-within{border-color:var(--accent)}
+.composer textarea{flex:1;border:0;background:transparent;resize:none;font:inherit;font-size:17px;line-height:24px;color:var(--ink);padding:8px 0;outline:none;height:40px}
+.sendbtn{width:40px;height:40px;border-radius:20px;border:0;background:var(--accent);color:var(--onAccent);display:grid;place-items:center;cursor:pointer;flex:none}
+.sendbtn[disabled]{background:var(--subtle);color:var(--muted);cursor:default}
+.sendbtn.stop{background:var(--ink);color:var(--background)}
+.composer-meta{font-size:12px;color:var(--muted);text-align:center}
+.setupcard{display:flex;gap:12px;align-items:center;background:var(--surface);border-radius:20px;padding:14px 16px}
+.setupcard > svg{color:var(--accent);flex:none}
+.thread{display:flex;flex-direction:column;gap:18px;padding-top:4px}
+.msg-user{align-self:flex-end;max-width:82%;background:var(--focus);color:var(--onFocus);border-radius:20px 20px 6px 20px;padding:10px 14px;font-size:16px;line-height:23px}
+.msg-ai{font-size:16px;line-height:25px}
+.msg-ai p{margin:0 0 10px}.msg-ai ul{margin:0 0 10px;padding-left:20px}.msg-ai li{margin:4px 0}
+.msg-ai blockquote{margin:0 0 10px;padding:10px 14px;border-radius:14px;background:var(--subtle)}
+.cursor{display:inline-block;width:8px;height:18px;background:var(--accent);border-radius:2px;vertical-align:-3px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.msg-actions{display:flex;gap:2px;margin:-6px 0 0 -8px}
+.msg-actions button{width:36px;height:36px;border:0;background:transparent;color:var(--muted);border-radius:10px;display:grid;place-items:center;cursor:pointer}
+.msg-actions button:active{background:var(--subtle)}
+.msg-note{font-size:13px;color:var(--muted)}
+.msg-err{display:flex;gap:10px;align-items:flex-start;background:var(--errorSurface);border-radius:16px;padding:12px 14px;font-size:14px;line-height:20px}
+.msg-err > svg{color:var(--error);flex:none}
+.plancard{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:14px 16px;margin:4px 0 10px}
+.pc-head{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);font-weight:600}
+.pc-head em{margin-left:auto;font-style:normal;color:var(--muted);font-weight:500}
+.pc-title{font-size:18px;font-weight:600;margin:6px 0 2px;line-height:24px}
+.pc-meta{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:18px}
+.space-title{display:flex;align-items:center;gap:6px;border:0;background:none;color:var(--ink);padding:0;cursor:pointer;font:inherit;text-align:left}
+.space-title h1{margin:4px 0}
+.syncline{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);margin:0 0 18px}
+.syncline svg{flex:none}.syncline.warn{color:var(--warn)}
+.goalcard{display:flex;align-items:center;gap:14px;width:100%;border:0;background:var(--surface);color:var(--ink);border-radius:20px;padding:14px 16px;margin-bottom:10px;font:inherit;text-align:left;cursor:pointer}
+.goalcard:active{background:var(--subtle)}
+.gmeta{text-align:right;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gmeta em{display:block;font-style:normal}
+.task{display:flex;align-items:center;gap:4px;min-height:56px;padding:4px 14px 4px 4px;position:relative}
+.task + .task::before{content:"";position:absolute;top:0;left:52px;right:0;height:1px;background:var(--border);transform:scaleY(.5)}
+.tcheck{width:44px;height:44px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
+.tcheck .circle{width:24px;height:24px;border-radius:12px;border:2px solid var(--controlBorder);display:grid;place-items:center;color:var(--onAccent);transition:all .15s}
+.tcheck[disabled]{cursor:default;opacity:.55}
+.task.done .circle{background:var(--accent);border-color:var(--accent)}
+.task.done .rtitle{color:var(--muted);text-decoration:line-through}
+.tmain{flex:1;min-width:0;border:0;background:none;color:var(--ink);text-align:left;font:inherit;padding:6px 0;cursor:pointer}
+.due{font-size:12px;line-height:20px;color:var(--muted);background:var(--subtle);border-radius:99px;padding:0 8px;white-space:nowrap}
+.due.today{color:var(--onFocus);background:var(--focus)}
+.fab{position:absolute;right:20px;bottom:40px;width:60px;height:60px;border-radius:30px;border:0;background:var(--accent);color:var(--onAccent);display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(40,70,50,.55);cursor:pointer;z-index:20}
+.fab:active{transform:scale(.96)}
+.pad .fab{bottom:28px;right:28px}
+.avstack{display:flex;padding-left:8px;border:0;background:none;cursor:pointer}
+.avstack span{width:32px;height:32px;border-radius:16px;border:2px solid var(--background);margin-left:-8px;display:grid;place-items:center;font-size:12px;font-weight:600;background:var(--focus);color:var(--onFocus)}
+.progress{height:6px;background:var(--subtle);border-radius:3px;overflow:hidden;margin:14px 0 6px}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:3px}
+details.why{background:var(--surface);border-radius:16px;padding:12px 16px;margin:14px 0 4px}
+details.why summary{cursor:pointer;font-size:15px;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:28px}
+details.why summary::-webkit-details-marker{display:none}
+details.why p{font-size:14px;color:var(--muted);line-height:21px;margin:8px 0 0}
+details.why textarea{width:100%;margin-top:8px;border:0;background:var(--subtle);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;line-height:21px;color:var(--ink);resize:none;min-height:84px;outline:none}
+.addrow{display:flex;align-items:center;gap:12px;padding:4px 16px 4px 14px;min-height:52px;color:var(--accent);position:relative}
+.task + .addrow::before{content:"";position:absolute;top:0;left:52px;right:0;height:1px;background:var(--border);transform:scaleY(.5)}
+.addrow input{flex:1;border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);outline:none;padding:10px 0}
+.addrow input::placeholder{color:var(--accent);opacity:1}
+.metarow{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.metachip{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:0 12px;min-height:34px;background:var(--surface);color:var(--ink);border:1px solid var(--border);cursor:pointer;font:inherit;font-size:13px}
+.metachip svg{color:var(--muted)}
+.mode{display:flex;background:var(--subtle);border-radius:14px;padding:4px;margin:0 0 16px}
+.mode button{flex:1;min-height:40px;border:0;border-radius:10px;background:transparent;color:var(--muted);font:inherit;font-size:15px;font-weight:500;cursor:pointer}
+.mode button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.mode button[disabled]{opacity:.45;cursor:not-allowed}
+.bigtext{width:100%;min-height:150px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--ink);font:inherit;font-size:19px;line-height:28px;padding:16px;resize:none;outline:none;display:block}
+.bigtext:focus{border-color:var(--accent)}
+.examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.examples button{border:0;background:var(--subtle);color:var(--ink);border-radius:99px;padding:0 12px;min-height:32px;font:inherit;font-size:13px;cursor:pointer}
+.quote{font-size:16px;line-height:24px;padding:12px 16px;background:var(--surface);border-radius:16px;margin:0 0 20px}
+.skel{background:var(--subtle);border-radius:10px;height:18px;margin:12px 0;position:relative;overflow:hidden}
+.skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:shimmer 1.3s infinite}
+.t-dark .skel::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.titleinput{resize:none;display:block;width:100%;border:0;background:transparent;font:inherit;font-size:26px;line-height:34px;font-weight:650;color:var(--ink);padding:2px 0 4px;outline:none;border-bottom:1.5px solid transparent}
+.titleinput:focus{border-bottom-color:var(--accent)}
+.plainin{width:100%;border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);outline:none;padding:12px 0;min-width:0}
+.projrow{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:52px}
+.projrow svg{color:var(--muted);flex:none}
+.dtask{display:flex;align-items:center;gap:4px;padding:0 6px 0 4px;min-height:52px;position:relative}
+.dtask + .dtask::before,.dtask + .addrow::before{content:"";position:absolute;top:0;left:40px;right:12px;height:1px;background:var(--border);transform:scaleY(.5)}
+.dtask .grip{color:var(--muted);opacity:.55;width:34px;height:44px;display:grid;place-items:center;cursor:grab;flex:none}
+.dtask .x{width:40px;height:40px;border:0;background:none;color:var(--muted);border-radius:12px;display:grid;place-items:center;cursor:pointer;flex:none}
+.statusline{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:0 0 8px;flex-wrap:wrap}
+.wb-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pad .wb-grid{grid-template-columns:repeat(3,1fr)}
+.wbcard{border:0;background:var(--surface);border-radius:20px;padding:10px 10px 12px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;display:block;width:100%}
+.wbcard:active{background:var(--subtle)}
+.wbthumb{aspect-ratio:4/3;border-radius:12px;background:var(--background);overflow:hidden;margin-bottom:10px;display:grid;place-items:center}
+.wbthumb svg{width:100%;height:100%}
+.wbcard .rtitle{font-size:15px;font-weight:600;padding:0 4px}.wbcard .rsub{padding:0 4px}
+.wbnew{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--controlBorder);background:transparent;color:var(--muted);border-radius:20px;min-height:100%;font:inherit;font-size:15px;cursor:pointer;aspect-ratio:auto;padding:24px}
+.canvas{position:absolute;inset:0;background-color:var(--surface);background-image:radial-gradient(var(--border) 1.1px,transparent 1.3px);background-size:22px 22px}
+.canvas svg.board{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:360px}
+.pad .canvas svg.board{width:430px;top:50%}
+.hand{font-family:"Kaiti SC","STKaiti","Bradley Hand","Chalkboard SE",cursive}
+.wb-top{position:absolute;top:58px;left:12px;right:12px;display:flex;align-items:center;gap:8px;z-index:10}
+.pad .wb-top{top:40px;left:20px;right:20px}
+.wb-top .navbtn,.wb-pill,.wb-title{background:var(--background);box-shadow:0 2px 10px -4px rgba(0,0,0,.18),0 0 0 1px var(--border)}
+.wb-title{flex:1;min-width:0;border:0;border-radius:22px;padding:4px 16px;min-height:44px;display:flex;flex-direction:column;justify-content:center;color:var(--ink);font:inherit;text-align:left}
+.wb-title div{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wb-title small{font-size:11px;color:var(--muted);display:flex;gap:4px;align-items:center}
+.wb-title small.bad{color:var(--error)}
+.wb-pill{height:44px;border-radius:22px;border:0;color:var(--ink);display:flex;align-items:center;gap:6px;padding:0 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums}
+.wb-tools{position:absolute;left:50%;transform:translateX(-50%);bottom:34px;display:flex;align-items:center;gap:2px;background:var(--background);border-radius:22px;padding:6px;box-shadow:0 10px 28px -12px rgba(0,0,0,.35),0 0 0 1px var(--border);z-index:10}
+.pad .wb-tools{bottom:24px}
+.incall .wb-tools{bottom:112px}.pad .incall .wb-tools{bottom:102px}
+.wb-tools button{width:40px;height:40px;border:0;border-radius:14px;background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.wb-tools button[aria-pressed=true]{background:var(--focus);color:var(--accent)}
+.wb-sep{width:1px;height:24px;background:var(--border);margin:0 3px}
+.cdot{width:20px;height:20px;border-radius:10px;box-shadow:0 0 0 2px var(--background),0 0 0 3.5px var(--border)}
+.tiles{position:absolute;top:110px;left:12px;right:12px;display:flex;gap:8px;z-index:9}
+.pad .tiles{top:96px;left:auto;right:20px;flex-direction:column;width:132px}
+.tiles .tile{flex:1;height:88px;border-radius:16px;background:var(--focus);color:var(--onFocus);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:11px;position:relative;min-width:0;border:0;font-family:inherit}
+.pad .tiles .tile{width:132px;height:100px;flex:none}
+.tiles .tile .av{width:34px;height:34px;border-radius:17px;background:var(--accent);color:var(--onAccent);display:grid;place-items:center;font-weight:650;font-size:14px}
+.tiles .tile span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;padding:0 4px}
+.tiles .tile.speaking{box-shadow:0 0 0 2.5px var(--accent)}
+.tiles .tile.empty{background:transparent;border:1.5px dashed var(--controlBorder);color:var(--muted);cursor:pointer}
+.tiles .tile .mute{position:absolute;top:6px;right:6px;color:var(--error)}
+.recpill{position:absolute;top:208px;left:50%;transform:translateX(-50%);z-index:11;background:var(--error);color:#fff;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:600;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.recpill i{width:8px;height:8px;border-radius:4px;background:#fff;animation:blink 1.2s steps(2) infinite}
+.pad .recpill{top:96px}
+.callbar{position:absolute;left:50%;transform:translateX(-50%);bottom:34px;display:flex;gap:10px;z-index:10;background:#1C241E;padding:8px;border-radius:32px}
+.pad .callbar{bottom:24px}
+.callbar button{width:48px;height:48px;border-radius:24px;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer}
+.callbar button[aria-pressed=false]{background:#fff;color:#1C241E}
+.callbar button.recon{background:var(--error)}
+.callbar .hang{background:#C2412F;width:64px}
+.pagestrip{display:flex;gap:10px;overflow:auto;padding:4px 2px 14px}
+.pthumb{flex:none;width:92px;border:2px solid var(--border);border-radius:14px;aspect-ratio:3/4;background:var(--surface);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit}
+.pthumb.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.pthumb.add{border-style:dashed;align-items:center;padding:0}
+.sheetrow{display:flex;align-items:center;gap:14px;width:100%;min-height:56px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:16px;text-align:left;cursor:pointer;border-radius:14px;padding:0 8px}
+.sheetrow:active{background:var(--subtle)}
+.sheetrow .tile-ic{width:40px;height:40px;border-radius:12px;background:var(--subtle);color:var(--accent);display:grid;place-items:center;flex:none}
+.sheetrow.danger{color:var(--error)}.sheetrow.danger .tile-ic{color:var(--error)}
+.sheetrow .rsub{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="stage">
+  <aside class="notes" id="notes"></aside>
+  <main class="center"><div class="scaler" id="scaler"><div id="app"></div></div></main>
+  <aside class="tweaks" id="tweaks"></aside>
+</div>
+<script>
+(function(){
+const saved=JSON.parse(localStorage.getItem('siyue-prototype')||'{}');
+const S={screen:'chat.home',stack:[],dir:'push',theme:saved.theme||'light',lang:saved.lang||'zh',device:saved.device||'phone',scenario:saved.scenario||'normal',anno:saved.anno??true,
+  sheet:null,toast:null,busy:null,f:{},show:{},err:{},revoked:[],famAccepted:false,famChecks:{m:false,g:false},
+  del:{choices:{},recipient:{}},resendAt:0,spaceCreated:false};
+const L=(zh,en)=>S.lang==='en'?en:zh;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function persist(){localStorage.setItem('siyue-prototype',JSON.stringify({theme:S.theme,lang:S.lang,device:S.device,scenario:S.scenario,anno:S.anno}));}
+
+/* ---------- icons ---------- */
+const P={
+ chevR:'<path d="M9 6l6 6-6 6"/>',chevL:'<path d="M15 5l-7 7 7 7"/>',close:'<path d="M6 6l12 12M18 6L6 18"/>',
+ key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>',
+ phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+ tablet:'<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M11 18h2"/>',
+ desktop:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+ people:'<circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15.5 14.3c3 0 5.5 2.2 5.5 5.2"/>',
+ box:'<path d="M4 7.5l8-4 8 4-8 4-8-4z"/><path d="M4 7.5v9l8 4 8-4v-9M12 11.5v9"/>',
+ mail:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/>',
+ eye:'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ eyeOff:'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/>',
+ check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+ warn:'<path d="M12 3.5l9.5 17h-19L12 3.5z"/><path d="M12 10v4.5M12 17.5v.01"/>',
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.01"/>',
+ lock:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+ refresh:'<path d="M20 12a8 8 0 1 1-2.4-5.7M20 4.5V9h-4.5"/>',
+ shield:'<path d="M12 3l8 3v6c0 4.8-3.4 8-8 9-4.6-1-8-4.2-8-9V6l8-3z"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ dots:'<circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/>'
+};
+const APPLE='<svg width="18" height="20" viewBox="0 0 17 20" fill="currentColor" aria-hidden="true"><path d="M14.1 10.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 6.9 1.2 9.2.8 1.1 1.7 2.3 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.8-2.2.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-.9-2.5-3.8zM11.8 3.8c.6-.8 1.1-1.8.9-2.9-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.8 1.1.1 2.1-.5 2.8-1.3z"/></svg>';
+const I=(n,s=20,w=1.8)=>'<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+P[n]+'</svg>';
+
+/* ---------- synthetic data ---------- */
+const appleOnly=()=>S.scenario==='appleOnly';
+const email='z•••@icloud.com';
+function baseDevices(){return [
+ {id:'a',label:L('张秋的 iPhone','Zhang’s iPhone'),platform:'ios',method:appleOnly()?'apple':'email',last:0,current:true},
+ {id:'b',label:L('客厅 iPad','Living-room iPad'),platform:'ios',kind:'tablet',method:'apple',last:2*3600e3},
+ {id:'c',label:null,platform:'android',method:'email',last:3*86400e3},
+ {id:'d',label:'MacBook Air',platform:'desktop',method:'email',last:12*86400e3}];}
+const rel=ms=>ms<3600e3?L(Math.max(1,Math.round(ms/60e3))+' 分钟前',Math.max(1,Math.round(ms/60e3))+' min ago'):ms<86400e3?L(Math.round(ms/3600e3)+' 小时前',Math.round(ms/3600e3)+' h ago'):L(Math.round(ms/86400e3)+' 天前',Math.round(ms/86400e3)+' days ago');
+const families=()=>[
+ {id:'f1',name:L('我们家','Our family'),role:L('唯一管理者','Sole manager'),detail:L('另有 1 名成人 · 2 名儿童 · 儿童设备 2 台','1 other adult · 2 children · 2 child devices')},
+ {id:'f2',name:L('外婆家','Grandma’s family'),role:L('成员','Member'),detail:L('另有 3 名成人','3 other adults'),member:true}];
+const recipients=()=>[
+ {id:'r1',name:L('李敏','Li Min'),ok:true,detail:L('已接受管理与监护责任','Accepted management and guardianship')},
+ {id:'r2',name:L('张伟','Zhang Wei'),ok:false,detail:L('尚未接受 · 需对方在自己的账号中确认','Not accepted yet · they confirm in their own account')}];
+
+/* ---------- builders ---------- */
+function anno(label,inner){return S.anno?'<div class="anno"><span class="anno-tag">'+esc(label)+'</span>'+inner+'</div>':inner;}
+function row(o){
+  const tag=o.act?'button':'div';
+  return '<'+tag+' class="row'+(o.icon?'':' noicon')+(o.cls?' '+o.cls:'')+'" '+(o.act?'data-act="'+o.act+'"':'')+(o.disabled?' disabled':'')+'>'+
+   (o.icon?'<span class="tile">'+I(o.icon,18)+'</span>':'')+
+   '<span class="rmain"><div class="rtitle">'+o.title+'</div>'+(o.sub?'<div class="rsub">'+o.sub+'</div>':'')+'</span>'+
+   (o.value?'<span class="rval">'+o.value+'</span>':'')+(o.badge?'<span class="badge">'+o.badge+'</span>':'')+(o.trail||'')+
+   (o.act&&!o.nochev?'<span class="chev">'+I('chevR',16,2)+'</span>':'')+'</'+tag+'>';
+}
+function btn(label,act,kind='primary',o={}){
+  const busy=S.busy===act;
+  return '<button class="btn '+kind+'" data-act="'+act+'"'+(o.disabled||busy?' disabled':'')+'>'+(busy?'<span class="spin"></span>'+L('处理中','Working'):(o.icon||'')+label)+'</button>';
+}
+function field(name,label,o={}){
+  const pw=o.type==='password',shown=S.show[name],v=S.f[name]??'',err=S.err[name];
+  return '<div class="field"><div class="flabel"><label for="in-'+name+'">'+label+'</label>'+(o.link||'')+'</div>'+
+   '<div class="inputwrap'+(err?' invalid':'')+'"><input id="in-'+name+'" data-name="'+name+'" '+(pw&&!shown?'type="password"':o.type==='email'?'type="email" inputmode="email"':'type="text"')+
+   ' value="'+esc(v)+'" placeholder="'+(o.ph||'')+'" autocomplete="'+(o.ac||'off')+'" '+(o.readonly?'readonly':'')+' spellcheck="false">'+
+   (pw?'<button class="eye" data-act="eye:'+name+'" aria-label="'+(shown?L('隐藏密码','Hide password'):L('显示密码','Show password'))+'">'+I(shown?'eyeOff':'eye',20)+'</button>':'')+
+   '</div>'+(err?'<div class="ferr" role="alert">'+I('info',16)+'<span>'+err+'</span></div>':'')+(o.after||'')+'</div>';
+}
+function rules(name,confirm){
+  const v=S.f[name]||'',c=S.f[confirm]||'',n=[...v].length,ok1=n>=6&&n<=20,ok2=c.length>0&&c===v;
+  return '<div class="meter" aria-hidden="true"><i style="width:'+Math.min(100,n/6*100)+'%"></i></div><ul class="rules">'+
+   '<li class="'+(ok1?'ok':'')+'"><span class="mark">'+(ok1?I('check',12,3):'')+'</span>'+L('6–20 个字符，不限字母、数字或符号','6–20 characters of any kind')+(n&&!ok1?'<span style="margin-left:auto;font-variant-numeric:tabular-nums">'+(n<6?n+'/6':L('超出 '+(n-20)+' 个','Over by '+(n-20)))+'</span>':'')+'</li>'+
+   (confirm?'<li class="'+(ok2?'ok':'')+'"><span class="mark">'+(ok2?I('check',12,3):'')+'</span>'+L('两次输入一致','Both entries match')+'</li>':'')+'</ul>';
+}
+const pwValid=(a,b)=>{const n=[...(S.f[a]||'')].length;return n>=6&&n<=20&&(!b||S.f[a]===S.f[b]);};
+function otp(name){
+  const v=(S.f[name]||'').slice(0,6);let boxes='';
+  for(let i=0;i<6;i++)boxes+='<div class="box'+(i===v.length?' cur':'')+'">'+(v[i]||'')+'</div>';
+  return '<div class="otp">'+boxes+'<input data-name="'+name+'" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="'+L('六位验证码','Six-digit code')+'" value="'+esc(v)+'"></div>';
+}
+function banner(kind,title,body,action){return '<div class="banner '+kind+'" role="'+(kind==='error'?'alert':'status')+'">'+I(kind==='info'?'info':'warn',20)+'<div class="bmain">'+(title?'<b>'+title+'</b>':'')+(body||'')+(action||'')+'</div></div>';}
+function steps(n,of,cap){let s='';for(let i=1;i<=of;i++)s+='<i class="'+(i<=n?'on':'')+'"></i>';return '<div class="stepcap">'+cap+' · '+n+'/'+of+'</div><div class="steps">'+s+'</div>';}
+function resend(){
+  const left=Math.max(0,Math.ceil((S.resendAt-Date.now())/1000));
+  return '<div class="resend"><span>'+L('没收到？看看垃圾邮件','Nothing? Check spam')+'</span>'+(left>0?'<span style="font-variant-numeric:tabular-nums">'+L(left+' 秒后可重发','Resend in '+left+'s')+'</span>':'<button class="linkbtn" data-act="resend">'+L('重新发送','Resend code')+'</button>')+'</div>';
+}
+
+/* ---------- screens ---------- */
+const SCREENS={
+'account.entry':{flow:'out',nav:'none',label:['未登录','Signed out'],notes:[
+  ['首屏只回答一件事：怎么登录','One question: how do I sign in'],
+  ['主操作放在拇指区；Apple 在前，邮箱其次','Actions in the thumb zone; Apple first'],
+  ['“本机内容不会上传”从警告改为一句安心提示','Local-content note reframed as reassurance'],
+  ['场景切到“有注销回执”：顶部出现可点的进度横幅','“Deletion receipt” scenario adds a progress banner']],
+ render(){
+  const receipt=S.scenario==='receipt';
+  return {body:
+   (receipt?'<button class="banner warn" data-act="go:account.delProgress" style="width:100%;border:0;text-align:left;font:inherit;cursor:pointer">'+I('clock',20)+'<div class="bmain"><b>'+L('注销请求处理中','Deletion in progress')+'</b>'+L('无需登录即可查看进度','Check progress without signing in')+'</div><span class="chev">'+I('chevR',16,2)+'</span></button>':'')+
+   '<div style="height:120px"></div><h1 class="lt">'+L('登录账号','Sign in')+'</h1><p class="lead">'+L('创建家庭、管理登录设备都从这里开始。','Start here to create a family and manage your devices.')+'</p>'+
+   '<div class="note">'+I('lock',16)+'<span>'+L('这台设备上已有的内容保持原样，登录不会上传。','What’s already on this device stays here. Signing in uploads nothing.')+'</span></div>',
+   footer:btn(L('通过 Apple 登录','Sign in with Apple'),'apple','apple',{icon:APPLE})+btn(L('使用邮箱登录','Continue with email'),'go:account.login','tonal',{icon:I('mail',20)})+
+   '<div class="inline-links">'+L('还没有账号？','New here?')+'<button class="linkbtn" data-act="go:account.reg1">'+L('创建账号','Create account')+'</button></div>'};
+ }},
+'account.login':{flow:'out',nav:'back',label:['邮箱登录','Email sign-in'],notes:[
+  ['“忘记密码”贴在密码标签旁，不再是同权重的大按钮','“Forgot?” sits on the password label'],
+  ['错误就近出现在字段下方，输入保留','Errors appear under the field; input is kept'],
+  ['限流时按钮自身倒计时','Rate limit counts down inside the button'],
+  ['试试：密码输入 wrong 查看错误态','Try: password “wrong” shows the error state']],
+ render(){
+  const rl=S.scenario==='ratelimit',ok=(S.f.email||'').includes('@')&&(S.f.pw||'').length>0;
+  return {body:'<h1 class="lt">'+L('邮箱登录','Sign in with email')+'</h1><p class="lead">'+L('欢迎回来。','Welcome back.')+'</p>'+
+   (rl?banner('warn',L('尝试次数过多','Too many attempts'),L('倒计时结束后可以再次提交。','You can try again when the countdown ends.')):'')+
+   field('email',L('邮箱','Email'),{type:'email',ph:'name@example.com',ac:'email'})+
+   field('pw',L('密码','Password'),{type:'password',ac:'current-password',link:'<button class="linkbtn" data-act="go:account.forgot1">'+L('忘记密码？','Forgot?')+'</button>'}),
+   footer:(rl?btn(L('28 秒后可重试','Retry in 28s'),'login','primary',{disabled:true}):btn(L('登录','Sign in'),'login','primary',{disabled:!ok}))+
+   '<div class="inline-links">'+L('还没有账号？','New here?')+'<button class="linkbtn" data-act="go:account.reg1">'+L('创建账号','Create account')+'</button></div>'};
+ }},
+'account.forgot1':{flow:'out',nav:'back',label:['找回密码 1/2','Reset 1/2'],notes:[['两步：邮箱 → 验证码与新密码','Two steps: email → code + new password'],['文案不透露邮箱是否已注册','Copy never reveals whether the email exists']],
+ render(){return {body:steps(1,2,L('找回密码','Reset password'))+'<h1 class="lt">'+L('输入注册邮箱','Your account email')+'</h1><p class="lead">'+L('如果这个邮箱已注册，你会收到六位验证码。','If this email has an account, you’ll get a six-digit code.')+'</p>'+field('email',L('邮箱','Email'),{type:'email',ph:'name@example.com',ac:'email'}),
+  footer:btn(L('发送验证码','Send code'),'forgotSend','primary',{disabled:!(S.f.email||'').includes('@')})};}},
+'account.forgot2':{flow:'out',nav:'back',label:['找回密码 2/2','Reset 2/2'],notes:[['6 格验证码，支持系统自动填充','6-box code with system autofill'],['新密码规则实时打勾','Rules tick live']],
+ render(){const ok=(S.f.fcode||'').length===6&&pwValid('fpw','fpw2');return {body:steps(2,2,L('找回密码','Reset password'))+'<h1 class="lt">'+L('设置新密码','Set a new password')+'</h1><p class="lead">'+L('验证码已发送至 ','Code sent to ')+'<b style="color:var(--ink)">'+esc(S.f.email||'name@example.com')+'</b></p>'+
+  '<div class="field">'+otp('fcode')+resend()+'</div>'+field('fpw',L('新密码','New password'),{type:'password',ac:'new-password'})+field('fpw2',L('再次输入','Repeat password'),{type:'password',ac:'new-password',after:rules('fpw','fpw2')}),
+  footer:btn(L('更新密码','Update password'),'forgotDone','primary',{disabled:!ok})};}},
+'account.forgotDone':{flow:'out',nav:'none',label:['找回完成','Reset done'],notes:[['结果页只给一个下一步：回到登录，邮箱已预填','One next step: sign in, email prefilled']],
+ render(){return {body:'<div class="result"><div class="ring">'+I('check',40,2.2)+'</div><h1>'+L('密码已更新','Password updated')+'</h1><p>'+L('之前登录的设备都已退出。用新密码重新登录。','Other devices were signed out. Sign in with your new password.')+'</p></div>',footer:btn(L('去登录','Sign in'),'toLogin')};}},
+'account.reg1':{flow:'out',nav:'back',label:['注册 1/3','Sign-up 1/3'],notes:[['注册拆成 3 步，每步一个任务','Three steps, one task each'],['同意条款是一整行可点的复选框，链接内嵌','Consent is one tappable row with inline links']],
+ render(){const ok=(S.f.email||'').includes('@')&&S.f.consent;return {body:steps(1,3,L('创建账号','Create account'))+'<h1 class="lt">'+L('你的邮箱','Your email')+'</h1><p class="lead">'+L('用于登录和找回密码。','Used to sign in and recover your password.')+'</p>'+
+  field('email',L('邮箱','Email'),{type:'email',ph:'name@example.com',ac:'email'})+
+  '<button class="check" data-act="consent" role="checkbox" aria-checked="'+!!S.f.consent+'"><span class="box">'+(S.f.consent?I('check',16,3):'')+'</span><span>'+L('我已阅读并同意','I agree to the ')+'<a href="#" style="color:var(--accent)">'+L('《用户协议》','Terms')+'</a>'+L('和',' and ')+'<a href="#" style="color:var(--accent)">'+L('《隐私政策》','Privacy Policy')+'</a></span></button>',
+  footer:btn(L('发送验证码','Send code'),'regSend','primary',{disabled:!ok})};}},
+'account.reg2':{flow:'out',nav:'back',label:['注册 2/3','Sign-up 2/3'],notes:[['输满 6 位自动进入下一步','Auto-advance after 6 digits'],['“修改邮箱”就是返回上一步','Change email = go back'],['服务端在第 3 步提交时统一校验验证码；错误时退回本步','Server checks the code on step-3 submit; errors return here']],
+ render(){return {body:steps(2,3,L('创建账号','Create account'))+'<h1 class="lt">'+L('输入验证码','Enter the code')+'</h1><p class="lead">'+L('已发送至 ','Sent to ')+'<b style="color:var(--ink)">'+esc(S.f.email||'name@example.com')+'</b> <button class="linkbtn" data-act="back">'+L('修改','Change')+'</button></p>'+'<div class="field">'+otp('rcode')+resend()+'</div>',
+  footer:btn(L('继续','Continue'),'go:account.reg3','primary',{disabled:(S.f.rcode||'').length!==6})};}},
+'account.reg3':{flow:'out',nav:'back',label:['注册 3/3','Sign-up 3/3'],notes:[['长度要求用进度条和清单表达','Length rule as meter + checklist'],['可显示密码，减少两次输入不一致','Show/hide reduces mismatches']],
+ render(){return {body:steps(3,3,L('创建账号','Create account'))+'<h1 class="lt">'+L('设置密码','Choose a password')+'</h1><p class="lead">'+L('6–20 个字符，不限字符类型。','6–20 characters, any kind.')+'</p>'+
+  field('rpw',L('密码','Password'),{type:'password',ac:'new-password'})+field('rpw2',L('再次输入','Repeat password'),{type:'password',ac:'new-password',after:rules('rpw','rpw2')}),
+  footer:btn(L('创建账号','Create account'),'regDone','primary',{disabled:!pwValid('rpw','rpw2')})};}},
+
+'account.home':{flow:'in',nav:'back',label:['账号首页','Account home'],notes:[
+  ['身份卡先说明：你是谁、用什么登录、状态如何','Identity card: who, how, status'],
+  ['低频操作收进分组列表，逐项进入','Low-frequency tasks become list rows'],
+  ['行尾直接给答案：4 台、1 项待确认','Trailing values answer at a glance'],
+  ['注销放最底、独立一组、红字','Delete is last, isolated, red']],
+ render(){
+  const off=S.scenario==='offline',ao=appleOnly(),devCount=baseDevices().length-S.revoked.length;
+  return {body:
+   (off?banner('warn',L('暂时无法验证登录状态','Can’t verify your session'),L('内容仍可查看，需要联网的操作暂停。','Your content is here; online actions are paused.'),'<button class="btn tonal sm" data-act="toast:'+L('正在重新连接…','Reconnecting…')+'">'+I('refresh',16)+L('重试','Retry')+'</button>'):'')+
+   '<h1 class="lt" style="margin-bottom:12px">'+L('账号','Account')+'</h1>'+
+   anno(L('接口：loginMethods() 打码邮箱','API: masked email · loginMethods()'),
+   '<div class="idcard"><div class="avatar">'+(ao?I('people',28):'Z')+'</div><div style="min-width:0"><div class="idname">'+(ao?L('Apple 账号','Apple account'):email)+'</div><div class="idmeta"><span class="pill"><span class="dot'+(off?' off':'')+'"></span>'+(off?L('离线','Offline'):L('已登录','Signed in'))+'</span>'+(ao?'':'<span class="pill">'+L('邮箱','Email')+'</span>')+'<span class="pill">Apple</span></div></div></div>')+
+   '<div class="section-label">'+L('登录与安全','Sign-in & security')+'</div><div class="group">'+
+    row({icon:'mail',title:L('登录方式','Sign-in methods'),value:ao?'Apple':L('邮箱、Apple','Email, Apple'),act:'go:account.methods',disabled:off})+
+    (ao?'':row({icon:'key',title:L('密码','Password'),value:L('修改','Change'),act:'go:account.password',disabled:off}))+
+    row({icon:'phone',title:L('登录设备','Devices'),value:off?L('需联网','Offline'):L(devCount+' 台',String(devCount)),act:'go:account.devices',disabled:off})+
+   '</div>'+
+   '<div class="section-label">'+L('家庭','Family')+'</div><div class="group">'+
+    row({icon:'people',title:L('家庭责任','Family responsibilities'),badge:S.famAccepted?null:L('1 项待确认','1 pending'),value:S.famAccepted?L('无待办','None'):null,act:'go:account.family'})+
+   '</div>'+
+   '<div class="section-label">'+L('这台设备','This device')+'</div><div class="group">'+
+    row({icon:'box',title:L('数据空间','Data space'),value:S.spaceCreated?L('账号空间','Account space'):L('原本机空间','Original'),act:'go:account.space'})+
+   '</div>'+
+   '<div class="group" style="margin-top:28px">'+row({title:L('退出登录','Sign out'),act:'sheet:signout',cls:'center',nochev:true})+'</div>'+
+   '<div class="group" style="margin-top:12px">'+row({title:L('注销账号','Delete account'),act:'del',cls:'center danger',nochev:true})+'</div>'};
+ }},
+'account.methods':{flow:'in',nav:'back',label:['登录方式','Sign-in methods'],notes:[['基于已有 loginMethods / unlinkIdentity 接口','Backed by loginMethods / unlinkIdentity'],['唯一登录方式不能移除，直接标出','The last method is marked and can’t be removed']],
+ render(){const ao=appleOnly();return {body:'<h1 class="lt">'+L('登录方式','Sign-in methods')+'</h1><p class="lead">'+L('至少保留一种。','Keep at least one.')+'</p><div class="group">'+
+  (ao?'':row({icon:'mail',title:L('邮箱与密码','Email & password'),sub:email,trail:'<button class="btn tonal sm" data-act="sheet:unlink">'+L('移除','Remove')+'</button>'}))+
+  row({icon:'shield',title:'Apple',sub:L('通过 Apple 登录','Sign in with Apple'),trail:ao?'<span class="pill">'+L('唯一方式','Only method')+'</span>':''})+'</div>'+
+  (ao?'<div class="note">'+I('info',16)+'<span>'+L('只用 Apple 登录时，暂时不能在这里退出其他设备。','With Apple only, you can’t sign out other devices from here yet.')+'</span></div>':'')};}},
+'account.password':{flow:'in',nav:'back',label:['修改密码','Change password'],notes:[
+  ['独立页面，账号首页不再常驻 3 个空输入框','Own page — no empty fields on home'],
+  ['提交前先讲后果：所有设备会退出','Consequence stated before submit'],
+  ['场景切到“结果未确认”：输入锁定，只能重试同一请求','“Unconfirmed” locks fields; same-request retry']],
+ render(){const unc=S.scenario==='uncertain',ok=(S.f.cur||'').length>0&&pwValid('npw','npw2');
+  return {body:'<h1 class="lt">'+L('修改密码','Change password')+'</h1>'+
+   (unc?banner('warn',L('结果尚未确认','Result not confirmed'),L('重试会使用同一请求，不会重复修改。','Retrying reuses the same request.')):banner('info',null,L('修改后，所有设备都会退出登录，包括这台。','Every device, including this one, will be signed out.')))+
+   field('cur',L('当前密码','Current password'),{type:'password',ac:'current-password',readonly:unc,link:'<button class="linkbtn" data-act="go:account.forgot1">'+L('忘记了？','Forgot?')+'</button>'})+
+   field('npw',L('新密码','New password'),{type:'password',ac:'new-password',readonly:unc})+
+   field('npw2',L('再次输入新密码','Repeat new password'),{type:'password',ac:'new-password',readonly:unc,after:rules('npw','npw2')}),
+   footer:unc?btn(L('重试本次操作','Retry this request'),'pwDone','primary',{icon:I('refresh',18)}):btn(L('更新密码','Update password'),'pwDone','primary',{disabled:!ok})};}},
+'account.pwDone':{flow:'out',nav:'none',label:['改密完成','Password changed'],notes:[['改密后服务端会结束全部会话，直接引导重新登录','Server ends all sessions; guide straight to sign-in']],
+ render(){return {body:'<div class="result"><div class="ring">'+I('check',40,2.2)+'</div><h1>'+L('密码已更新','Password updated')+'</h1><p>'+L('所有设备都已退出。用新密码重新登录即可继续。','Every device was signed out. Sign in with the new password to continue.')+'</p></div>',footer:btn(L('重新登录','Sign in again'),'toLogin')};}},
+'account.devices':{flow:'in',nav:'back',label:['登录设备','Devices'],notes:[
+  ['进入即加载列表，去掉“管理登录设备”这一步','List loads on entry'],
+  ['不再预先填密码：点“退出”时才弹出身份验证','Password asked only when you act'],
+  ['图标 + 最近活跃 + 登录方式，一眼分清设备','Icon + last active + method'],
+  ['“退出所有设备”是底部红字，带二次确认','“Sign out everywhere” is red, confirmed']],
+ render(){const unc=S.scenario==='uncertain';const list=baseDevices().filter(d=>!S.revoked.includes(d.id));
+  const ic=d=>d.platform==='desktop'?'desktop':d.kind==='tablet'?'tablet':'phone';
+  const meth=m=>m==='apple'?'Apple':L('邮箱','Email');
+  return {body:'<h1 class="lt">'+L('登录设备','Devices')+'</h1><p class="lead">'+L(list.length+' 台设备正在使用这个账号。',list.length+' devices use this account.')+'</p>'+
+   (unc?banner('warn',L('上一次操作结果未确认','Last action unconfirmed'),L('先刷新列表核实，再决定是否重试。','Refresh to check before retrying.'),'<button class="btn tonal sm" data-act="toast:'+L('列表已刷新','List refreshed')+'">'+I('refresh',16)+L('刷新','Refresh')+'</button>'):'')+
+   '<div class="group">'+list.map(d=>row({icon:ic(d),title:esc(d.label||L('未命名设备','Unnamed device')),sub:(d.current?L('这台设备','This device'):L(rel(d.last)+'活跃','Active '+rel(d.last)))+' · '+meth(d.method),
+     trail:d.current?'<span class="pill on">'+L('本机','This one')+'</span>':'<button class="btn tonal sm" data-act="sheet:revoke:'+d.id+'">'+L('退出','Sign out')+'</button>'})).join('')+'</div>'+
+   '<div class="group" style="margin-top:24px">'+row({title:L('退出所有设备','Sign out everywhere'),sub:L('包括这台设备','Including this one'),act:'sheet:revokeAll',cls:'danger',nochev:true})+'</div>'};}},
+'account.family':{flow:'in',nav:'back',label:['家庭责任','Family responsibilities'],notes:[
+  ['待确认事项直接以任务卡呈现，不用先点“查看”再加载','Pending items shown directly as task cards'],
+  ['不显示截断的家庭 ID；需接口补充家庭名称与发起人','No truncated IDs; API needs family name + requester']],
+ render(){return {body:'<h1 class="lt">'+L('家庭责任','Family responsibilities')+'</h1><p class="lead">'+L('有人请你接手家庭管理时，会出现在这里。','Handover requests appear here.')+'</p>'+
+  (S.famAccepted?'<div class="card" style="text-align:center;color:var(--muted)">'+L('暂无待确认事项','Nothing waiting for you')+'</div>':
+  anno(L('需接口：家庭名称、发起人','API: family name, requester'),'<button class="card" data-act="go:account.familyReview" style="width:100%;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer;display:flex;gap:14px;align-items:center;margin:0"><span class="tile" style="width:44px;height:44px;border-radius:14px">'+I('people',22)+'</span><span style="flex:1"><h4>'+L('我们家','Our family')+'</h4><div class="csub">'+L('李敏请你接手管理 · 涉及 2 名儿童','Li Min asks you to take over · 2 children')+'</div></span><span class="badge">'+L('待确认','Review')+'</span></button>'))};}},
+'account.familyReview':{flow:'in',nav:'back',label:['确认责任','Review responsibility'],notes:[['责任范围用数字表达，后果一句话说清','Scope as numbers; consequence in one line'],['两项确认是真正的复选框控件','Real checkbox controls']],
+ render(){const c=S.famChecks;return {body:'<h1 class="lt">'+L('接手「我们家」','Take over “Our family”')+'</h1><p class="lead">'+L('确认你了解将承担的责任。','Confirm what you’re taking on.')+'</p>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"><div class="card" style="margin:0"><div class="stat">1</div><div class="csub">'+L('个家庭的管理','family to manage')+'</div></div><div class="card" style="margin:0"><div class="stat">2</div><div class="csub">'+L('名儿童的监护','children in your care')+'</div></div></div>'+
+  banner('info',null,L('接受后不会立即转交，还需当前管理者确认。','Nothing transfers yet — the current manager confirms the handover.'))+
+  '<div class="group" style="padding:4px 12px">'+
+   '<button class="check" data-act="fc:m" role="checkbox" aria-checked="'+c.m+'"><span class="box">'+(c.m?I('check',16,3):'')+'</span><span>'+L('我接受家庭管理责任','I accept family management')+'</span></button>'+
+   '<button class="check" data-act="fc:g" role="checkbox" aria-checked="'+c.g+'"><span class="box">'+(c.g?I('check',16,3):'')+'</span><span>'+L('我接受适用的监护责任','I accept applicable guardianship')+'</span></button></div>',
+  footer:btn(L('确认接受','Confirm'),'famAccept','primary',{disabled:!(c.m&&c.g)})};}},
+'account.space':{flow:'in',nav:'back',label:['数据空间','Data space'],notes:[['“当前空间”这类系统话术改成两张说明卡','System-speak becomes two clear cards'],['创建账号空间不移动、不上传原内容','Creating a space moves and uploads nothing']],
+ render(){const c=S.spaceCreated;return {body:'<h1 class="lt">'+L('数据空间','Data space')+'</h1><p class="lead">'+L('这台设备上的内容分空间保存，互不混合。','Content on this device lives in separate spaces.')+'</p>'+
+  '<div class="choice" aria-checked="'+!c+'" style="cursor:default"><span class="radio"></span><span><div class="ct">'+L('原本机空间','Original local space')+'</div><div class="cd">'+L('登录前就在这台设备上的内容','What was here before you signed in')+'</div></span></div>'+
+  '<div class="choice" aria-checked="'+c+'" style="cursor:default"><span class="radio"></span><span><div class="ct">'+L('账号空间','Account space')+'</div><div class="cd">'+(c?L('已在这台设备上创建','Created on this device'):L('为这个账号新建，原空间不变、不上传','New for this account; the original stays, nothing uploads'))+'</div></span></div>',
+  footer:c?'':btn(L('创建账号空间','Create account space'),'space','tonal')};}},
+
+'account.del1':{flow:'del',nav:'close',label:['注销 · 影响','Delete · impact'],notes:[
+  ['注销是独立的全屏流程，顶部显示三段进度','Deletion is its own modal flow, 3 steps'],
+  ['影响清单每行一句话','Impact rows, one sentence each'],
+  ['这一步按钮用中性色：还没到不可逆的一步','Neutral button — nothing irreversible yet']],
+ render(){return {body:steps(1,3,L('注销账号','Delete account'))+'<h1 class="lt">'+L('注销前，先看影响','Before you delete')+'</h1><p class="lead">'+L('下面三类内容会受到影响。','Three things are affected.')+'</p>'+
+  '<div class="group">'+row({icon:'lock',title:L('账号资料','Account data'),sub:L('服务端资料进入删除流程','Server data enters deletion')})+row({icon:'people',title:L('家庭与儿童设备','Families & child devices'),sub:L('下一步逐个家庭决定','You decide per family next')})+row({icon:'box',title:L('本机内容','On this device'),sub:L('不会自动删除','Not deleted automatically')})+'</div>'+
+  '<div class="note">'+I('info',16)+'<span>'+L('受理后会立即退出登录。他人已导出的副本无法远程删除。','You’ll be signed out once accepted. Copies others exported can’t be erased remotely.')+'</span></div>',
+  footer:btn(L('继续','Continue'),'go:account.del2','tonal')};}},
+'account.del2':{flow:'del',nav:'back',label:['注销 · 家庭','Delete · families'],notes:[
+  ['每个家庭一张卡、单选，不替用户默认','One card per family; no default'],
+  ['选“转交管理”后卡内出现“选择接收人”','“Hand over” reveals recipient picker'],
+  ['底部显示完成度，全部处理后才能继续','Count shown; continue when all decided']],
+ render(){const fs=families(),ch=S.del.choices,rc=S.del.recipient;const done=fs.filter(f=>ch[f.id]&&(ch[f.id]!=='transfer'||rc[f.id])).length;
+  return {body:steps(2,3,L('注销账号','Delete account'))+'<h1 class="lt">'+L('逐个处理家庭','Decide for each family')+'</h1><p class="lead">'+L('每个家庭都需要你明确选择。','Each family needs an explicit choice.')+'</p>'+
+  fs.map(f=>{const c=ch[f.id];const opts=f.member?[['end',L('结束本人访问','Leave this family'),L('立即撤销你的家庭权限','Your access ends immediately')]]:[['transfer',L('转交管理','Hand over'),L('由另一位已加入的成人接手','Another adult member takes over')],['freeze',L('结束本人管理','Step down'),L('家庭将冻结，等待核对','Family is frozen pending review')]];
+   const r=recipients().find(x=>x.id===rc[f.id]);
+   return '<div class="card"><h4>'+f.name+'</h4><div class="csub">'+f.role+' · '+f.detail+'</div>'+opts.map(o=>'<button class="choice" role="radio" aria-checked="'+(c===o[0])+'" data-act="dc:'+f.id+':'+o[0]+'"><span class="radio"></span><span><div class="ct">'+o[1]+'</div><div class="cd">'+o[2]+'</div></span></button>').join('')+
+   (c==='transfer'?'<button class="sub-row" data-act="go:account.del2r:'+f.id+'">'+I('people',18)+'<span style="flex:1">'+(r?L('接收人：','Recipient: ')+r.name:L('选择接收人','Choose recipient'))+'</span>'+I('chevR',16,2)+'</button>':'')+'</div>';}).join(''),
+  footer:'<div class="fine" style="text-align:center;margin:0 0 2px">'+L('已处理 '+done+'/'+fs.length,done+' of '+fs.length+' decided')+'</div>'+btn(L('下一步','Next'),'go:account.del3','tonal',{disabled:done<fs.length})};}},
+'account.del2r':{flow:'del',nav:'back',label:['注销 · 接收人','Delete · recipient'],notes:[['未接受的成员不可选，并写明原因','Members who haven’t accepted are disabled, with reason'],['需接口：成员显示名','API: member display names']],
+ render(){const fid=S.param||'f1';return {body:'<h1 class="lt">'+L('选择接收人','Choose recipient')+'</h1><p class="lead">'+L('只列出「我们家」已加入的成人。','Adult members of “Our family” only.')+'</p>'+
+  recipients().map(r=>'<button class="choice" role="radio" '+(r.ok?'':'disabled style="opacity:.6;cursor:not-allowed"')+' aria-checked="'+(S.del.recipient[fid]===r.id)+'" data-act="rc:'+fid+':'+r.id+'"><span class="radio"></span><span style="flex:1"><div class="ct">'+r.name+'</div><div class="cd">'+r.detail+'</div></span></button>').join('')+
+  '<div class="note">'+I('info',16)+'<span>'+L('没有合适的人？返回选择“结束本人管理”。','No one suitable? Go back and choose “Step down”.')+'</span></div>',
+  footer:btn(L('确定','Done'),'back','primary',{disabled:!S.del.recipient[fid]})};}},
+'account.del3':{flow:'del',nav:'back',label:['注销 · 验证','Delete · verify'],notes:[
+  ['只有这最后一步使用红色实心按钮','Only this final step is solid red'],
+  ['汇总所有选择，可以返回修改','Summary with a way back'],
+  ['结果未知时锁定选择，只重试同一请求','Unknown result: locked, same-request retry']],
+ render(){const ao=appleOnly(),r=recipients().find(x=>x.id===S.del.recipient.f1);
+  return {body:steps(3,3,L('注销账号','Delete account'))+'<h1 class="lt">'+L('确认注销','Confirm deletion')+'</h1>'+
+  '<div class="section-label" style="margin-top:8px;display:flex;justify-content:space-between">'+L('你的选择','Your choices')+'<button class="linkbtn" data-act="back">'+L('修改','Edit')+'</button></div><div class="group">'+
+  row({icon:'people',title:L('我们家','Our family'),sub:S.del.choices.f1==='transfer'?L('转交给 ','Hand over to ')+(r?r.name:'—'):L('结束本人管理 · 冻结待核对','Step down · frozen for review')})+row({icon:'people',title:L('外婆家','Grandma’s family'),sub:L('结束本人访问','Leave family')})+'</div>'+
+  '<div class="section-label">'+L('验证身份','Verify it’s you')+'</div>'+
+  (ao?btn(L('通过 Apple 验证','Verify with Apple'),'toast:'+L('已通过 Apple 验证','Verified with Apple'),'apple',{icon:APPLE}):field('dpw',L('当前密码','Current password'),{type:'password',ac:'current-password'}))+
+  '<div class="note">'+I('warn',16)+'<span>'+L('确认后立即退出所有设备，并撤销受影响的儿童设备授权。','All devices sign out and affected child-device access is revoked immediately.')+'</span></div>',
+  footer:btn(L('注销账号','Delete account'),'delSubmit','dangerfill',{disabled:!ao&&!(S.f.dpw||'').length})};}},
+'account.delProgress':{flow:'out',nav:'back',label:['注销进度','Deletion progress'],notes:[['时间线表达进度，每项独立状态','Timeline, independent statuses'],['回执失效不等于删除完成，明确说出','A lost receipt is not completion']],
+ render(){return {body:'<h1 class="lt">'+L('注销处理进度','Deletion progress')+'</h1><p class="lead">'+L('请求已受理，各项分别更新。','Accepted. Each item updates on its own.')+'</p>'+
+  '<ul class="tl"><li class="done"><span class="tdot">'+I('check',16,2.4)+'</span><div><div class="tt">'+L('已受理','Accepted')+'</div><div class="td">'+L('本机登录凭据已清除','Credentials on this device cleared')+'</div></div></li>'+
+  '<li class="wait"><span class="tdot">'+I('clock',16)+'</span><div><div class="tt">'+L('服务端资料','Server data')+'</div><div class="td">'+L('处理中 · 尚未全部删除','In progress · not fully deleted')+'</div></div></li>'+
+  '<li class="wait"><span class="tdot">'+I('clock',16)+'</span><div><div class="tt">'+L('Apple 授权','Apple authorisation')+'</div><div class="td">'+L('撤销待重试','Revocation will retry')+'</div></div></li>'+
+  '<li><span class="tdot">'+I('dots',16)+'</span><div><div class="tt">'+L('全部完成','All done')+'</div><div class="td">'+L('完成后这里会更新','Updates here when finished')+'</div></div></li></ul>'+
+  '<div class="note">'+I('info',16)+'<span>'+L('家庭与共同作品的核对另行处理，不在这份回执中。','Family and shared-work review happens separately.')+'</span></div>',
+  footer:btn(L('刷新进度','Refresh'),'toast:'+L('进度已刷新','Progress refreshed'),'tonal',{icon:I('refresh',18)})};}}
+};
+/* ======================= app shell · chat · space · plan · whiteboard ======================= */
+Object.assign(P,{
+ menu:'<rect x="3" y="4.5" width="18" height="15" rx="3"/><path d="M9 4.5v15"/>',
+ compose:'<path d="M12 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20h11a2.5 2.5 0 0 0 2.5-2.5V12"/><path d="M17.5 3.5l3 3L12 15l-4 1 1-4z"/>',
+ chat:'<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4A8 8 0 1 1 20 12z"/>',
+ target:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+ board:'<rect x="3.5" y="4" width="17" height="13" rx="2"/><path d="M9 21l3-4 3 4M7.5 12c1.5-3 3 .5 4.5-1.5s3 .5 4.5-1"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ send:'<path d="M12 19V5M6 11l6-6 6 6"/>',
+ stop:'<rect x="7.5" y="7.5" width="9" height="9" rx="1.5" fill="currentColor"/>',
+ copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/>',
+ mic:'<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/>',
+ micOff:'<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M4 4l16 16"/>',
+ video:'<rect x="3" y="6.5" width="12.5" height="11" rx="2.5"/><path d="M15.5 10.5l5-3v9l-5-3z"/>',
+ camera:'<path d="M4 8.5a2 2 0 0 1 2-2h2l1.5-2h5l1.5 2h2a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/>',
+ image:'<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="9.5" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/>',
+ pen:'<path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5z"/><path d="M13.5 7l3 3"/>',
+ eraser:'<path d="M8.5 19.5L3.8 14.8a2 2 0 0 1 0-2.8l7.9-7.9a2 2 0 0 1 2.8 0l5.4 5.4a2 2 0 0 1 0 2.8l-7.2 7.2M9 20h11M7 10.5l6.5 6.5"/>',
+ text:'<path d="M5 6.5V5h14v1.5M12 5v14M9.5 19h5"/>',
+ shape:'<rect x="3.5" y="10.5" width="9" height="9" rx="1.5"/><circle cx="16" cy="8" r="4.5"/>',
+ cursor:'<path d="M5 3.5l13 6.2-5.6 1.6-2.2 5.7z"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+ redo:'<path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>',
+ layers:'<path d="M12 4l8.5 4.5L12 13 3.5 8.5z"/><path d="M3.5 12.5L12 17l8.5-4.5M3.5 16.5L12 21l8.5-4.5"/>',
+ more:'<circle cx="5.5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18.5" cy="12" r="1.3"/>',
+ cloud:'<path d="M7 18.5h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7.1 9.1 4.7 4.7 0 0 0 7 18.5z"/>',
+ cloudOff:'<path d="M7 18.5h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7.1 9.1 4.7 4.7 0 0 0 7 18.5z"/><path d="M4 4l16 16"/>',
+ calendar:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+ hang:'<path d="M3 13.5c5-4.5 13-4.5 18 0l-2.2 2.6-3.6-1.4v-2.4a12 12 0 0 0-6.4 0v2.4l-3.6 1.4z"/>',
+ rec:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3" fill="currentColor"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4L5.3 5.3"/>',
+ grip:'<circle cx="9" cy="7" r="1" fill="currentColor"/><circle cx="15" cy="7" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="17" r="1" fill="currentColor"/><circle cx="15" cy="17" r="1" fill="currentColor"/>',
+ chevD:'<path d="M6 9l6 6 6-6"/>',
+ arrowR:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ archive:'<rect x="3.5" y="4.5" width="17" height="4.5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 13h4"/>',
+ edit:'<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/>'
+});
+Object.assign(S,{space:'personal',drawer:false,chat:{msgs:[],streaming:false},conv:null,done:{},added:{},goal:'g1',planMode:'ai',dtIds:[],created:false,
+  wb:{tool:'pen',color:0,page:2,pages:3,rec:false,mic:true,cam:true},inv:{r1:true,r2:true,r3:false},conflictDone:false});
+
+/* ---------- synthetic data ---------- */
+const initial=s=>S.lang==='en'?s.replace(/^[^A-Za-z]*/,'').slice(0,1).toUpperCase():s.slice(0,1);
+const SPACES=()=>[
+ {id:'personal',name:L('我的空间','My space'),sub:L('个人 · 已同步','Personal · synced'),badge:L('我','M')},
+ {id:'family',name:L('我们家','Our family'),sub:L('家庭 · 4 位成员 · 你是管理者','Family · 4 members · you manage'),badge:L('家','F')},
+ {id:'local',name:L('本机空间','This device'),sub:L('只在这台设备 · 不同步','This device only · not synced'),badge:L('本','D')}];
+const curSpace=()=>SPACES().find(s=>s.id===S.space);
+const spaceBadge=s=>'<span class="spbadge">'+s.badge+'</span>';
+const readonlyMode=()=>S.space==='family'&&S.scenario==='readonly';
+const T=(id,zh,en,due,dueEn,today,done)=>({id,title:L(zh,en),due:due?L(due,dueEn):null,today:!!today,done0:!!done});
+function goalData(){return {
+ gNew:{id:'gNew',title:S.f.dTitle||L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November'),target:null,why:S.f.dWhy||draftWhy(),project:S.f.dProject||L('跑步训练','Running'),
+   tasks:(S.dtIds.length?S.dtIds:[0,1,2,3,4,5]).map((i,k)=>T('n'+i,S.f['dt_'+i]||'',S.f['dt_'+i]||'',k===0?'今天':null,'Today',k===0))},
+ g1:{id:'g1',title:L('每天 20 分钟英语口语','20 minutes of spoken English a day'),target:L('12月31日','Dec 31'),project:L('口语练习','Speaking'),
+   why:L('先固定时间和最小动作：每天跟读加复述，每周两次情景对话，周末录音复盘。','Fix the time and the smallest daily action first: shadow and retell every day, two role-plays a week, record and review on weekends.'),
+   tasks:[T('t1','跟读 BBC 6 分钟','Shadow BBC for 6 minutes','今天','Today',1,1),T('t2','录一段 1 分钟自我介绍','Record a 1-minute self-introduction','今天','Today',1),T('t3','和 AI 做 10 分钟点餐对话','10-minute ordering role-play with AI','周三','Wed'),T('t4','整理 20 个生活表达','Collect 20 everyday phrases','周五','Fri'),T('t5','复述昨天的跟读内容','Retell yesterday’s shadowing'),T('t6','下载跟读材料','Download shadowing material',null,null,0,1),T('t7','定好每天的练习时间','Set a daily practice time',null,null,0,1)]},
+ g2:{id:'g2',title:L('读完《非暴力沟通》','Finish “Nonviolent Communication”'),target:L('10月31日','Oct 31'),project:L('阅读','Reading'),why:L('每天一章，读完写下一个自己的例子。','A chapter a day, then write down one example of your own.'),
+   tasks:[T('r1','读第 3 章','Read chapter 3','今天','Today',1),T('r2','记下 3 个“观察”与“评论”的例子','Note 3 examples of observation vs. evaluation','周四','Thu'),T('r3','读第 4 章','Read chapter 4'),T('r4','读第 1 章','Read chapter 1',null,null,0,1),T('r5','读第 2 章','Read chapter 2',null,null,0,1)]},
+ g3:{id:'g3',title:L('准备小满的科学展','Xiaoman’s science fair'),target:L('11月8日','Nov 8'),project:L('科学展','Science fair'),why:L('先定题目和材料，每天记录，最后一周做展板和讲解练习。','Pick the topic and materials, record daily, then build the board and rehearse in the last week.'),
+   tasks:[T('f2','买种子和纸杯','Buy seeds and paper cups','今天','Today',1),T('f3','每天拍一张生长照片','Take a growth photo every day'),T('f4','周末一起做展板','Make the display board together','周六','Sat'),T('f5','练习 2 分钟讲解','Rehearse a 2-minute talk'),T('f1','选定题目：植物向光性','Choose topic: phototropism',null,null,0,1)]},
+ g4:{id:'g4',title:L('周末全家徒步','Family hike this weekend'),target:L('本周六','This Sat'),project:L('徒步','Hike'),why:L('选一条 2 小时内、适合孩子的路线。','A child-friendly route under 2 hours.'),
+   tasks:[T('h1','选定路线','Choose the route','今天','Today',1),T('h2','准备水和零食','Pack water and snacks','周五','Fri'),T('h3','看天气预报','Check the forecast','周五','Fri')]},
+ g5:{id:'g5',title:L('整理旧照片','Sort old photos'),target:null,project:L('照片','Photos'),why:'',tasks:[T('p1','挑出 2019 年的照片','Pick out photos from 2019'),T('p2','建一个家庭相册','Create a family album')]}
+};}
+const goalsOf=sp=>{const d=goalData();return [...(S.created&&S.createdIn===sp?['gNew']:[]),...(sp==='personal'?['g1','g2']:sp==='family'?['g3','g4']:['g5'])].map(id=>d[id]);};
+const isDone=t=>S.done[t.id]!==undefined?S.done[t.id]:t.done0;
+const tasksOf=g=>[...g.tasks,...(S.added[g.id]||[])];
+function ring(done,total,size=46){const r=(size-6)/2,c=2*Math.PI*r,p=total?done/total:0;
+ return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="var(--subtle)" stroke-width="5"/>'+(p?'<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+(c*p)+' '+c+'" transform="rotate(-90 '+size/2+' '+size/2+')"/>':'')+'</svg>';}
+const MEMBERS=()=>[
+ {id:'m1',name:L('张秋','Zhang Qiu'),role:L('管理者 · 你','Manager · you'),sub:L('iPhone、iPad','iPhone, iPad')},
+ {id:'m2',name:L('李敏','Li Min'),role:L('管理员','Admin'),sub:L('iPhone、MacBook','iPhone, MacBook')},
+ {id:'m3',name:L('小满','Xiaoman'),role:L('儿童','Child'),sub:L('2 台儿童设备 · 由你和李敏监护','2 child devices · guarded by you and Li Min')},
+ {id:'m4',name:L('外婆','Grandma'),role:L('成员 · 只读','Member · read-only'),sub:L('iPhone','iPhone')}];
+const CONVS=()=>S.space==='family'?[
+ {id:'c3',title:L('科学展选题','Science fair topic'),time:L('昨天','Yesterday')},{id:'c5',title:L('徒步路线怎么选','Choosing a hiking route'),time:L('周一','Mon')}]:
+ S.space==='local'?[{id:'c6',title:L('整理照片的顺序','Photo sorting order'),time:L('9月20日','Sep 20')}]:[
+ {id:'c1',title:L('10 公里跑步计划','10K running plan'),time:L('刚刚','Now')},{id:'c2',title:L('点餐场景练习','Ordering role-play'),time:'09:12'},{id:'c4',title:L('第 2 章读书笔记','Notes on chapter 2'),time:L('昨天','Yesterday')}];
+
+/* ---------- chat content ---------- */
+function planCard(){return anno(L('需能力：对话内生成计划草稿','Needs: plan drafts from chat'),'<div class="plancard"><div class="pc-head">'+I('target',16,2)+'<span>'+L('计划草稿','Plan draft')+'</span><em>'+L('等你确认','Needs your OK')+'</em></div><div class="pc-title">'+L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November')+'</div><div class="pc-meta">'+L('1 个项目 · 6 项任务 · 加入「'+curSpace().name+'」前可以修改','1 project · 6 tasks · editable before it joins “'+curSpace().name+'”')+'</div><button class="btn tonal sm" data-act="openDraft">'+L('查看并确认','Review')+I('arrowR',16,2)+'</button></div>');}
+const REPLIES={
+ plan:()=>['<p>'+L('可以。你现在能跑 3 公里，离 11 月还有 6 周，每周总量增加不超过一成比较稳：','Sure. You can run 3K now and have 6 weeks until November. Growing weekly volume by no more than 10% is safe:')+'</p>',
+  '<ul><li>'+L('<b>周一</b> 慢跑 4–5 公里，能边跑边说话的速度','<b>Mon</b> easy 4–5K, conversational pace')+'</li><li>'+L('<b>周三</b> 间歇跑：快 400 米、慢 400 米，做 6 组','<b>Wed</b> intervals: 6 × 400m fast / 400m easy')+'</li><li>'+L('<b>周六</b> 长距离，从 6 公里开始每周加 0.5 公里','<b>Sat</b> long run, start at 6K and add 0.5K weekly')+'</li></ul>',
+  '<p>'+L('我整理成了一份计划草稿。你可以先改，再决定要不要加入空间。','I turned it into a plan draft. Edit it first, then decide whether to add it to your space.')+'</p>',planCard()],
+ generic:()=>['<p>'+L('好的，我们用点餐场景练习。我是服务员，你是顾客，准备好了就说第一句。','Great, let’s practise ordering. I’m the waiter and you’re the customer. Say the first line when you’re ready.')+'</p>',
+  '<blockquote>Waiter: Hi there! Are you ready to order, or do you need a few more minutes?</blockquote>',
+  '<p>'+L('说完我会指出一处可以更自然的表达。','Afterwards I’ll point out one phrase that could sound more natural.')+'</p>']};
+function sampleThread(){return [{role:'user',text:L('我想 11 月能跑完 10 公里，帮我排一下每周的训练','I want to run 10K by November. Can you plan my weekly training?')},{role:'ai',reply:'plan',shown:4,done:true}];}
+function msgHTML(m,i,all){
+ if(m.role==='user')return '<div class="msg-user">'+esc(m.text)+'</div>';
+ const blocks=REPLIES[m.reply]();const vis=blocks.slice(0,m.shown).join('');
+ const last=i===all.length-1;
+ return '<div class="msg-ai">'+vis+(!m.done?'<span class="cursor"></span>':'')+(m.stopped?'<div class="msg-note">'+L('已停止生成','Stopped')+'</div>':'')+'</div>'+
+  (m.done?'<div class="msg-actions"><button data-act="toast:'+L('已复制','Copied')+'" aria-label="'+L('复制','Copy')+'">'+I('copy',18)+'</button>'+(last?'<button data-act="regen" aria-label="'+L('重新生成','Regenerate')+'">'+I('refresh',18)+'</button>':'')+'</div>':'');
+}
+function composer(){
+ if(S.scenario==='unconfigured')return '<div class="setupcard">'+I('info',22)+'<div class="rmain"><div class="rtitle">'+L('还没有连接 AI 服务','No AI service connected')+'</div><div class="rsub">'+L('连接后就能开始对话，目标和记录不受影响。','Connect one to chat. Goals and records keep working.')+'</div></div><button class="btn primary sm" data-act="toast:'+L('打开 AI 服务设置','Open AI service settings')+'">'+L('去连接','Connect')+'</button></div>';
+ const v=S.f.compose||'';
+ return '<div class="composer"><textarea data-name="compose" rows="1" aria-label="'+L('消息','Message')+'" placeholder="'+L('输入消息','Message')+'">'+esc(v)+'</textarea>'+
+  (S.chat.streaming?'<button class="sendbtn stop" data-act="stopgen" aria-label="'+L('停止生成','Stop')+'">'+I('stop',18)+'</button>':'<button class="sendbtn" data-act="send" '+(v.trim()?'':'disabled')+' aria-label="'+L('发送','Send')+'">'+I('send',20,2.4)+'</button>')+'</div>';
+}
+const suggestions=()=>S.space==='family'?[L('帮小满想 3 个适合科学展的小实验','Suggest 3 small experiments for Xiaoman’s fair'),L('周六徒步要带什么','What to pack for Saturday’s hike'),L('回顾这周家里完成了什么','Review what the family finished this week')]:
+ [L('帮我把「读完《非暴力沟通》」排进这周','Fit “Nonviolent Communication” into this week'),L('用英语和我练一段点餐对话','Practise an ordering conversation in English'),L('回顾今天完成了什么','Review what I finished today')];
+function startStream(m){
+ S.chat.streaming=true;clearInterval(S._st);
+ const n=REPLIES[m.reply]().length;
+ S._st=setInterval(()=>{m.shown++;if(m.shown>=n){m.done=true;S.chat.streaming=false;clearInterval(S._st);}render();},420);
+}
+function iconBtn(icon,act,label){return '<button class="navbtn" data-act="'+act+'" aria-label="'+label+'">'+I(icon,20)+'</button>';}
+function activeNav(id){id=id||S.screen;return id.startsWith('chat.')||id==='shell.sidebar'?'chat':id.startsWith('space.')?'space':id.startsWith('whiteboard.')?'board':null;}
+function sidebarHTML(){
+ const sp=curSpace(),a=activeNav(S.screen.startsWith('plan.')?S.modalBase||'space.home':S.screen);
+ const nav=(key,target,icon,label)=>'<button class="sb-nav'+(a===key?' on':'')+'" data-act="nav:'+target+'">'+I(icon,20)+'<span>'+label+'</span></button>';
+ return '<div class="sb"><div class="sb-top"><span class="sb-brand">'+L('思玥','Siyue')+'</span><button class="iconbtn" data-act="newchat" aria-label="'+L('新对话','New chat')+'">'+I('compose',21)+'</button></div>'+
+  '<button class="sb-space" data-act="sheet:spaceSwitch">'+spaceBadge(sp)+'<span class="rmain"><div class="rtitle">'+sp.name+'</div><div class="rsub">'+sp.sub+'</div></span>'+I('chevD',16,2)+'</button>'+
+  nav('chat','chat.home','chat',L('对话','Chat'))+nav('space','space.home','target',L('目标','Goals'))+nav('board','whiteboard.library','board',L('白板','Whiteboard'))+
+  '<div class="sb-label">'+L('最近对话','Recent chats')+'</div>'+
+  anno(L('需能力：对话按空间持久保存','Needs: per-space chat history'),'<div>'+CONVS().map(c=>'<button class="sb-conv'+(S.conv===c.id&&a==='chat'?' on':'')+'" data-act="conv:'+c.id+'"><span>'+c.title+'</span><em>'+c.time+'</em></button>').join('')+'</div>')+
+  '<div class="sb-foot"><button class="sb-me" data-act="acct"><span class="avatar sm">Z</span><span>'+L('张秋','Zhang Qiu')+'</span></button><button class="iconbtn" data-act="toast:'+L('设置不在本轮重构范围内','Settings are out of scope for this round')+'" aria-label="'+L('设置','Settings')+'">'+I('gear',21)+'</button></div></div>';
+}
+
+/* ---------- space helpers ---------- */
+function syncLine(){
+ if(S.space==='local')return '<div class="syncline">'+I('lock',14)+L('只保存在这台设备','Saved on this device only')+'</div>';
+ if(S.scenario==='offline')return '<div class="syncline warn">'+I('cloudOff',15)+L('离线 · 更改已保存在本机','Offline · changes saved on this device')+(S.space==='family'?L(' · 22 小时内需联网',' · reconnect within 22 h'):'')+'</div>';
+ if(S.scenario==='pending')return '<div class="syncline">'+I('refresh',14)+L('3 项更改等待同步','3 changes waiting to sync')+'</div>';
+ return '<div class="syncline">'+I('cloud',15)+L('已同步 · 刚刚','Synced · just now')+'</div>';
+}
+function taskRow(t,goalName){
+ const d=isDone(t),ro=readonlyMode();
+ return '<div class="task'+(d?' done':'')+'"><button class="tcheck" role="checkbox" aria-checked="'+d+'" aria-label="'+esc(t.title)+'" data-act="toggle:'+t.id+'"'+(ro?' disabled':'')+'><span class="circle">'+(d?I('check',14,3):'')+'</span></button>'+
+  '<button class="tmain" data-act="'+(ro?'toast:'+L('只读成员不能修改','Read-only members can’t edit'):'sheet:task:'+t.id)+'"><div class="rtitle">'+esc(t.title||L('未命名任务','Untitled task'))+'</div>'+(goalName?'<div class="rsub">'+goalName+'</div>':'')+'</button>'+
+  (t.due&&!d?'<span class="due'+(t.today?' today':'')+'">'+t.due+'</span>':'')+'</div>';
+}
+function findTask(id){for(const g of Object.values(goalData())){for(const t of tasksOf(g))if(t.id===id)return {t,g};}return null;}
+
+/* ---------- plan helpers ---------- */
+const draftWhy=()=>L('你现在能跑 3 公里，距离 11 月还有 6 周。每周三次、总量每周增加不超过一成，能稳定提升又不容易受伤。','You can run 3K now with 6 weeks to go. Three runs a week and no more than 10% weekly growth builds up steadily with low injury risk.');
+function initDraft(kind){
+ S.f.dTitle=kind==='manual'?(S.f.planGoal||''):L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November');
+ S.f.dWhy=kind==='manual'?'':draftWhy();S.f.dProject=kind==='manual'?'':L('跑步训练','Running');
+ const tasks=kind==='manual'?['']:[L('周一慢跑 4–5 公里','Mon: easy run 4–5K'),L('周三间歇跑 6 组','Wed: 6 interval sets'),L('周六长距离 6 公里起','Sat: long run from 6K'),L('买一双合适的跑鞋','Buy proper running shoes'),L('每次跑后拉伸 10 分钟','Stretch 10 min after each run'),L('周日记录本周配速','Sun: log this week’s pace')];
+ S.dtIds=tasks.map((_,i)=>i);tasks.forEach((v,i)=>S.f['dt_'+i]=v);S.draftKind=kind;
+}
+const EXAMPLES=()=>[L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November'),L('三个月内能用英语点餐','Order food in English within 3 months'),L('这学期每天陪孩子读 15 分钟','Read with my kid 15 min a day this term')];
+
+/* ---------- whiteboard helpers ---------- */
+const COLORS=['var(--ink)','#3E7BB6','#C2412F'];
+function boardSVG(small){
+ const hand='class="hand"';
+ return '<svg class="'+(small?'':'board')+'" viewBox="0 0 360 430" aria-label="'+L('白板内容','Board content')+'">'+
+  '<rect x="8" y="8" width="344" height="104" rx="14" fill="var(--background)" stroke="var(--border)"/>'+
+  '<text x="26" y="40" font-size="14" font-weight="600" fill="var(--ink)">3.</text>'+
+  '<text x="46" y="40" font-size="14" fill="var(--ink)">'+L('一个长方形的周长是 26 厘米，','A rectangle has a perimeter of 26 cm.')+'</text>'+
+  '<text x="46" y="63" font-size="14" fill="var(--ink)">'+L('长比宽多 3 厘米。长和宽各是多少？','Its length is 3 cm more than its width.')+'</text>'+
+  '<text x="46" y="86" font-size="14" fill="var(--ink)">'+(S.lang==='en'?'Find the length and the width.':'')+'</text>'+
+  '<text x="26" y="104" font-size="10" fill="var(--muted)">'+L('拍题 · 9月24日','Photo · Sep 24')+'</text>'+
+  '<g fill="none" stroke="var(--ink)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M44 158 C90 155 160 153 206 155 L208 236 C150 238 92 239 46 240 Z"/></g>'+
+  '<text x="104" y="148" font-size="19" fill="#3E7BB6" '+hand+'>x + 3</text><text x="214" y="204" font-size="19" fill="#3E7BB6" '+hand+'>x</text>'+
+  '<text x="40" y="292" font-size="22" fill="var(--ink)" '+hand+'>2 × ( x + x + 3 ) = 26</text>'+
+  '<text x="40" y="330" font-size="22" fill="var(--ink)" '+hand+'>x + x + 3 = 13</text>'+
+  '<text x="40" y="368" font-size="22" fill="var(--ink)" '+hand+'>x = 5</text>'+
+  '<text x="170" y="410" font-size="22" fill="#C2412F" '+hand+'>'+L('长 8，宽 5','L = 8, W = 5')+'</text>'+
+  '<ellipse cx="220" cy="402" rx="66" ry="22" fill="none" stroke="#C2412F" stroke-width="2.2" transform="rotate(-3 220 402)"/></svg>';
+}
+function thumb(kind){
+ if(kind==='math')return boardSVG(true);
+ if(kind==='poster')return '<svg viewBox="0 0 160 120"><rect x="30" y="18" width="100" height="84" rx="6" fill="none" stroke="var(--muted)" stroke-width="2"/><path d="M50 80c6-20 14-30 30-34M80 46c4 10 12 18 26 20" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="104" cy="36" r="8" fill="none" stroke="#C2412F" stroke-width="2"/></svg>';
+ return '<svg viewBox="0 0 160 120"><rect x="22" y="28" width="52" height="34" rx="5" fill="none" stroke="var(--muted)" stroke-width="2"/><rect x="86" y="28" width="52" height="34" rx="5" fill="none" stroke="var(--muted)" stroke-width="2"/><text x="32" y="50" font-size="12" fill="var(--ink)" class="hand">apple</text><text x="96" y="50" font-size="12" fill="var(--ink)" class="hand">order</text><path d="M26 84h108" stroke="var(--border)" stroke-width="2"/></svg>';
+}
+const BOARDS=()=>[{id:'b1',kind:'math',title:L('周三数学题','Wednesday maths'),sub:L('3 页 · 10 分钟前','3 pages · 10 min ago')},{id:'b2',kind:'poster',title:L('科学展海报草图','Science fair poster'),sub:L('1 页 · 昨天','1 page · yesterday')},{id:'b3',kind:'words',title:L('英语单词卡','English word cards'),sub:L('5 页 · 9月20日','5 pages · Sep 20')}];
+const isChild=()=>S.scenario==='child';
+function wbTools(){
+ const tool=(k,icon,label)=>'<button data-act="tool:'+k+'" aria-pressed="'+(S.wb.tool===k)+'" aria-label="'+label+'">'+I(icon,20)+'</button>';
+ return '<div class="wb-tools">'+tool('select','cursor',L('选择','Select'))+tool('pen','pen',L('画笔','Pen'))+tool('eraser','eraser',L('橡皮','Eraser'))+tool('text','text',L('文字','Text'))+tool('shape','shape',L('形状','Shape'))+
+  '<span class="wb-sep"></span><button data-act="color" aria-label="'+L('颜色','Colour')+'"><span class="cdot" style="background:'+COLORS[S.wb.color]+'"></span></button><span class="wb-sep"></span>'+
+  '<button data-act="toast:'+L('已撤销','Undone')+'" aria-label="'+L('撤销','Undo')+'">'+I('undo',20)+'</button><button data-act="toast:'+L('已重做','Redone')+'" aria-label="'+L('重做','Redo')+'">'+I('redo',20)+'</button></div>';
+}
+function wbTop(inCall){
+ const bad=S.scenario==='saveFailed';
+ return '<div class="wb-top"><button class="navbtn" data-act="'+(inCall?'sheet:leaveCall':'back')+'" aria-label="'+L('返回','Back')+'">'+I('chevL',20,2.2)+'</button>'+
+  '<button class="wb-title" data-act="'+(bad?'retrySave':'toast:'+L('点按标题可以重命名','Tap the title to rename'))+'"><div>'+L('周三数学题','Wednesday maths')+'</div><small class="'+(bad?'bad':'')+'">'+(bad?I('warn',12,2.2)+L('未能保存 · 点按重试','Not saved · tap to retry'):I('check',12,2.6)+L('已自动保存','Saved automatically'))+'</small></button>'+
+  '<button class="wb-pill" data-act="sheet:pages" aria-label="'+L('页面','Pages')+'">'+I('layers',17)+S.wb.page+'/'+S.wb.pages+'</button>'+
+  (!inCall&&!isChild()?'<button class="navbtn" data-act="go:whiteboard.invite" aria-label="'+L('发起家庭通话','Start a family call')+'">'+I('video',20)+'</button>':'')+
+  '<button class="navbtn" data-act="sheet:insert" aria-label="'+L('插入','Insert')+'">'+I('plus',20,2.2)+'</button></div>';
+}
+
+/* ---------- screens ---------- */
+const topJump=()=>{S.stack=[];};
+Object.assign(SCREENS,{
+'shell.sidebar':{flow:'app',nav:'menu',label:['侧栏','Sidebar'],notes:[
+  ['顶部先切空间，下面的对话、目标、白板和最近对话都跟随当前空间','Switch space first; everything below follows it'],
+  ['品牌名只出现在这里；新对话按钮紧挨品牌名','The brand appears only here, next to New chat'],
+  ['账号放在底部头像，设置用齿轮','Account sits on the avatar at the bottom; settings on the gear'],
+  ['iPad 上侧栏常驻，不需要打开','On iPad the sidebar stays visible']],
+ jump(){S.stack=[];S.drawer=true;S.chat.msgs=[];},render(){return SCREENS['chat.home'].render();}},
+'chat.home':{flow:'app',nav:'menu',label:['新对话','New chat'],notes:[
+  ['只有问候、三条与当前空间相关的建议和输入框，没有“AI 对话”标题','Greeting, three space-aware suggestions and the composer; no “AI chat” title'],
+  ['一行小字说明发送范围：只发送本对话文字','One quiet line states what is sent'],
+  ['场景“未连接 AI”：输入框位置换成连接卡，避免发出第一条消息才失败','“Not connected” swaps the composer for a connect card instead of failing on send']],
+ jump(){S.stack=[];S.drawer=false;S.chat.msgs=[];},
+ render(){return {right:iconBtn('compose','newchat',L('新对话','New chat')),
+  body:'<div class="chat-empty"><h1 class="lt">'+L('今天想聊什么？','What’s on your mind?')+'</h1><p class="lead">'+curSpace().name+'</p><div class="chips">'+suggestions().map((s,i)=>'<button class="chip" data-act="suggest:'+i+'">'+s+'</button>').join('')+'</div></div>',
+  footer:composer()+(S.scenario==='unconfigured'?'':'<div class="composer-meta">'+L('DeepSeek · 只发送本对话的文字','DeepSeek · only this chat’s text is sent')+'</div>')};}},
+'chat.thread':{flow:'app',nav:'menu',label:['对话','Conversation'],notes:[
+  ['助手回复不加气泡，按正文排版（列表、引用、加粗）','Assistant replies are typeset text, not bubbles'],
+  ['生成时发送键变成停止键，回复逐段出现并带光标','While generating, Send becomes Stop and text streams with a cursor'],
+  ['复制常驻；重新生成只出现在最后一条回复','Copy is always there; Regenerate only on the last reply'],
+  ['AI 给出计划草稿卡，加入空间必须经你确认','AI offers a plan-draft card; adding it needs your OK']],
+ jump(){S.stack=[];S.drawer=false;S.conv='c1';S.chat.msgs=sampleThread();},
+ render(){const ms=S.chat.msgs.length?S.chat.msgs:(S.chat.msgs=sampleThread());
+  const net=S.scenario==='network';
+  return {right:iconBtn('compose','newchat',L('新对话','New chat')),
+   body:'<div class="thread">'+ms.map(msgHTML).join('')+(net?'<div class="msg-user">'+L('再加一次周日的恢复跑','Add a Sunday recovery run too')+'</div><div class="msg-err">'+I('warn',20)+'<div class="bmain"><b>'+L('网络连接失败','Connection failed')+'</b>'+L('这条消息没有发出，内容已保留。','This message wasn’t sent; your text is kept.')+'<div><button class="btn tonal sm" style="margin-top:10px" data-act="toast:'+L('正在重新发送…','Resending…')+'">'+I('refresh',16)+L('重新发送','Resend')+'</button></div></div></div>':'')+'</div>',
+   footer:composer()};}},
+
+'space.home':{flow:'app',nav:'menu',label:['空间首页','Space home'],notes:[
+  ['标题就是当前空间名，点它切换空间','The title is the space name; tap it to switch'],
+  ['同步状态始终在标题下方：已同步、待同步、离线（家庭空间显示剩余联网期限）','Sync state always under the title, including the family offline window'],
+  ['先列“今天”要做的任务，可直接打勾；再列目标卡片','Today’s tasks first, checkable in place; goal cards next'],
+  ['右下角按钮新建计划；只读成员看不到任何写操作','The corner button starts a plan; read-only members see no write actions']],
+ jump(){S.stack=[];S.drawer=false;},
+ render(){const sp=curSpace(),gs=goalsOf(S.space),ro=readonlyMode(),empty=S.scenario==='empty';
+  const today=[];gs.forEach(g=>tasksOf(g).forEach(t=>{if(t.today)today.push([t,g.title]);}));
+  const conflict=S.scenario==='conflict'&&!S.conflictDone&&S.space!=='local';
+  return {right:(S.space==='family'?'<button class="avstack" data-act="go:space.members" aria-label="'+L('成员','Members')+'">'+MEMBERS().map(m=>'<span>'+initial(m.name)+'</span>').join('')+'</button>':''),
+   body:'<button class="space-title" data-act="sheet:spaceSwitch"><h1 class="lt">'+sp.name+'</h1>'+I('chevD',20,2.4)+'</button>'+syncLine()+
+    (ro?'<div class="banner info">'+I('info',20)+'<div class="bmain">'+L('你在这个空间是只读成员，可以查看，不能修改。','You’re a read-only member here: view only.')+'</div></div>':'')+
+    (conflict?banner('warn',L('「录一段 1 分钟自我介绍」在另一台设备也改过','“Record a 1-minute self-introduction” changed on another device too'),L('这台：已完成 · 另一台：改到周四','Here: done · Other device: moved to Thu'),'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn tonal sm" data-act="resolve:here">'+L('保留这台的','Keep this one')+'</button><button class="btn tonal sm" data-act="resolve:other">'+L('用另一台的','Use the other')+'</button></div>'):'')+
+    (empty?'<div class="result" style="padding-top:40px"><div class="ring">'+I('target',38,2)+'</div><h1 style="font-size:22px">'+L('还没有目标','No goals yet')+'</h1><p>'+L('写下一个想实现的事，AI 可以帮你拆成任务，也可以自己填写。','Write down something you want to achieve. AI can break it down, or you can fill it in yourself.')+'</p></div>':
+     (S.space==='personal'&&!S.created&&S.scenario!=='empty'?'<button class="card" data-act="openDraft" style="width:100%;border:0;display:flex;gap:12px;align-items:center;text-align:left;font:inherit;color:var(--onFocus);background:var(--focus);cursor:pointer"><span class="tile" style="background:var(--surface)">'+I('target',18)+'</span><span class="rmain"><div class="rtitle">'+L('1 份计划草稿等你确认','1 plan draft needs your OK')+'</div><div class="rsub" style="color:var(--focusMuted)">'+L('每周跑三次，11 月跑完 10 公里','Run 3× a week, 10K by November')+'</div></span>'+I('chevR',16,2)+'</button>':'')+
+     (today.length?'<div class="section-label">'+L('今天','Today')+'</div><div class="group">'+today.map(x=>taskRow(x[0],x[1])).join('')+'</div>':'')+
+     '<div class="section-label">'+L('目标','Goals')+'</div>'+gs.map(g=>{const ts=tasksOf(g),dn=ts.filter(isDone).length,next=ts.find(t=>!isDone(t));
+      return '<button class="goalcard" data-act="goal:'+g.id+'">'+ring(dn,ts.length)+'<span class="rmain"><div class="rtitle" style="font-weight:600">'+esc(g.title)+'</div><div class="rsub">'+(next?L('下一步：','Next: ')+esc(next.title):L('全部完成','All done'))+'</div></span><span class="gmeta">'+dn+'/'+ts.length+(g.target?'<em>'+g.target+'</em>':'')+'</span></button>';}).join('')),
+   overlay:ro?'':'<button class="fab" data-act="newplan" aria-label="'+L('新建计划','New plan')+'">'+I('plus',28,2.2)+'</button>',
+   footer:empty?btn(L('新建计划','New plan'),'newplan','primary')+btn(L('在对话里聊聊','Talk it through in chat'),'nav:chat.home','text'):''};}},
+'space.goal':{flow:'app',nav:'back',label:['目标详情','Goal'],notes:[
+  ['一页看全：日期、进度、为什么这样安排、所有任务','One page: date, progress, rationale and every task'],
+  ['任务可以直接打勾；点任务改名称和日期','Check tasks in place; tap one to edit name and date'],
+  ['最后一行直接输入就能添加任务','Type in the last row to add a task'],
+  ['已完成的任务折叠在底部；目标的完成、归档放在右上角菜单','Done tasks fold at the bottom; complete/archive live in the top-right menu']],
+ jump(){S.stack=[['space.home']];if(!goalData()[S.goal])S.goal='g1';if(S.goal==='g3'||S.goal==='g4')S.space='family';else if(S.goal==='g5')S.space='local';else S.space='personal';},
+ render(){const g=goalData()[S.goal],ts=tasksOf(g),open=ts.filter(t=>!isDone(t)),closed=ts.filter(isDone),ro=readonlyMode();
+  return {right:ro?'':iconBtn('more','sheet:goalMenu',L('更多','More')),
+   body:'<h1 class="lt" style="font-size:26px;line-height:34px">'+esc(g.title)+'</h1>'+
+    '<div class="metarow">'+(g.target?'<span class="metachip">'+I('calendar',15)+g.target+'</span>':'')+'<span class="metachip">'+I('check',15,2.2)+L(closed.length+'/'+ts.length+' 已完成',closed.length+'/'+ts.length+' done')+'</span></div>'+
+    '<div class="progress"><i style="width:'+(ts.length?closed.length/ts.length*100:0)+'%"></i></div>'+
+    (g.why?'<details class="why"><summary>'+L('为什么这样安排','Why this plan')+I('chevD',16,2)+'</summary><p>'+esc(g.why)+'</p></details>':'')+
+    '<div class="section-label">'+esc(g.project)+'</div><div class="group">'+open.map(t=>taskRow(t)).join('')+
+    (ro?'':'<div class="addrow">'+I('plus',20,2.2)+'<input data-name="newtask" placeholder="'+L('添加任务','Add a task')+'" value="'+esc(S.f.newtask||'')+'" aria-label="'+L('添加任务','Add a task')+'"></div>')+'</div>'+
+    (closed.length?'<details class="why" style="margin-top:16px"><summary>'+L('已完成 '+closed.length,'Done · '+closed.length)+I('chevD',16,2)+'</summary><div style="margin:6px -16px -8px">'+closed.map(t=>taskRow(t)).join('')+'</div></details>':'')};}},
+'space.members':{flow:'app',nav:'back',label:['家庭成员','Members'],notes:[
+  ['角色直接写在名字旁：管理者、管理员、成员、儿童','Roles sit next to each name'],
+  ['儿童显示设备数和监护人，不暴露更多身份信息','Children show devices and guardians only'],
+  ['离线期限写成一句话：最多 24 小时后需要联网确认','The offline limit is one sentence']],
+ jump(){S.space='family';S.stack=[['space.home']];},
+ render(){const own=!readonlyMode();
+  return {body:'<h1 class="lt">'+L('成员','Members')+'</h1><p class="lead">'+L('「我们家」共享目标、白板和对话。','“Our family” shares goals, whiteboards and chats.')+'</p>'+
+   '<div class="group">'+MEMBERS().map(m=>row({icon:null,title:'<span style="display:flex;align-items:center;gap:10px"><span class="avatar sm" style="background:var(--focus);color:var(--onFocus)">'+initial(m.name)+'</span>'+m.name+'</span>',sub:'<span style="padding-left:42px;display:block">'+m.sub+'</span>',trail:'<span class="pill">'+m.role+'</span>'})).join('')+'</div>'+
+   '<div class="note">'+I('info',16)+'<span>'+L('离线时家庭内容最多可用 24 小时，之后需要联网确认权限。','Family content works offline for up to 24 hours, then needs a connection to confirm access.')+'</span></div>',
+   footer:own?anno(L('待决：邀请方式与有效期','Pending: invite method and expiry'),btn(L('邀请成员','Invite a member'),'toast:'+L('邀请流程待设计','Invite flow to be designed'),'tonal',{icon:I('plus',18,2.2)})):''};}},
+
+'plan.new':{flow:'modal',nav:'close',closeAct:'closeModal',label:['写下目标','Describe the goal'],notes:[
+  ['一个输入框写目标；AI 拆解和自己填写用分段切换，两条路进入同一个草稿页','One box for the goal; AI or manual lead to the same draft page'],
+  ['示例一点就填入，降低开头难度','Tap an example to fill it in'],
+  ['说明发送范围：只发送这段目标文字','States exactly what is sent'],
+  ['场景“未连接 AI”：AI 选项不可用并说明原因，默认自己填写','“Not connected” disables AI with a reason and defaults to manual']],
+ jump(){S.stack=[['space.home']];S.modalBase='space.home';},
+ render(){const un=S.scenario==='unconfigured',mode=un?'manual':S.planMode,v=S.f.planGoal||'';
+  return {body:'<h1 class="lt">'+L('新建计划','New plan')+'</h1>'+
+   '<div class="mode" role="radiogroup"><button role="radio" aria-pressed="'+(mode==='ai')+'" data-act="planMode:ai"'+(un?' disabled':'')+'>'+L('AI 帮我拆解','Let AI break it down')+'</button><button role="radio" aria-pressed="'+(mode==='manual')+'" data-act="planMode:manual">'+L('自己填写','Fill it in myself')+'</button></div>'+
+   '<textarea class="bigtext" data-name="planGoal" aria-label="'+L('目标','Goal')+'" placeholder="'+L('你想实现什么？','What do you want to achieve?')+'">'+esc(v)+'</textarea>'+
+   '<div class="examples">'+EXAMPLES().map((e,i)=>'<button data-act="example:'+i+'">'+e+'</button>').join('')+'</div>'+
+   '<div class="note">'+I(un?'info':'lock',16)+'<span>'+(un?L('还没有连接 AI 服务，可以先自己填写。','No AI service yet; fill it in yourself for now.'):mode==='ai'?L('只发送这段目标文字。生成的是草稿，确认前不会写入空间。','Only this goal text is sent. You get a draft; nothing joins your space until you confirm.'):L('直接进入草稿，自己写任务。','Go straight to a draft and write the tasks yourself.'))+'</span></div>'+
+   '<div class="metarow" style="margin-top:4px"><button class="metachip" data-act="sheet:spaceSwitch">'+I('target',15)+L('加入：','Add to: ')+curSpace().name+I('chevD',14,2)+'</button></div>',
+   footer:btn(mode==='ai'?L('生成草稿','Create draft'):L('开始填写','Start writing'),'planGo','primary',{disabled:!v.trim()})};}},
+'plan.generating':{flow:'modal',nav:'back',label:['生成中','Generating'],notes:[['骨架屏预告草稿的样子，而不是一个转圈','A skeleton previews the draft instead of a spinner'],['随时可以停止，停止后不留下任何草稿','Stop any time; nothing is left behind']],
+ jump(){S.stack=[['space.home'],['plan.new']];S.modalBase='space.home';S.f.planGoal=S.f.planGoal||EXAMPLES()[0];},
+ render(){if(!S._gen){S._gen=setTimeout(()=>{S._gen=null;if(S.screen==='plan.generating'){initDraft('ai');S.screen='plan.draft';S.dir='push';S.animate=true;render();}},2000);}
+  return {body:'<h1 class="lt">'+L('正在拆解…','Breaking it down…')+'</h1><div class="quote">'+esc(S.f.planGoal||'')+'</div><div class="skel" style="width:70%;height:26px"></div><div class="skel" style="width:40%"></div><div style="height:18px"></div>'+[88,72,80,64,76].map(w=>'<div class="skel" style="width:'+w+'%"></div>').join(''),
+   footer:btn(L('停止','Stop'),'stopPlan','tonal')};}},
+'plan.draft':{flow:'modal',nav:'close',closeAct:'closeModal',label:['计划草稿','Plan draft'],notes:[
+  ['只有一页：标题、日期、为什么、项目、任务，全部可以直接改','One page; every field is editable in place'],
+  ['修改自动保存到草稿，“加入空间”按钮一直可用','Edits autosave to the draft; “Add” is always available'],
+  ['任务可以拖动排序、删除，最后一行添加','Drag to reorder, remove, or add at the end'],
+  ['场景“已过期”“结果未确认”在顶部说明，并给出唯一的下一步','“Expired” and “Unconfirmed” each get one clear next step']],
+ jump(){S.stack=[['space.home']];S.modalBase='space.home';if(!S.dtIds.length)initDraft('ai');},
+ render(){if(!S.dtIds.length)initDraft('ai');const exp=S.scenario==='expired',unk=S.scenario==='unknown';
+  const filled=S.dtIds.filter(i=>(S.f['dt_'+i]||'').trim()).length,ok=(S.f.dTitle||'').trim()&&filled>0;
+  return {body:(exp?banner('warn',L('草稿已过期','This draft expired'),L('内容还在。重新创建后，再确认加入空间。','Your content is kept. Recreate it, then confirm.')):unk?banner('warn',L('上次确认的结果还不确定','Last confirmation is unconfirmed'),L('先核对，避免重复加入。','Check first so nothing is added twice.')):
+    '<div class="statusline"><span class="pill on">'+I('check',12,2.6)+' '+L('草稿 · 自动保存','Draft · autosaved')+'</span><span>'+L('28 分钟内有效','Valid for 28 min')+'</span></div>')+
+   '<textarea class="titleinput" rows="'+([...(S.f.dTitle||'')].length>(S.lang==='en'?22:12)?2:1)+'" data-name="dTitle" aria-label="'+L('目标名称','Goal name')+'" placeholder="'+L('目标名称','Goal name')+'"'+(unk?' readonly':'')+'>'+esc(S.f.dTitle||'')+'</textarea>'+
+   '<div class="metarow">'+anno(L('需契约：草稿日期字段','Needs contract: draft date'),'<button class="metachip" data-act="toast:'+L('选择目标日期','Pick a target date')+'">'+I('calendar',15)+L('目标日期（可选）','Target date (optional)')+'</button>')+'<button class="metachip" data-act="sheet:spaceSwitch">'+I('target',15)+curSpace().name+'</button></div>'+
+   '<details class="why"'+(S.draftKind==='manual'?'':' open')+'><summary>'+L('为什么这样拆','Why this breakdown')+I('chevD',16,2)+'</summary><textarea data-name="dWhy" aria-label="'+L('理由','Rationale')+'" placeholder="'+L('写下你的考虑（可选）','Your reasoning (optional)')+'">'+esc(S.f.dWhy||'')+'</textarea></details>'+
+   '<div class="section-label">'+L('项目','Project')+'</div><div class="group"><div class="projrow">'+I('box',18)+'<input class="plainin" data-name="dProject" aria-label="'+L('项目名称','Project name')+'" placeholder="'+L('项目名称','Project name')+'" value="'+esc(S.f.dProject||'')+'"></div></div>'+
+   '<div class="section-label">'+L('任务 · '+filled,'Tasks · '+filled)+'</div><div class="group">'+
+    S.dtIds.map(i=>'<div class="dtask"><span class="grip" aria-hidden="true">'+I('grip',18)+'</span><input class="plainin" data-name="dt_'+i+'" aria-label="'+L('任务','Task')+'" placeholder="'+L('任务名称','Task name')+'" value="'+esc(S.f['dt_'+i]||'')+'"><button class="x" data-act="dtDel:'+i+'" aria-label="'+L('删除任务','Remove task')+'">'+I('close',16,2.2)+'</button></div>').join('')+
+    '<button class="addrow" data-act="dtAdd" style="width:100%;border:0;background:transparent;font:inherit;font-size:16px;cursor:pointer">'+I('plus',20,2.2)+L('添加任务','Add a task')+'</button></div>',
+   footer:unk?btn(L('核对保存结果','Check the result'),'toast:'+L('已核对：这份计划还没有加入空间','Checked: the plan hasn’t been added yet'),'primary',{icon:I('refresh',18)}):
+    exp?btn(L('用这些内容重新创建','Recreate from this content'),'toast:'+L('已重新创建草稿','Draft recreated'),'primary'):
+    btn(L('加入「','Add to “')+curSpace().name+L('」','”'),'planConfirm','primary',{disabled:!ok})+btn(L('放弃草稿','Discard draft'),'sheet:discardDraft','text')};}},
+'plan.done':{flow:'modal',nav:'none',label:['已加入','Added'],notes:[['结果页说清加入了什么，并给出两个去处','The result says what was added and offers two next steps']],
+ jump(){S.stack=[['space.home']];S.modalBase='space.home';S.created=true;S.createdIn=S.space;},
+ render(){const n=S.dtIds.filter(i=>(S.f['dt_'+i]||'').trim()).length||6;
+  return {body:'<div class="result"><div class="ring">'+I('check',40,2.2)+'</div><h1>'+L('已加入「','Added to “')+curSpace().name+L('」','”')+'</h1><p>'+L('1 个目标 · 1 个项目 · '+n+' 项任务。今天的任务已经出现在空间首页。','1 goal · 1 project · '+n+' tasks. Today’s task is already on your space home.')+'</p></div>',
+   footer:btn(L('查看目标','View goal'),'viewGoal','primary')+btn(L('完成','Done'),'closeModal','text')};}},
+
+'whiteboard.library':{flow:'app',nav:'menu',label:['白板库','Library'],notes:[
+  ['白板不再只有一张：按最近编辑排列，有名称和缩略图','Many boards, sorted by last edit, with names and thumbnails'],
+  ['新建时直接选：空白、拍题、从相册','New board starts blank, from a photo, or from the library'],
+  ['家长在右上角发起家庭通话；儿童设备不显示这个入口','Parents start a family call top-right; child devices don’t see it']],
+ jump(){S.stack=[];S.drawer=false;},
+ render(){return {right:(isChild()?'':iconBtn('video','go:whiteboard.invite',L('发起家庭通话','Start a family call')))+iconBtn('plus','sheet:newBoard',L('新建白板','New board')),
+  body:'<h1 class="lt">'+L('白板','Whiteboards')+'</h1><p class="lead">'+L('自动保存在这台设备','Saved automatically on this device')+'</p>'+
+   anno(L('需能力：多块白板存储','Needs: multiple boards'),'<div class="wb-grid">'+BOARDS().map(b=>'<button class="wbcard" data-act="go:whiteboard.editor"><div class="wbthumb">'+thumb(b.kind)+'</div><div class="rtitle">'+b.title+'</div><div class="rsub">'+b.sub+'</div></button>').join('')+
+   '<button class="wbnew" data-act="sheet:newBoard">'+I('plus',26,2)+L('新建白板','New board')+'</button></div>')};}},
+'whiteboard.editor':{flow:'full',label:['白板编辑','Editor'],notes:[
+  ['画布占满全屏，只有顶部和底部两条浮动栏','Full-bleed canvas with two floating bars'],
+  ['去掉“保存”按钮：标题下方一直显示自动保存状态，失败时变红并可点按重试','No Save button: autosave status sits under the title and turns red on failure'],
+  ['页码是一个按钮，打开页面缩略图；插入统一放在“+”里','The page count opens thumbnails; inserting lives under “+”'],
+  ['工具栏只保留常用工具，颜色一键切换','Only everyday tools; one tap cycles colour']],
+ jump(){S.stack=[['whiteboard.library']];},
+ render(){return {full:'<div class="canvas">'+boardSVG()+'</div>'+wbTop(false)+wbTools()};}},
+'whiteboard.invite':{flow:'modal',nav:'close',closeAct:'closeModal',label:['发起通话','Start a call'],notes:[
+  ['只能邀请家庭成员，没有公开房间码','Family members only; no public room codes'],
+  ['按设备计数，最多 5 台（含这台）','Counted by device, up to 5 including this one'],
+  ['说清默认不录制','States that recording is off by default']],
+ jump(){S.stack=[['whiteboard.library'],['whiteboard.editor']];S.modalBase='whiteboard.editor';},
+ render(){const devs=[{id:'r1',name:L('李敏 · iPhone','Li Min · iPhone')},{id:'r2',name:L('小满 · iPad（儿童设备）','Xiaoman · iPad (child)')},{id:'r3',name:L('外婆 · iPhone','Grandma · iPhone')}];
+  const n=1+devs.filter(d=>S.inv[d.id]).length;
+  return {body:'<h1 class="lt">'+L('发起家庭通话','Start a family call')+'</h1><p class="lead">'+L('邀请「我们家」的成员一起看这块白板。','Invite members of “Our family” to this board.')+'</p>'+
+   anno(L('待决 O01：逐人接纳与邀请委托','Pending O01: admission and delegation'),'<div class="group" style="padding:4px 12px">'+devs.map(d=>'<button class="check" role="checkbox" aria-checked="'+!!S.inv[d.id]+'" data-act="inv:'+d.id+'"><span class="box">'+(S.inv[d.id]?I('check',16,3):'')+'</span><span>'+d.name+'</span></button>').join('')+
+    '<div class="check" style="cursor:default;color:var(--muted)"><span class="box" style="opacity:.4"></span><span>'+L('李敏 · MacBook（桌面端角色待定）','Li Min · MacBook (desktop role pending)')+'</span></div></div>')+
+   '<p class="fine">'+L('已选 '+n+'/5 台设备（含这台）','Selected '+n+'/5 devices, including this one')+'</p>'+
+   '<div class="note">'+I('info',16)+'<span>'+L('默认不录制。发起后大家会看到同一块白板，你离开后通话仍会继续。','Recording is off by default. Everyone sees the same board, and the call continues if you leave.')+'</span></div>',
+   footer:btn(L('发起通话','Start call'),'startCall','primary',{disabled:n<2,icon:I('video',18)})};}},
+'whiteboard.call':{flow:'full',label:['通话中','In call'],notes:[
+  ['参与者小窗排在顶部（iPad 在右侧），正在讲的人有描边','Participant tiles on top (right on iPad); the speaker is outlined'],
+  ['录制时所有人都能看到红色“录制中”提示；停止录制不结束通话','Everyone sees the red recording pill; stopping doesn’t end the call'],
+  ['白板工具栏和通话控制分成两层，互不遮挡','Board tools and call controls sit on separate rows'],
+  ['儿童设备没有录制和邀请按钮','Child devices have no record or invite buttons']],
+ jump(){S.stack=[['whiteboard.library'],['whiteboard.editor']];},
+ render(){const tiles=[[L('张秋','Zhang Qiu'),'speaking',0],[L('李敏','Li Min'),'',0],[L('小满','Xiaoman'),'',0],[L('外婆','Grandma'),'',1]];
+  return {full:'<div class="incall" style="position:absolute;inset:0"><div class="canvas">'+boardSVG()+'</div>'+wbTop(true)+
+   '<div class="tiles">'+tiles.map(t=>'<div class="tile '+t[1]+'"><span class="av">'+initial(t[0])+'</span><span>'+t[0]+'</span>'+(t[2]?'<span class="mute">'+I('micOff',14,2.2)+'</span>':'')+'</div>').join('')+(isChild()?'':'<button class="tile empty" data-act="toast:'+L('邀请更多家庭成员','Invite more family members')+'" aria-label="'+L('邀请','Invite')+'">'+I('plus',20,2)+'<span>'+L('邀请','Invite')+'</span></button>')+'</div>'+
+   (S.wb.rec?'<div class="recpill"><i></i>'+L('录制中 02:14 · 所有人可见','Recording 02:14 · visible to all')+'</div>':'')+
+   wbTools()+
+   '<div class="callbar"><button data-act="mic" aria-pressed="'+S.wb.mic+'" aria-label="'+L('麦克风','Microphone')+'">'+I(S.wb.mic?'mic':'micOff',22)+'</button><button data-act="cam" aria-pressed="'+S.wb.cam+'" aria-label="'+L('摄像头','Camera')+'">'+I('video',22)+'</button>'+
+    (isChild()?'':'<button data-act="rec" class="'+(S.wb.rec?'recon':'')+'" aria-label="'+(S.wb.rec?L('停止录制','Stop recording'):L('录制','Record'))+'">'+I('rec',22)+'</button>')+
+    '<button class="hang" data-act="hang" aria-label="'+L('结束通话','Leave call')+'">'+I('hang',24,2)+'</button></div></div>'};}}
+});
+
+/* ---------- sheets ---------- */
+const EXT_SHEETS={
+ spaceSwitch(){return '<h2>'+L('切换空间','Switch space')+'</h2><div style="margin:0 -8px">'+SPACES().map(sp=>'<button class="sheetrow" data-act="sw:'+sp.id+'">'+spaceBadge(sp)+'<span class="rmain"><div class="rtitle">'+sp.name+'</div><div class="rsub">'+sp.sub+'</div></span>'+(S.space===sp.id?'<span style="color:var(--accent)">'+I('check',20,2.6)+'</span>':'')+'</button>').join('')+
+  '<button class="sheetrow" data-act="toast:'+L('创建家庭流程另行设计','Family creation to be designed')+'"><span class="tile-ic">'+I('plus',20,2.2)+'</span><span class="rmain"><div class="rtitle">'+L('创建家庭空间','Create a family space')+'</div></span></button></div>';},
+ task(s){const f=findTask(s.id);if(!f)return '';if(S._taskFor!==s.id){S._taskFor=s.id;S.f.taskTitle=f.t.title;}
+  return '<h2>'+L('编辑任务','Edit task')+'</h2><p>'+esc(f.g.title)+'</p>'+field('taskTitle',L('名称','Name'))+
+   '<div class="flabel"><span>'+L('日期','Date')+'</span></div><div class="metarow" style="margin-bottom:16px">'+[L('今天','Today'),L('明天','Tomorrow'),L('本周六','Sat')].map(d=>'<button class="metachip" data-act="toast:'+L('日期已设为 ','Date set to ')+d+'">'+d+'</button>').join('')+'<button class="metachip" data-act="toast:'+L('打开日期选择','Open date picker')+'">'+I('calendar',15)+L('选择…','Pick…')+'</button></div>'+
+   '<div class="btns">'+btn(L('保存','Save'),'saveTask','primary')+btn(L('归档任务','Archive task'),'toast:'+L('任务已归档','Task archived'),'text')+'</div>';},
+ goalMenu(){return '<h2>'+L('目标','Goal')+'</h2><div style="margin:0 -8px">'+
+  '<button class="sheetrow" data-act="toast:'+L('编辑名称与日期','Edit name and date')+'"><span class="tile-ic">'+I('edit',19)+'</span>'+L('修改名称和日期','Edit name and date')+'</button>'+
+  '<button class="sheetrow" data-act="toast:'+L('目标已完成','Goal completed')+'"><span class="tile-ic">'+I('check',19,2.4)+'</span>'+L('标记为已完成','Mark as completed')+'</button>'+
+  '<button class="sheetrow danger" data-act="toast:'+L('目标已归档，可在归档中找回','Archived; restore it from Archive')+'"><span class="tile-ic">'+I('archive',19)+'</span>'+L('归档目标','Archive goal')+'</button></div>';},
+ discardDraft(){return '<h2>'+L('放弃这份草稿？','Discard this draft?')+'</h2><p>'+L('草稿会被删除，空间里的内容不受影响。','The draft is deleted. Nothing in your space changes.')+'</p><div class="btns">'+btn(L('放弃草稿','Discard'),'planDiscard','dangerfill')+btn(L('继续编辑','Keep editing'),'closeSheet','text')+'</div>';},
+ pages(){let t='';for(let i=1;i<=S.wb.pages;i++)t+='<button class="pthumb'+(S.wb.page===i?' on':'')+'" data-act="page:'+i+'">'+L('第 '+i+' 页','Page '+i)+'</button>';
+  return '<h2>'+L('页面','Pages')+'</h2><div class="pagestrip">'+t+'<button class="pthumb add" data-act="addPage" aria-label="'+L('新建页面','New page')+'">'+I('plus',22,2)+'</button></div><div class="btns">'+btn(L('删除当前页','Delete this page'),'toast:'+L('已删除，停留在上一页','Deleted; showing the previous page'),'text')+'</div>';},
+ insert(){const r=(ic,t,s,a)=>'<button class="sheetrow" data-act="'+a+'"><span class="tile-ic">'+I(ic,20)+'</span><span class="rmain"><div class="rtitle">'+t+'</div>'+(s?'<div class="rsub">'+s+'</div>':'')+'</span></button>';
+  return '<h2>'+L('插入','Insert')+'</h2><div style="margin:0 -8px">'+r('camera',L('拍题','Photograph a question'),L('拍照后放到当前页','Adds the photo to this page'),'toast:'+L('打开相机','Opening camera'))+r('image',L('从相册选图','Choose from library'),null,'toast:'+L('打开相册','Opening library'))+r('layers',L('空白页','Blank page'),null,'addPage')+'</div>';},
+ newBoard(){const r=(ic,t,s)=>'<button class="sheetrow" data-act="go:whiteboard.editor"><span class="tile-ic">'+I(ic,20)+'</span><span class="rmain"><div class="rtitle">'+t+'</div><div class="rsub">'+s+'</div></span></button>';
+  return '<h2>'+L('新建白板','New board')+'</h2><div style="margin:0 -8px">'+r('pen',L('空白白板','Blank board'),L('直接开始写','Start writing'))+r('camera',L('拍题开始','Start from a photo'),L('拍一道题，在旁边讲解','Photograph a question and explain beside it'))+r('image',L('从相册开始','Start from the library'),L('选一张图片作为第一页','Use a picture as page one'))+'</div>';},
+ recConsent(){return anno(L('待决 O02：录制同意与儿童告知','Pending O02: consent and child notice'),'<h2>'+L('开始录制？','Start recording?')+'</h2><p>'+L('所有人会一直看到“录制中”。录像只保存在这台设备，停止录制不会结束通话。','Everyone will see “Recording” the whole time. The video stays on this device, and stopping doesn’t end the call.')+'</p>')+'<div class="btns">'+btn(L('开始录制','Start recording'),'recStart','dangerfill',{icon:I('rec',18)})+btn(L('取消','Cancel'),'closeSheet','text')+'</div>';},
+ leaveCall(){return '<h2>'+L('离开通话？','Leave the call?')+'</h2><p>'+L('其他人可以继续通话，白板已自动保存。','Others can stay on; the board is saved.')+'</p><div class="btns">'+btn(L('离开通话','Leave call'),'hang','dangerfill')+btn(L('留下','Stay'),'closeSheet','text')+'</div>';}
+};
+
+/* ---------- actions ---------- */
+function navTo(id,stack){S.drawer=false;S.sheet=null;S.stack=stack||[];S.screen=id;S.dir='push';S.animate=true;render();}
+function extAct(k,p1,p2,a){
+ switch(k){
+ case 'drawer':S.drawer=!S.drawer;render();return true;
+ case 'nav':if(p1==='chat.home'&&S.chat.msgs.length)return navTo('chat.thread'),true;navTo(p1);return true;
+ case 'acct':navTo('account.home',[['chat.home']]);return true;
+ case 'newchat':clearInterval(S._st);S.chat={msgs:[],streaming:false};S.conv=null;S.f.compose='';navTo('chat.home');return true;
+ case 'conv':clearInterval(S._st);S.conv=p1;S.chat={msgs:sampleThread(),streaming:false};navTo('chat.thread');return true;
+ case 'suggest':S.f.compose=suggestions()[+p1];render('compose');return true;
+ case 'send':{const v=(S.f.compose||'').trim();if(!v||S.chat.streaming)return true;
+  const m={role:'ai',reply:/计划|排|拆|plan|train|schedule/i.test(v)?'plan':'generic',shown:0,done:false};
+  S.chat.msgs=[...S.chat.msgs,{role:'user',text:v},m];S.f.compose='';if(S.screen!=='chat.thread'){S.screen='chat.thread';S.dir='push';S.animate=true;}
+  S.conv=S.conv||'c1';startStream(m);render('compose');return true;}
+ case 'stopgen':{clearInterval(S._st);const m=S.chat.msgs[S.chat.msgs.length-1];m.done=true;m.stopped=true;S.chat.streaming=false;render();return true;}
+ case 'regen':{const m=S.chat.msgs[S.chat.msgs.length-1];m.shown=0;m.done=false;m.stopped=false;startStream(m);render();return true;}
+ case 'openDraft':initDraft('ai');S.modalBase=S.screen;go('plan.draft');return true;
+ case 'newplan':S.f.planGoal='';S.planMode=S.scenario==='unconfigured'?'manual':'ai';S.modalBase=SCREENS[S.screen].flow==='app'?S.screen:'space.home';go('plan.new');return true;
+ case 'planMode':S.planMode=p1;render();return true;
+ case 'example':S.f.planGoal=EXAMPLES()[+p1];render('planGoal');return true;
+ case 'planGo':if(S.planMode==='ai'&&S.scenario!=='unconfigured')go('plan.generating');else{initDraft('manual');go('plan.draft');}return true;
+ case 'stopPlan':clearTimeout(S._gen);S._gen=null;back();toast(L('已停止，没有生成草稿','Stopped; no draft was created'));return true;
+ case 'dtAdd':{const id=Math.max(-1,...S.dtIds)+1;S.dtIds.push(id);S.f['dt_'+id]='';render('dt_'+id);return true;}
+ case 'dtDel':S.dtIds=S.dtIds.filter(i=>i!==+p1);render();return true;
+ case 'planConfirm':work('planConfirm',()=>{S.created=true;S.createdIn=S.space;S.screen='plan.done';S.dir='push';S.animate=true;render();},900);return true;
+ case 'planDiscard':S.sheet=null;S.dtIds=[];closeModal();toast(L('草稿已放弃','Draft discarded'));return true;
+ case 'closeModal':closeModal();return true;
+ case 'viewGoal':S.space=S.createdIn||S.space;S.goal='gNew';navTo('space.goal',[['space.home']]);return true;
+ case 'goal':S.goal=p1;go('space.goal');return true;
+ case 'toggle':{const f=findTask(p1);if(f&&!readonlyMode()){S.done[p1]=!isDone(f.t);render();}return true;}
+ case 'saveTask':S.sheet=null;toast(L('任务已保存','Task saved'));return true;
+ case 'sw':S.space=p1;S.sheet=null;S.f.taskTitle=undefined;if(S.screen==='space.goal'||S.screen==='space.members')navTo('space.home');else render();toast(L('已切换到「','Switched to “')+curSpace().name+L('」','”'));return true;
+ case 'resolve':S.conflictDone=true;if(p1==='here')S.done.t2=true;toast(p1==='here'?L('已保留这台设备的修改','Kept this device’s change'):L('已使用另一台设备的修改','Used the other device’s change'));return true;
+ case 'tool':S.wb.tool=p1;render();return true;
+ case 'color':S.wb.color=(S.wb.color+1)%COLORS.length;render();return true;
+ case 'page':S.wb.page=+p1;S.sheet=null;render();return true;
+ case 'addPage':S.wb.pages++;S.wb.page=S.wb.pages;S.sheet=null;render();toast(L('已新建第 '+S.wb.page+' 页','Page '+S.wb.page+' added'));return true;
+ case 'retrySave':S.scenario='normal';persist();toast(L('已保存','Saved'));return true;
+ case 'inv':S.inv[p1]=!S.inv[p1];render();return true;
+ case 'startCall':S.sheet=null;S.wb.rec=false;navTo('whiteboard.call',[['whiteboard.library'],['whiteboard.editor']]);return true;
+ case 'mic':S.wb.mic=!S.wb.mic;render();return true;
+ case 'cam':S.wb.cam=!S.wb.cam;render();return true;
+ case 'rec':if(S.wb.rec){S.wb.rec=false;toast(L('录像已保存到这台设备','Recording saved on this device'));}else{S.sheet={kind:'recConsent'};render();}return true;
+ case 'recStart':S.wb.rec=true;S.sheet=null;render();return true;
+ case 'hang':S.wb.rec=false;S.sheet=null;navTo('whiteboard.editor',[['whiteboard.library']]);toast(L('你已离开通话','You left the call'));return true;
+ }
+ return false;
+}
+function closeModal(){while(S.stack.length&&SCREENS[S.screen].flow==='modal'){const p=S.stack.pop();S.screen=p[0];S.param=p[1];}S.dir='back';S.animate=true;render();}
+function appView(sc,a,toastHTML){
+ const phone=S.device==='phone';
+ if(phone){const drawer=S.drawer&&sc.flow==='app'?'<div class="scrim" data-act="drawer"></div><div class="drawer">'+sidebarHTML()+'</div>':'';
+  return '<div class="device"><div class="screen t-'+S.theme+'">'+viewHTML(S.screen,a)+drawer+sheetHTML()+toastHTML+'<div class="island"></div>'+statusBar()+'<div class="homebar"></div></div></div>';}
+ let inner;
+ const base=sc.flow==='modal'?(S.modalBase||'space.home'):S.screen,baseFlow=SCREENS[base].flow;
+ if(baseFlow==='full')inner='<div style="position:absolute;inset:0">'+viewHTML(base,sc.flow==='modal'?'':a)+'</div>';
+ else inner='<div class="appsplit"><aside>'+sidebarHTML()+'</aside><main>'+viewHTML(base,sc.flow==='modal'?'':a)+'</main></div>';
+ if(sc.flow==='modal')inner+='<div class="modalwrap"><div class="formsheet">'+viewHTML(S.screen,'')+'</div></div>';
+ return '<div class="device pad"><div class="screen t-'+S.theme+'">'+inner+sheetHTML()+toastHTML+statusBar()+'</div></div>';
+}
+document.addEventListener('keydown',e=>{const n=e.target.dataset&&e.target.dataset.name;if(e.key!=='Enter'||e.shiftKey||e.isComposing)return;
+ if(n==='compose'){e.preventDefault();act('send');}
+ if(n==='newtask'&&(S.f.newtask||'').trim()){e.preventDefault();const id='a'+Date.now();(S.added[S.goal]=S.added[S.goal]||[]).push({id,title:S.f.newtask.trim(),due:null,today:false,done0:false});S.f.newtask='';render('newtask');}
+});
+document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.twSel==='scenario'&&e.target.value==='readonly'&&S.space!=='family'){S.space='family';render();}});
+/* ---------- feature registry ----------
+   Every screen id is "<feature>.<screen>". A new feature adds its screens to SCREENS and one entry here;
+   the jump panel, notes panel and scenario list are built from this registry. */
+const FEATURES=[
+ {id:'shell',name:['导航','Navigation'],doc:'shell.md',principles:[['先选空间，再选功能；对话、目标、白板都跟随当前空间','Pick the space first; every feature follows it']],scenarios:[],groups:[[['侧栏','Sidebar'],['shell.sidebar']]]},
+ {id:'chat',name:['对话','Chat'],doc:'chat.md',principles:[['注意力留给对话内容和输入框','Attention stays on the conversation and the composer'],['AI 只给建议和草稿，写入空间要你确认','AI suggests and drafts; you confirm every write']],scenarios:[['unconfigured',['未连接 AI','AI not connected']],['network',['网络失败','Network error']]],groups:[[['对话','Chat'],['chat.home','chat.thread']]]},
+ {id:'space',name:['空间','Space'],doc:'space.md',principles:[['先看今天要做的事，再看目标','Today first, then goals'],['同步状态始终可见，冲突就地解决','Sync state is always visible; conflicts resolve in place']],scenarios:[['offline',['离线','Offline']],['pending',['待同步','Pending sync']],['conflict',['同步冲突','Sync conflict']],['readonly',['只读成员（家庭空间）','Read-only member (family)']],['empty',['空空间','Empty space']]],groups:[[['空间','Space'],['space.home','space.goal','space.members']]]},
+ {id:'plan',name:['计划创建','New plan'],doc:'plan.md',principles:[['一页草稿，编辑自动保存，确认按钮始终可见','One draft page, autosaved, with the confirm button always visible']],scenarios:[['unconfigured',['未连接 AI','AI not connected']],['expired',['草稿过期','Draft expired']],['unknown',['结果未确认','Unconfirmed result']]],groups:[[['新建计划','New plan'],['plan.new','plan.generating','plan.draft','plan.done']]]},
+ {id:'whiteboard',name:['白板','Whiteboard'],doc:'whiteboard.md',principles:[['画布最大化，操作浮在边缘','Maximise the canvas; controls float at the edges'],['只有自动保存，状态一直可见','Autosave only, with visible status'],['通话和录制状态所有人可见','Call and recording state is visible to everyone']],scenarios:[['saveFailed',['保存失败','Save failed']],['child',['儿童设备','Child device']]],groups:[[['白板','Boards'],['whiteboard.library','whiteboard.editor']],[['家庭通话','Family call'],['whiteboard.invite','whiteboard.call']]]},
+ {id:'account',name:['账号','Account'],doc:'account.md',
+  principles:[['先身份后操作：账号首页先说明“你是谁”','Identity before actions']],
+  scenarios:[['offline',['离线 / 无法验证','Offline']],['uncertain',['结果未确认','Unconfirmed result']],['ratelimit',['登录限流','Rate limited']],['appleOnly',['仅 Apple 登录','Apple only']],['receipt',['有注销回执','Deletion receipt']]],
+  groups:[
+   [['登录与注册','Sign-in & sign-up'],['account.entry','account.login','account.forgot1','account.forgot2','account.forgotDone','account.reg1','account.reg2','account.reg3']],
+   [['账号管理','Account settings'],['account.home','account.methods','account.password','account.pwDone','account.devices','account.family','account.familyReview','account.space']],
+   [['注销','Delete account'],['account.del1','account.del2','account.del2r','account.del3','account.delProgress']]]}
+];
+/* Product-wide design principles shown on every screen. */
+const PRINCIPLES=[['一屏一件事：每个任务独立成页或成为一个步骤','One task per screen'],['按需验证：执行敏感操作时才要求密码','Ask for the password only when acting'],['危险程度决定视觉：只有不可逆的那一步用红色实心','Only the irreversible step is solid red'],['状态就近：错误在字段下，未确认结果在操作旁','State lives next to its action'],['iPad 分栏：左侧列表常驻，右侧详情','iPad: persistent list + detail']];
+const ORDER=FEATURES.flatMap(f=>f.groups.flatMap(g=>g[1]));
+const featureOf=id=>FEATURES.find(f=>id.startsWith(f.id+'.'));
+{const keys=Object.keys(SCREENS),missing=keys.filter(k=>!ORDER.includes(k)||!featureOf(k)),extra=ORDER.filter(k=>!SCREENS[k]);
+ if(missing.length||extra.length||new Set(ORDER).size!==ORDER.length)console.error('prototype registry mismatch',{missing,extra});}
+
+/* ---------- sheets ---------- */
+function sheetHTML(){
+  const s=S.sheet;if(!s)return '';let h='';if(EXT_SHEETS[s.kind])h=EXT_SHEETS[s.kind](s);
+  if(s.kind==='revoke'){const d=baseDevices().find(x=>x.id===s.id);const name=esc(d.label||L('未命名设备','Unnamed device'));
+    if(appleOnly())h='<h2>'+L('暂时无法在这里退出','Can’t sign out from here yet')+'</h2><p>'+L('只用 Apple 登录的账号还不能验证这个操作。可以直接在「'+name+'」上退出。','Apple-only accounts can’t verify this yet. Sign out on “'+name+'” directly.')+'</p><div class="btns">'+btn(L('知道了','OK'),'closeSheet','tonal')+'</div>';
+    else h='<h2>'+L('退出「'+name+'」','Sign out “'+name+'”')+'</h2><p>'+L('为确认是你本人，请输入当前密码。','Enter your current password to confirm it’s you.')+'</p>'+field('spw',L('当前密码','Current password'),{type:'password',ac:'current-password'})+'<div class="btns">'+btn(L('验证并退出','Verify & sign out'),'revoke:'+s.id,'primary',{disabled:!(S.f.spw||'').length})+btn(L('取消','Cancel'),'closeSheet','text')+'</div>';}
+  if(s.kind==='revokeAll')h='<h2>'+L('退出所有设备？','Sign out everywhere?')+'</h2><p>'+L('包括这台设备。之后需要在每台设备上重新登录。','Including this one. You’ll sign in again on each device.')+'</p>'+(appleOnly()?'':field('spw',L('当前密码','Current password'),{type:'password',ac:'current-password'}))+'<div class="btns">'+btn(L('全部退出','Sign out all'),'revokeAll','dangerfill',{disabled:!appleOnly()&&!(S.f.spw||'').length})+btn(L('取消','Cancel'),'closeSheet','text')+'</div>';
+  if(s.kind==='signout')h='<h2>'+L('退出登录？','Sign out?')+'</h2><p>'+L('这台设备上的内容会保留。','Content on this device stays.')+'</p><div class="btns">'+btn(L('退出登录','Sign out'),'signout','primary')+btn(L('取消','Cancel'),'closeSheet','text')+'</div>';
+  if(s.kind==='unlink')h='<h2>'+L('移除邮箱登录？','Remove email sign-in?')+'</h2><p>'+L('之后只能通过 Apple 登录。输入当前密码确认。','You’ll sign in with Apple only. Enter your password to confirm.')+'</p>'+field('spw',L('当前密码','Current password'),{type:'password'})+'<div class="btns">'+btn(L('移除','Remove'),'unlink','dangerfill',{disabled:!(S.f.spw||'').length})+btn(L('取消','Cancel'),'closeSheet','text')+'</div>';
+  return '<div class="scrim" data-act="closeSheet"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>'+h+'</div>';
+}
+
+/* ---------- frame ---------- */
+function viewHTML(id,cls,noNav){
+  const sc=SCREENS[id],r=sc.render();
+  if(r.full)return '<div class="view '+(cls||'')+'">'+r.full+'</div>';
+  const navL=sc.nav==='menu'?(noNav||S.device==='pad'?'<span></span>':'<button class="navbtn" data-act="drawer" aria-label="'+L('打开侧栏','Open sidebar')+'">'+I('menu',20,2)+'</button>'):sc.nav==='none'||noNav?'<span></span>':'<button class="navbtn" data-act="'+(sc.nav==='close'?(sc.closeAct||'closeDel'):'back')+'" aria-label="'+(sc.nav==='close'?L('关闭','Close'):L('返回','Back'))+'">'+I(sc.nav==='close'?'close':'chevL',20,2.2)+'</button>';
+  return '<div class="view '+(cls||'')+'"><div class="nav">'+navL+(r.right?'<div class="navright">'+r.right+'</div>':'')+'</div><div class="body">'+r.body+'</div>'+(r.footer?'<div class="footer">'+r.footer+'</div>':'')+(r.overlay||'')+'</div>';
+}
+function statusBar(){return '<div class="status"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/></svg></span></div>';}
+function animCls(){if(!S.animate)return '';S.animate=false;return S.dir==='modal'?'enter-modal':S.dir==='back'?'enter-back':'enter';}
+function app(){
+  const sc=SCREENS[S.screen],a=animCls();
+  if(['app','modal','full'].includes(sc.flow))return appView(sc,a,S.toast?'<div class="toast" role="status">'+I('check',16,2.4)+esc(S.toast)+'</div>':'');
+  const toast=S.toast?'<div class="toast" role="status">'+I('check',16,2.4)+esc(S.toast)+'</div>':'';
+  if(S.device==='phone')return '<div class="device"><div class="screen t-'+S.theme+'">'+viewHTML(S.screen,a)+sheetHTML()+toast+'<div class="island"></div>'+statusBar()+'<div class="homebar"></div></div></div>';
+  let inner;
+  if(sc.flow==='in'||sc.flow==='del'){
+    if(sc.flow==='in')S.padDetail=S.screen==='account.home'?null:S.screen;
+    const d=S.padDetail;
+    const side='<div class="side">'+viewHTML('account.home','',true)+'</div>';
+    const detail='<div class="detail">'+(d?viewHTML(d,sc.flow==='del'?'':a,d==='account.devices'||d==='account.password'||d==='account.methods'||d==='account.family'||d==='account.space'):'<div class="empty-detail">'+L('从左侧选择一项','Choose an item on the left')+'</div>')+'</div>';
+    const modal=sc.flow==='del'?'<div class="modalwrap"><div class="formsheet">'+viewHTML(S.screen,'')+'</div></div>':'';
+    inner='<div class="split">'+side+detail+'</div>'+modal;
+    const top=d==='account.familyReview'?'account.family':d;
+    inner=inner.replace('data-act="go:'+top+'"','data-act="go:'+top+'" data-sel="1"');
+  } else inner='<div class="solo" style="position:absolute;inset:0">'+viewHTML(S.screen,a)+'</div>';
+  return '<div class="device pad"><div class="screen t-'+S.theme+'">'+inner+sheetHTML()+toast+statusBar()+'</div></div>';
+}
+function notes(){
+  const sc=SCREENS[S.screen],f=featureOf(S.screen);
+  const list=items=>'<ul>'+items.map(n=>'<li>'+L(n[0],n[1])+'</li>').join('')+'</ul>';
+  return '<div class="panel"><h2>'+L('本屏设计要点','THIS SCREEN')+'</h2><h3>'+L(f.name[0],f.name[1])+' · '+L(sc.label[0],sc.label[1])+'</h3>'+list(sc.notes)+'</div>'+
+  (f.principles.length?'<div class="panel"><h2>'+L('功能原则 · ','FEATURE · ')+L(f.name[0],f.name[1])+'</h2>'+list(f.principles)+'</div>':'')+
+  '<div class="panel"><h2>'+L('全局原则','PRINCIPLES')+'</h2>'+list(PRINCIPLES)+'</div>';
+}
+function tweaks(){
+  const seg=(k,opts)=>'<div class="seg">'+opts.map(o=>'<button data-tw="'+k+':'+o[0]+'" aria-pressed="'+(String(S[k])===String(o[0]))+'">'+o[1]+'</button>').join('')+'</div>';
+  return '<div class="panel"><h2>TWEAKS</h2>'+
+   '<div class="ctl"><label>'+L('设备','Device')+'</label>'+seg('device',[['phone','iPhone'],['pad','iPad']])+'</div>'+
+   '<div class="ctl"><label>'+L('主题','Theme')+'</label>'+seg('theme',[['light',L('明色','Light')],['dark',L('暗色','Dark')]])+'</div>'+
+   '<div class="ctl"><label>'+L('语言','Language')+'</label>'+seg('lang',[['zh','中文'],['en','English']])+'</div>'+
+   '<div class="ctl"><label>'+L('场景','Scenario')+'</label><select data-tw-sel="scenario">'+[['normal',['正常','Normal']],...featureOf(S.screen).scenarios].map(o=>'<option value="'+o[0]+'"'+(S.scenario===o[0]?' selected':'')+'>'+L(o[1][0],o[1][1])+'</option>').join('')+'</select></div>'+
+   '<div class="ctl"><label>'+L('接口依赖标注','API annotations')+'</label>'+seg('anno',[[true,L('显示','Show')],[false,L('隐藏','Hide')]])+'</div></div>'+
+   '<div class="panel"><h2>'+L('跳转','SCREENS')+'</h2>'+FEATURES.map(f=>'<div class="feature"><div class="fname">'+L(f.name[0],f.name[1])+'</div>'+f.groups.map(g=>'<div class="gname">'+L(g[0][0],g[0][1])+'</div><div class="jump">'+g[1].map(id=>'<button data-jump="'+id+'" aria-current="'+(S.screen===id)+'">'+L(SCREENS[id].label[0],SCREENS[id].label[1])+'</button>').join('')+'</div>').join('')+'</div>').join('')+'</div>';
+}
+function fit(){
+  const sc=document.getElementById('scaler');
+  const w=S.device==='pad'?1212:414,h=S.device==='pad'?852:868;
+  const avail=sc.parentElement.clientWidth,availH=window.innerHeight-56;
+  const k=Math.min(1,avail/w,availH/h);sc.style.transform='scale('+k+')';sc.style.width=w+'px';sc.parentElement.style.height=(h*k)+'px';
+}
+function render(focus){
+  const active=document.activeElement,fname=focus||(active&&active.dataset&&active.dataset.name),pos=active&&active.selectionStart;
+  document.body.classList.toggle('page-dark',S.theme==='dark');
+  document.documentElement.lang=S.lang==='en'?'en':'zh-CN';
+  document.getElementById('app').innerHTML=app();
+  document.getElementById('notes').innerHTML=notes();
+  document.getElementById('tweaks').innerHTML=tweaks();
+  if(fname){const el=document.querySelector('[data-name="'+fname+'"]');if(el){el.focus();try{if(pos!=null)el.setSelectionRange(pos,pos);}catch(e){}}}
+  fit();
+}
+/* ---------- navigation & actions ---------- */
+function go(id,param){if(id===S.screen&&param===S.param)return;const from=S.screen;S.stack.push([S.screen,S.param]);S.screen=id;S.param=param;S.err={};S.dir=['del','modal'].includes(SCREENS[id].flow)&&SCREENS[from].flow!==SCREENS[id].flow?'modal':'push';S.animate=true;render();}
+function back(){const p=S.stack.pop();if(!p)return;S.screen=p[0];S.param=p[1];S.err={};S.dir='back';S.animate=true;render();}
+function reset(to){S.stack=to==='account.home'?[['account.entry']]:[];S.screen=to;S.dir='push';S.animate=true;render();}
+function toast(msg){S.toast=msg;render();clearTimeout(S._t);S._t=setTimeout(()=>{S.toast=null;render();},2200);}
+function work(act,fn,ms=700){S.busy=act;render();setTimeout(()=>{S.busy=null;fn();},ms);}
+function act(a){
+  const [k,p1,p2]=a.split(':');
+  if(extAct(k,p1,p2,a))return;
+  if(k==='go')return go(p1,p2);
+  if(k==='back')return back();
+  if(k==='eye'){S.show[p1]=!S.show[p1];return render('');}
+  if(k==='toast')return toast(a.slice(6));
+  if(k==='sheet'){S.f.spw='';S.sheet={kind:p1,id:p2};return render();}
+  if(k==='closeSheet'){S.sheet=null;return render();}
+  if(k==='apple')return work('apple',()=>{reset('account.home');toast(L('已通过 Apple 登录','Signed in with Apple'));},900);
+  if(k==='login'){if(S.f.pw==='wrong'){S.err.pw=L('邮箱或密码不正确。','Email or password is incorrect.');return render();}return work('login',()=>{reset('account.home');toast(L('已登录','Signed in'));});}
+  if(k==='forgotSend')return work(k,()=>{S.resendAt=Date.now()+45e3;go('account.forgot2');});
+  if(k==='forgotDone')return work(k,()=>reset('account.forgotDone'));
+  if(k==='toLogin'){['pw','cur','npw','npw2','fpw','fpw2','fcode'].forEach(x=>S.f[x]='');S.f.email=S.f.email||'zhang.qiu@icloud.com';S.stack=[['account.entry']];S.screen='account.login';S.dir='push';S.animate=true;return render();}
+  if(k==='consent'){S.f.consent=!S.f.consent;return render();}
+  if(k==='regSend')return work(k,()=>{S.resendAt=Date.now()+45e3;go('account.reg2');});
+  if(k==='resend'){S.resendAt=Date.now()+45e3;return toast(L('验证码已重新发送','Code resent'));}
+  if(k==='regDone')return work(k,()=>{reset('account.home');toast(L('账号已创建','Account created'));},900);
+  if(k==='pwDone')return work(k,()=>reset('account.pwDone'),900);
+  if(k==='revoke')return work(a,()=>{S.sheet=null;S.revoked.push(p1);const d=baseDevices().find(x=>x.id===p1);toast(L('已退出「'+(d.label||'未命名设备')+'」','Signed out “'+(d.label||'Unnamed device')+'”'));});
+  if(k==='revokeAll')return work(k,()=>{S.sheet=null;reset('account.entry');toast(L('已退出所有设备','Signed out everywhere'));});
+  if(k==='signout')return work(k,()=>{S.sheet=null;reset('account.entry');toast(L('已退出登录','Signed out'));});
+  if(k==='unlink')return work(k,()=>{S.sheet=null;toast(L('已移除邮箱登录','Email sign-in removed'));});
+  if(k==='fc'){S.famChecks[p1]=!S.famChecks[p1];return render();}
+  if(k==='famAccept')return work(k,()=>{S.famAccepted=true;back();toast(L('已记录你的确认','Your acceptance was recorded'));});
+  if(k==='space')return work(k,()=>{S.spaceCreated=true;toast(L('账号空间已创建','Account space created'));});
+  if(k==='del')return go('account.del1');
+  if(k==='closeDel'){while(S.stack.length&&SCREENS[S.screen].flow==='del'){const p=S.stack.pop();S.screen=p[0];S.param=p[1];}S.dir='back';S.animate=true;return render();}
+  if(k==='dc'){S.del.choices[p1]=p2;if(p2!=='transfer')delete S.del.recipient[p1];return render();}
+  if(k==='rc'){S.del.recipient[p1]=p2;return render();}
+  if(k==='delSubmit')return work(k,()=>{S.stack=[['account.entry']];S.screen='account.delProgress';S.dir='push';S.animate=true;render();toast(L('注销请求已受理','Deletion request accepted'));},1100);
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act],[data-tw],[data-jump]');if(!t||t.disabled)return;
+  e.preventDefault();
+  if(t.dataset.tw){let [k,v]=t.dataset.tw.split(':');if(k==='anno')v=v==='true';S[k]=v;persist();return render();}
+  if(t.dataset.jump){const id=t.dataset.jump,fl=SCREENS[id].flow;S.sheet=null;
+    if(SCREENS[id].jump){S.drawer=false;SCREENS[id].jump();S.screen=id;S.dir='push';S.animate=true;return render();}
+    S.stack=id==='account.entry'?[]:id==='account.home'?[['account.entry']]:fl==='in'?[['account.entry'],['account.home']]:fl==='del'?[['account.entry'],['account.home']]:[['account.entry']];
+    S.param=id==='account.del2r'?'f1':undefined;
+    if(fl==='del'&&id!=='account.del1'){S.del.choices.f1=S.del.choices.f1||'transfer';S.del.choices.f2='end';if(id==='account.del3')S.del.recipient.f1='r1';}
+    if(fl==='in'&&S.padDetail&&id==='account.home')S.padDetail=null;
+    S.screen=id;S.dir='push';S.animate=true;return render();}
+  act(t.dataset.act);
+});
+document.addEventListener('input',e=>{const n=e.target.dataset&&e.target.dataset.name;if(!n)return;
+  S.f[n]=n.endsWith('code')?e.target.value.replace(/\D/g,'').slice(0,6):e.target.value;delete S.err[n];
+  render(n);if(n==='rcode'&&S.f[n].length===6)setTimeout(()=>go('account.reg3'),250);});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.twSel){S[t.dataset.twSel]=t.value;persist();render();}});
+window.addEventListener('resize',fit);
+setInterval(()=>{if(['account.reg2','account.forgot2'].includes(S.screen)){const el=document.querySelector('.resend');if(el){const tmp=document.createElement('div');tmp.innerHTML=resend();el.replaceWith(tmp.firstChild);}}},1000);
+render();
+window.__proto={S,go,act,render};
+})();
+</script>
+</body>
+</html>

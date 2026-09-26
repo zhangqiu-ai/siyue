@@ -28,7 +28,7 @@
 ## 标准流程
 
 1. **提案**：用 kebab-case 命名 change-id。填写 Why、范围与非目标、Capabilities、Impact，以及 `Authorization`（日期、来源、已批准范围、待决项）。关联 SY 工作包；无适用项如实说明。
-2. **规格与设计**：在 `specs/<capability>/spec.md` 写 ADDED / MODIFIED / REMOVED 差量。Requirement 使用 SHALL / MUST；每项至少一个 `#### Scenario:`，写 WHEN / THEN。交互按需附原型；技术设计说明模块、失败状态及适用的数据/安全边界。
+2. **规格与设计**：在 `specs/<capability>/spec.md` 写 ADDED / MODIFIED / REMOVED 差量。Requirement 使用 SHALL / MUST；每项至少一个 `#### Scenario:`，写 WHEN / THEN。界面交互在[统一原型](../docs/design/prototype/README.md)中设计并链接对应页面；技术设计说明模块、失败状态及适用的数据/安全边界。
 3. **开工**：提案、规格、设计、任务齐备，阻止实施的待决项已解决，严格校验通过。OpenSpec 的 ready 状态只表示文件依赖满足，不代表维护者已批准。
 4. **实施与审查**：按任务小步实施，先跑定向验证。需求改变先更新差量；超出已批准范围重新确认。审查对照规格和实际 diff。
 5. **验收**：逐项记录场景与证据，分别写通过、失败、未运行、阻塞。勾选任务不能代替证据；关键验收未完成时保持活动变更，不使用跳过校验强行归档。

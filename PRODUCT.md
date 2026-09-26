@@ -86,4 +86,4 @@ Web、Linux 安装包、Watch、健康数据和第三方插件，不属于 Alpha
 
 ## 10. 2026-09-08 · 首版账号与家庭空间
 
-维护者确认账号、云同步、家庭共享为基础必需功能，明确并入未发布的 0.0.1。覆盖上文可选账号和家庭权限尚不进入排期的旧说明；保留个人内容私有、用途分别授权和数据可控的约束。具体行为以 [账号与家庭空间提案](openspec/changes/add-account-family-spaces/proposal.md) 为准，尚待关键取舍确认，不代表已经实现。先 OpenSpec，后 Figma 草稿和视觉确认，再实施正式 UI。
+维护者确认账号、云同步、家庭共享为基础必需功能，明确并入未发布的 0.0.1。覆盖上文可选账号和家庭权限尚不进入排期的旧说明；保留个人内容私有、用途分别授权和数据可控的约束。具体行为以 [账号与家庭空间提案](openspec/changes/add-account-family-spaces/proposal.md) 为准，尚待关键取舍确认，不代表已经实现。先 OpenSpec，后在[统一原型](docs/design/prototype/README.md)中设计并确认，再实施正式 UI（2026-09-25 起不再使用 Figma）。

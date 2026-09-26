@@ -1,10 +1,17 @@
 export type CompatibleConfig = { baseUrl: string; model: string; apiKey: string };
 export type CompatibleMessage = { role: 'user' | 'assistant' | 'system'; content: string };
 
+/** Stable, client-owned classification of a failed reply. Never provider text. */
+export type CompatibleErrorCode =
+  | 'invalid_url' | 'invalid_config' | 'auth' | 'rate_limit' | 'service' | 'malformed'
+  | 'empty' | 'length' | 'filtered' | 'tools' | 'interrupted' | 'timeout' | 'network' | 'unknown';
+
 /** Only fixed, client-owned messages may be displayed; provider bodies are untrusted. */
 export class CompatibleChatError extends Error {
-  constructor(message: string) {
+  readonly code: CompatibleErrorCode;
+  constructor(message: string, code: CompatibleErrorCode = 'unknown') {
     super(message);
+    this.code = code;
     this.name = 'CompatibleChatError';
   }
 }
@@ -17,11 +24,11 @@ export function normalizeBaseUrl(value: string): string {
     }
     return url.href.replace(/\/+$/, '');
   } catch {
-    throw new CompatibleChatError('请输入有效的 HTTPS 接口地址，不包含账号、查询参数或片段。');
+    throw new CompatibleChatError('请输入有效的 HTTPS 接口地址，不包含账号、查询参数或片段。', 'invalid_url');
   }
 }
 
-const malformed = () => new CompatibleChatError('服务返回了无法识别的流式回复，请检查接口和模型配置。');
+const malformed = () => new CompatibleChatError('服务返回了无法识别的流式回复，请检查接口和模型配置。', 'malformed');
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -52,7 +59,7 @@ export async function* streamCompatibleReply(
   if (signal.aborted) return;
   const baseUrl = normalizeBaseUrl(config.baseUrl);
   if (!config.model.trim() || config.model.length > 200 || !config.apiKey.trim() || /[\r\n]/.test(config.apiKey)) {
-    throw new CompatibleChatError('请先在设置中填写有效的模型名称和 API 密钥。');
+    throw new CompatibleChatError('请先在设置中填写有效的模型名称和 API 密钥。', 'invalid_config');
   }
   const controller = new AbortController();
   let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
@@ -84,9 +91,9 @@ export async function* streamCompatibleReply(
     });
     if (!response.ok) {
       void response.body?.cancel().catch(() => {});
-      if (response.status === 401 || response.status === 403) throw new CompatibleChatError('密钥无效或没有模型访问权限，请检查 AI 设置。');
-      if (response.status === 429) throw new CompatibleChatError('请求过于频繁或额度不足，请稍后重试并检查服务商额度。');
-      throw new CompatibleChatError('AI 服务暂时无法完成请求，请检查接口和模型配置后重试。');
+      if (response.status === 401 || response.status === 403) throw new CompatibleChatError('密钥无效或没有模型访问权限，请检查 AI 设置。', 'auth');
+      if (response.status === 429) throw new CompatibleChatError('请求过于频繁或额度不足，请稍后重试并检查服务商额度。', 'rate_limit');
+      throw new CompatibleChatError('AI 服务暂时无法完成请求，请检查接口和模型配置后重试。', 'service');
     }
     if (!response.body || !response.headers.get('content-type')?.toLowerCase().includes('text/event-stream')) {
       void response.body?.cancel().catch(() => {});
@@ -109,7 +116,7 @@ export async function* streamCompatibleReply(
           .map((line) => line.slice(5).replace(/^ /, '')).join('\n');
         if (!data) continue;
         if (data.trim() === '[DONE]') {
-          if (!text) throw new CompatibleChatError('模型没有返回文字，请检查模型是否支持对话。');
+          if (!text) throw new CompatibleChatError('模型没有返回文字，请检查模型是否支持对话。', 'empty');
           return;
         }
         const delta = readDelta(data);
@@ -120,23 +127,23 @@ export async function* streamCompatibleReply(
           if (controller.signal.aborted) break;
         }
         if (delta.finishReason === 'length') {
-          throw new CompatibleChatError('回复已达到长度上限，内容尚未完整，已收到的文字已保留。');
+          throw new CompatibleChatError('回复已达到长度上限，内容尚未完整，已收到的文字已保留。', 'length');
         }
         if (delta.finishReason === 'content_filter') {
-          throw new CompatibleChatError('服务商中止了这次回复，内容可能不完整，请调整问题后重试。');
+          throw new CompatibleChatError('服务商中止了这次回复，内容可能不完整，请调整问题后重试。', 'filtered');
         }
         if (delta.hasToolCall || (delta.finishReason !== undefined && delta.finishReason !== null && delta.finishReason !== 'stop')) {
-          throw new CompatibleChatError('模型请求了当前对话不支持的能力，回复尚未完成，请检查模型配置。');
+          throw new CompatibleChatError('模型请求了当前对话不支持的能力，回复尚未完成，请检查模型配置。', 'tools');
         }
       }
-      if (chunk.done) throw new CompatibleChatError('回复连接提前中断，已收到的文字已保留，请重试。');
+      if (chunk.done) throw new CompatibleChatError('回复连接提前中断，已收到的文字已保留，请重试。', 'interrupted');
     }
-    if (timedOut) throw new CompatibleChatError('AI 回复超时，请稍后重试。');
+    if (timedOut) throw new CompatibleChatError('AI 回复超时，请稍后重试。', 'timeout');
   } catch (error) {
     if (signal.aborted) return;
-    if (timedOut) throw new CompatibleChatError('AI 回复超时，请稍后重试。');
+    if (timedOut) throw new CompatibleChatError('AI 回复超时，请稍后重试。', 'timeout');
     if (error instanceof CompatibleChatError) throw error;
-    throw new CompatibleChatError('无法连接 AI 服务，请检查网络和接口地址后重试。');
+    throw new CompatibleChatError('无法连接 AI 服务，请检查网络和接口地址后重试。', 'network');
   } finally {
     clearTimeout(timer);
     signal.removeEventListener('abort', abort);

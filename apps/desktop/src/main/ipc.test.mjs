@@ -11,6 +11,12 @@ function setup(client = {}) {
 }
 const message = (method, args = [], requestId = 'request-1') => ({ requestId, method, args });
 
+test('disposed workspace dispatcher never returns a late read from its previous context',async()=>{
+ let release;const {event,dispatcher}=setup({snapshot:()=>new Promise(resolve=>{release=resolve;})});
+ const result=dispatcher.handle(event,message('snapshot'));dispatcher.dispose();release({privateOldAccount:'synthetic'});
+ assert.deepEqual(await result,{ok:false,error:{code:'cancelled'}});
+});
+
 test('IPC only trusts the exact loaded URL and owning main frame', () => {
   const { event, webContents } = setup();
   assert.equal(isTrustedSender(event, webContents, rendererUrl), true);

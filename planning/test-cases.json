@@ -255,9 +255,10 @@
       "expected": "A 数据不发给 B；旧授权停止；无跨空间检索",
       "status": "partial",
       "evidence": [
-        "docs/evidence/m1-validation.md"
+        "docs/evidence/m1-validation.md",
+        "docs/evidence/backend-auth-account-space-2026-09-22.md"
       ],
-      "coverage_note": "本地空间与完整执行身份、撤权测试通过；生产账号切换/同步未实现。"
+      "coverage_note": "本地空间与完整执行身份、撤权测试通过；生产账号切换/同步未实现。 2026-09-22新增受信会话/SQLite空间协调器基础验证；正式宿主、UI和白板未接线，不能视为应用换号隔离完成。"
     },
     {
       "id": "AT-020",
@@ -374,7 +375,35 @@
         "docs/evidence/excalidraw-integration-2026-09-20.md"
       ],
       "coverage_note": "Excalidraw 当前结果以本轮证据为准；旧自研试用证据不可替代新编辑器验收。真实手指/Pencil/相机/后台极限与五设备仍未验收。"
+    },
+    {
+      "id": "AT-027",
+      "title": "邮箱登录、找回密码与安全恢复",
+      "work_package": "SY-005",
+      "scenario": "设置中登录、找回密码、关闭重启恢复、退出后重启；处理丢响应、限流和存储失败",
+      "expected": "服务器确认后显示真实状态；重置不自动登录；秘密仅进入受保护存储；本地内容不自动上传或归属",
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/backend-auth-client-2026-09-22.md",
+        "docs/evidence/backend-auth-account-ui-2026-09-22.md",
+        "docs/evidence/backend-auth-account-space-2026-09-22.md",
+        "docs/evidence/backend-auth-password-change-client-2026-09-23.md",
+        "docs/evidence/online-account-lifecycle-2026-09-25.md"
+      ],
+      "coverage_note": "桌面实际登录/重置/故障重试及iPhone、iPad、Android隔离原生登录恢复通过；真实邮件、注册、账号空间映射、完整UI与真机矩阵未完成。2026-09-23补中英桌面改密和丢响应幂等恢复；移动端改密代码已接入但原生UI验收未执行。具体失败和设备差异见证据，不以模拟器代替真机。2026-09-22新增受信会话/SQLite空间协调器基础验证；正式宿主、UI和白板未接线，不能视为应用换号隔离完成。 2026-09-25新增当前线上证据：真实邮件注册、同主体Electron重启恢复、密码再登录、正式注销和删除后登录拒绝通过；上述真实邮件/注册未完成为历史状态。iPhone/iPad中英文隔离原生注册、冷启动恢复及注销已通过；受控输入回写错位已修复，失败与最终连续复跑保留在同一证据。完整跨端与真机矩阵仍partial。"
+    },
+    {
+      "id": "AT-028",
+      "title": "本人设备会话查看与撤销",
+      "work_package": "SY-005",
+      "scenario": "通过真实 HTTP 与 PostgreSQL 分页查看本人有效设备，并撤销本人单设备或全部会话",
+      "expected": "只暴露本人摘要且不含秘密；其他/全部设备撤销需匹配新鲜授权；跨主体会话不受影响",
+      "status": "partial",
+      "evidence": [
+        "docs/evidence/backend-auth-device-sessions-2026-09-23.md"
+      ],
+      "coverage_note": "本机真实 HTTP + 临时 PostgreSQL + Playwright 覆盖服务/API、分页、访问隔离、动作绑定 grant、异常凭据拒绝、重复撤销与行为者/目标审计；桌面中英账号 UI 验证列出及撤销其他设备，共享控制器验证本机/全部撤销、响应丢失恢复和安全存储失败。iPhone 模拟器中英/明暗设备列表与本机撤销、英文其他/全部设备撤销和冷启动不恢复通过；Android API 36 模拟器中英其他/全部设备撤销及冷启动不恢复各 1/1 通过。Apple-only reauth 仅服务端合成验证，客户端/iPad/真机、家庭派生授权及注销删除仍未完成。"
     }
   ],
-  "updated_on": "2026-09-20"
+  "updated_on": "2026-09-25"
 }

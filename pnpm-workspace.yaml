@@ -3,6 +3,7 @@ packages:
   - 'packages/*'
 allowBuilds:
   esbuild: true
+  argon2: true
 # Keep automatically resolved native peers on the Expo SDK 57 compatibility set.
 overrides:
   '@excalidraw/excalidraw>@radix-ui/react-tabs': 1.1.21

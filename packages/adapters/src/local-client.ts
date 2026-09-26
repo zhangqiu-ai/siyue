@@ -1,4 +1,4 @@
-import { runExecutionMetadataSchema, type RunExecutionMetadata, businessCommandSchema, commandEnvelopeSchema, commandReceiptSchema, goalDraftSchema, type ActionDraft, type AgentRun, type BusinessCommand, type GoalDraft } from '@siyue/contracts';
+import { runExecutionMetadataSchema, type RunExecutionMetadata, businessCommandSchema, commandEnvelopeSchema, commandReceiptSchema, goalDraftSchema, taskSchema, type ActionDraft, type AgentRun, type BusinessCommand, type CommandReceipt, type GoalDraft } from '@siyue/contracts';
 import { canonicalize, CommandError, type Actor, type CommandService, type RunService } from '@siyue/domain';
 import type { RequestJournal } from './request-journal.js';
 
@@ -12,6 +12,8 @@ export interface LocalClientOptions {
   newId: () => string;
   now: () => string;
   propose: (goal: string, signal?: AbortSignal) => Promise<GoalDraft>;
+  /** Host lifetime for one account/space selection. Abort before replacing the client. */
+  lifetimeSignal?: AbortSignal;
 }
 export interface RequestPlanProposer { propose: LocalClientOptions['propose']; execution: RunExecutionMetadata }
 type UpdateCommand = Extract<BusinessCommand, {entityId: string}>;
@@ -23,17 +25,23 @@ export function createLocalClient(options: LocalClientOptions) {
   let confirmations: Promise<unknown> = Promise.resolve();
   const pending = new Map<string, BusinessCommand>();
   const flights = new Map<string, Promise<ReturnType<typeof commandReceiptSchema.parse>>>();
+  /** Per-draft edit queue: a confirmation must observe every save the user already triggered. */
+  const editTails = new Map<string, Promise<unknown>>();
   const journalSchema = commandEnvelopeSchema.omit({spaceId: true}).refine((value) => value.commandId.trim().length > 0, 'Empty command identifier');
   const envelope = () => ({schemaVersion: 1 as const, commandId: newId(), spaceId, issuedAt: now()});
   const snapshot = async (): Promise<PlanSnapshot> => {
+    checkCancelled();
     const plan = await service.listPlan(spaceId, actor);
+    checkCancelled();
     const runs = await options.runService?.list(spaceId, actor) ?? [];
+    checkCancelled();
     return {...plan, runs};
   };
   function checkCancelled(signal?: AbortSignal) {
-    if (signal?.aborted) throw Object.assign(new Error('Operation was cancelled'), {name: 'AbortError', code: 'cancelled'});
+    if (signal?.aborted||options.lifetimeSignal?.aborted) throw Object.assign(new Error('Operation was cancelled'), {name: 'AbortError', code: 'cancelled'});
   }
   function execute(body: object, request?: LocalRequest) {
+    checkCancelled();
     const key = canonicalize({body, request});
     const active = flights.get(key);
     if (active) return active;
@@ -65,31 +73,35 @@ export function createLocalClient(options: LocalClientOptions) {
       if (!parsed.success) throw new CommandError('invalid_input', 'Command does not match schema version 1');
       const command = parsed.data;
       if (journal && journalKey && !saved) await journal.storage.setItem(journalKey, JSON.stringify({schemaVersion: 1, commandId: command.commandId, issuedAt: command.issuedAt}));
+      checkCancelled();
       pending.set(key, command);
       async function complete() {
         if (journal && journalKey) await journal.storage.removeItem(journalKey);
         pending.delete(key);
       }
       async function verify(value: unknown) {
+        checkCancelled();
         const receipt = commandReceiptSchema.parse(value);
         if (receipt.commandId !== command.commandId || receipt.spaceId !== spaceId || receipt.actorId !== actor.id || receipt.actorKind !== actor.kind ||
           (journal && receipt.payloadHash !== await journal.hash(canonicalize(command)))) throw new Error('Command receipt does not match pending request');
-        return receipt;
+        checkCancelled();return receipt;
       }
       if (saved) {
         const prior = await service.getReceipt(spaceId, actor, command.commandId);
-        if (prior) {const receipt = await verify(prior); await complete(); return receipt;}
+        if (prior) {const receipt = await verify(prior); await complete(); checkCancelled();return receipt;}
       }
       try {
+        checkCancelled();
         const receipt = await verify(await service.execute(command, actor));
         await complete();
+        checkCancelled();
         return receipt;
       } catch (error) {
         if (error instanceof CommandError) {await complete(); throw error;}
         // Unknown outcomes retain identity across retries and process restart.
         try {
           const prior = await service.getReceipt(spaceId, actor, command.commandId);
-          if (prior) {const receipt = await verify(prior); await complete(); return receipt;}
+          if (prior) {const receipt = await verify(prior); await complete(); checkCancelled();return receipt;}
         } catch { /* Preserve the original error and pending identity. */ }
         throw error;
       }
@@ -104,9 +116,46 @@ export function createLocalClient(options: LocalClientOptions) {
     if (draft.version !== version) throw new CommandError('version_conflict', 'Draft changed; review it before trying again');
     return draft;
   }
+  /** Latest saved draft, for a caller that must not assert a version it has not seen. */
+  async function latestDraft(id: string) {
+    const draft = (await snapshot()).drafts.find((item) => item.id === id);
+    if (!draft) throw new CommandError('not_found', 'Draft does not exist');
+    return draft;
+  }
+  /** Serialises edits per draft, running the next edit whatever the previous outcome was. */
+  function trackEdit(id: string, work: () => Promise<ActionDraft>): Promise<ActionDraft> {
+    const previous = editTails.get(id) ?? Promise.resolve();
+    const result = previous.then(work, work);
+    editTails.set(id, result.then(() => undefined, () => undefined));
+    return result;
+  }
+  const pendingEdit = (id: string) => editTails.get(id) ?? Promise.resolve();
+  /** Approval and application of one specific saved version, including receipt reconciliation. */
+  async function settleConfirmation(draft: ActionDraft, version: number): Promise<CommandReceipt> {
+    const receipt = await service.getReceipt(spaceId, actor, draft.command.commandId);
+    checkCancelled();
+    if (draft.status === 'applied' && receipt) {
+      await options.runService?.settleDraft(spaceId, actor, draft.id);
+      checkCancelled();
+      return receipt;
+    }
+    const approval = await service.approveDraft(spaceId, actor, draft.id, version);
+    checkCancelled();
+    const applied = await service.applyApproved(spaceId, actor, draft.id, approval.id);
+    await options.runService?.settleDraft(spaceId, actor, draft.id);
+    checkCancelled();
+    return applied;
+  }
   return {
     snapshot,
     async propose(goal: string, signal?: AbortSignal, proposer?: RequestPlanProposer) {
+      checkCancelled(signal);
+      const controller=new AbortController();
+      const signals=[signal,options.lifetimeSignal].filter((item):item is AbortSignal=>!!item);
+      const abort=()=>controller.abort();
+      for(const source of signals){source.addEventListener('abort',abort,{once:true});if(source.aborted)abort();}
+      try{return await proposeInLifetime(controller.signal);}finally{for(const source of signals)source.removeEventListener('abort',abort);}
+      async function proposeInLifetime(signal:AbortSignal){
       checkCancelled(signal);
       const metadata = proposer === undefined ? undefined : runExecutionMetadataSchema.safeParse(proposer?.execution);
       if (proposer !== undefined && (typeof proposer?.propose !== 'function' || !metadata?.success)) {
@@ -154,8 +203,10 @@ export function createLocalClient(options: LocalClientOptions) {
         if (cancelled) throw Object.assign(new Error('Operation was cancelled'), {name: 'AbortError', code: 'cancelled'});
         throw error;
       }
+      }
     },
     async createManualDraft(payload: GoalDraft, request: LocalRequest): Promise<ActionDraft> {
+      checkCancelled();
       // Parse before awaiting so later caller edits cannot change this attempt.
       const parsed = businessCommandSchema.safeParse({schemaVersion: 1, spaceId,
         commandId: request?.commandId, issuedAt: request?.issuedAt, kind: 'plan.create', payload});
@@ -165,6 +216,7 @@ export function createLocalClient(options: LocalClientOptions) {
       const command = parsed.data;
       const expiresAt = new Date(Date.parse(command.issuedAt) + 30 * 60 * 1000).toISOString();
       const verify = (draft: ActionDraft): ActionDraft => {
+        checkCancelled();
         if (draft.spaceId !== spaceId || draft.actorId !== actor.id || draft.actorKind !== actor.kind ||
             draft.source !== 'ui' || canonicalize(draft.command) !== canonicalize(command)) {
           throw new CommandError('command_conflict', 'Draft does not match the original manual request');
@@ -183,39 +235,82 @@ export function createLocalClient(options: LocalClientOptions) {
       }
     },
     saveManual(payload: GoalDraft, request?: LocalRequest) { return execute({kind: 'plan.create', payload}, request); },
-    async editDraft(id: string, version: number, payload: GoalDraft) {
-      const draft = await findDraft(id, version);
-      if (draft.command.kind !== 'plan.create') throw new CommandError('invalid_input', 'This editor requires a plan draft');
-      return service.editDraft(spaceId, actor, id, version, {...draft.command, payload});
+    /** A task belongs to a goal through a real project, including older goals without one. */
+    async addTaskToGoal(goalId: string, title: string, preferredProjectId?: string, request?: LocalRequest) {
+      if (!taskSchema.shape.title.safeParse(title).success) throw new CommandError('invalid_input', 'Task title is invalid');
+      const plan = await snapshot();
+      const goal = plan.goals.find(item => item.id === goalId && item.spaceId === spaceId);
+      if (!goal || goal.status === 'archived') throw new CommandError('not_found', 'Goal is unavailable in this space');
+      const projects = plan.projects.filter(item => item.goalId === goalId && item.spaceId === spaceId && item.status !== 'archived');
+      const preferred = preferredProjectId ? projects.find(item => item.id === preferredProjectId) : projects[0];
+      if (preferredProjectId && !preferred) throw new CommandError('not_found', 'Project is unavailable for this goal');
+      let projectId = preferred?.id;
+      if (!projectId) {
+        const receipt = await execute({kind: 'project.create', payload: {title: goal.title, goalId}});
+        projectId = receipt.result.entities.find(item => item.kind === 'project')?.id;
+        if (!projectId) throw new Error('Project creation returned no project identity');
+      }
+      return execute({kind: 'task.create', payload: {title, projectId}}, request);
+    },
+    editDraft(id: string, version: number, payload: GoalDraft) {
+      return trackEdit(id, async () => {
+        const draft = await findDraft(id, version);
+        checkCancelled();
+        if (draft.command.kind !== 'plan.create') throw new CommandError('invalid_input', 'This editor requires a plan draft');
+        const result = await service.editDraft(spaceId, actor, id, version, {...draft.command, payload});
+        checkCancelled();
+        return result;
+      });
     },
     confirmDraft(id: string, version: number) {
       const result = confirmations.then(async () => {
+        checkCancelled();
         const draft = await findDraft(id, version);
-        const receipt = await service.getReceipt(spaceId, actor, draft.command.commandId);
-        if (draft.status === 'applied' && receipt) {
-          await options.runService?.settleDraft(spaceId, actor, id);
-          return receipt;
+        return settleConfirmation(draft, version);
+      });
+      confirmations = result.catch(() => undefined);
+      return result;
+    },
+    /** Confirm the latest saved draft, refusing a version the user has not seen. */
+    confirmLatestDraft(id: string, expectedVisiblePayloadHash?: string, expectedVisibleVersion?: number) {
+      const result = confirmations.then(async () => {
+        checkCancelled();
+        // Wait for a save that is already in flight, so the callback cannot confirm older content.
+        await pendingEdit(id);
+        checkCancelled();
+        const draft = await latestDraft(id);
+        if (draft.command.kind !== 'plan.create') throw new CommandError('invalid_input', 'This confirmation requires a plan draft');
+        if (expectedVisiblePayloadHash !== undefined && draft.payloadHash !== expectedVisiblePayloadHash)
+          throw new CommandError('draft_changed', 'Draft content changed after it was shown; review the saved draft before confirming');
+        if (expectedVisibleVersion !== undefined && draft.version !== expectedVisibleVersion)
+          throw new CommandError('draft_changed', 'Draft version changed after it was shown; review the saved draft before confirming');
+        try {
+          return await settleConfirmation(draft, draft.version);
+        } catch (error) {
+          // A save that landed after this read must never be approved unseen.
+          if (error instanceof CommandError && error.code === 'version_conflict')
+            throw new CommandError('draft_changed', 'Draft changed while confirming; review the saved draft before trying again');
+          throw error;
         }
-        const approval = await service.approveDraft(spaceId, actor, id, version);
-        const applied = await service.applyApproved(spaceId, actor, id, approval.id);
-        await options.runService?.settleDraft(spaceId, actor, id);
-        return applied;
       });
       confirmations = result.catch(() => undefined);
       return result;
     },
     async discardDraft(id: string, version: number) {
+      checkCancelled();
       const draft = await service.rejectDraft(spaceId, actor, id, version);
+      checkCancelled();
       if (options.runService) {
         const runs = await options.runService.list(spaceId, actor);
         for (const run of runs.filter((item) => item.draftId === id)) await options.runService.cancel(spaceId, actor, run.id);
       }
+      checkCancelled();
       return draft;
     },
     update(kind: 'goal' | 'project' | 'task', id: string, version: number, patch: UpdateCommand['patch'], request?: LocalRequest) {
       return execute({kind: `${kind}.update`, entityId: id, expectedVersion: version, patch}, request);
     },
-    receipt(commandId: string) { return service.getReceipt(spaceId, actor, commandId); },
+    async receipt(commandId: string) { checkCancelled();const result=await service.getReceipt(spaceId, actor, commandId);checkCancelled();return result; },
   };
 }
 export type LocalClient = ReturnType<typeof createLocalClient>;
